@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClashLegends · 2D 对局观察</title>
+<style>
+:root{color-scheme:dark;font:16px "Inter",system-ui,sans-serif;background:#171c22;color:#f3ede1}
+body{margin:0;display:grid;justify-items:center;gap:.6rem;padding:.75rem}
+header{width:min(96vw,55vh);display:flex;justify-content:space-between;align-items:baseline;gap:.5rem}
+h1{font-size:1rem;margin:0}output{font-variant-numeric:tabular-nums}
+canvas{display:block;width:min(94vw,50vh);height:auto;background:#26362e;border:1px solid #787563}
+</style>
+<header><h1>晴昼峡谷 · 经典模式</h1><output id="clock"></output></header>
+<canvas width="720" height="1280" aria-label="服务器权威战场"></canvas>
+<output id="status" role="status">正在连接</output>
+<output id="inspect">点选单位可查看视野、射程和当前目标</output>
+<script type="module">
+const canvas=document.querySelector('canvas'), ctx=canvas.getContext('2d');
+const status=document.querySelector('#status'), clock=document.querySelector('#clock');
+const colors=['#76baff','#ff9489'];
+const inspector=document.querySelector('#inspect');
+const actions={Idle:'待机',March:'推进',Chase:'追击',Windup:'前摇',Recover:'攻击间隔',Mending:'自疗',Channeling:'持续行动',Displaced:'位移',Deploying:'部署'};
+let selected=null, lastFrame=null;
+canvas.addEventListener('click',event=>{
+  if(!lastFrame)return;
+  const rect=canvas.getBoundingClientRect();
+  const x=(event.clientX-rect.left)*canvas.width/rect.width;
+  const y=(event.clientY-rect.top)*canvas.height/rect.height;
+  const distance=u=>Math.hypot(u.center[0]-x,u.center[1]-y);
+  const hit=lastFrame.units.filter(u=>distance(u)<=u.radius+3).sort((a,b)=>distance(a)-distance(b))[0];
+  selected=hit?.id??null;
+  render(lastFrame);
+});
+function rect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(x,y,w,h)}
+function circle(x,y,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill()}
+function render(s){
+  lastFrame=s;
+  rect(0,0,720,1280,'#29392e');rect(0,600,720,80,'#284c59');
+  for(const x of [80,520])rect(x,598,120,84,'#81745c');
+  for(const u of s.units){
+    const [x,y]=u.center,r=u.radius;
+    circle(x,y,r,'#202728');circle(x,y,r*.84,colors[u.team]);
+    if(u.kind==='nexus'||u.kind==='princess_tower')rect(x-r*.46,y-r*.46,r*.92,r*.92,'#3a4244');
+    else{ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+u.facing[0]*r,y+u.facing[1]*r);ctx.strokeStyle='#18282a';ctx.lineWidth=2;ctx.stroke()}
+    rect(x-r,y-r-7,2*r,4,'#151d1b');rect(x-r,y-r-7,2*r*u.hp/u.maxHp,4,colors[u.team]);
+  }
+  for(const [,team,x,y] of s.shots)circle(x,y,4,colors[team]);
+  const actor=s.units.find(u=>u.id===selected);
+  if(actor){
+    const [x,y]=actor.center;
+    const target=s.units.find(u=>u.id===actor.target);
+    ctx.save();
+    for(const [radius,color] of [[actor.sight,'#a2d7ff'],[actor.range,'#ffd478']]){
+      ctx.beginPath();ctx.arc(x,y,actor.radius+radius,0,Math.PI*2);
+      ctx.strokeStyle=color;ctx.lineWidth=2;ctx.stroke();
+    }
+    if(target){
+      ctx.setLineDash([6,6]);ctx.strokeStyle='#f8efe2';ctx.beginPath();
+      ctx.moveTo(x,y);ctx.lineTo(...target.center);ctx.stroke();
+    }
+    ctx.restore();
+    inspector.textContent=actor.kind+' · '+actions[actor.action]+' · 视野 '+actor.sight+' · 射程 '+actor.range;
+  }else{
+    selected=null;inspector.textContent='点选单位可查看视野、射程和当前目标';
+  }
+  const seconds=Math.ceil(s.remaining/20);
+  clock.textContent=(s.overtime?'加时 ':'')+String(Math.floor(seconds/60))+':'+String(seconds%60).padStart(2,'0');
+  status.textContent=s.result?(s.result.winner===null?'平局':(s.result.winner===0?'蓝方':'红方')+'获胜'):'AI 对战中';
+  canvas.dataset.tick=String(s.tick);canvas.dataset.result=s.result?JSON.stringify(s.result):'';
+}
+let finished=false;
+function connect(){
+  const socket=new WebSocket(new URL('/stream',location.href).href.replace(/^http/,'ws'));
+  socket.onmessage=e=>{const s=JSON.parse(e.data);render(s);finished=Boolean(s.result)};
+  socket.onclose=()=>{if(!finished){status.textContent='重新连接中';setTimeout(connect,500)}};
+}
+connect();
+</script></html>
