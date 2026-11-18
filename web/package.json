@@ -1,0 +1,23 @@
+{
+  "name": "clash-legends-lobby",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit && vite build --base=/play/",
+    "dev": "vite --base=/play/",
+    "test:lobby": "node tests/lobby.mjs",
+    "test:settings": "node tests/settings.mjs"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "playwright-core": "^1.65.0",
+    "prettier": "^3.10.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.3"
+  }
+}
