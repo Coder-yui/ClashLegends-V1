@@ -1,0 +1,294 @@
+{
+	"aatrox": {
+		"radius": 25.5
+	},
+	"anivia": {
+		"radius": 22.5
+	},
+	"anivia_egg": {
+		"radius": 16.5
+	},
+	"apex_turret": {
+		"radius": 55.0,
+		"teamRing": false
+	},
+	"ashe": {
+		"radius": 22.5
+	},
+	"aurelionsol": {
+		"fullColor": "#946bfff5",
+		"radius": 22.5
+	},
+	"azir": {
+		"radius": 25.5
+	},
+	"belveth": {
+		"radius": 28.5
+	},
+	"blitzcrank": {
+		"radius": 22.5
+	},
+	"corki": {
+		"radius": 22.5
+	},
+	"daisy": {
+		"radius": 28.5
+	},
+	"darius": {
+		"radius": 25.5
+	},
+	"demacian_standard": {
+		"radius": 22.5
+	},
+	"ekko": {
+		"radius": 22.5
+	},
+	"enraged_reksai": {
+		"radius": 25.5
+	},
+	"evolution_turret": {
+		"radius": 30.0,
+		"teamRing": false
+	},
+	"fiddlesticks": {
+		"radius": 29.0
+	},
+	"garen": {
+		"radius": 28.5
+	},
+	"gnar": {
+		"alternate": 28.5,
+		"radius": 19.5
+	},
+	"gold_ward": {
+		"radius": 30.0
+	},
+	"graves": {
+		"radius": 25.5
+	},
+	"gwen": {
+		"fullColor": "#47b8fff5",
+		"radius": 22.5
+	},
+	"hecarim": {
+		"radius": 25.5
+	},
+	"imp": {
+		"radius": 16.5
+	},
+	"inhibitor": {
+		"radius": 59.0,
+		"teamRing": false
+	},
+	"ivern": {
+		"radius": 22.5
+	},
+	"jack_in_the_box": {
+		"radius": 30.0
+	},
+	"jax": {
+		"radius": 25.5
+	},
+	"jayce": {
+		"radius": 22.5
+	},
+	"jinx": {
+		"radius": 22.5
+	},
+	"kassadin": {
+		"radius": 22.5
+	},
+	"kayle": {
+		"radius": 22.5
+	},
+	"kayle_ranged": {
+		"radius": 22.5
+	},
+	"kayn": {
+		"radius": 22.5
+	},
+	"kayn_assassin": {
+		"radius": 22.5
+	},
+	"kayn_slayer": {
+		"radius": 22.5
+	},
+	"lulu": {
+		"radius": 19.5
+	},
+	"malphite": {
+		"radius": 28.5
+	},
+	"malzahar": {
+		"radius": 22.5
+	},
+	"masteryi": {
+		"radius": 22.5
+	},
+	"melee_minion": {
+		"radius": 16.5
+	},
+	"missfortune": {
+		"radius": 22.5
+	},
+	"nest_reksai": {
+		"radius": 25.5
+	},
+	"nocturne": {
+		"radius": 22.5
+	},
+	"olaf": {
+		"radius": 22.5
+	},
+	"olaf_single": {
+		"radius": 22.5
+	},
+	"ornn": {
+		"radius": 28.5
+	},
+	"pantheon": {
+		"fullColor": "#a60b12ff",
+		"radius": 22.5
+	},
+	"pillar_of_ice": {
+		"radius": 25.5
+	},
+	"pix": {
+		"radius": 13.5
+	},
+	"pix_single": {
+		"radius": 13.5
+	},
+	"powder_keg": {
+		"radius": 34.5
+	},
+	"queen_nest": {
+		"radius": 50.0
+	},
+	"ranged_minion": {
+		"radius": 16.5
+	},
+	"reksai": {
+		"radius": 25.5
+	},
+	"rift_herald": {
+		"radius": 31.5
+	},
+	"samira": {
+		"fullColor": "#ff4d1fff",
+		"radius": 22.5
+	},
+	"sand_soldier": {
+		"radius": 22.5
+	},
+	"scarecrow": {
+		"radius": 29.0
+	},
+	"scuttle_crab": {
+		"radius": 22.5
+	},
+	"sett": {
+		"fullColor": "#ffd13df5",
+		"radius": 25.5
+	},
+	"shurima_guard": {
+		"radius": 22.5
+	},
+	"siege_minion": {
+		"radius": 22.5
+	},
+	"sion": {
+		"radius": 31.5
+	},
+	"sivir": {
+		"radius": 22.5
+	},
+	"sona": {
+		"radius": 25.5
+	},
+	"soul_tentacle": {
+		"radius": 30.0,
+		"teamRing": false
+	},
+	"sun_disc": {
+		"radius": 60.0,
+		"teamRing": false
+	},
+	"super_minion": {
+		"radius": 25.5
+	},
+	"target_dummy": {
+		"radius": 34.5,
+		"teamRing": false
+	},
+	"teemo": {
+		"radius": 19.5
+	},
+	"thorn_spitter": {
+		"radius": 30.0,
+		"teamRing": false
+	},
+	"tibbers": {
+		"radius": 28.5
+	},
+	"tombstone": {
+		"radius": 50.0,
+		"teamRing": false
+	},
+	"tristana": {
+		"radius": 19.5
+	},
+	"tryndamere": {
+		"fullColor": "#ff290dff",
+		"radius": 25.5
+	},
+	"twisted_fate": {
+		"radius": 22.5
+	},
+	"twitch": {
+		"radius": 22.5
+	},
+	"vine_lasher": {
+		"radius": 30.0,
+		"teamRing": false
+	},
+	"void_gate": {
+		"radius": 50.0
+	},
+	"void_scuttle_crab": {
+		"radius": 25.5
+	},
+	"void_spawn": {
+		"radius": 19.5
+	},
+	"void_spawn_single": {
+		"radius": 19.5
+	},
+	"voidfish": {
+		"radius": 16.5
+	},
+	"voidfish_ranged": {
+		"radius": 16.5
+	},
+	"voidfish_ranged_army": {
+		"radius": 16.5
+	},
+	"voidfish_ranged_single": {
+		"radius": 16.5
+	},
+	"voidling": {
+		"radius": 16.5
+	},
+	"voidmite": {
+		"radius": 16.5
+	},
+	"xin": {
+		"radius": 22.5
+	},
+	"yorick": {
+		"radius": 25.5
+	},
+	"ziggs": {
+		"radius": 19.5
+	}
+}
