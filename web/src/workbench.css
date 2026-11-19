@@ -1,0 +1,248 @@
+.wb {
+  color: var(--text, #e8edf0);
+}
+.wb-head,
+.wb-title,
+.wb-row,
+.wb-slots {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+.wb-head,
+.wb-title {
+  justify-content: space-between;
+}
+.wb-head {
+  margin-bottom: 1rem;
+}
+.wb h1 {
+  font-size: clamp(24px, 3vw, 36px);
+  margin: 0;
+}
+.wb h2 {
+  font-size: 1rem;
+  color: #e8cf91;
+  margin: 0 0 0.5rem;
+}
+.wb-row + .wb-row,
+.wb-title + .wb-row {
+  margin-top: 0.55rem;
+}
+.wb button,
+.wb-picker button {
+  border: 1px solid #516069;
+  border-radius: 0.35rem;
+  background: #263038;
+  color: #f0f0e7;
+  padding: 0.42rem 0.65rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.86rem;
+}
+.wb button[aria-pressed="true"],
+.wb-picker button[aria-pressed="true"] {
+  color: #fbe2a2;
+  border-color: #c1a269;
+  background: #403c32;
+}
+.wb button:disabled,
+.wb-picker button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.wb label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.wb-layout {
+  display: grid;
+  grid-template-columns: minmax(285px, 0.7fr) minmax(0, 1.3fr);
+  gap: 1rem;
+}
+.wb-tools,
+.wb-display {
+  min-width: 0;
+  border: 1px solid #405057;
+  border-radius: 0.55rem;
+  background: #17252c;
+  overflow: hidden;
+}
+.wb-tools {
+  overflow: visible;
+  align-self: start;
+}
+.wb-tools section,
+.wb-preview-controls {
+  padding: 0.9rem 1rem;
+}
+.wb-tools section + section {
+  border-top: 1px solid #39484f;
+}
+.wb-tools section > button,
+.wb-tools section > label,
+.wb-tools section > .wb-row {
+  margin-top: 0.5rem;
+}
+.wb-tools p {
+  font-size: 0.86rem;
+  color: #c2ccd1;
+  margin: 0.45rem 0;
+}
+.wb-slots {
+  margin: 0.65rem 0;
+}
+.wb-slots small {
+  color: #d6bc78;
+  margin-right: 0.4rem;
+}
+.wb-display {
+  align-self: start;
+}
+.wb-arena {
+  position: relative;
+  container-type: size;
+  height: clamp(340px, 69dvh, 840px);
+  overflow: hidden;
+  background: #23382e;
+}
+.wb-arena .battle-stage {
+  --tray-height: 0px;
+  --ground-x: min(
+    calc(100cqw / var(--map-width)),
+    calc(100cqh / var(--map-height) / var(--projection))
+  );
+  --ground-y: calc(var(--ground-x) * var(--projection));
+  transform-origin: center;
+}
+.wb-stats {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: 0.3rem 0.55rem;
+  background: #102024de;
+  color: #f4f0df;
+  font: 12px/1.4 monospace;
+  border-radius: 4px;
+  pointer-events: none;
+}
+.wb-zoom {
+  padding: 0.5rem 0.8rem;
+  justify-content: space-between;
+}
+.wb-zoom label,
+.wb-preview-controls label {
+  font-size: 0.85rem;
+  color: #c4ccca;
+}
+.wb-log {
+  font-size: 0.78rem;
+  height: 12rem;
+  overflow: auto;
+  padding-left: 0;
+  list-style: none;
+}
+.wb-log li {
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #39454c;
+}
+.wb-log code {
+  display: block;
+  overflow-wrap: anywhere;
+  color: #aebdc3;
+}
+.wb-view {
+  height: clamp(270px, 50dvh, 680px);
+  background: radial-gradient(
+    ellipse at 50% 65%,
+    #526267,
+    #27343a 60%,
+    #18242c
+  );
+  position: relative;
+}
+.wb-view canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+.wb-view p {
+  position: absolute;
+  inset: 40% 0 auto;
+  text-align: center;
+}
+.wb-preview-controls {
+  display: grid;
+  gap: 0.6rem;
+}
+.wb-preview-controls input[type="range"] {
+  flex: 1;
+  min-width: 30px;
+}
+.wb-picker .wb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+  gap: 0.4rem;
+  max-height: 44dvh;
+  overflow: auto;
+  margin: 0.8rem 0;
+}
+.wb-grid button {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+}
+.wb-grid img {
+  width: 100%;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 0.2rem;
+}
+dialog:has(.wb-picker) {
+  width: min(680px, 96vw);
+}
+.wb-picker .wb-row input {
+  min-width: 0;
+  flex: 1;
+}
+@media (max-width: 740px) {
+  .wb-layout {
+    grid-template-columns: 1fr;
+  }
+  .wb-display {
+    grid-row: 1;
+  }
+  .wb-arena {
+    height: 48dvh;
+  }
+  .wb-head h1 {
+    font-size: 22px;
+  }
+  .wb-view {
+    height: 36dvh;
+  }
+}
+.wb-info {
+  padding: 1rem;
+}
+.wb-tools section > .game-list {
+  margin-top: 0.65rem;
+}
+.wb-info .prep-card {
+  min-height: 112px;
+}
+.wb-preview-controls {
+  border-top: 1px solid #39484f;
+}
+.wb-preview-controls label {
+  flex-wrap: wrap;
+}
+.wb-preview-controls input {
+  flex-basis: 100%;
+}
+.wb-view {
+  height: clamp(340px, 64dvh, 780px);
+}

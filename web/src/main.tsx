@@ -6,6 +6,8 @@ import { Hall } from "./hall";
 import { RoomPage } from "./room-page";
 import { MatchPage } from "./match-page";
 import {
+  lazy,
+  Suspense,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -17,6 +19,8 @@ import { api, go, href, updateRoom } from "./api";
 import type { Catalog, Room, Session, Match } from "./api";
 import { Editor } from "./editor";
 import "./style.css";
+
+const Workbench = lazy(() => import("./workbench"));
 
 function App({ url }: { url: string }) {
   const currentUrl = new URL(url);
@@ -30,8 +34,8 @@ function App({ url }: { url: string }) {
     [room, setRoom] = useState<Room>(),
     [match, setMatch] = useState<Match>();
   const [dialog, setDialog] = useState(""),
-    [mode, setMode] = useState("classic"),
-    [map, setMapId] = useState("rift"),
+    [mode, setMode] = useState(""),
+    [map, setMapId] = useState(""),
     [code, setCode] = useState(invite ?? ""),
     [err, setError] = useState(""),
     [toast, setToast] = useState(""),
@@ -62,7 +66,7 @@ function App({ url }: { url: string }) {
     if (
       r?.matchId &&
       page === "rooms" &&
-      r.status === "locked" &&
+      (r.status === "locked" || r.status === "playing") &&
       (sub === "deck" || old?.status === "open")
     ) {
       go("matches/" + r.matchId);
@@ -84,7 +88,11 @@ function App({ url }: { url: string }) {
     let active = true;
     async function init() {
       try {
-        const c = await api<Catalog>("catalog");
+        const c = await api<Catalog>(
+          page === "decks" && key === "collection"
+            ? "catalog"
+            : "battle/catalog",
+        );
         if (!active) return;
         setCatalog(c);
         await refresh();
@@ -180,8 +188,11 @@ function App({ url }: { url: string }) {
   function setup(kind: string) {
     setError("");
     setToast("");
-    setMode(kind === "settings" && room ? room.mode : "classic");
-    setMapId(kind === "settings" && room ? room.map : "rift");
+    if (!catalog) return;
+    setMode(kind === "settings" && room ? room.mode : catalog.modes[0].id);
+    setMapId(
+      kind === "settings" && room ? room.map : catalog.modes[0].mapIds[0],
+    );
     setDialog(kind);
   }
   const errors = err && (
@@ -204,7 +215,12 @@ function App({ url }: { url: string }) {
             </span>
           </a>
           <nav>
-            <a className={page !== "decks" ? "active" : ""} href={href()}>
+            <a
+              className={
+                page !== "decks" && page !== "workbench" ? "active" : ""
+              }
+              href={href()}
+            >
               对战大厅
             </a>
             <a
@@ -213,6 +229,14 @@ function App({ url }: { url: string }) {
             >
               我的卡组
             </a>
+            {catalog?.workbench && (
+              <a
+                href={href("workbench")}
+                className={page === "workbench" ? "active" : ""}
+              >
+                开发工作台
+              </a>
+            )}
           </nav>
           <button
             className="settings-trigger"
@@ -245,14 +269,37 @@ function App({ url }: { url: string }) {
           </div>
         ) : hall ? (
           <Hall catalog={catalog} room={room} session={session} setup={setup} />
+        ) : page === "workbench" && catalog.workbench ? (
+          <Suspense fallback={<p>正在打开工作台…</p>}>
+            <Workbench catalog={catalog} />
+          </Suspense>
         ) : page === "decks" ? (
-          <Editor catalog={catalog} session={session} reload={refresh} />
+          <Editor
+            catalog={catalog}
+            session={session}
+            collection={key === "collection"}
+            reload={refresh}
+          />
         ) : page === "rooms" && room ? (
-          sub === "deck" && room.status === "open" ? (
+          room.status === "open" ? (
             <Editor
               catalog={catalog}
               session={session}
               room={room}
+              online={online}
+              management={
+                <RoomPage
+                  compact
+                  catalog={catalog}
+                  room={room}
+                  online={online}
+                  busy={busy}
+                  setup={setup}
+                  action={action}
+                  run={run}
+                  notify={setToast}
+                />
+              }
               reload={refresh}
             />
           ) : (
@@ -268,7 +315,12 @@ function App({ url }: { url: string }) {
             />
           )
         ) : page === "matches" && match ? (
-          <MatchPage catalog={catalog} match={match} session={session} />
+          <MatchPage
+            catalog={catalog}
+            match={match}
+            session={session}
+            settings={() => showSettings(true)}
+          />
         ) : (
           <div className="panel">
             <h2>页面不存在或已离房</h2>
