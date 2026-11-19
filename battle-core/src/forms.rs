@@ -25,7 +25,7 @@ pub(crate) struct Revert {
     health: HealthOnChange,
 }
 impl Battle {
-    fn replace_form(
+    pub(crate) fn replace_form(
         &mut self,
         id: Id,
         def: UnitDef,
@@ -38,6 +38,9 @@ impl Battle {
         let a = self.actors.get(&id).ok_or(Error::NoTarget)?;
         let blocks = movement::blockers(&self.actors);
         let q = Query {
+            cross_river: def
+                .rules
+                .is_some_and(|s| s["river_traversal"] == true || s["terrain_traversal"] == true),
             map: &self.map,
             blocks: &blocks,
             id,
@@ -56,6 +59,7 @@ impl Battle {
                 .clamp(1, i64::from(a.def.hp)) as i32,
         };
         a.pos = pos;
+        a.deploy_start = self.tick;
         a.ready_tick = self.tick + u64::from(lock);
         a.reset_attack();
         a.target = None;
@@ -105,6 +109,8 @@ impl Battle {
         a.shields = Default::default();
         a.effect_shield_until = 0;
         a.slows = Default::default();
+        a.grievous_wounds = false;
+        a.sunlight = None;
         a.empowerment = None;
         a.sanctuary = None;
         a.hidden_until = 0;

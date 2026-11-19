@@ -1,6 +1,6 @@
 use crate::{lifecycle, vitals::Change, Battle, Effect, Fact, Id, Point, Role, Shape, Team};
 use crate::{status, Action};
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize)]
 pub enum AreaAnchor {
     /// The released result remains fixed through source control and death.
     Independent,
@@ -51,7 +51,7 @@ pub(crate) struct Origin {
     pub source_pos: Point,
     pub direction: Point,
 }
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, serde::Serialize)]
 pub struct AreaView {
     pub id: Id,
     pub caster: Id,
@@ -75,6 +75,21 @@ impl Battle {
             return false;
         }
         a.effect_shield_until = 0;
+        if let Some(s) = a.card_state.on_block.take() {
+            let heal = s["block_heal"].as_f64().unwrap_or(0.) as i32;
+            if let Some(duration) = s["block_haste_duration"].as_f64() {
+                a.empowerment = Some(crate::status::Empowerment {
+                    movement: 1000,
+                    attack: (s["block_attack_speed_multiplier"].as_f64().unwrap_or(1.) * 1000.)
+                        .round() as u16,
+                    damage: 1000,
+                    until: self.tick + (duration * 20.).ceil() as u64,
+                });
+            }
+            if heal > 0 {
+                self.commit(vec![Change::new(id, id, heal)]);
+            }
+        }
         self.emit(Fact::EffectBlocked(id));
         true
     }
@@ -195,6 +210,10 @@ impl Battle {
                 continue;
             }
             match effect {
+                Effect::CardAbility(s) => {
+                    self.card_ability(ctx, s, changes);
+                    continue;
+                }
                 Effect::Empower {
                     movement,
                     attack,
@@ -208,6 +227,12 @@ impl Battle {
                             damage,
                             until: self.tick + u64::from(ticks),
                         });
+                    }
+                    continue;
+                }
+                Effect::SelfShield { amount, ticks } => {
+                    if let Some(a) = self.actors.get_mut(&ctx.caster) {
+                        a.shields.add(amount, self.tick + u64::from(ticks));
                     }
                     continue;
                 }
@@ -302,7 +327,10 @@ impl Battle {
                             changes.push(Change::new(ctx.caster, id, n))
                         }
                     }
-                    Effect::RegenTroops { .. } | Effect::Transform(_) => {
+                    Effect::CardAbility(_)
+                    | Effect::RegenTroops { .. }
+                    | Effect::SelfShield { .. }
+                    | Effect::Transform(_) => {
                         unreachable!("resolved by action owner")
                     }
                     Effect::Heal(n) => changes.push(crate::vitals::Change::new(ctx.caster, id, n)),

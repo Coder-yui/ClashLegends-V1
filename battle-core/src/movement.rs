@@ -17,8 +17,16 @@ pub(crate) fn blockers(actors: &BTreeMap<Id, Actor>) -> Vec<Block> {
 }
 pub(crate) fn query<'a>(map: &'a Arena, blocks: &'a [Block], a: &Actor) -> Query<'a> {
     Query {
+        cross_river: a
+            .def
+            .rules
+            .is_some_and(|s| s["river_traversal"] == true || s["terrain_traversal"] == true),
         map,
-        blocks,
+        blocks: if a.def.rules.is_some_and(|s| s["terrain_traversal"] == true) {
+            &[]
+        } else {
+            blocks
+        },
         id: a.id,
         layer: a.def.layer,
         radius: a.def.radius,
@@ -86,7 +94,15 @@ fn walk(
         let delta = next - a.pos;
         let len = delta.length();
         if let Some(dir) = delta.unit() {
-            let dir = steer(a, dir, view, intents);
+            let dir = if a
+                .def
+                .rules
+                .is_some_and(|s| s["permanent_unit_phasing"] == true)
+            {
+                dir
+            } else {
+                steer(a, dir, view, intents)
+            };
             let p = a.pos
                 + dir
                     * len.min(
@@ -186,13 +202,33 @@ pub(crate) fn advance(
             }
             continue;
         }
+        if let Some((end, heading)) = a.card_state.cast_heading {
+            if tick < end && !a.disabled() && !a.has(Control::Root) {
+                let pos = a.pos + heading * (a.def.speed * f64::from(a.rates().0) / 20000.);
+                if q.clear(a.pos, pos) {
+                    a.pos = pos;
+                }
+                continue;
+            }
+            a.card_state.cast_heading = None;
+        }
         if matches!(a.activity, Activity::March | Activity::Chase)
             && !a.disabled()
             && !a.has(Control::Root)
+            && a.card_state.move_lock <= tick
             && a.def.speed > 0.
         {
             if let Some(b) = destinations.get(&a.id) {
                 walk(&q, a, *b, tick, &peers, &intents)
+            }
+        }
+    }
+    for a in actors.values_mut() {
+        let shift = std::mem::take(&mut a.field_shift);
+        if shift != Point::default() && a.flight.is_none() && !a.has(Control::Stasis) {
+            let q = query(map, &blocks, a);
+            if q.clear(a.pos, a.pos + shift) {
+                a.pos = a.pos + shift;
             }
         }
     }
@@ -236,6 +272,10 @@ pub(crate) fn advance(
 }
 fn mobile(a: &Actor) -> bool {
     !a.def.role.structure()
+        && !a
+            .def
+            .rules
+            .is_some_and(|s| s["permanent_unit_phasing"] == true)
         && !a.has(Control::Stasis)
         && a.flight
             .is_none_or(|f| f.kind == crate::motion::MotionKind::Knockback)

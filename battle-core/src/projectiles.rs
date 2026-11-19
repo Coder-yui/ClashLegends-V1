@@ -92,13 +92,32 @@ pub(crate) fn fire(
     target: Body,
     damage: i32,
     speed: f64,
+    on_hit: crate::classic::Attack,
     out: &mut crate::combat::Effects,
 ) {
     let d = (target.pos - a.pos).unit().unwrap_or(a.facing);
+    let spawn_offset = a.def.rules.map_or(0., |s| {
+        s["projectile_spawn_offset"].as_f64().unwrap_or(0.)
+            + if s["projectile_spawn_at_edge"] == true {
+                a.def.radius
+            } else {
+                0.
+            }
+    });
+    let muzzle = a.pos + d * spawn_offset;
+    if let Some(s) = on_hit
+        .rules
+        .filter(|s| s.get("attack_wave_damage").is_some())
+    {
+        out.waves
+            .push(crate::classic::zones::Wave::new(a, target, s, out.tick));
+    }
     let mut launch = |trajectory| {
         let id = out.next_id;
         out.next_id += 1;
         out.shots.push(Projectile {
+            born: out.tick,
+            source_kind: a.def.key,
             id,
             owner: a.id,
             team: a.team,
@@ -106,14 +125,25 @@ pub(crate) fn fire(
             hits_air: a.def.hits_air,
             radius: a.def.weapon.radius,
             target: target.id,
-            position: a.pos,
+            position: muzzle,
             damage,
             speed,
             trajectory,
+            on_hit,
+            volley: None,
         });
         out.facts.push(Fact::Fired(a.id, target.id, id));
     };
-    match a.def.weapon.delivery {
+    let delivery = if let Some(s) = on_hit.ability.filter(|s| s.get("bounce_count").is_some()) {
+        Delivery::Ground {
+            radius: s["radius"].as_f64().unwrap(),
+            bounces: s["bounce_count"].as_u64().unwrap() as u8,
+            hop_distance: s["bounce_distance"].as_f64().unwrap(),
+        }
+    } else {
+        a.def.weapon.delivery
+    };
+    match delivery {
         Delivery::Homing => launch(Trajectory::Homing),
         Delivery::Line {
             count,
@@ -170,9 +200,15 @@ impl Battle {
         let view = Perception::new(&self.actors);
         let mut changes = vec![];
         let mut events = vec![];
+        let mut caught = Vec::new();
         self.shots.retain_mut(|p| {
             let mut hit = |b: Body| {
-                changes.push(Change::new(p.owner, b.id, -p.damage));
+                if p.volley
+                    .is_some_and(|id| !self.volley_hits.entry(id).or_default().insert(b.id))
+                {
+                    return;
+                }
+                changes.push(Change::attack(p.owner, b.id, p.damage, p.on_hit));
                 events.push(Fact::ProjectileHit {
                     projectile: p.id,
                     target: b.id,
@@ -247,6 +283,9 @@ impl Battle {
                         already.clear();
                         return true;
                     }
+                    if *inbound {
+                        caught.push(p.owner);
+                    }
                     false
                 }
                 Trajectory::Ground {
@@ -273,6 +312,13 @@ impl Battle {
                 }
             }
         });
+        for owner in caught {
+            if let Some(a) = self.actors.get_mut(&owner) {
+                a.card_state.visual_action = Some(("attack:return", self.tick, self.tick + 4));
+            }
+        }
+        self.volley_hits
+            .retain(|id, _| self.shots.iter().any(|p| p.volley == Some(*id)));
         for f in events {
             self.emit(f)
         }

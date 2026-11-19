@@ -96,7 +96,60 @@ pub(crate) struct Empowerment {
 }
 impl crate::Actor {
     pub fn rates(&self) -> (u16, u16, u16) {
-        let (movement, attack) = self.slows.rates();
+        let (mut movement, mut attack) = self.slows.rates();
+        if let Some((_, _, haste)) = self.card_state.hit_haste {
+            attack = (u32::from(attack) * u32::from(haste) / 1000) as u16;
+        }
+        if let Some((_, _, rate)) = self.card_state.burst {
+            attack = (f64::from(attack) * rate).round() as u16;
+        }
+        if let Some(s) = self.card_state.buff_spec {
+            if s["ignore_attack_speed_slow"] == true {
+                attack = 1000;
+            }
+            if s["ignore_movement_slow"] == true {
+                movement = 1000;
+            }
+        }
+        if let Some((s, _)) = self.card_state.empowered {
+            movement = (f64::from(movement)
+                * s["empowered_speed_multiplier"].as_f64().unwrap_or(1.))
+            .round() as u16;
+        }
+        let attack =
+            (u32::from(attack) * u32::from(self.card_state.aura_attack.max(1000)) / 1000) as u16;
+        let movement = if let Some(s) = self.def.rules {
+            let m = if self.card_state.in_terrain {
+                s["terrain_entry_speed_multiplier"].as_f64().unwrap_or(1.)
+            } else if s["charge_distance"]
+                .as_f64()
+                .is_some_and(|d| self.card_state.marched >= d)
+            {
+                s["charge_speed_multiplier"].as_f64().unwrap_or(1.)
+            } else {
+                1.
+            };
+            (f64::from(movement) * m).round() as u16
+        } else {
+            movement
+        };
+        let movement = if let Some(s) = self
+            .def
+            .rules
+            .filter(|s| s.get("skill_resource_move_per_stack").is_some())
+        {
+            let bonus = if self.card_state.resource >= s["skill_resource_max"].as_f64().unwrap() {
+                s["skill_resource_full_move_bonus"].as_f64().unwrap()
+            } else {
+                self.card_state.resource * s["skill_resource_move_per_stack"].as_f64().unwrap()
+            };
+            (f64::from(movement) * (1. + bonus)).round() as u16
+        } else {
+            movement
+        };
+        let movement = self.tidal_haste.map_or(movement, |(_, rate)| {
+            (u32::from(movement) * u32::from(rate) / 1000) as u16
+        });
         let Some(b) = self.empowerment else {
             return (movement, attack, NORMAL);
         };

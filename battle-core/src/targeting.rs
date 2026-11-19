@@ -10,6 +10,7 @@ pub(crate) struct Body {
     pub team: Team,
     pub isolated: bool,
     pub hidden: bool,
+    pub dormant: bool,
     pub buildings_only: bool,
     pub transit: bool,
     pub sanctuary: Option<crate::status::Sanctuary>,
@@ -23,8 +24,9 @@ impl From<&Actor> for Body {
             layer: a.def.layer,
             role: a.def.role,
             team: a.team,
-            isolated: a.has(Control::Stasis),
+            isolated: a.has(Control::Stasis) || a.card_state.untargetable > 0,
             hidden: a.hidden_until > 0,
+            dormant: a.card_state.dormant,
             buildings_only: a.def.buildings_only,
             transit: a.flight.is_some(),
             sanctuary: a.sanctuary,
@@ -42,6 +44,7 @@ impl Body {
     pub fn eligible(self, a: &Actor) -> bool {
         self.team != a.team
             && !self.hidden
+            && !self.dormant
             && self.allows(a.team, a.pos)
             && (a.def.hits_air || self.layer != Layer::Air)
             && (!a.def.buildings_only || self.role.structure())

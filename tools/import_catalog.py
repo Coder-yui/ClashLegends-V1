@@ -28,14 +28,16 @@ def save_art(source: Path, filename: str, bounds: tuple[int, int], quality: int)
     return "/play/media/" + filename
 
 
-def public_card(card: dict) -> dict:
+def public_card(card: dict, previous_skills: dict) -> dict:
     card_id = card["id"]
     skills = []
     for skill in card["skills"]:
         # Compiled legacy options are positional. Give each canonical ability an
         # explicit, card-scoped key which survives deck/option reordering.
         slug = re.sub(r"[^a-z0-9]+", "-", skill["name"]["en"].lower()).strip("-")
+        key = card_id + "." + slug
         skills.append({
+            "image": previous_skills.get(key, {}).get("image", "/play/media/battle/" + key + ".webp"),
             "id": card_id + "." + slug,
             "name": skill["name"]["zh"],
             "description": skill["description"]["zh"],
@@ -62,7 +64,9 @@ def public_card(card: dict) -> dict:
 def main():
     raw = json.loads((WEBSITE / "content/catalog.json").read_text())
     MEDIA.mkdir(parents=True, exist_ok=True)
-    cards = [public_card(card) for card in raw["cards"] if card["selectable"]]
+    previous = json.loads(CATALOG.read_text()) if CATALOG.exists() else {"cards": []}
+    previous_skills = {s["id"]: s for c in previous["cards"] for s in c["skills"]}
+    cards = [public_card(card, previous_skills) for card in raw["cards"] if card["selectable"]]
     ids = {card["id"] for card in cards}
     if len(cards) != len(ids) or not set(DEFAULT_DECK) <= ids:
         raise ValueError("Invalid card IDs or default deck")

@@ -547,3 +547,47 @@ fn lock_survives_closer_enemy_and_windup_transfers_on_invalid_target() {
     assert_eq!(view(&b, a).target, Some(closer));
     assert_eq!(view(&b, closer).hp, 168);
 }
+
+#[test]
+fn swing_timeline_cancels_and_resumes_at_the_actual_release_tick() {
+    let mut b = world();
+    let source = b
+        .spawn(Team::Blue, p(100., 200.), UnitDef::ranged())
+        .unwrap();
+    b.spawn(Team::Red, p(220., 200.), inert()).unwrap();
+    b.step(&[]);
+    let cancelled = view(&b, source).attack.unwrap();
+    b.control(source, Control::Freeze, 2).unwrap();
+    assert!(view(&b, source).attack.is_none());
+    // First swing was interrupted. This new start owns the first real shot.
+    let mut released = None;
+    for _ in 0..40 {
+        b.step(&[]);
+        let timing = view(&b, source).attack;
+        for e in b.drain_events() {
+            if let Fact::AttackReleased {
+                source: id, start, ..
+            } = e.fact
+            {
+                if id != source {
+                    continue;
+                }
+                let timing = timing.unwrap();
+                assert!(timing.released);
+                assert_eq!(e.tick, timing.release);
+                assert_eq!(start, timing.start);
+                assert_ne!(start, cancelled.start);
+                released = Some(timing);
+            }
+        }
+        if released.is_some() {
+            break;
+        }
+    }
+    let first = released.unwrap();
+    while b.snapshot().tick < first.end {
+        b.step(&[]);
+    }
+    let second = view(&b, source).attack.unwrap();
+    assert_eq!((second.start, second.cycle), (first.end, first.cycle + 1));
+}

@@ -21,7 +21,8 @@ mod targeting;
 mod vitals;
 use model::Actor;
 pub use model::{
-    Action, Activity, Control, Event, Fact, Id, Projectile, Role, Snapshot, Team, UnitDef, UnitView,
+    Action, Activity, AttackTiming, Control, Event, Fact, Id, Projectile, Role, Snapshot, Team,
+    UnitDef, UnitView,
 };
 mod motion;
 pub use motion::Motion;
@@ -29,7 +30,7 @@ pub use skills::{Aim, AimKind, Cast, Effect, Shape, Skill};
 pub use space::{Arena, Layer, Point, Rect};
 use std::collections::BTreeMap;
 pub const TICKS_PER_SECOND: u64 = 20;
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, serde::Serialize)]
 pub enum Error {
     InvalidDefinition,
     InvalidPoint,
@@ -52,6 +53,15 @@ pub struct Battle {
     next_id: Id,
     sequence: u64,
     events: Vec<Event>,
+    card_queue: Vec<classic::casts::Pending>,
+    volley_hits: BTreeMap<Id, std::collections::BTreeSet<Id>>,
+    kayn_forms: [classic::marks::Growth; 2],
+    grants: Vec<classic::specialists::Grant>,
+    attack_waves: Vec<classic::zones::Wave>,
+    pending_births: Vec<(Id, Team, Point, classic::production::Birth)>,
+    zones: Vec<classic::zones::Zone>,
+    deaths: Vec<classic::production::Death>,
+    gold_rewards: [u8; 2],
 }
 impl Battle {
     pub fn new(map: Arena) -> Result<Self, Error> {
@@ -77,6 +87,15 @@ impl Battle {
             next_id: 1,
             sequence: 0,
             events: vec![],
+            kayn_forms: Default::default(),
+            grants: vec![],
+            attack_waves: vec![],
+            pending_births: vec![],
+            zones: vec![],
+            deaths: vec![],
+            gold_rewards: [0; 2],
+            card_queue: vec![],
+            volley_hits: Default::default(),
         })
     }
     pub fn spawn(&mut self, team: Team, pos: Point, def: UnitDef) -> Result<Id, Error> {
@@ -84,7 +103,19 @@ impl Battle {
             return Err(Error::InvalidDefinition);
         }
         let id = self.next_id;
-        let a = Actor::new(id, team, pos, def);
+        let mut a = Actor::new(id, team, pos, def);
+        a.since = self.tick;
+        a.deploy_start = self.tick;
+        if let Some(shield) = a.def.rules.and_then(|s| s["deployment_shield"].as_i64()) {
+            a.shields.deployment(shield as i32);
+        }
+        if a.def.key == "jack_in_the_box"
+            || a.def
+                .rules
+                .is_some_and(|s| s.get("stealth_delay").is_some())
+        {
+            a.hidden_until = u64::MAX;
+        }
         let blocks = movement::blockers(&self.actors);
         if !movement::query(&self.map, &blocks, &a).legal(pos) {
             return Err(Error::InvalidPoint);
@@ -145,7 +176,10 @@ impl Battle {
             }
         }
         let a = self.actors.get_mut(&id).ok_or(Error::NoTarget)?;
-        if a.def.role == Role::Nexus || (a.has(Control::Stasis) && kind != Control::Stasis) {
+        if a.card_state.immunity > self.tick
+            || a.def.role == Role::Nexus
+            || (a.has(Control::Stasis) && kind != Control::Stasis)
+        {
             return Err(Error::Controlled);
         }
         if a.flight.is_some_and(|f| {
@@ -191,17 +225,33 @@ impl Battle {
         Snapshot {
             tick: self.tick,
             projectiles: self.shots.clone(),
-            areas: self.areas.values().map(|a| a.view).collect(),
+            areas: self
+                .areas
+                .values()
+                .map(|a| a.view)
+                .chain(self.zones.iter().map(|z| z.view()))
+                .collect(),
             units: self
                 .actors
                 .values()
                 .map(|a| UnitView {
+                    visual: a.visual_state(self.tick),
+                    bar: a.bar_indicators(self.tick),
+                    dormant: a.card_state.dormant,
                     sight: a.def.sight,
                     range: a.def.range,
                     radius: a.def.radius,
                     max_hp: a.def.hp,
                     id: a.id,
+                    cast_end: a.card_state.cast_end,
+                    skill: a
+                        .card_state
+                        .equipped_skill
+                        .filter(|_| a.card_state.cast_end > self.tick),
+                    form_changed: a.card_state.changed_form,
                     kind: a.def.key,
+                    name: a.def.rules.and_then(|s| s["name"].as_str()),
+                    structure: a.def.role.structure(),
                     team: a.team,
                     position: a.pos,
                     facing: a.facing,
@@ -209,7 +259,12 @@ impl Battle {
                     target: a.target,
                     activity: a.activity,
                     action_serial: a.action_serial,
+                    attack: a.attack,
+                    cast_start: a.card_state.cast_start,
+                    impact_tick: a.card_state.impact_tick,
                     since: a.since,
+                    deploy_start: a.deploy_start,
+                    ready_tick: a.ready_tick,
                     rounds: a.rounds,
                     reload_left: a.reload_left,
                     shield: a.shields.total(),
@@ -225,7 +280,9 @@ impl Battle {
     }
     pub fn snapshot_for(&self, team: Team) -> Snapshot {
         let mut field = self.snapshot();
-        field.units.retain(|u| u.team == team || !u.hidden);
+        field
+            .units
+            .retain(|u| u.team == team || !u.hidden || u.kind == "twitch");
         for u in &mut field.units {
             if u.target.is_some_and(|id| {
                 self.actors
@@ -235,6 +292,15 @@ impl Battle {
                 u.target = None
             }
         }
+        let hidden = |id: &Id| {
+            self.actors
+                .get(id)
+                .is_some_and(|a| a.team != team && a.hidden_until > 0 && a.def.key != "twitch")
+        };
+        field
+            .projectiles
+            .retain(|shot| !hidden(&shot.owner) && !hidden(&shot.target));
+        field.areas.retain(|area| !hidden(&area.caster));
         field
     }
     fn cast(
@@ -259,6 +325,7 @@ impl Battle {
         self.actors.get_mut(&command.caster).unwrap().next_skill =
             self.tick + u64::from(skill.cooldown);
         self.emit(Fact::Cast {
+            skill: self.actors[&command.caster].card_state.equipped_skill,
             caster: command.caster,
             origin,
             direction: dir,
@@ -294,8 +361,28 @@ impl Battle {
     }
     fn begin_step(&mut self) {
         self.tick += 1;
+        self.deaths.clear();
+        let mut bursts = vec![];
         for a in self.actors.values_mut() {
-            a.shields.expire(self.tick);
+            if let Some(s) = a.shields.expiry_burst(self.tick) {
+                a.card_state.visual_action = Some(("shield:explode", self.tick, self.tick + 12));
+                bursts.push((
+                    timeline::Origin {
+                        caster: a.id,
+                        team: a.team,
+                        origin: a.pos,
+                        source_pos: a.pos,
+                        direction: a.facing,
+                    },
+                    s,
+                ));
+            }
+            if a.shields.expire(self.tick) && !a.grievous_wounds {
+                a.hp = a.def.hp;
+            }
+            if a.tidal_haste.is_some_and(|(until, _)| until <= self.tick) {
+                a.tidal_haste = None;
+            }
             a.slows.expire(self.tick);
             if a.empowerment.is_some_and(|e| e.until <= self.tick) {
                 a.empowerment = None;
@@ -310,11 +397,26 @@ impl Battle {
                 a.sanctuary = None;
             }
         }
+        let mut changes = vec![];
+        for (ctx, s) in bursts {
+            self.nova(ctx, s, &mut changes);
+        }
+        if !changes.is_empty() {
+            self.commit(changes);
+        }
         self.advance_forms();
+        self.card_form_step();
+        self.aura_heal_step();
+        self.advance_card_states();
+        self.advance_casts();
+        self.advance_zones();
+        self.advance_marks();
+        self.advance_specialists();
         self.tick_areas();
     }
     fn finish_step(&mut self) {
         self.lifecycle_step();
+        self.advance_production();
         let view = targeting::Perception::new(&self.actors);
         for a in self.actors.values_mut() {
             if let Some(src) = a.controls.source(Control::Taunt) {
@@ -327,18 +429,42 @@ impl Battle {
                 }
             }
         }
-        let mut out = combat::Effects::new(self.next_id);
+        let mut out = combat::Effects::new(self.next_id, self.tick);
         for a in self.actors.values_mut() {
             let old = a.published_activity;
             let start = out.facts.len();
             if a.ready_tick > self.tick {
                 a.activity = Activity::Deploying;
+            } else if a.card_state.attack_lock > self.tick {
+                a.activity = if a.card_state.move_lock > self.tick {
+                    Activity::Channeling
+                } else if let Some((target, march)) = view.choose(a, self.map.width / 2.) {
+                    a.target = Some(target.id);
+                    if march {
+                        Activity::March
+                    } else {
+                        Activity::Chase
+                    }
+                } else {
+                    Activity::Channeling
+                };
+            } else if a
+                .def
+                .rules
+                .is_some_and(|s| s.get("returning_attack_distance").is_some())
+                && self.shots.iter().any(|p| p.owner == a.id)
+            {
+                a.activity = Activity::Recover;
             } else {
                 combat::decide(a, &view, self.map.width / 2., &mut out)
             }
             let cycle = out.facts[start..]
                 .iter()
                 .any(|f| matches!(f, Fact::AttackStarted(_, _)));
+            if cycle {
+                a.card_state.last_combat = self.tick;
+                a.hidden_until = 0;
+            }
             if old != a.activity || cycle {
                 a.action_serial += 1;
                 a.since = self.tick;
@@ -351,9 +477,27 @@ impl Battle {
             }
         }
         self.next_id = out.next_id;
+        self.attack_waves.extend(out.waves);
         self.shots.extend(out.shots);
         for f in out.facts {
             self.emit(f)
+        }
+        for (source, target, damage) in out.sacrifices {
+            let a = self.actors.get_mut(&source).unwrap();
+            let s = a.def.rules.unwrap();
+            self.card_queue.push(classic::casts::Pending {
+                ctx: timeline::Origin {
+                    caster: source,
+                    team: a.team,
+                    origin: a.pos,
+                    source_pos: a.pos,
+                    direction: a.facing,
+                },
+                spec: s,
+                due: self.tick + (s["sacrifice_delay"].as_f64().unwrap() * 20.).ceil() as u64,
+                stage: classic::casts::Stage::Sacrifice(target, damage),
+            });
+            a.hp = 0;
         }
         self.commit(out.health);
         let mut facts = vec![];
@@ -366,6 +510,8 @@ impl Battle {
                 a.sanctuary = None
             }
         }
+        self.advance_waves();
+        self.advance_sweeps();
         self.projectile_step();
         let mut transitions = vec![];
         for a in self

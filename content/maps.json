@@ -1,0 +1,4 @@
+[
+  {"id":"rift","name":"晴昼峡谷","width":720,"height":1280,"tile":40,"obstacles":[[0,600,80,680],[200,600,520,680],[640,600,720,680]],"towerColumns":[140,580],"towerDepth":1020,"nexus":[360,1160],"waveColumns":[240,480],"waveDepth":1160,"home":[[0,17,18,14],[6,31,6,1]],"pockets":[[[0,9,9,5],[1,14,8,1]],[[9,9,9,5],[9,14,8,1]]],"terrain":"/play/media/battle/rift-arena.webp","backdropWidth":2480,"backMargin":80,"projection":0.8090169943749475,"image":"/play/media/rift.webp"},
+  {"id":"training-crossing","name":"交错桥测试场","testOnly":true,"width":800,"height":1280,"tile":40,"obstacles":[[0,600,120,680],[240,600,560,680],[680,600,800,680]],"towerColumns":[180,620],"towerDepth":980,"nexus":[400,1160],"waveColumns":[280,520],"waveDepth":1080,"home":[[0,17,20,14],[7,31,6,1]],"pockets":[[[0,9,10,6]],[[10,9,10,6]]],"terrain":null,"backdropWidth":800,"backMargin":80,"projection":0.8090169943749475,"image":"/play/media/rift.webp"}
+]

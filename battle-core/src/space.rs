@@ -1,6 +1,6 @@
 use std::ops::{Add, Mul, Sub};
 
-#[derive(Clone, Copy, Debug, Default, PartialEq)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, serde::Serialize)]
 pub struct Point {
     pub x: f64,
     pub y: f64,
@@ -55,11 +55,11 @@ impl Rect {
             max: self.max + d,
         }
     }
-    fn contains(self, p: Point) -> bool {
+    pub(crate) fn contains(self, p: Point) -> bool {
         p.x >= self.min.x && p.x <= self.max.x && p.y >= self.min.y && p.y <= self.max.y
     }
     // Slab intersection along a ray. A stationary axis must lie in its slab.
-    fn interval(self, p: Point, d: Point) -> Option<(f64, f64)> {
+    pub(crate) fn interval(self, p: Point, d: Point) -> Option<(f64, f64)> {
         let (mut lo, mut hi) = (f64::NEG_INFINITY, f64::INFINITY);
         for (v, s, min, max) in [
             (p.x, d.x, self.min.x, self.max.x),
@@ -93,18 +93,7 @@ pub struct Arena {
 }
 impl Arena {
     pub fn classic() -> Self {
-        let ground_obstacles = [(0., 80.), (200., 520.), (640., 720.)]
-            .into_iter()
-            .map(|(a, b)| Rect {
-                min: Point::new(a, 600.),
-                max: Point::new(b, 680.),
-            })
-            .collect();
-        Self {
-            width: 720.,
-            height: 1280.,
-            ground_obstacles,
-        }
+        crate::classic::MatchMap::rift().arena
     }
     pub(crate) fn bounds(&self, r: f64) -> Rect {
         Rect {
@@ -125,6 +114,7 @@ pub(crate) struct Block {
     pub layer: Layer,
 }
 pub(crate) struct Query<'a> {
+    pub cross_river: bool,
     pub map: &'a Arena,
     pub blocks: &'a [Block],
     pub id: u64,
@@ -136,7 +126,7 @@ impl Query<'_> {
         self.map
             .ground_obstacles
             .iter()
-            .filter(|_| self.layer == Layer::Ground)
+            .filter(|_| self.layer == Layer::Ground && !self.cross_river)
             .map(|r| r.expand(self.radius))
     }
     fn circles(&self) -> impl Iterator<Item = &Block> {

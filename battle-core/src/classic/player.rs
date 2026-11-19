@@ -9,7 +9,11 @@ pub struct Active {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct HandView {
     pub hand: [&'static str; 4],
+    pub costs: [u8; 4],
+    pub last: Option<&'static str>,
+    pub active_keys: [Option<&'static str>; 2],
     pub next: &'static str,
+    pub next_cost: u8,
     pub gold: u8,
     pub version: u64,
     pub acknowledged: u64,
@@ -17,6 +21,10 @@ pub struct HandView {
 }
 pub(super) struct Player {
     pub deck: [Card; 8],
+    pub last_card: Option<Card>,
+    pub last_form: Option<&'static str>,
+    pub active_cards: [Option<Card>; 2],
+    pub groups: [Vec<Id>; 2],
     hand: [usize; 4],
     queue: VecDeque<usize>,
     pub gold: u8,
@@ -62,6 +70,10 @@ impl Player {
         }
         Ok(Self {
             deck,
+            groups: Default::default(),
+            last_card: None,
+            last_form: None,
+            active_cards: [None; 2],
             hand: order[..4].try_into().unwrap(),
             queue: order[4..].iter().copied().collect(),
             gold: 5,
@@ -71,10 +83,31 @@ impl Player {
             active: [None; 2],
         })
     }
+    pub(super) fn deploy_cost(&self, card: Card) -> u8 {
+        if let Some(upgrade) = super::roster::rules()[card.key]["deployment_upgrade_id"].as_str() {
+            let cost = super::roster::rules()[upgrade]["cost"].as_u64().unwrap() as u8;
+            if self.gold >= cost {
+                return cost;
+            }
+        }
+        card.cost
+    }
     pub fn view(&self) -> HandView {
+        let cost = |i: usize| {
+            let card = self.deck[i];
+            if matches!(card.play, super::Play::Mirror) {
+                self.last_card.map_or(99, |source| source.cost)
+            } else {
+                self.deploy_cost(card)
+            }
+        };
         HandView {
             hand: self.hand.map(|i| self.deck[i].key),
+            costs: self.hand.map(cost),
+            last: self.last_card.map(|card| card.key),
+            active_keys: self.active_cards.map(|card| card.map(|c| c.key)),
             next: self.deck[self.queue[0]].key,
+            next_cost: cost(self.queue[0]),
             gold: self.gold,
             version: self.version,
             acknowledged: self.ack,

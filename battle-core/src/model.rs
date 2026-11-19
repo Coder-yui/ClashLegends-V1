@@ -1,7 +1,7 @@
 use crate::{Layer, Point};
 use std::collections::{BTreeMap, VecDeque};
 pub type Id = u64;
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize)]
 pub enum Team {
     Blue,
     Red,
@@ -48,6 +48,7 @@ pub enum Action {
 #[derive(Clone, Debug)]
 pub struct UnitDef {
     pub key: &'static str,
+    pub rules: Option<&'static serde_json::Value>,
     pub role: Role,
     pub layer: Layer,
     pub radius: f64,
@@ -102,7 +103,7 @@ impl UnitDef {
             && self.skill.as_ref().is_none_or(|s| s.valid())
     }
 }
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, serde::Serialize)]
 pub enum Control {
     Root,
     Stun,
@@ -111,7 +112,7 @@ pub enum Control {
     Taunt,
     Stasis,
 }
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize)]
 pub enum Activity {
     Idle,
     March,
@@ -130,6 +131,22 @@ pub(crate) struct Flight {
     pub step: f64,
     pub lock_until: u64,
 }
+/// Tick timeline of one swing, stable across Windup -> Recover and reconnect.
+#[derive(Clone, Copy, Debug, PartialEq, serde::Serialize)]
+pub struct AttackTiming {
+    pub start: u64,
+    pub release: u64,
+    pub end: u64,
+    pub cycle: u32,
+    pub released: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub empowered: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub close: bool,
+    #[serde(rename = "structureTarget", skip_serializing_if = "std::ops::Not::not")]
+    pub structure_target: bool,
+}
+
 #[derive(Clone, Debug)]
 pub(crate) struct Actor {
     pub id: Id,
@@ -141,9 +158,13 @@ pub(crate) struct Actor {
     pub target: Option<Id>,
     pub activity: Activity,
     pub action_serial: u64,
+    pub attack: Option<AttackTiming>,
     pub published_activity: Activity,
+    pub card_state: crate::classic::abilities::State,
+    pub field_shift: Point,
     pub avoidance_turn: f64,
     pub since: u64,
+    pub deploy_start: u64,
     pub route: VecDeque<Point>,
     pub route_goal: Option<Point>,
     pub replan: u64,
@@ -162,6 +183,9 @@ pub(crate) struct Actor {
     pub shields: crate::vitals::Shields,
     pub effect_shield_until: u64,
     pub steal_carry: u16,
+    pub grievous_wounds: bool,
+    pub tidal_haste: Option<(u64, u16)>,
+    pub sunlight: Option<(u64, i32)>,
     pub blind: u8,
     pub lives: u8,
     pub revert: Option<crate::forms::Revert>,
@@ -188,9 +212,13 @@ impl Actor {
             target: None,
             activity: Activity::Idle,
             action_serial: 0,
+            attack: None,
             published_activity: Activity::Idle,
+            card_state: Default::default(),
+            field_shift: Point::default(),
             avoidance_turn: 0.,
             since: 0,
+            deploy_start: 0,
             route: VecDeque::new(),
             route_goal: None,
             replan: 0,
@@ -209,6 +237,9 @@ impl Actor {
             shields: Default::default(),
             effect_shield_until: 0,
             steal_carry: 0,
+            grievous_wounds: false,
+            sunlight: None,
+            tidal_haste: None,
             blind: 0,
             drain: Default::default(),
             ready_tick: 0,
@@ -226,6 +257,7 @@ impl Actor {
             || self.flight.is_some()
     }
     pub fn reset_attack(&mut self) {
+        self.attack = None;
         self.drain = Default::default();
         self.release_at = None;
         self.next_attack = 0;
@@ -233,6 +265,10 @@ impl Actor {
 }
 #[derive(Clone, Debug, PartialEq)]
 pub struct Projectile {
+    pub born: u64,
+    pub source_kind: &'static str,
+    pub volley: Option<Id>,
+    pub on_hit: crate::classic::Attack,
     pub trajectory: crate::Trajectory,
     pub team: Team,
     pub origin: Point,
@@ -245,14 +281,71 @@ pub struct Projectile {
     pub damage: i32,
     pub speed: f64,
 }
+/// Extra bar indicators are projected only for a visible actor with an active indicator.
+#[derive(Clone, Debug, Default, PartialEq, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BarIndicators {
+    pub shield_capacity: i32,
+    pub bleed_stacks: u32,
+    pub untargetable: bool,
+    pub wounds: bool,
+    pub forged: bool,
+    pub resource: Option<(f64, f64)>,
+    pub rounds: Option<u8>,
+    pub recovery_ticks: u64,
+}
+
+#[derive(Clone, Debug, PartialEq, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct VisualState {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<(&'static str, u64, u64)>,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub empowered: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub buff: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub immune: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub charge: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub terrain: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub full: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub reload: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub strong: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub big: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub active_form: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub form_start: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub form_ticks: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cast_resource: Option<u32>,
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub struct UnitView {
+    pub visual: VisualState,
+    pub bar: Option<BarIndicators>,
+    pub dormant: bool,
+    pub cast_start: u64,
+    pub impact_tick: u64,
+    pub cast_end: u64,
+    pub skill: Option<&'static str>,
+    pub form_changed: bool,
     pub sight: f64,
     pub range: f64,
     pub radius: f64,
     pub max_hp: i32,
     pub id: Id,
     pub kind: &'static str,
+    pub name: Option<&'static str>,
+    pub structure: bool,
     pub team: Team,
     pub position: Point,
     pub facing: Point,
@@ -260,7 +353,10 @@ pub struct UnitView {
     pub target: Option<Id>,
     pub activity: Activity,
     pub action_serial: u64,
+    pub attack: Option<AttackTiming>,
     pub since: u64,
+    pub deploy_start: u64,
+    pub ready_tick: u64,
     pub controls: Vec<Control>,
     pub shield: i32,
     pub effect_shield: bool,
@@ -278,10 +374,22 @@ pub struct Snapshot {
     pub projectiles: Vec<Projectile>,
     pub areas: Vec<crate::AreaView>,
 }
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, serde::Serialize)]
+#[serde(tag = "kind", content = "data", rename_all = "camelCase")]
 pub enum Fact {
     EffectBlocked(Id),
     Spawned(Id),
+    SpellImpact {
+        id: Id,
+        key: &'static str,
+        position: Point,
+    },
+    SpellPlayed {
+        id: Id,
+        key: &'static str,
+        team: Team,
+        position: Point,
+    },
     ActionChanged {
         id: Id,
         serial: u64,
@@ -311,6 +419,11 @@ pub enum Fact {
         child: Id,
     },
     AttackStarted(Id, Id),
+    AttackReleased {
+        source: Id,
+        target: Id,
+        start: u64,
+    },
     Fired(Id, Id, Id),
     ProjectileHit {
         projectile: Id,
@@ -323,6 +436,7 @@ pub enum Fact {
     },
     Died(Id),
     Cast {
+        skill: Option<&'static str>,
         caster: Id,
         origin: Point,
         direction: Point,

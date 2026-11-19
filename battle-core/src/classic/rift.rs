@@ -1,11 +1,57 @@
 use super::{ClassicMatch, MatchError};
 use crate::{Point, Role, Team, UnitDef};
-pub(super) const LANE_X: [f64; 2] = [140., 580.];
-pub(super) const WAVE_X: [f64; 2] = [240., 480.];
-pub(super) fn home(team: Team, x: f64, y: f64) -> Point {
-    Point::new(x, if team == Team::Blue { y } else { 1280. - y })
+use serde::Deserialize;
+use std::sync::OnceLock;
+
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+#[derive(serde::Serialize)]
+pub struct MapDefinition {
+    pub id: String,
+    pub name: String,
+    pub width: f64,
+    pub height: f64,
+    pub tile: f64,
+    pub obstacles: Vec<[f64; 4]>,
+    tower_columns: [f64; 2],
+    tower_depth: f64,
+    nexus: [f64; 2],
+    wave_columns: [f64; 2],
+    wave_depth: f64,
+    home: Vec<[i32; 4]>,
+    pockets: [Vec<[i32; 4]>; 2],
+    pub terrain: Option<String>,
+    pub backdrop_width: f64,
+    pub back_margin: f64,
+    pub projection: f64,
+    pub image: String,
+    #[serde(default)]
+    pub test_only: bool,
 }
-#[derive(Clone, Copy, Debug)]
+pub fn maps() -> &'static [MapDefinition] {
+    static DATA: OnceLock<Vec<MapDefinition>> = OnceLock::new();
+    DATA.get_or_init(|| serde_json::from_str(include_str!("../../../content/maps.json")).unwrap())
+}
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+#[derive(serde::Serialize)]
+pub struct ModeRules {
+    pub id: String,
+    pub name: String,
+    pub map_ids: Vec<String>,
+    pub deck_size: usize,
+    pub regulation: u64,
+    pub end: u64,
+    pub double_gold: u64,
+    pub triple_gold: u64,
+    front_waves: Vec<u64>,
+    rear_waves: Vec<u64>,
+}
+pub fn modes() -> &'static [ModeRules] {
+    static DATA: OnceLock<Vec<ModeRules>> = OnceLock::new();
+    DATA.get_or_init(|| serde_json::from_str(include_str!("../../../content/modes.json")).unwrap())
+}
+#[derive(Clone, Copy, Debug, PartialEq, serde::Serialize)]
 pub struct Tiles {
     pub x: i32,
     pub y: i32,
@@ -13,7 +59,7 @@ pub struct Tiles {
     pub height: i32,
 }
 impl Tiles {
-    fn contains(&self, x: i32, y: i32) -> bool {
+    pub(super) fn contains(&self, x: i32, y: i32) -> bool {
         (self.x..self.x.saturating_add(self.width)).contains(&x)
             && (self.y..self.y.saturating_add(self.height)).contains(&y)
     }
@@ -35,38 +81,109 @@ pub struct MatchMap {
 }
 impl MatchMap {
     pub fn rift() -> Self {
+        Self::named("rift").unwrap()
+    }
+    pub fn named(id: &str) -> Option<Self> {
+        let def = maps().iter().find(|m| m.id == id)?;
         let sides = [Team::Blue, Team::Red].map(|team| {
-            let rect = |x, y, w, h| Tiles {
+            let home = |x, y| {
+                Point::new(
+                    x,
+                    if team == Team::Blue {
+                        y
+                    } else {
+                        def.height - y
+                    },
+                )
+            };
+            let rect = |[x, y, width, height]: [i32; 4]| Tiles {
                 x,
-                y: if team == Team::Blue { y } else { 32 - y - h },
-                width: w,
-                height: h,
+                y: if team == Team::Blue {
+                    y
+                } else {
+                    (def.height / def.tile) as i32 - y - height
+                },
+                width,
+                height,
             };
             SideLayout {
-                towers: LANE_X.map(|x| home(team, x, 1020.)),
-                nexus: home(team, 360., 1160.),
-                wave: WAVE_X.map(|x| home(team, x, 1160.)),
-                home: vec![rect(0, 17, 18, 14), rect(6, 31, 6, 1)],
-                pockets: [
-                    vec![rect(0, 9, 9, 5), rect(1, 14, 8, 1)],
-                    vec![rect(9, 9, 9, 5), rect(9, 14, 8, 1)],
-                ],
+                towers: def.tower_columns.map(|x| home(x, def.tower_depth)),
+                nexus: home(def.nexus[0], def.nexus[1]),
+                wave: def.wave_columns.map(|x| home(x, def.wave_depth)),
+                home: def.home.iter().copied().map(rect).collect(),
+                pockets: std::array::from_fn(|i| {
+                    def.pockets[i].iter().copied().map(rect).collect()
+                }),
             }
         });
-        Self {
-            id: "rift",
-            arena: crate::Arena::classic(),
-            tile_size: 40.,
+        Some(Self {
+            id: &def.id,
+            arena: crate::Arena {
+                width: def.width,
+                height: def.height,
+                ground_obstacles: def
+                    .obstacles
+                    .iter()
+                    .map(|&[x, y, r, b]| crate::Rect {
+                        min: Point::new(x, y),
+                        max: Point::new(r, b),
+                    })
+                    .collect(),
+            },
+            tile_size: def.tile,
             sides,
-        }
+        })
     }
 }
 impl ClassicMatch {
+    pub fn map(&self) -> &MatchMap {
+        &self.map
+    }
+    pub fn rules(&self) -> &ModeRules {
+        self.mode
+    }
+    pub fn open_pockets(&self, team: Team) -> [bool; 2] {
+        self.towers[team.enemy().index()].map(|id| !self.battle.actors.contains_key(&id))
+    }
+    pub(super) fn home_tile(&self, point: Point, team: Team) -> bool {
+        let tile = self.map.tile_size;
+        self.map.sides[team.index()].home.iter().any(|r| {
+            r.contains(
+                (point.x / tile).floor() as i32,
+                (point.y / tile).floor() as i32,
+            )
+        })
+    }
     pub(super) fn cell(
         &self,
         point: Point,
         team: Team,
         actor: Option<&UnitDef>,
+    ) -> Result<Point, MatchError> {
+        self.cell_with_rules(point, team, actor, false, false)
+    }
+    pub(super) fn deployment_cell(
+        &self,
+        point: Point,
+        team: Team,
+        def: &UnitDef,
+        rule: &serde_json::Value,
+    ) -> Result<Point, MatchError> {
+        self.cell_with_rules(
+            point,
+            team,
+            Some(def),
+            rule["deploy_zone"] == "global",
+            rule["deploy_pocket_requires_both_towers"] == true,
+        )
+    }
+    fn cell_with_rules(
+        &self,
+        point: Point,
+        team: Team,
+        actor: Option<&UnitDef>,
+        global: bool,
+        both: bool,
     ) -> Result<Point, MatchError> {
         if !self.battle.map.contains(point)
             || point.x >= self.map.arena.width
@@ -108,7 +225,10 @@ impl ClassicMatch {
                         .contains_key(&self.towers[team.enemy().index()][lane])
                         && regions.iter().any(|r| r.contains(x, y))
                 });
-                if !own && !pocket {
+                let both_down = self.towers[team.enemy().index()]
+                    .iter()
+                    .all(|id| !self.battle.actors.contains_key(id));
+                if !self.laboratory && !global && !own && !(pocket && (!both || both_down)) {
                     return Err(MatchError::Placement);
                 }
             }
@@ -129,14 +249,10 @@ impl ClassicMatch {
     }
     pub(super) fn wave(&mut self) {
         let t = self.battle.tick;
-        let first = matches!(t, 100 | 1000 | 1900 | 2500 | 3100 | 4300 | 4900 | 5500);
-        let second = t >= 10
-            && matches!(
-                t - 10,
-                100 | 1000 | 1900 | 2500 | 3100 | 3700 | 4300 | 4900 | 5500
-            );
+        let first = self.mode.front_waves.contains(&t);
+        let second = self.mode.rear_waves.contains(&t);
         if first || second {
-            self.spawn_wave(first, t >= 2500)
+            self.spawn_wave(first, t >= self.mode.double_gold)
         }
     }
     pub(super) fn spawn_wave(&mut self, front: bool, siege: bool) {
@@ -160,5 +276,55 @@ impl ClassicMatch {
                 let _ = self.battle.spawn_near(team, pos, def);
             }
         }
+    }
+}
+
+impl ClassicMatch {
+    /// Public map landmarks survive a disconnected spectator or player reconnecting.
+    pub fn ruined_towers(&self) -> impl Iterator<Item = (crate::Id, Team, Point)> + '_ {
+        [Team::Blue, Team::Red].into_iter().flat_map(move |team| {
+            self.towers[team.index()]
+                .into_iter()
+                .zip(self.map.sides[team.index()].towers)
+                .filter(move |(id, _)| !self.battle.actors.contains_key(id))
+                .map(move |(id, point)| (id, team, point))
+        })
+    }
+
+    pub fn deployment_regions(&self, team: Team) -> [Vec<Tiles>; 4] {
+        let player = &self.players[team.index()];
+        let side = &self.map.sides[team.index()];
+        let open = self.open_pockets(team);
+        std::array::from_fn(|slot| {
+            let mut card = player.deck[player.lookup(slot as u8, player.version).unwrap()];
+            if matches!(card.play, super::Play::Mirror) {
+                let Some(last) = player.last_card else {
+                    return vec![];
+                };
+                card = last;
+            }
+            if !card.home_deployment() {
+                return vec![Tiles {
+                    x: 0,
+                    y: 0,
+                    width: (self.map.arena.width / self.map.tile_size) as i32,
+                    height: (self.map.arena.height / self.map.tile_size) as i32,
+                }];
+            }
+            let mut zones = side.home.clone();
+            if !matches!(
+                card.play,
+                super::Play::Spell(_) | super::Play::CardSpell(..)
+            ) && (super::roster::rules()[card.key]["deploy_pocket_requires_both_towers"] != true
+                || open.iter().all(|v| *v))
+            {
+                for (lane, unlocked) in open.into_iter().enumerate() {
+                    if unlocked {
+                        zones.extend_from_slice(&side.pockets[lane])
+                    }
+                }
+            }
+            zones
+        })
     }
 }

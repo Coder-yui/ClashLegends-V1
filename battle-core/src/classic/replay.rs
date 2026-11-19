@@ -1,14 +1,15 @@
 //! Compact input log. Deck order and selected content are supplied at replay
 //! time and must match the header; spectators never receive this private log.
 use super::{Card, ClassicMatch, Input, MatchError};
-pub const RULESET: &str = "classic-kernel-1";
+pub const RULESET: &str = env!("BATTLE_RULESET");
 #[derive(Clone, Debug)]
 pub struct Record {
     pub rules: &'static str,
     pub content: String,
     pub seed: u64,
     pub map: String,
-    pub skills: [[Option<String>; 2]; 2],
+    pub mode: String,
+    pub skills: [[Option<String>; 8]; 2],
     pub decks: [[String; 8]; 2],
     pub steps: u64,
     pub commands: Vec<(u64, Input)>,
@@ -23,8 +24,9 @@ impl Record {
             rules: RULESET,
             content: content.to_owned(),
             seed: game.seed,
+            mode: game.mode.id.clone(),
             map: game.map.id.to_owned(),
-            skills: decks.map(|d| [0, 1].map(|i| d[i].skill_key.map(str::to_owned))),
+            skills: decks.map(|d| d.map(|card| card.skill_key.map(str::to_owned))),
             decks: decks.map(|cards| cards.map(|c| c.key.to_owned())),
             steps: 0,
             commands: vec![],
@@ -56,13 +58,14 @@ impl Record {
     ) -> Result<ClassicMatch, MatchError> {
         if self.rules != RULESET
             || self.map != map.id
-            || decks.iter().enumerate().any(|(s, d)| {
-                [0, 1]
-                    .iter()
-                    .any(|&i| d[i].skill_key != self.skills[s][i].as_deref())
-            })
+            || decks
+                .iter()
+                .enumerate()
+                .any(|(s, d)| (0..8).any(|i| d[i].skill_key != self.skills[s][i].as_deref()))
             || self.content != content
-            || self.steps > 6100
+            || !super::modes()
+                .iter()
+                .any(|m| m.id == self.mode && self.steps <= m.end)
             || self.commands.windows(2).any(|w| w[0].0 > w[1].0)
             || self
                 .commands
@@ -75,7 +78,11 @@ impl Record {
         {
             return Err(MatchError::Loadout);
         }
-        let mut game = ClassicMatch::on_map(self.seed, decks, map)?;
+        let mode = super::modes()
+            .iter()
+            .find(|m| m.id == self.mode)
+            .ok_or(MatchError::Loadout)?;
+        let mut game = ClassicMatch::with_rules(self.seed, decks, map, mode)?;
         let mut inputs = self.commands.iter().peekable();
         for tick in 1..=self.steps {
             if game.result().is_some() {

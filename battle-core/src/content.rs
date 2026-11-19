@@ -5,6 +5,7 @@ impl UnitDef {
     pub fn melee() -> Self {
         Self {
             key: "melee_minion",
+            rules: None,
             role: Role::Troop,
             layer: Layer::Ground,
             radius: 12.,

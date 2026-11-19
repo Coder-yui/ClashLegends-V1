@@ -13,7 +13,7 @@ pub enum Aim {
     Direction(Point),
     PointAndDirection { origin: Point, direction: Point },
 }
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, serde::Serialize)]
 pub enum Shape {
     Circle { radius: f64 },
     Ring { inner: f64, outer: f64 },
@@ -53,6 +53,7 @@ impl Shape {
 }
 #[derive(Clone, Copy, Debug)]
 pub enum Effect {
+    CardAbility(&'static serde_json::Value),
     Area(crate::TimedArea),
     Summon(crate::SpawnBatch),
     Transform(crate::Transform),
@@ -87,6 +88,10 @@ pub enum Effect {
     Blind {
         charges: u8,
     },
+    SelfShield {
+        amount: i32,
+        ticks: u32,
+    },
     Shield {
         amount: i32,
         ticks: u32,
@@ -104,6 +109,7 @@ pub enum Effect {
 impl Effect {
     pub(crate) fn valid(self) -> bool {
         match self {
+            Self::CardAbility(s) => s["kind"].is_string(),
             Self::Transform(t) => t.revert_after != Some(0),
             Self::RegenTroops { per_second } => per_second > 0,
             Self::HealTroops(n) => n >= 0,
@@ -117,7 +123,9 @@ impl Effect {
             Self::Stealth { ticks } | Self::EffectShield { ticks } => ticks > 0,
             Self::Sanctuary { radius, ticks } => radius.is_finite() && radius > 0. && ticks > 0,
             Self::Blind { charges } => charges > 0,
-            Self::Shield { amount, ticks } => amount > 0 && ticks > 0,
+            Self::Shield { amount, ticks } | Self::SelfShield { amount, ticks } => {
+                amount > 0 && ticks > 0
+            }
             Self::Motion(m) => m.valid(),
             Self::Summon(b) => b.count > 0,
             Self::Damage(n) | Self::Heal(n) => n > 0,
@@ -178,6 +186,18 @@ pub struct Cast {
     pub caster: Id,
     pub aim: Aim,
 }
+pub(crate) fn activation_locked(a: &Actor, skill: &Skill, tick: u64) -> bool {
+    if matches!(skill.effects.first(),Some(Effect::CardAbility(s)) if s["requires_full_resource"]==true && a.card_state.resource < a.def.rules.and_then(|r|r["skill_resource_max"].as_f64()).unwrap_or(0.))
+    {
+        return true;
+    }
+    let cleanse = matches!(skill.effects.first(),Some(Effect::CardAbility(s)) if s["cleanse_controls"]==true || s["kind"]=="undying_rage");
+    tick < a.ready_tick
+        || tick < a.card_state.cast_end
+        || ((!cleanse || a.has(Control::Stasis))
+            && (a.disabled() || a.has(Control::Taunt) || a.has(Control::Silence)))
+}
+
 pub(crate) fn resolve(
     map: &Arena,
     a: &Actor,
@@ -189,10 +209,10 @@ pub(crate) fn resolve(
         return Err(Error::Ownership);
     }
     let skill = a.def.skill.as_ref().ok_or(Error::NoSkill)?;
-    if tick < a.ready_tick || a.disabled() || a.has(Control::Taunt) || a.has(Control::Silence) {
+    if activation_locked(a, skill, tick) {
         return Err(Error::Controlled);
     }
-    if tick < a.next_skill {
+    if tick < a.next_skill && !a.card_state.free_execute {
         return Err(Error::Cooldown);
     }
     let (origin, heading) = match (skill.aim, aim) {

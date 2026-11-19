@@ -12,7 +12,8 @@
         {
           "id": "aatrox.world-ender",
           "name": "大灭",
-          "description": "增加生命并暂时升空，强化吸血和被动循环；击杀刷新形态时间与加速。结束时生命截回基础上限。"
+          "description": "增加生命并暂时升空，强化吸血和被动循环；击杀刷新形态时间与加速。结束时生命截回基础上限。",
+          "image": "/play/media/battle/aatrox_0.webp"
         }
       ]
     },
@@ -27,7 +28,8 @@
         {
           "id": "airdrop_bear.furious-arrival",
           "name": "焚怒降临",
-          "description": "落地额外眩晕1.5秒，水晶免疫。提伯斯永久灼烧周围2.5格内敌人，每0.5秒造成20伤害，并在出生后5秒内提高50%攻速。灼烧对空中与建筑有效，凝滞抑制，死亡结束。"
+          "description": "落地额外眩晕1.5秒，水晶免疫。提伯斯永久灼烧周围2.5格内敌人，每0.5秒造成20伤害，并在出生后5秒内提高50%攻速。灼烧对空中与建筑有效，凝滞抑制，死亡结束。",
+          "image": "/play/media/battle/airdrop_bear_0.webp"
         }
       ]
     },
@@ -42,7 +44,8 @@
         {
           "id": "anivia.glacial-storm",
           "name": "冰雪风暴",
-          "description": "在身前创造风暴，落地伤害后周期造成伤害与减速。施法锁定移动、攻击和朝向；已落地风暴独立存在。"
+          "description": "在身前创造风暴，落地伤害后周期造成伤害与减速。施法锁定移动、攻击和朝向；已落地风暴独立存在。",
+          "image": "/play/media/battle/anivia_0.webp"
         }
       ]
     },
@@ -57,7 +60,8 @@
         {
           "id": "apex_turret.hextech-piercing-laser",
           "name": "海克斯穿透激光",
-          "description": "沿朝向发射穿透激光，伤害路径上的地面敌人。"
+          "description": "沿朝向发射穿透激光，伤害路径上的地面敌人。",
+          "image": "/play/media/battle/apex_turret_0.webp"
         }
       ]
     },
@@ -72,7 +76,8 @@
         {
           "id": "ashe.volley",
           "name": "万箭齐发",
-          "description": "向前方扇形发射箭矢，每箭在首个敌人处消失；同次施法对同一目标不重复伤害，并触发冰霜减速。"
+          "description": "向前方扇形发射箭矢，每箭在首个敌人处消失；同次施法对同一目标不重复伤害，并触发冰霜减速。",
+          "image": "/play/media/battle/ashe_0.webp"
         }
       ]
     },
@@ -87,7 +92,8 @@
         {
           "id": "aurelionsol.falling-star-the-skies-descend",
           "name": "星落/天瀑",
-          "description": "击杀充能，向前方降星造成伤害与眩晕；满层强化伤害和眩晕，并产生全场扩散冲击波。"
+          "description": "击杀充能，向前方降星造成伤害与眩晕；满层强化伤害和眩晕，并产生全场扩散冲击波。",
+          "image": "/play/media/battle/aurelionsol_0.webp"
         }
       ]
     },
@@ -102,7 +108,8 @@
         {
           "id": "azir.arise",
           "name": "沙兵现身",
-          "description": "在自身四周召唤黄沙士兵。"
+          "description": "在自身四周召唤黄沙士兵。",
+          "image": "/play/media/battle/azir_0.webp"
         }
       ]
     },
@@ -117,7 +124,8 @@
         {
           "id": "belveth.void-surge",
           "name": "虚空激流",
-          "description": "向前突进，对路径上空地敌军及建筑造成一次伤害。"
+          "description": "向前突进，对路径上空地敌军及建筑造成一次伤害。",
+          "image": "/play/media/battle/belveth_0.webp"
         }
       ]
     },
@@ -132,7 +140,8 @@
         {
           "id": "blitzcrank.power-fist",
           "name": "能量铁拳",
-          "description": "刷新普攻，下一次攻击造成1.5倍伤害并眩晕敌方单位1秒。"
+          "description": "刷新普攻，下一次攻击造成1.5倍伤害并眩晕敌方单位1秒。",
+          "image": "/play/media/battle/blitzcrank_0.webp"
         }
       ]
     },
@@ -147,7 +156,8 @@
         {
           "id": "convergent_pulse.empowered-pulse",
           "name": "强化脉冲",
-          "description": "伤害提高至270，半径扩大至3.25格，强制位移提高至2.5格，基础持续0.5秒。"
+          "description": "伤害提高至270，半径扩大至3.25格，强制位移提高至2.5格，基础持续0.5秒。",
+          "image": "/play/media/battle/convergent_pulse_0.webp"
         }
       ]
     },
@@ -162,7 +172,8 @@
         {
           "id": "corki.missile-barrage",
           "name": "火箭轰击",
-          "description": "导弹碰到首个敌人后爆炸；最后一发为强化导弹。未命中则在射程尽头消失。"
+          "description": "导弹碰到首个敌人后爆炸；最后一发为强化导弹。未命中则在射程尽头消失。",
+          "image": "/play/media/battle/corki_0.webp"
         }
       ]
     },
@@ -177,7 +188,8 @@
         {
           "id": "corrosion.empowered-corrosion",
           "name": "强化腐蚀",
-          "description": "敌方进入腐蚀区域立即受到移动减速，离开后迅速消退。"
+          "description": "敌方进入腐蚀区域立即受到移动减速，离开后迅速消退。",
+          "image": "/play/media/battle/corrosion_0.webp"
         }
       ]
     },
@@ -192,7 +204,8 @@
         {
           "id": "darius.noxian-guillotine",
           "name": "诺克萨斯断头台",
-          "description": "强化下一击，按目标流血层数增伤；血怒进一步强化。技能不受致盲影响，击杀赠送免费追斩。"
+          "description": "强化下一击，按目标流血层数增伤；血怒进一步强化。技能不受致盲影响，击杀赠送免费追斩。",
+          "image": "/play/media/battle/darius_0.webp"
         }
       ]
     },
@@ -207,7 +220,8 @@
         {
           "id": "demacian_standard.golden-aegis",
           "name": "黄金圣盾",
-          "description": "旗杆中心4格内友军获得120护盾，持续3秒，包含自身、建筑、防御塔与水晶。范围内敌方单位减速35%，持续2秒，不造成伤害。"
+          "description": "旗杆中心4格内友军获得120护盾，持续3秒，包含自身、建筑、防御塔与水晶。范围内敌方单位减速35%，持续2秒，不造成伤害。",
+          "image": "/play/media/battle/demacian_standard_0.webp"
         }
       ]
     },
@@ -222,7 +236,8 @@
         {
           "id": "ekko.chronobreak",
           "name": "时空断裂",
-          "description": "开始回溯时回复满血，不可选中回溯0.75秒，回到施法时4秒前的位置并对半径140内敌人造成300伤害。历史不足时使用最早位置。"
+          "description": "开始回溯时回复满血，不可选中回溯0.75秒，回到施法时4秒前的位置并对半径140内敌人造成300伤害。历史不足时使用最早位置。",
+          "image": "/play/media/battle/ekko_0.webp"
         }
       ]
     },
@@ -237,7 +252,8 @@
         {
           "id": "event_horizon.dark-matter",
           "name": "黑暗物质",
-          "description": "首个成功眩晕的位置在1.2秒后落下黑暗物质，对半径1.625格内敌军造成220伤害，包括建筑；防御塔与水晶承受30%。每次法术仅触发一次。"
+          "description": "首个成功眩晕的位置在1.2秒后落下黑暗物质，对半径1.625格内敌军造成220伤害，包括建筑；防御塔与水晶承受30%。每次法术仅触发一次。",
+          "image": "/play/media/battle/event_horizon_0.webp"
         }
       ]
     },
@@ -252,7 +268,8 @@
         {
           "id": "evolution_turret.hextech-repair",
           "name": "海克斯修复",
-          "description": "回复炮台240生命，自然衰血速度不变。"
+          "description": "回复炮台240生命，自然衰血速度不变。",
+          "image": "/play/media/battle/evolution_turret_0.webp"
         }
       ]
     },
@@ -267,7 +284,8 @@
         {
           "id": "explosive_cask.volatile-powder",
           "name": "烈性火药",
-          "description": "提高爆炸伤害，不改变范围或击退。"
+          "description": "提高爆炸伤害，不改变范围或击退。",
+          "image": "/play/media/battle/explosive_cask_0.webp"
         }
       ]
     },
@@ -282,7 +300,8 @@
         {
           "id": "final_spark.dazzling-radiance",
           "name": "夺目光辉",
-          "description": "命中的敌方非建筑单位获得1次致盲，使下一次普通或强化攻击落空，仍消耗攻击。重复施加不叠加次数，技能不受影响。"
+          "description": "命中的敌方非建筑单位获得1次致盲，使下一次普通或强化攻击落空，仍消耗攻击。重复施加不叠加次数，技能不受影响。",
+          "image": "/play/media/battle/final_spark_0.webp"
         }
       ]
     },
@@ -297,7 +316,8 @@
         {
           "id": "freeze.empowered-freeze",
           "name": "强化冰冻",
-          "description": "施放时另建更大的减速区域，降低移动与攻击速度；减速区域比冻结持续更久，不扩大冻结本身。"
+          "description": "施放时另建更大的减速区域，降低移动与攻击速度；减速区域比冻结持续更久，不扩大冻结本身。",
+          "image": "/play/media/battle/freeze_0.webp"
         }
       ]
     },
@@ -312,12 +332,14 @@
         {
           "id": "garen.decisive-strike",
           "name": "致命打击",
-          "description": "强化下一次普攻并刷新攻击前摇，尚未打出时加速移动。"
+          "description": "强化下一次普攻并刷新攻击前摇，尚未打出时加速移动。",
+          "image": "/play/media/battle/garen_0.webp"
         },
         {
           "id": "garen.judgment",
           "name": "审判",
-          "description": "旋转并周期伤害周围地面敌人。期间不能普攻，但仍可移动和转向。"
+          "description": "旋转并周期伤害周围地面敌人。期间不能普攻，但仍可移动和转向。",
+          "image": "/play/media/battle/garen_1.webp"
         }
       ]
     },
@@ -332,7 +354,8 @@
         {
           "id": "gnar.rage-burst",
           "name": "怒气爆发",
-          "description": "向前重击并眩晕地面敌人；小纳尔先变为大纳尔。"
+          "description": "向前重击并眩晕地面敌人；小纳尔先变为大纳尔。",
+          "image": "/play/media/battle/gnar_0.webp"
         }
       ]
     },
@@ -347,7 +370,8 @@
         {
           "id": "gold_ward.perfect-timing",
           "name": "完美时机",
-          "description": "进入凝滞2.5秒，无法被选取或受伤，保留碰撞，暂停自然衰血并延后产出。"
+          "description": "进入凝滞2.5秒，无法被选取或受伤，保留碰撞，暂停自然衰血并延后产出。",
+          "image": "/play/media/battle/gold_ward_0.webp"
         }
       ]
     },
@@ -362,7 +386,8 @@
         {
           "id": "graves.quickdraw",
           "name": "快速拔枪",
-          "description": "向释放朝向的后方滑行3格，用时0.4秒，获得1发子弹（最多2发）并取消换弹。终点受阻时继续向后寻找最多40加身体半径加2单位的合法落点，否则停在障碍前。"
+          "description": "向释放朝向的后方滑行3格，用时0.4秒，获得1发子弹（最多2发）并取消换弹。终点受阻时继续向后寻找最多40加身体半径加2单位的合法落点，否则停在障碍前。",
+          "image": "/play/media/battle/graves_0.webp"
         }
       ]
     },
@@ -377,12 +402,14 @@
         {
           "id": "gwen.snip-snip",
           "name": "快刀乱剪",
-          "description": "普攻命中积攒剪切次数。每剪附带被动，中央提高基础伤害；满层首次实际命中回血，空放不回血。"
+          "description": "普攻命中积攒剪切次数。每剪附带被动，中央提高基础伤害；满层首次实际命中回血，空放不回血。",
+          "image": "/play/media/battle/gwen_0.webp"
         },
         {
           "id": "gwen.hallowed-mist",
           "name": "丝缕缠流",
-          "description": "创建固定圣霭，阻止圈外敌人选取格温或施加新效果；已有状态继续生效，格温离开则结界消失。"
+          "description": "创建固定圣霭，阻止圈外敌人选取格温或施加新效果；已有状态继续生效，格温离开则结界消失。",
+          "image": "/play/media/battle/gwen_1.webp"
         }
       ]
     },
@@ -397,12 +424,14 @@
         {
           "id": "heal.empowered-heal",
           "name": "强化治疗",
-          "description": "治疗全场友方普通单位，落点范围内治疗量进一步提高，不提供护盾。"
+          "description": "治疗全场友方普通单位，落点范围内治疗量进一步提高，不提供护盾。",
+          "image": "/play/media/battle/heal_0.webp"
         },
         {
           "id": "heal.overheal",
           "name": "过量治疗",
-          "description": "提高范围治疗量，部分溢出治疗转为限时护盾。"
+          "description": "提高范围治疗量，部分溢出治疗转为限时护盾。",
+          "image": "/play/media/battle/heal_1.webp"
         }
       ]
     },
@@ -417,7 +446,8 @@
         {
           "id": "heavy_minion_squad.hand-of-baron",
           "name": "男爵之力",
-          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。"
+          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。",
+          "image": "/play/media/battle/heavy_minion_squad.webp"
         }
       ]
     },
@@ -432,7 +462,8 @@
         {
           "id": "hecarim.spirit-of-dread",
           "name": "恐惧之灵",
-          "description": "起手0.44秒期间锁攻击，随后开启4秒领域，每0.5秒对周围地面敌人造成20伤害。领域伤害和普通攻击按实际生命伤害的30%治疗自身；期间可以移动和攻击。"
+          "description": "起手0.44秒期间锁攻击，随后开启4秒领域，每0.5秒对周围地面敌人造成20伤害。领域伤害和普通攻击按实际生命伤害的30%治疗自身；期间可以移动和攻击。",
+          "image": "/play/media/battle/hecarim_0.webp"
         }
       ]
     },
@@ -447,7 +478,8 @@
         {
           "id": "inhibitor.super-reinforcements",
           "name": "超级增援",
-          "description": "立即召唤1个可立即行动的超级兵，不推进被动波次。"
+          "description": "立即召唤1个可立即行动的超级兵，不推进被动波次。",
+          "image": "/play/media/battle/inhibitor_0.webp"
         }
       ]
     },
@@ -462,7 +494,8 @@
         {
           "id": "ivern.daisy",
           "name": "小菊！",
-          "description": "施法1秒，在0.2秒时于当前朝向前方1格召出小菊，非法落点自动校正。小菊出生等待1.3秒后行动，每第三击造成160伤害并眩晕存活目标1秒；翠神死亡不会移除小菊，召唤物不继承主动资格。"
+          "description": "施法1秒，在0.2秒时于当前朝向前方1格召出小菊，非法落点自动校正。小菊出生等待1.3秒后行动，每第三击造成160伤害并眩晕存活目标1秒；翠神死亡不会移除小菊，召唤物不继承主动资格。",
+          "image": "/play/media/battle/ivern_0.webp"
         }
       ]
     },
@@ -477,7 +510,8 @@
         {
           "id": "jack_in_the_box.fright",
           "name": "惊吓",
-          "description": "使攻击范围内敌方单位眩晕1秒。"
+          "description": "使攻击范围内敌方单位眩晕1秒。",
+          "image": "/play/media/battle/jack_in_the_box_0.webp"
         }
       ]
     },
@@ -492,7 +526,8 @@
         {
           "id": "jax.counter-strike",
           "name": "反击风暴",
-          "description": "暂时免疫普攻伤害，仍可移动攻击；结束时伤害并眩晕周围地面敌人，闪避的攻击提高伤害。死亡取消，凝滞到期不补发。"
+          "description": "暂时免疫普攻伤害，仍可移动攻击；结束时伤害并眩晕周围地面敌人，闪避的攻击提高伤害。死亡取消，凝滞到期不补发。",
+          "image": "/play/media/battle/jax_0.webp"
         }
       ]
     },
@@ -507,7 +542,8 @@
         {
           "id": "jayce.hyper-charge-lightning-field",
           "name": "超能电荷 / 闪电领域",
-          "description": "炮形态：4秒内接下来3次普攻获得3倍攻速，次数用完或时间到期即结束。锤形态：开启4秒电场，每0.5秒对周围敌军造成10伤害。两种效果换形后均保留。"
+          "description": "炮形态：4秒内接下来3次普攻获得3倍攻速，次数用完或时间到期即结束。锤形态：开启4秒电场，每0.5秒对周围敌军造成10伤害。两种效果换形后均保留。",
+          "image": "/play/media/battle/jayce_0.webp"
         }
       ]
     },
@@ -522,7 +558,8 @@
         {
           "id": "jinx.switcheroo",
           "name": "枪炮交响曲！",
-          "description": "切换武器并重置旧普攻后摇，切换期间不能攻击；机枪命中叠攻速，换武器清空层数。"
+          "description": "切换武器并重置旧普攻后摇，切换期间不能攻击；机枪命中叠攻速，换武器清空层数。",
+          "image": "/play/media/battle/jinx_0.webp"
         }
       ]
     },
@@ -537,7 +574,8 @@
         {
           "id": "kassadin.riftwalk",
           "name": "虚空行走",
-          "description": "向前传送并伤害落点附近敌人。连续使用提高费用和伤害，达到上限后不再增加；建筑阻挡会调整落点。"
+          "description": "向前传送并伤害落点附近敌人。连续使用提高费用和伤害，达到上限后不再增加；建筑阻挡会调整落点。",
+          "image": "/play/media/battle/kassadin_0.webp"
         }
       ]
     },
@@ -552,7 +590,8 @@
         {
           "id": "kayle.celestial-blessing",
           "name": "星界恩典",
-          "description": "回复自身生命并短暂加速。"
+          "description": "回复自身生命并短暂加速。",
+          "image": "/play/media/battle/kayle_0.webp"
         }
       ]
     },
@@ -567,7 +606,8 @@
         {
           "id": "kayn.reaping-slash",
           "name": "巨镰横扫",
-          "description": "向前突进后旋转，分段伤害地面敌人。拉亚斯特附加最大生命伤害，并在每段命中时回复生命。"
+          "description": "向前突进后旋转，分段伤害地面敌人。拉亚斯特附加最大生命伤害，并在每段命中时回复生命。",
+          "image": "/play/media/battle/kayn_0.webp"
         }
       ]
     },
@@ -582,7 +622,8 @@
         {
           "id": "lightning.escalating-lightning",
           "name": "递增电击",
-          "description": "逐段提高电击伤害；某段无目标不会改变后续段的伤害档位。"
+          "description": "逐段提高电击伤害；某段无目标不会改变后续段的伤害档位。",
+          "image": "/play/media/battle/lightning_0.webp"
         }
       ]
     },
@@ -597,7 +638,8 @@
         {
           "id": "lulu.wild-growth",
           "name": "狂野生长",
-          "description": "选择范围内费用最高、同费最近的未增益友军，永久增加生命和体型并击退周围敌军。不能重复增益；无目标则退还消耗。"
+          "description": "选择范围内费用最高、同费最近的未增益友军，永久增加生命和体型并击退周围敌军。不能重复增益；无目标则退还消耗。",
+          "image": "/play/media/battle/lulu_0.webp"
         }
       ]
     },
@@ -612,7 +654,8 @@
         {
           "id": "malphite.ground-slam",
           "name": "大地震颤",
-          "description": "伤害周围地面敌人，同时降低移动和攻击速度。"
+          "description": "伤害周围地面敌人，同时降低移动和攻击速度。",
+          "image": "/play/media/battle/malphite_0.webp"
         }
       ]
     },
@@ -627,12 +670,14 @@
         {
           "id": "malzahar.nether-grasp",
           "name": "冥府之握",
-          "description": "下一击命中后引导眩晕，自身不能移动或攻击。控制可打断引导，但已建立的持续伤害区域独立存在。"
+          "description": "下一击命中后引导眩晕，自身不能移动或攻击。控制可打断引导，但已建立的持续伤害区域独立存在。",
+          "image": "/play/media/battle/malzahar_0.webp"
         },
         {
           "id": "malzahar.void-swarm",
           "name": "虚空虫群",
-          "description": "施法期间停止普攻，开启裂隙依次召唤虚灵。"
+          "description": "施法期间停止普攻，开启裂隙依次召唤虚灵。",
+          "image": "/play/media/battle/malzahar_1.webp"
         }
       ]
     },
@@ -647,7 +692,8 @@
         {
           "id": "masteryi.highlander",
           "name": "高原血统",
-          "description": "提高移动与攻击速度，并免疫移速和攻速减速。"
+          "description": "提高移动与攻击速度，并免疫移速和攻速减速。",
+          "image": "/play/media/battle/masteryi_0.webp"
         }
       ]
     },
@@ -662,7 +708,8 @@
         {
           "id": "medium_lightning.sky-splitter",
           "name": "霹天雳地",
-          "description": "落雷时为范围内友方非建筑单位提供180护盾，持续3秒；命中的敌方非建筑单位减速30%，持续2秒。"
+          "description": "落雷时为范围内友方非建筑单位提供180护盾，持续3秒；命中的敌方非建筑单位减速30%，持续2秒。",
+          "image": "/play/media/battle/medium_lightning_0.webp"
         }
       ]
     },
@@ -677,7 +724,8 @@
         {
           "id": "mega_inferno_bomb.inferno-cannon",
           "name": "地狱火炮",
-          "description": "命中时先清除普通伤害护盾，再造成伤害。命中的非建筑单位受到100%重伤，持续至死亡，阻止治疗和吸血，不影响最大生命提升。重复命中不叠加，梦魇的效果护盾可抵挡整次法术。"
+          "description": "命中时先清除普通伤害护盾，再造成伤害。命中的非建筑单位受到100%重伤，持续至死亡，阻止治疗和吸血，不影响最大生命提升。重复命中不叠加，梦魇的效果护盾可抵挡整次法术。",
+          "image": "/play/media/battle/mega_inferno_bomb_0.webp"
         }
       ]
     },
@@ -692,7 +740,8 @@
         {
           "id": "melee_minion.hand-of-baron",
           "name": "男爵之力",
-          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。"
+          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。",
+          "image": "/play/media/battle/melee_minion_0.webp"
         }
       ]
     },
@@ -707,7 +756,8 @@
         {
           "id": "melee_minion_squad.hand-of-baron",
           "name": "男爵之力",
-          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。"
+          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。",
+          "image": "/play/media/battle/melee_minion_squad.webp"
         }
       ]
     },
@@ -722,7 +772,8 @@
         {
           "id": "minion_squad.hand-of-baron",
           "name": "男爵之力",
-          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。"
+          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。",
+          "image": "/play/media/battle/minion_squad.webp"
         }
       ]
     },
@@ -747,7 +798,8 @@
         {
           "id": "missfortune.strut",
           "name": "大步流星",
-          "description": "短暂提高移动速度与攻击速度。"
+          "description": "短暂提高移动速度与攻击速度。",
+          "image": "/play/media/battle/missfortune_0.webp"
         }
       ]
     },
@@ -762,12 +814,14 @@
         {
           "id": "nocturne.shroud-of-darkness",
           "name": "黑暗庇护",
-          "description": "抵挡一次完整敌方攻击、法术或技能及其附带效果，成功后加攻速。已有状态和友方效果不受影响。"
+          "description": "抵挡一次完整敌方攻击、法术或技能及其附带效果，成功后加攻速。已有状态和友方效果不受影响。",
+          "image": "/play/media/battle/nocturne_0.webp"
         },
         {
           "id": "nocturne.umbra-blades",
           "name": "暗影之刃",
-          "description": "强化下一次普攻，追加周围范围伤害并按实际生命伤害回血；不能叠加储存。"
+          "description": "强化下一次普攻，追加周围范围伤害并按实际生命伤害回血；不能叠加储存。",
+          "image": "/play/media/battle/nocturne_1.webp"
         }
       ]
     },
@@ -782,12 +836,14 @@
         {
           "id": "olaf.vicious-strikes",
           "name": "残暴打击",
-          "description": "本批存活狂战士获得限时护盾、攻速和普攻吸血。护盾耗尽不会提前结束其他增益。"
+          "description": "本批存活狂战士获得限时护盾、攻速和普攻吸血。护盾耗尽不会提前结束其他增益。",
+          "image": "/play/media/battle/olaf_0.webp"
         },
         {
           "id": "olaf.ragnarok",
           "name": "诸神黄昏",
-          "description": "本次部署仍存活的狂战士解除控制，获得6秒控制免疫、30%移速、30%攻速、30%普攻增伤和30%普攻吸血。受控时可用，已在凝滞中不可用；生效期间免疫双方及自身凝滞，伤害与流血仍生效。"
+          "description": "本次部署仍存活的狂战士解除控制，获得6秒控制免疫、30%移速、30%攻速、30%普攻增伤和30%普攻吸血。受控时可用，已在凝滞中不可用；生效期间免疫双方及自身凝滞，伤害与流血仍生效。",
+          "image": "/play/media/battle/olaf_1.webp"
         }
       ]
     },
@@ -802,7 +858,8 @@
         {
           "id": "ornn.searing-charge",
           "name": "熔铸冲锋",
-          "description": "蓄力后向前冲锋，路径伤害较低；撞上建筑、河流或边界才触发范围伤害与眩晕。"
+          "description": "蓄力后向前冲锋，路径伤害较低；撞上建筑、河流或边界才触发范围伤害与眩晕。",
+          "image": "/play/media/battle/ornn_0.webp"
         }
       ]
     },
@@ -817,7 +874,8 @@
         {
           "id": "pantheon.comet-spear",
           "name": "贯星长枪",
-          "description": "向前刺击地面敌人，满红怒时消耗全部层数提高伤害；未满时保留并增加红怒。"
+          "description": "向前刺击地面敌人，满红怒时消耗全部层数提高伤害；未满时保留并增加红怒。",
+          "image": "/play/media/battle/pantheon_0.webp"
         }
       ]
     },
@@ -832,7 +890,8 @@
         {
           "id": "pillar_of_ice.frozen-domain",
           "name": "冰封领域",
-          "description": "减速与减攻速强度不变，光环半径扩大至5格，持续5秒，结束后恢复基础范围。"
+          "description": "减速与减攻速强度不变，光环半径扩大至5格，持续5秒，结束后恢复基础范围。",
+          "image": "/play/media/battle/pillar_of_ice_0.webp"
         }
       ]
     },
@@ -847,7 +906,8 @@
         {
           "id": "pix.faerie-siphon",
           "name": "仙灵汲取",
-          "description": "本批存活皮克斯的后续普攻按实际生命伤害回血，可暂时超过基础生命上限；护盾伤害与过量伤害不计入。"
+          "description": "本批存活皮克斯的后续普攻按实际生命伤害回血，可暂时超过基础生命上限；护盾伤害与过量伤害不计入。",
+          "image": "/play/media/battle/pix_0.webp"
         }
       ]
     },
@@ -862,7 +922,8 @@
         {
           "id": "pool_of_reflection.deepened-reflection",
           "name": "渲浓",
-          "description": "落地立即为范围内友方非建筑单位提供120护盾。"
+          "description": "落地立即为范围内友方非建筑单位提供120护盾。",
+          "image": "/play/media/battle/pool_of_reflection_0.webp"
         }
       ]
     },
@@ -877,7 +938,8 @@
         {
           "id": "powder_keg.volatile-powder",
           "name": "烈性火药",
-          "description": "立即引爆。爆炸命中后，生命低于15%的敌方单位被斩杀，无视普通护盾；不斩杀建筑，无法突破拒绝死亡。"
+          "description": "立即引爆。爆炸命中后，生命低于15%的敌方单位被斩杀，无视普通护盾；不斩杀建筑，无法突破拒绝死亡。",
+          "image": "/play/media/battle/powder_keg_0.webp"
         }
       ]
     },
@@ -892,7 +954,8 @@
         {
           "id": "queen_nest.queen-s-wrath",
           "name": "女王之怒",
-          "description": "立即在洞口前方50单位唤醒暴怒雷克塞，无出生等待，永久使用90伤害、半径1.5格的范围攻击。巢穴保留当前生命与占地，继续衰血，死亡时不再召唤。"
+          "description": "立即在洞口前方50单位唤醒暴怒雷克塞，无出生等待，永久使用90伤害、半径1.5格的范围攻击。巢穴保留当前生命与占地，继续衰血，死亡时不再召唤。",
+          "image": "/play/media/battle/queen_nest_0.webp"
         }
       ]
     },
@@ -907,7 +970,8 @@
         {
           "id": "ranged_minion.hand-of-baron",
           "name": "男爵之力",
-          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。"
+          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。",
+          "image": "/play/media/battle/ranged_minion_0.webp"
         }
       ]
     },
@@ -922,7 +986,8 @@
         {
           "id": "ranged_minion_squad.hand-of-baron",
           "name": "男爵之力",
-          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。"
+          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。",
+          "image": "/play/media/battle/ranged_minion_squad.webp"
         }
       ]
     },
@@ -937,7 +1002,8 @@
         {
           "id": "reksai.queen-s-wrath",
           "name": "女王之怒",
-          "description": "接下来3次攻击造成90伤害，并命中主目标周围半径1.5格内的地面敌人。再次释放刷新为3次，无持续时间限制，死亡后不转移剩余次数。"
+          "description": "接下来3次攻击造成90伤害，并命中主目标周围半径1.5格内的地面敌人。再次释放刷新为3次，无持续时间限制，死亡后不转移剩余次数。",
+          "image": "/play/media/battle/reksai_0.webp"
         }
       ]
     },
@@ -952,7 +1018,8 @@
         {
           "id": "rift_herald.sweeping-strike",
           "name": "旋转重拳",
-          "description": "伤害前方半圆的地面敌军及建筑，冲撞的准备、冲刺与收势期间不可用。"
+          "description": "伤害前方半圆的地面敌军及建筑，冲撞的准备、冲刺与收势期间不可用。",
+          "image": "/play/media/battle/rift_herald_0.webp"
         }
       ]
     },
@@ -967,7 +1034,8 @@
         {
           "id": "samira.inferno-trigger",
           "name": "炼狱扳机",
-          "description": "消耗悍勇本色全部5层，旋转射击2秒并沿释放时记住的朝向持续移动，每秒对半径180内的地面与空中敌军造成120伤害；期间不能普攻或叠加被动层数。每次1金币，冷却5秒，次数不限。"
+          "description": "消耗悍勇本色全部5层，旋转射击2秒并沿释放时记住的朝向持续移动，每秒对半径180内的地面与空中敌军造成120伤害；期间不能普攻或叠加被动层数。每次1金币，冷却5秒，次数不限。",
+          "image": "/play/media/battle/samira_0.webp"
         }
       ]
     },
@@ -982,7 +1050,8 @@
         {
           "id": "scarecrow.dread-effigy",
           "name": "巫骇草人",
-          "description": "变为可移动的远古恐惧，保留当前生命与实体身份，停止自然衰血并释放建筑占地。"
+          "description": "变为可移动的远古恐惧，保留当前生命与实体身份，停止自然衰血并释放建筑占地。",
+          "image": "/play/media/battle/scarecrow_0.webp"
         }
       ]
     },
@@ -997,7 +1066,8 @@
         {
           "id": "scuttle_crab.humility",
           "name": "谦卑",
-          "description": "降低周围敌人的移动与攻击速度。"
+          "description": "降低周围敌人的移动与攻击速度。",
+          "image": "/play/media/battle/scuttle_crab_0.webp"
         }
       ]
     },
@@ -1012,7 +1082,8 @@
         {
           "id": "sett.haymaker",
           "name": "蓄意轰拳",
-          "description": "锁定行动后向前轰出梯形冲击波，豪意提高伤害，中心伤害更高；消耗的豪意同时提供衰减护盾。"
+          "description": "锁定行动后向前轰出梯形冲击波，豪意提高伤害，中心伤害更高；消耗的豪意同时提供衰减护盾。",
+          "image": "/play/media/battle/sett_0.webp"
         }
       ]
     },
@@ -1027,7 +1098,8 @@
         {
           "id": "severing_bolt.severing-thunder",
           "name": "攢聚惊雷",
-          "description": "单体伤害倍率提高至3.5倍，硬控伤害倍率提高至2.5倍，同时满足取较高值，不相乘。"
+          "description": "单体伤害倍率提高至3.5倍，硬控伤害倍率提高至2.5倍，同时满足取较高值，不相乘。",
+          "image": "/play/media/battle/severing_bolt_0.webp"
         }
       ]
     },
@@ -1042,7 +1114,8 @@
         {
           "id": "shurima_guard.sand-aegis",
           "name": "黄沙庇护",
-          "description": "为本次部署成员提供护盾，到期时逐人判断，盾未破则回满生命。召唤士兵不自动获得主动资格。"
+          "description": "为本次部署成员提供护盾，到期时逐人判断，盾未破则回满生命。召唤士兵不自动获得主动资格。",
+          "image": "/play/media/battle/shurima_guard_0.webp"
         }
       ]
     },
@@ -1057,7 +1130,8 @@
         {
           "id": "siege_minion.hand-of-baron",
           "name": "男爵之力",
-          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。"
+          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。",
+          "image": "/play/media/battle/siege_minion.webp"
         }
       ]
     },
@@ -1072,7 +1146,8 @@
         {
           "id": "siege_minion_squad.hand-of-baron",
           "name": "男爵之力",
-          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。"
+          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。",
+          "image": "/play/media/battle/siege_minion_squad.webp"
         }
       ]
     },
@@ -1087,7 +1162,8 @@
         {
           "id": "sion.soul-furnace",
           "name": "灵魂熔炉",
-          "description": "获得护盾，计时结束时若护盾未破，移除剩余护盾并对周围空地单位及建筑造成伤害。"
+          "description": "获得护盾，计时结束时若护盾未破，移除剩余护盾并对周围空地单位及建筑造成伤害。",
+          "image": "/play/media/battle/sion_0.webp"
         }
       ]
     },
@@ -1102,7 +1178,8 @@
         {
           "id": "sivir.spell-shield",
           "name": "法术护盾",
-          "description": "获得1.5秒效果护盾，抵挡一次敌方攻击、法术或技能及其附带效果，成功抵挡后回复120生命。已有持续效果不消耗护盾。"
+          "description": "获得1.5秒效果护盾，抵挡一次敌方攻击、法术或技能及其附带效果，成功抵挡后回复120生命。已有持续效果不消耗护盾。",
+          "image": "/play/media/battle/sivir_0.webp"
         }
       ]
     },
@@ -1117,7 +1194,8 @@
         {
           "id": "solar_flare.sunlight",
           "name": "日光",
-          "description": "为命中的敌军、建筑卡、防御塔与水晶施加2.5秒日光。后续首次有效伤害消耗标记并追加100伤害，防御塔与水晶为30。重复施加刷新，不叠加。"
+          "description": "为命中的敌军、建筑卡、防御塔与水晶施加2.5秒日光。后续首次有效伤害消耗标记并追加100伤害，防御塔与水晶为30。重复施加刷新，不叠加。",
+          "image": "/play/media/battle/solar_flare_0.webp"
         }
       ]
     },
@@ -1132,7 +1210,8 @@
         {
           "id": "sona.crescendo",
           "name": "狂舞终乐章",
-          "description": "施法1秒，在0.3秒时向前发出长8格、宽3.5格的穿透音波，以每秒16格飞行。敌方地面、空中、建筑卡与防御塔受到140伤害和1秒眩晕；水晶受到伤害但免疫眩晕。每次施法对同一目标只命中一次，发出的音波不因琴女死亡撤回。"
+          "description": "施法1秒，在0.3秒时向前发出长8格、宽3.5格的穿透音波，以每秒16格飞行。敌方地面、空中、建筑卡与防御塔受到140伤害和1秒眩晕；水晶受到伤害但免疫眩晕。每次施法对同一目标只命中一次，发出的音波不因琴女死亡撤回。",
+          "image": "/play/media/battle/sona_0.webp"
         }
       ]
     },
@@ -1147,7 +1226,8 @@
         {
           "id": "soul_tentacle.faith-beyond-bounds",
           "name": "过界信仰",
-          "description": "8秒内不可选取，暂停自然生命衰减，攻速提高50%。"
+          "description": "8秒内不可选取，暂停自然生命衰减，攻速提高50%。",
+          "image": "/play/media/battle/soul_tentacle_0.webp"
         }
       ]
     },
@@ -1162,7 +1242,8 @@
         {
           "id": "stasis.friendly-favor",
           "name": "友军优待",
-          "description": "缩短友军凝滞时间，敌方时长不变。"
+          "description": "缩短友军凝滞时间，敌方时长不变。",
+          "image": "/play/media/battle/stasis_0.webp"
         }
       ]
     },
@@ -1177,7 +1258,8 @@
         {
           "id": "stellar_convergence.black-hole-devour",
           "name": "黑洞吞噬",
-          "description": "敌方单位身体触碰半径1.5格的中心内部且生命严格低于15%时被斩杀。无视普通护盾和减伤，不斩杀建筑，保留拒绝死亡、替身与复生规则。"
+          "description": "敌方单位身体触碰半径1.5格的中心内部且生命严格低于15%时被斩杀。无视普通护盾和减伤，不斩杀建筑，保留拒绝死亡、替身与复生规则。",
+          "image": "/play/media/battle/stellar_convergence_0.webp"
         }
       ]
     },
@@ -1192,7 +1274,8 @@
         {
           "id": "sun_disc.solar-aegis",
           "name": "日耀庇护",
-          "description": "为攻击范围内所有存活友方单位和建筑提供限时护盾，包括防御塔和水晶。"
+          "description": "为攻击范围内所有存活友方单位和建筑提供限时护盾，包括防御塔和水晶。",
+          "image": "/play/media/battle/sun_disc_0.webp"
         }
       ]
     },
@@ -1207,7 +1290,8 @@
         {
           "id": "super_minion.hand-of-baron",
           "name": "男爵之力",
-          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。"
+          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。",
+          "image": "/play/media/battle/super_minion.webp"
         }
       ]
     },
@@ -1222,7 +1306,8 @@
         {
           "id": "super_minion_squad.hand-of-baron",
           "name": "男爵之力",
-          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。"
+          "description": "强化本次部署的存活成员；不同兵种分别获得各自的伤害、速度或护盾加成。",
+          "image": "/play/media/battle/super_minion_squad.webp"
         }
       ]
     },
@@ -1237,7 +1322,8 @@
         {
           "id": "target_dummy.aftershock",
           "name": "余震",
-          "description": "暂时减伤，到期后向周围爆炸；死亡取消，凝滞中到期不爆炸。"
+          "description": "暂时减伤，到期后向周围爆炸；死亡取消，凝滞中到期不爆炸。",
+          "image": "/play/media/battle/target_dummy_0.webp"
         }
       ]
     },
@@ -1252,7 +1338,8 @@
         {
           "id": "teemo.blinding-dart",
           "name": "致盲",
-          "description": "下一次出手改为技能吹箭，使目标后续普攻无法造成伤害。该吹箭自身不受致盲影响，也不消耗致盲次数。"
+          "description": "下一次出手改为技能吹箭，使目标后续普攻无法造成伤害。该吹箭自身不受致盲影响，也不消耗致盲次数。",
+          "image": "/play/media/battle/teemo_0.webp"
         }
       ]
     },
@@ -1267,7 +1354,8 @@
         {
           "id": "thorn_spitter.deadly-spines",
           "name": "致命棘刺",
-          "description": "持续6秒：最大生命提高50%并获得新增生命，模型与碰撞增大25%，攻击伤害提高50%至每发150。"
+          "description": "持续6秒：最大生命提高50%并获得新增生命，模型与碰撞增大25%，攻击伤害提高50%至每发150。",
+          "image": "/play/media/battle/thorn_spitter_0.webp"
         }
       ]
     },
@@ -1282,7 +1370,8 @@
         {
           "id": "tidal_wave.surging-tides",
           "name": "踏浪而行",
-          "description": "浪潮经过己方地面单位时，给予2秒30%移速加成；每次浪潮对每个单位只生效一次，不作用于建筑。"
+          "description": "浪潮经过己方地面单位时，给予2秒30%移速加成；每次浪潮对每个单位只生效一次，不作用于建筑。",
+          "image": "/play/media/battle/tidal_wave_0.webp"
         }
       ]
     },
@@ -1297,7 +1386,8 @@
         {
           "id": "tombstone.gather-the-fallen",
           "name": "亡者集结",
-          "description": "立即召唤额外的雾行者。"
+          "description": "立即召唤额外的雾行者。",
+          "image": "/play/media/battle/tombstone_0.webp"
         }
       ]
     },
@@ -1312,7 +1402,8 @@
         {
           "id": "tristana.rapid-fire",
           "name": "急速射击",
-          "description": "暂时提高攻击速度，缩短攻击间隔。"
+          "description": "暂时提高攻击速度，缩短攻击间隔。",
+          "image": "/play/media/battle/tristana_0.webp"
         }
       ]
     },
@@ -1327,7 +1418,8 @@
         {
           "id": "tryndamere.undying-rage",
           "name": "无尽怒火",
-          "description": "立即满怒并暂时拒绝死亡，暴击不消耗怒气。除凝滞外可在控制中使用，不解除控制，也不治疗。"
+          "description": "立即满怒并暂时拒绝死亡，暴击不消耗怒气。除凝滞外可在控制中使用，不解除控制，也不治疗。",
+          "image": "/play/media/battle/tryndamere_0.webp"
         }
       ]
     },
@@ -1342,7 +1434,8 @@
         {
           "id": "twisted_fate.wild-cards",
           "name": "万能牌",
-          "description": "向前方发射穿透牌，命中空地敌军；同次施法对同一敌人只造成一次伤害。"
+          "description": "向前方发射穿透牌，命中空地敌军；同次施法对同一敌人只造成一次伤害。",
+          "image": "/play/media/battle/twisted_fate_0.webp"
         }
       ]
     },
@@ -1357,7 +1450,8 @@
         {
           "id": "twitch.spray-and-pray",
           "name": "火力全开",
-          "description": "提高攻速、弹速与射程，普攻改为固定方向的穿透弩箭，不再追踪移动目标。"
+          "description": "提高攻速、弹速与射程，普攻改为固定方向的穿透弩箭，不再追踪移动目标。",
+          "image": "/play/media/battle/twitch_0.webp"
         }
       ]
     },
@@ -1372,7 +1466,8 @@
         {
           "id": "vine_lasher.grasping-roots",
           "name": "缠绕之根",
-          "description": "持续6秒：最大生命提高50%并获得新增生命，模型与碰撞增大25%，攻速提高60%。"
+          "description": "持续6秒：最大生命提高50%并获得新增生命，模型与碰撞增大25%，攻速提高60%。",
+          "image": "/play/media/battle/vine_lasher_0.webp"
         }
       ]
     },
@@ -1387,7 +1482,8 @@
         {
           "id": "void_gate.void-burst",
           "name": "虚空迸发",
-          "description": "立即摧毁传送门并召唤虚空兽。"
+          "description": "立即摧毁传送门并召唤虚空兽。",
+          "image": "/play/media/battle/void_gate_0.webp"
         }
       ]
     },
@@ -1402,7 +1498,8 @@
         {
           "id": "void_scuttle_crab.return-to-the-void",
           "name": "归于虚空",
-          "description": "立即死亡并留下治疗区，不给敌方金币赏金。"
+          "description": "立即死亡并留下治疗区，不给敌方金币赏金。",
+          "image": "/play/media/battle/void_scuttle_crab_0.webp"
         }
       ]
     },
@@ -1417,7 +1514,8 @@
         {
           "id": "void_spawn.void-empowerment",
           "name": "虚空强化",
-          "description": "永久提高本批成员的伤害、生命、体型和移动速度。"
+          "description": "永久提高本批成员的伤害、生命、体型和移动速度。",
+          "image": "/play/media/battle/void_spawn_0.webp"
         }
       ]
     },
@@ -1432,7 +1530,8 @@
         {
           "id": "void_summoning.void-sacrifice",
           "name": "虚空献祭",
-          "description": "区域持续期间，双方符合条件的非建筑单位真正死亡时生成己方近战虚空鱼；近战虚空鱼不参与转化。"
+          "description": "区域持续期间，双方符合条件的非建筑单位真正死亡时生成己方近战虚空鱼；近战虚空鱼不参与转化。",
+          "image": "/play/media/battle/void_summoning_0.webp"
         }
       ]
     },
@@ -1447,7 +1546,8 @@
         {
           "id": "voidfish_ranged.void-regeneration",
           "name": "虚空再生",
-          "description": "限时标记本批存活成员，期间被击杀则原地生成新鱼；新鱼不继承再生或主动资格。"
+          "description": "限时标记本批存活成员，期间被击杀则原地生成新鱼；新鱼不继承再生或主动资格。",
+          "image": "/play/media/battle/voidfish_ranged_0.webp"
         }
       ]
     },
@@ -1462,7 +1562,8 @@
         {
           "id": "voidfish_ranged_army.void-regeneration",
           "name": "虚空再生",
-          "description": "限时标记本批存活成员，期间被击杀则原地生成新鱼；新鱼不继承再生或主动资格。"
+          "description": "限时标记本批存活成员，期间被击杀则原地生成新鱼；新鱼不继承再生或主动资格。",
+          "image": "/play/media/battle/voidfish_ranged_army_0.webp"
         }
       ]
     },
@@ -1477,12 +1578,14 @@
         {
           "id": "xin.crescent-guard",
           "name": "新月护卫",
-          "description": "挥舞长枪伤害并击退周围敌人，施放期间锁定移动、攻击和朝向。"
+          "description": "挥舞长枪伤害并击退周围敌人，施放期间锁定移动、攻击和朝向。",
+          "image": "/play/media/battle/xin_0.webp"
         },
         {
           "id": "xin.audacious-charge",
           "name": "无畏冲锋",
-          "description": "下一次攻击距离提升至4格，突进至目标身前，对目标周围70像素内地面敌人造成一次普攻伤害，不受致盲影响；命中后攻击速度提高40%，持续5秒。"
+          "description": "下一次攻击距离提升至4格，突进至目标身前，对目标周围70像素内地面敌人造成一次普攻伤害，不受致盲影响；命中后攻击速度提高40%，持续5秒。",
+          "image": "/play/media/battle/xin_1.webp"
         }
       ]
     },
@@ -1497,7 +1600,8 @@
         {
           "id": "yorick.last-rites",
           "name": "临终仪式",
-          "description": "强化下一次范围攻击，命中时固定回复生命，每次攻击只治疗一次。"
+          "description": "强化下一次范围攻击，命中时固定回复生命，每次攻击只治疗一次。",
+          "image": "/play/media/battle/yorick_0.webp"
         }
       ]
     },
@@ -1512,7 +1616,8 @@
         {
           "id": "zap.multi-zap",
           "name": "多重电击",
-          "description": "在相同位置追加一次电击，重复伤害与眩晕。"
+          "description": "在相同位置追加一次电击，重复伤害与眩晕。",
+          "image": "/play/media/battle/zap_0.webp"
         }
       ]
     },
@@ -1527,7 +1632,8 @@
         {
           "id": "ziggs.bouncing-bomb",
           "name": "弹跳炸弹",
-          "description": "接下来3次攻击沿固定方向弹跳，每枚炸弹落地3次，每次造成70伤害，半径1格；后两跳各向前延伸1.5格。再次释放刷新为3次。"
+          "description": "接下来3次攻击沿固定方向弹跳，每枚炸弹落地3次，每次造成70伤害，半径1格；后两跳各向前延伸1.5格。再次释放刷新为3次。",
+          "image": "/play/media/battle/ziggs_0.webp"
         }
       ]
     }

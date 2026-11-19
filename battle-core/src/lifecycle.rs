@@ -63,6 +63,9 @@ impl Battle {
         }
         let blocks = crate::movement::blockers(&self.actors);
         let q = crate::space::Query {
+            cross_river: def
+                .rules
+                .is_some_and(|s| s["river_traversal"] == true || s["terrain_traversal"] == true),
             map: &self.map,
             blocks: &blocks,
             id: self.next_id,
@@ -81,7 +84,13 @@ impl Battle {
                 continue;
             }
             let spec = a.def.lifecycle;
-            if spec.decay_ticks > 0 && !a.has(Control::Stasis) {
+            if spec.decay_ticks > 0
+                && !a.has(Control::Stasis)
+                && !(a.card_state.aura_until > self.tick
+                    && a.card_state
+                        .buff_spec
+                        .is_some_and(|s| s["pause_lifespan"] == true))
+            {
                 a.decay_carry += i64::from(a.def.hp);
                 let decay =
                     (a.decay_carry + i64::from(spec.decay_ticks) / 2) / i64::from(spec.decay_ticks);
@@ -112,11 +121,28 @@ impl Battle {
             .map(|a| a.id)
             .collect();
         let mut batches = vec![];
+        let mut blasts = vec![];
         for id in ids {
-            if self.rebirth(id) {
+            if !self.actors.contains_key(&id) {
+                continue;
+            }
+            if self.native_death_form(id) || self.rebirth(id) {
                 continue;
             }
             let a = self.actors.remove(&id).unwrap();
+            self.card_death(&a, &mut blasts);
+            if let Some((until, key)) = a.card_state.death_spawn {
+                if until > self.tick {
+                    if let Ok(child) =
+                        self.spawn_near(a.team, a.pos, crate::classic::units::unit(key))
+                    {
+                        self.emit(Fact::Summoned {
+                            source: a.id,
+                            child,
+                        });
+                    }
+                }
+            }
             self.cancel_owned_areas(id);
             if let Some(spec) = a.def.lifecycle.death_area {
                 self.schedule_area(
@@ -138,6 +164,13 @@ impl Battle {
                 other.beam_remainders.remove(&id);
             }
             self.emit(Fact::Died(id));
+        }
+        for (team, reward, ids, changes) in blasts {
+            self.commit(changes);
+            if ids.iter().any(|id| !self.actors.contains_key(id)) {
+                self.gold_rewards[team.index()] =
+                    self.gold_rewards[team.index()].saturating_add(reward);
+            }
         }
         for g in batches {
             self.summon(g)
