@@ -1,6 +1,7 @@
 import { Choice, useConfirmation } from "./controls";
 import { internalLink, navigate } from "./navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { Preparation } from "./preparation";
 import { api, defaultDeck, go, updateRoom } from "./api";
 import type { Catalog, Deck, Room, Session } from "./api";
 interface Draft {
@@ -45,12 +46,18 @@ export function Editor({
   catalog: c,
   session,
   room,
+  collection = false,
   reload,
+  online = true,
+  management,
 }: {
   catalog: Catalog;
   session: Session;
   room?: Room;
+  collection?: boolean;
   reload: () => Promise<void>;
+  online?: boolean;
+  management?: ReactNode;
 }) {
   const { ask, confirmation } = useConfirmation();
   const draftKey = [
@@ -66,11 +73,6 @@ export function Editor({
     [deck, setDeck] = useState<Deck>(() =>
       structuredClone(draft?.deck ?? room?.deck ?? defaultDeck(c)),
     );
-  const [slot, setSlot] = useState(0),
-    [focus, setFocus] = useState(deck.cards.find(Boolean) ?? c.cards[0].id),
-    [search, setSearch] = useState(""),
-    [type, setType] = useState(""),
-    [order, setOrder] = useState("default");
   const [dirty, setDirty] = useState(Boolean(draft)),
     [msg, setMsg] = useState(""),
     [busy, setBusy] = useState(false),
@@ -81,15 +83,18 @@ export function Editor({
     [presetRevision, setPresetRevision] = useState<number | undefined>(
       draft?.presetRevision,
     );
-  const byId = new Map(c.cards.map((x) => [x.id, x])),
-    card = byId.get(focus)!;
-  const list = c.cards.filter(
-    (x) =>
-      (!type || x.type === type) &&
-      (x.name.includes(search) || x.id.includes(search.toLowerCase())),
-  );
-  if (order !== "default")
-    list.sort((a, b) => (order === "asc" ? a.cost - b.cost : b.cost - a.cost));
+  const byId = new Map(c.cards.map((x) => [x.id, x]));
+  useEffect(() => {
+    if (
+      !room ||
+      dirty ||
+      (room.deckVersion === version && room.settingsVersion === settings)
+    )
+      return;
+    setDeck(structuredClone(room.deck));
+    setVersion(room.deckVersion);
+    setSettings(room.settingsVersion);
+  }, [room, dirty, version, settings]);
   useEffect(() => {
     try {
       if (dirty)
@@ -136,6 +141,9 @@ export function Editor({
     setDirty(true);
     setMsg("");
   }
+  const presetsForMenu = !collection
+    ? session.presets.filter((p) => p.battleDeck)
+    : session.presets;
   async function choosePreset(key: string) {
     if (
       dirty &&
@@ -143,32 +151,25 @@ export function Editor({
     )
       return;
     const p = session.presets.find((x) => x.id === key);
-    const d = structuredClone(p?.deck ?? room?.deck ?? defaultDeck(c));
+    const d = structuredClone(
+      (collection ? p?.deck : p?.battleDeck) ?? room?.deck ?? defaultDeck(c),
+    );
+    for (const id of d.cards) {
+      const first = byId.get(id)?.skills[0];
+      if (first && !d.skills[id]) d.skills[id] = first.id;
+    }
     setPreset(key);
     setPresetRevision(p?.revision);
     setName(p?.name ?? "我的卡组");
     setDeck(d);
-    setFocus(d.cards[0]);
-    setSlot(0);
     setDirty(needsApply(d, room));
     setVersion(room?.deckVersion);
     setSettings(room?.settingsVersion);
     setMsg("");
   }
-  function assign() {
-    const d = structuredClone(deck),
-      old = d.cards[slot],
-      existing = d.cards.indexOf(focus);
-    if (existing >= 0) {
-      d.cards[existing] = old;
-    } else {
-      if (old) delete d.skills[old];
-      if (card.skills[0]) d.skills[focus] = card.skills[0].id;
-    }
-    d.cards[slot] = focus;
-    change(d);
-  }
-  async function submit(action: "apply" | "save" | "copy" | "delete") {
+  async function submit(
+    action: "ready" | "apply" | "save" | "copy" | "delete",
+  ) {
     if (busy) return;
     setBusy(true);
     setMsg("");
@@ -187,18 +188,35 @@ export function Editor({
       }
       const empty = deck.cards.findIndex((x) => !x);
       if (empty >= 0) throw new Error("请先填满第 " + (empty + 1) + " 个卡位");
-      if (action === "apply" && room) {
-        const next = await updateRoom(
-          { ...room, deckVersion: version!, settingsVersion: settings! },
-          "deck",
-          { deck, presetId: preset || undefined },
-        );
+      if ((action === "apply" || action === "ready") && room) {
+        let current = {
+          ...room,
+          deckVersion: version!,
+          settingsVersion: settings!,
+        };
+        const changed = needsApply(deck, room);
+        if (changed) {
+          current = await updateRoom(current, "deck", {
+            deck,
+            presetId: preset || undefined,
+          });
+          setVersion(current.deckVersion);
+          setSettings(current.settingsVersion);
+        }
+        if (action === "ready") {
+          current = await updateRoom(current, "ready", {
+            ready: changed || !current.seats[current.me].ready,
+          });
+        }
         setDirty(false);
-        setTimeout(
-          () =>
-            go(next.matchId ? "matches/" + next.matchId : "rooms/" + room.id),
-          0,
-        );
+        try {
+          sessionStorage.removeItem(draftKey);
+        } catch {}
+        if (current.matchId) go("matches/" + current.matchId);
+        else {
+          await reload();
+          setMsg(action === "apply" ? "已应用到本局" : "");
+        }
         return;
       }
       const p = await api<{ id: string }>("presets", {
@@ -221,218 +239,98 @@ export function Editor({
       setBusy(false);
     }
   }
-  return (
-    <section>
-      {confirmation}
-      <div className="page-title">
-        <div>
-          <span className="eyebrow">备战工坊</span>
-          <h1>{room ? "本局备战" : "我的卡组"}</h1>
-        </div>
-        <a
-          className="outline"
-          href={room ? "/play/rooms/" + room.id : "/play/"}
-        >
-          {room ? "返回房间" : "返回大厅"}
-        </a>
-      </div>
-      <div className="panel editor-head">
-        <div className="tools">
-          <Choice
-            label="个人预设"
-            value={preset}
-            items={[
-              { id: "", name: room ? "本局卡组" : "默认卡组" },
-              ...session.presets,
-            ]}
-            onChange={choosePreset}
-          />
-          <label>
-            预设名称
-            <input
-              value={name}
-              maxLength={32}
-              onChange={(e) => {
-                setName(e.target.value);
-                setDirty(true);
-              }}
-            />
-          </label>
-          <button disabled={busy} onClick={() => submit("save")}>
-            保存预设
-          </button>
-          {preset && (
-            <>
-              <button disabled={busy} onClick={() => submit("copy")}>
-                另存一套
-              </button>
-              <button disabled={busy} onClick={() => submit("delete")}>
-                删除预设
-              </button>
-            </>
-          )}
-          {room && (
-            <button
-              className="gold"
-              disabled={busy}
-              onClick={() => submit("apply")}
-            >
-              应用到本局
+  const stale =
+    room && (version !== room.deckVersion || settings !== room.settingsVersion);
+  const changed = needsApply(deck, room);
+  const caption = room
+    ? room.kind === "ai"
+      ? "开始游戏"
+      : room.seats[room.me].ready && !changed
+        ? "取消准备"
+        : "准备"
+    : "保存预设";
+  const presets = (
+    <div className="prep-presets">
+      <Choice
+        label="个人预设"
+        value={preset}
+        items={[
+          { id: "", name: room ? "本局卡组" : "默认卡组" },
+          ...presetsForMenu,
+        ]}
+        onChange={choosePreset}
+      />
+      <label>
+        预设名称
+        <input
+          value={name}
+          maxLength={32}
+          onChange={(e) => {
+            setName(e.target.value);
+            setDirty(true);
+          }}
+        />
+      </label>
+      <div className="footer-actions">
+        <button disabled={busy} onClick={() => submit("save")}>
+          保存预设
+        </button>
+        {preset && (
+          <>
+            <button disabled={busy} onClick={() => submit("copy")}>
+              另存一套
             </button>
-          )}
-        </div>
-        <div className="section-title">
-          <h2>出战卡组</h2>
-          <small>选择卡位后替换卡牌</small>
-        </div>
-        {room &&
-          (room.deckVersion !== version ||
-            room.settingsVersion !== settings) && (
-            <p className="notice">
+            <button disabled={busy} onClick={() => submit("delete")}>
+              删除预设
+            </button>
+          </>
+        )}
+        {room && (
+          <button disabled={busy || !!stale} onClick={() => submit("apply")}>
+            应用到本局
+          </button>
+        )}
+      </div>
+      {!room && (
+        <a href={collection ? "/play/decks" : "/play/decks/collection"}>
+          {collection ? "查看实战卡组" : "管理全部收藏预设"}
+        </a>
+      )}
+      {msg && <p role="status">{msg}</p>}
+    </div>
+  );
+  return (
+    <>
+      {confirmation}
+      <Preparation
+        catalog={c}
+        collection={collection}
+        deck={deck}
+        change={change}
+        room={room}
+        busy={busy}
+        management={management}
+        presets={presets}
+        caption={caption}
+        readyDisabled={Boolean(
+          room &&
+          (!online ||
+            stale ||
+            room.seats.length !== 2 ||
+            room.seats.some((seat) => !seat.online)),
+        )}
+        submit={() => submit(room ? "ready" : "save")}
+        footerMessage={msg}
+        back="/play/"
+        notice={
+          stale && (
+            <div className="notice">
               房间配置已更新。
               <button onClick={() => choosePreset("")}>重新载入本局配置</button>
-            </p>
-          )}
-        <div className="slots">
-          {deck.cards.map((id, i) => (
-            <button
-              key={i}
-              draggable={Boolean(id)}
-              onDragStart={(e) =>
-                e.dataTransfer.setData("application/x-deck-slot", String(i))
-              }
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => {
-                e.preventDefault();
-                const value = e.dataTransfer.getData("application/x-deck-slot");
-                if (!/^[0-7]$/.test(value)) return;
-                const from = Number(value);
-                const next = structuredClone(deck);
-                [next.cards[from], next.cards[i]] = [
-                  next.cards[i],
-                  next.cards[from],
-                ];
-                change(next);
-                setSlot(i);
-                if (next.cards[i]) setFocus(next.cards[i]);
-              }}
-              className={"slot " + (slot === i ? "selected" : "")}
-              onClick={() => {
-                setSlot(i);
-                if (id) setFocus(id);
-              }}
-            >
-              {id && <img src={byId.get(id)?.image} alt="" />}
-              <span>{i < 2 ? "主动槽 " + (i + 1) : "卡位 " + (i + 1)}</span>
-              <b>{byId.get(id)?.name ?? "空位"}</b>
-            </button>
-          ))}
-        </div>
-      </div>
-      {msg && (
-        <p role="status" className="notice">
-          {msg}
-        </p>
-      )}
-      <div className="library">
-        <div className="panel">
-          <div className="section-title">
-            <h2>卡牌收藏</h2>
-            <small>{list.length} 张</small>
-          </div>
-          <div className="tools filters">
-            <input
-              aria-label="搜索卡牌"
-              placeholder="搜索卡牌名称"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <Choice
-              compact
-              label="类型"
-              value={type}
-              onChange={setType}
-              items={[
-                { id: "", name: "全部类型" },
-                { id: "unit", name: "单位" },
-                { id: "spell", name: "法术" },
-                { id: "building", name: "建筑" },
-              ]}
-            />
-            <Choice
-              compact
-              label="费用排序"
-              value={order}
-              onChange={setOrder}
-              items={[
-                { id: "default", name: "默认排序" },
-                { id: "asc", name: "费用由低到高" },
-                { id: "desc", name: "费用由高到低" },
-              ]}
-            />
-          </div>
-          <div className="collection">
-            {list.map((x) => (
-              <button
-                className={"tile " + (focus === x.id ? "selected" : "")}
-                key={x.id}
-                onClick={() => setFocus(x.id)}
-              >
-                <img loading="lazy" src={x.image} alt="" />
-                <small>{x.costLabel ?? x.cost}</small>
-                <b>{x.name}</b>
-              </button>
-            ))}
-          </div>
-          {!list.length && <p>没有匹配的卡牌</p>}
-        </div>
-        <aside className="panel details">
-          <img src={card.image} alt="" />
-          <h2>{card.name}</h2>
-          <p>{card.description}</p>
-          <button className="gold" onClick={assign}>
-            {deck.cards.includes(focus) && deck.cards[slot] !== focus
-              ? "交换到"
-              : "放入"}
-            第 {slot + 1} 位
-          </button>
-          {deck.cards[slot] && (
-            <button
-              onClick={() => {
-                const d = structuredClone(deck);
-                delete d.skills[d.cards[slot]];
-                d.cards[slot] = "";
-                change(d);
-              }}
-            >
-              清空第 {slot + 1} 位
-            </button>
-          )}
-          {card.skills.length > 0 && (
-            <fieldset>
-              <legend>技能选择</legend>
-              {card.skills.map((s) => (
-                <label key={s.id}>
-                  <input
-                    type="radio"
-                    name="skill"
-                    checked={deck.skills[focus] === s.id}
-                    disabled={!deck.cards.includes(focus)}
-                    onChange={() =>
-                      change({
-                        ...deck,
-                        skills: { ...deck.skills, [focus]: s.id },
-                      })
-                    }
-                  />
-                  <strong>{s.name}</strong>
-                  <small>{s.description}</small>
-                </label>
-              ))}
-            </fieldset>
-          )}
-        </aside>
-      </div>
-    </section>
+            </div>
+          )
+        }
+      />
+    </>
   );
 }

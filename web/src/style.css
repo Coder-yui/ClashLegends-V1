@@ -784,7 +784,7 @@ fieldset label {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-.volume-controls input[type="range"] {
+input[type="range"] {
   appearance: none;
   -webkit-appearance: none;
   width: 100%;
@@ -795,7 +795,7 @@ fieldset label {
   padding: 0;
   margin: 8px 0;
 }
-.volume-controls input::-webkit-slider-thumb {
+input[type="range"]::-webkit-slider-thumb {
   appearance: none;
   -webkit-appearance: none;
   width: 17px;
@@ -803,7 +803,7 @@ fieldset label {
   background: var(--gold);
   border-radius: 50%;
 }
-.volume-controls input::-moz-range-thumb {
+input[type="range"]::-moz-range-thumb {
   width: 17px;
   height: 17px;
   background: var(--gold);
@@ -855,4 +855,89 @@ fieldset label {
   .top {
     gap: 8px;
   }
+}
+
+[data-card="scuttle_crab"] {
+  --card-edge: #69c5ce;
+}
+[data-card="tombstone"],
+[data-card="aurelionsol"] {
+  --card-edge: #d4ad65;
+}
+[data-card="melee_minion"],
+[data-card="ranged_minion"],
+[data-card="super_minion"],
+[data-card="freeze"] {
+  --card-edge: #719cda;
+}
+[data-card="siege_minion"] {
+  --card-edge: #a4b4bf;
+}
+
+.game-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 14rem;
+  overflow: auto;
+  background: #101c23;
+  border: 1px solid #49575b;
+  border-radius: 0.35rem;
+}
+.game-list button[role="option"] {
+  display: block;
+  text-align: left;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  width: 100%;
+}
+.game-list [role="option"][aria-selected="true"] {
+  background: #37444a;
+  box-shadow: inset 3px 0 var(--gold);
+}
+.game-list [role="option"][data-bound="true"] {
+  color: #93dc9b;
+}
+input[type="checkbox"] {
+  appearance: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  padding: 0;
+  border: 1px solid #71818a;
+  background: #101c23;
+  border-radius: 0.2rem;
+  display: inline-grid;
+  place-items: center;
+}
+input[type="checkbox"]:checked::after {
+  content: "";
+  width: 0.5rem;
+  height: 0.26rem;
+  border: solid var(--gold);
+  border-width: 0 0 2px 2px;
+  transform: rotate(-45deg);
+}
+
+input:not([type]),
+input[type="search"],
+input[type="text"] {
+  appearance: none;
+}
+input[type="search"]::-webkit-search-cancel-button {
+  appearance: none;
+}
+summary {
+  list-style: none;
+  cursor: pointer;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
+summary::before {
+  content: "▸";
+  color: var(--gold);
+  margin-right: 0.4em;
+}
+details[open] > summary::before {
+  content: "▾";
 }

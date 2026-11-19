@@ -127,36 +127,50 @@ try {
   assert.deepEqual(await readBindings(), expected);
   await button("完成").click();
   await page.getByRole("link", { name: "我的卡组", exact: true }).click();
+  const openPresets = () => button("预设").click();
+  await button("随机").click();
+  const randomDeck = await page
+    .locator(".prep-slots button")
+    .evaluateAll((nodes) => nodes.map((n) => n.dataset.card));
+  assert.equal(randomDeck.filter(Boolean).length, 8);
+  assert.equal(new Set(randomDeck).size, 8);
+  const closePresets = () =>
+    dialog.getByRole("button", { name: "关闭", exact: true }).click();
+  await openPresets();
   await page.getByLabel("预设名称").fill("未保存草稿");
   await page.reload();
-  await page.getByLabel("预设名称").waitFor();
+  await openPresets();
   assert.equal(await page.getByLabel("预设名称").inputValue(), "未保存草稿");
+  await closePresets();
   await page.getByRole("link", { name: "返回大厅", exact: true }).click();
-  await dialog.getByRole("button", { name: "取消" }).click();
-  assert.equal(await page.getByLabel("预设名称").inputValue(), "未保存草稿");
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
   await page.goBack();
   await page.getByRole("heading", { name: "对战大厅" }).waitFor();
   await page.goForward();
-  await page.getByLabel("预设名称").waitFor();
+  await openPresets();
   assert.equal(await page.getByLabel("预设名称").inputValue(), "未保存草稿");
-  const type = page.getByRole("combobox", { name: "类型", exact: true });
-  await type.click();
-  await type.press("End");
-  await type.press("Enter");
-  assert.match(await type.innerText(), /建筑/);
+  await closePresets();
+  await button("建筑").click();
+  assert.equal(await button("建筑").getAttribute("aria-pressed"), "true");
   await page.getByRole("link", { name: "返回大厅", exact: true }).click();
   await dialog.getByRole("button", { name: "放弃并离开" }).click();
   await page.getByRole("link", { name: "我的卡组", exact: true }).click();
-  await page.getByLabel("预设名称").waitFor();
+  await openPresets();
   assert.equal(await page.getByLabel("预设名称").inputValue(), "我的卡组");
   await page.getByLabel("预设名称").fill("网页确认测试");
-  await button("保存预设").click();
-  await page.getByText("个人预设已保存").waitFor();
+  await dialog.getByRole("button", { name: "保存预设", exact: true }).click();
+  await dialog.getByText("个人预设已保存").waitFor();
   await button("删除预设").click();
-  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+  await page
+    .getByRole("dialog", { name: "删除个人预设" })
+    .getByRole("button", { name: "取消", exact: true })
+    .click();
   await button("删除预设").click();
-  await dialog.getByRole("button", { name: "确认删除", exact: true }).click();
-  await page.getByText("预设已删除").waitFor();
+  await page
+    .getByRole("dialog", { name: "删除个人预设" })
+    .getByRole("button", { name: "确认删除", exact: true })
+    .click();
+  await dialog.getByText("预设已删除").waitFor();
   assert.deepEqual(problems, []);
   console.log(
     "Web controls, native-dialog guard, audio output/mute, persisted volumes and key bindings, draft navigation and refresh passed",

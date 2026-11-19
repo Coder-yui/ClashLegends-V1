@@ -12,6 +12,9 @@ export function Hall({
   session: Session;
   setup: (kind: string) => void;
 }) {
+  const preset = session.presets[0]?.battleDeck
+    ? session.presets[0]
+    : undefined;
   return (
     <>
       <div className="hero">
@@ -23,21 +26,25 @@ export function Hall({
           </div>
           <h1>对战大厅</h1>
           <p>
-            经典模式 <em>／</em> 1 对 1 <em>／</em> 晴昼峡谷
+            {catalog.modes[0]?.name} <em>／</em> 1 对 1 <em>／</em>{" "}
+            {
+              catalog.maps.find((m) => m.id === catalog.modes[0]?.mapIds[0])
+                ?.name
+            }
           </p>
         </div>
       </div>
       {room && session.roomId && (
         <div className="resume">
           <strong>
-            {room.matchId ? "比赛配置已锁定" : "你有一个活动房间"}
+            {room.matchId ? "你有一场待继续的对局" : "你有一个活动房间"}
           </strong>
           <a
             href={href(
               room.matchId ? "matches/" + room.matchId : "rooms/" + room.id,
             )}
           >
-            {room.matchId ? "查看开局" : "返回房间"} →
+            {room.matchId ? "进入战场" : "返回房间"} →
           </a>
         </div>
       )}
@@ -84,10 +91,10 @@ export function Hall({
         </a>
       </div>
       <div className="panel">
-        <h3>{session.presets[0]?.name ?? "经典初始卡组"}</h3>
+        <h3>{preset?.name ?? "经典初始卡组"}</h3>
         <DeckStrip
           catalog={catalog}
-          deck={session.presets[0]?.deck ?? defaultDeck(catalog)}
+          deck={preset?.battleDeck ?? defaultDeck(catalog)}
         />
       </div>
     </>

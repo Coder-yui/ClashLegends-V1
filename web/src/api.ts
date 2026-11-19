@@ -1,5 +1,7 @@
 import { navigate } from "./navigation";
 export interface Skill {
+  cost?: number;
+  image?: string;
   id: string;
   name: string;
   description: string;
@@ -10,11 +12,14 @@ export interface Card {
   type: string;
   cost: number;
   costLabel?: string;
+  homeDeployment?: boolean;
+  skillCost?: number;
   image: string;
   description: string;
   skills: Skill[];
 }
 export interface Catalog {
+  workbench?: boolean;
   cards: Card[];
   version: string;
   defaultDeck: string[];
@@ -26,6 +31,7 @@ export interface Deck {
   skills: Record<string, string>;
 }
 export interface Preset {
+  battleDeck: Deck | null;
   id: string;
   name: string;
   revision: number;
@@ -52,7 +58,15 @@ export interface Room {
   deck: Deck;
   deckVersion: number;
 }
+export interface Result {
+  winner: number | null;
+  reason: "Nexus" | "Towers" | "Draw";
+  tick: number;
+}
 export interface Match {
+  modelResources?: string[];
+  result: Result | null;
+  playable: boolean;
   id: string;
   roomId: string;
   mode: string;

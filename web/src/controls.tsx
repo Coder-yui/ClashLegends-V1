@@ -195,6 +195,7 @@ export function Choice({
               tabIndex={-1}
               key={item.id}
               id={id + "-" + i}
+              data-value={item.id}
               role="option"
               aria-selected={selected === i}
               className={active === i ? "highlight" : ""}
@@ -207,6 +208,61 @@ export function Choice({
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+// Inline list for browsing larger catalogs without opening a system picker.
+export function ChoiceList({
+  label,
+  value,
+  items,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  items: (Item & { bound?: boolean })[];
+  onChange: (id: string) => void;
+}) {
+  const selected = items.findIndex((item) => item.id === value);
+  return (
+    <div
+      role="listbox"
+      aria-label={label}
+      className="game-list"
+      onKeyDown={(e) => {
+        const current = items.findIndex((item) => item.id === value);
+        const next =
+          e.key === "ArrowDown"
+            ? current + 1
+            : e.key === "ArrowUp"
+              ? current - 1
+              : e.key === "Home"
+                ? 0
+                : e.key === "End"
+                  ? items.length - 1
+                  : undefined;
+        if (next === undefined || !items.length) return;
+        e.preventDefault();
+        const index = Math.max(0, Math.min(next, items.length - 1));
+        (e.currentTarget.children[index] as HTMLElement).focus();
+        onChange(items[index].id);
+      }}
+    >
+      {items.map((item, i) => (
+        <button
+          type="button"
+          role="option"
+          key={item.id}
+          data-value={item.id}
+          data-bound={item.bound}
+          tabIndex={value === item.id || (selected < 0 && i === 0) ? 0 : -1}
+          aria-selected={value === item.id}
+          onClick={() => onChange(item.id)}
+        >
+          {item.name}
+        </button>
+      ))}
     </div>
   );
 }

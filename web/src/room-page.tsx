@@ -3,6 +3,7 @@ import { href } from "./api";
 import type { Catalog, Room } from "./api";
 import { DeckStrip } from "./deck-strip";
 export function RoomPage({
+  compact = false,
   catalog,
   room,
   online,
@@ -12,6 +13,7 @@ export function RoomPage({
   action,
   notify,
 }: {
+  compact?: boolean;
   catalog: Catalog;
   room: Room;
   online: boolean;
@@ -25,18 +27,20 @@ export function RoomPage({
   return (
     <>
       {confirmation}
-      <div className="page-title">
-        <div>
-          <span className="eyebrow">
-            第 {room.round} 轮 · {room.kind === "ai" ? "训练场" : "双人对战"}
-          </span>
-          <h1>{room.kind === "ai" ? "AI 备战室" : "好友房间"}</h1>
+      {!compact && (
+        <div className="page-title">
+          <div>
+            <span className="eyebrow">
+              第 {room.round} 轮 · {room.kind === "ai" ? "训练场" : "双人对战"}
+            </span>
+            <h1>{room.kind === "ai" ? "AI 备战室" : "好友房间"}</h1>
+          </div>
+          <a className="outline" href={href()}>
+            返回大厅
+          </a>
         </div>
-        <a className="outline" href={href()}>
-          返回大厅
-        </a>
-      </div>
-      <div className="room-layout">
+      )}
+      <div className={compact ? "prep-room-tools" : "room-layout"}>
         <article className="panel">
           <div className="section-title">
             <h2>对战席位</h2>
@@ -106,17 +110,24 @@ export function RoomPage({
           )}
         </aside>
       </div>
-      <div className="section-title">
-        <h2>本局卡组</h2>
-        {room.status === "open" && (
-          <a className="text-button" href={href("rooms/" + room.id + "/deck")}>
-            编辑卡组与技能 ↗
-          </a>
-        )}
-      </div>
-      <div className="panel">
-        <DeckStrip deck={room.deck} catalog={catalog} />
-      </div>
+      {!compact && (
+        <>
+          <div className="section-title">
+            <h2>本局卡组</h2>
+            {room.status === "open" && (
+              <a
+                className="text-button"
+                href={href("rooms/" + room.id + "/deck")}
+              >
+                编辑卡组与技能 ↗
+              </a>
+            )}
+          </div>
+          <div className="panel">
+            <DeckStrip deck={room.deck} catalog={catalog} />
+          </div>
+        </>
+      )}
       <div className="footer-actions">
         {room.status === "open" ? (
           <>
@@ -136,36 +147,38 @@ export function RoomPage({
             >
               离开房间
             </button>
-            <button
-              className="gold"
-              disabled={
-                busy ||
-                !online ||
-                room.seats.length !== 2 ||
-                room.seats.some((x) => !x.online)
-              }
-              onClick={() =>
-                run(() =>
-                  action("ready", { ready: !room.seats[room.me].ready }),
-                )
-              }
-            >
-              {room.kind === "ai"
-                ? "开始对战"
-                : room.seats[room.me].ready
-                  ? "取消准备"
-                  : "准备"}
-            </button>
+            {!compact && (
+              <button
+                className="gold"
+                disabled={
+                  busy ||
+                  !online ||
+                  room.seats.length !== 2 ||
+                  room.seats.some((x) => !x.online)
+                }
+                onClick={() =>
+                  run(() =>
+                    action("ready", { ready: !room.seats[room.me].ready }),
+                  )
+                }
+              >
+                {room.kind === "ai"
+                  ? "开始对战"
+                  : room.seats[room.me].ready
+                    ? "取消准备"
+                    : "准备"}
+              </button>
+            )}
           </>
-        ) : room.status === "locked" ? (
+        ) : ["locked", "playing"].includes(room.status) ? (
           <>
-            {room.me === 0 && (
+            {room.me === 0 && room.status === "locked" && (
               <button onClick={() => run(() => action("reopen"))}>
                 结束本次备战，重新组局
               </button>
             )}
             <a className="gold" href={href("matches/" + room.matchId)}>
-              查看开局确认
+              进入战场
             </a>
           </>
         ) : (
