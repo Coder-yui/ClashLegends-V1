@@ -1,0 +1,6098 @@
+{
+  "aatrox": [
+    {
+      "asset": "aatrox",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.25
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.25
+        },
+        {
+          "clip": "Attack3",
+          "marker": 0.25
+        },
+        {
+          "clip": "Passive_Attack",
+          "marker": 0.25
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0,
+        "clipEnd": 0.8
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2",
+          "Attack3",
+          "Passive_Attack"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "empowered_idle": [
+          "Passive_Idle"
+        ],
+        "empowered_move": [
+          "Passive_Run"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "initial_move": [
+          "Aatrox_sheath_run01_anm"
+        ],
+        "move": [
+          "Run_Base"
+        ]
+      },
+      "actions": {
+        "revert": {
+          "clips": [
+            "ULT_out"
+          ],
+          "blend_in": 0.1,
+          "blend_out": 0.1
+        }
+      },
+      "casts": {},
+      "air": false,
+      "deploy": "Respawn",
+      "transitions": {
+        "Attack2>run": {
+          "clip": "Attack_INTO_Run",
+          "blend": 2.0
+        },
+        "Passive_Attack>idle": {
+          "clip": "Passive_Attack_out",
+          "blend": 2.0
+        },
+        "Passive_Attack>run": {
+          "clip": "Passive_Attack_out",
+          "blend": 2.0
+        }
+      },
+      "clipBlends": {
+        "Aatrox_ULT_Idle_anm>Death": 0.0,
+        "Aatrox_ULT_Idle_anm>Spell4": 0.0,
+        "Aatrox_sheath_run01_anm>Aatrox_ULT_Idle_anm": 0.0,
+        "Aatrox_sheath_run01_anm>Spell4": 0.0,
+        "Attack1_Ult>Aatrox_ULT_Idle_anm": 0.0,
+        "Attack1_Ult>Attack_INTO_Run": 0.6,
+        "Attack1_Ult>Spell4": 0.0,
+        "Attack2>Aatrox_ULT_Idle_anm": 0.0,
+        "Attack2>Attack_INTO_Run": 0.6,
+        "Attack2>Spell4": 0.0,
+        "Attack2_Ult>Aatrox_ULT_Idle_anm": 0.0,
+        "Attack2_Ult>Attack_INTO_Run": 0.6,
+        "Attack2_Ult>Spell4": 0.0,
+        "Attack3>Aatrox_ULT_Idle_anm": 0.0,
+        "Attack3>Passive_Run": 3.0,
+        "Attack3>Spell4": 0.0,
+        "Attack_INTO_Run>Aatrox_ULT_Idle_anm": 0.0,
+        "Attack_INTO_Run>Attack1": 1.0,
+        "Attack_INTO_Run>Attack1_Ult": 1.0,
+        "Attack_INTO_Run>Attack2": 1.0,
+        "Attack_INTO_Run>Attack2_Ult": 1.0,
+        "Attack_INTO_Run>Attack3": 1.0,
+        "Attack_INTO_Run>Death": 1.0,
+        "Attack_INTO_Run>Idle1": 1.0,
+        "Attack_INTO_Run>Spell4": 0.0,
+        "Death>Aatrox_ULT_Idle_anm": 0.0,
+        "Death>Attack1": 0.0,
+        "Death>Attack1_Ult": 0.0,
+        "Death>Attack2": 0.0,
+        "Death>Attack2_Ult": 0.0,
+        "Death>Attack3": 0.0,
+        "Death>Idle1": 0.0,
+        "Death>Passive_Idle": 0.0,
+        "Death>Passive_Run": 0.0,
+        "Death>Run_Base": 0.0,
+        "Death>Spell4": 0.0,
+        "Idle1>Aatrox_ULT_Idle_anm": 0.0,
+        "Idle1>Death": 0.0,
+        "Idle1>Spell4": 0.0,
+        "Passive_Idle>Aatrox_ULT_Idle_anm": 0.0,
+        "Passive_Idle>Attack1": 0.0,
+        "Passive_Idle>Attack1_Ult": 0.0,
+        "Passive_Idle>Attack2": 0.0,
+        "Passive_Idle>Attack2_Ult": 0.0,
+        "Passive_Idle>Attack3": 0.0,
+        "Passive_Idle>Death": 0.0,
+        "Passive_Idle>Idle1": 0.0,
+        "Passive_Idle>Run_Base": 0.0,
+        "Passive_Idle>Spell4": 0.0,
+        "Passive_Run>Aatrox_ULT_Idle_anm": 0.0,
+        "Passive_Run>Attack1": 0.0,
+        "Passive_Run>Attack1_Ult": 0.0,
+        "Passive_Run>Attack2": 0.0,
+        "Passive_Run>Attack2_Ult": 0.0,
+        "Passive_Run>Attack3": 0.0,
+        "Passive_Run>Death": 0.0,
+        "Passive_Run>Idle1": 0.0,
+        "Passive_Run>Run_Base": 0.0,
+        "Passive_Run>Spell4": 0.0,
+        "Run_Base>Aatrox_ULT_Idle_anm": 0.0,
+        "Run_Base>Death": 0.0,
+        "Run_Base>Spell4": 0.0,
+        "Run_Ult>Spell4": 0.0,
+        "Spell4>Run_Ult": 5.0
+      },
+      "packs": {
+        "aatrox.world-ender": [
+          "ULT_out"
+        ]
+      },
+      "packFiles": {
+        "aatrox.world-ender": "aatrox-world-ender"
+      }
+    },
+    {
+      "asset": "aatrox-alt",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Aatrox_ULT_Idle_anm",
+      "run": "Run_Ult",
+      "attacks": [
+        {
+          "clip": "Passive_Attack_Ult",
+          "marker": 0.25
+        },
+        {
+          "clip": "Attack1_Ult",
+          "marker": 0.25
+        },
+        {
+          "clip": "Attack2_Ult",
+          "marker": 0.25
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0,
+        "clipEnd": 0.8
+      },
+      "roles": {
+        "attack": [
+          "Passive_Attack_Ult",
+          "Attack1_Ult",
+          "Attack2_Ult"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Aatrox_ULT_Idle_anm"
+        ],
+        "move": [
+          "Run_Ult"
+        ]
+      },
+      "actions": {
+        "transform_active": {
+          "clips": [
+            "Spell4"
+          ],
+          "clip_ranges": [
+            [
+              0.0,
+              1.0
+            ]
+          ],
+          "blend_in": 0.1,
+          "blend_out": 0.1
+        }
+      },
+      "casts": {},
+      "air": true,
+      "deploy": "Respawn",
+      "clipBlends": {
+        "Aatrox_ULT_Idle_anm>Death": 0.0,
+        "Aatrox_ULT_Idle_anm>Spell4": 0.0,
+        "Aatrox_sheath_run01_anm>Aatrox_ULT_Idle_anm": 0.0,
+        "Aatrox_sheath_run01_anm>Spell4": 0.0,
+        "Attack1_Ult>Aatrox_ULT_Idle_anm": 0.0,
+        "Attack1_Ult>Attack_INTO_Run": 0.6,
+        "Attack1_Ult>Spell4": 0.0,
+        "Attack2>Aatrox_ULT_Idle_anm": 0.0,
+        "Attack2>Attack_INTO_Run": 0.6,
+        "Attack2>Spell4": 0.0,
+        "Attack2_Ult>Aatrox_ULT_Idle_anm": 0.0,
+        "Attack2_Ult>Attack_INTO_Run": 0.6,
+        "Attack2_Ult>Spell4": 0.0,
+        "Attack3>Aatrox_ULT_Idle_anm": 0.0,
+        "Attack3>Passive_Run": 3.0,
+        "Attack3>Spell4": 0.0,
+        "Attack_INTO_Run>Aatrox_ULT_Idle_anm": 0.0,
+        "Attack_INTO_Run>Attack1": 1.0,
+        "Attack_INTO_Run>Attack1_Ult": 1.0,
+        "Attack_INTO_Run>Attack2": 1.0,
+        "Attack_INTO_Run>Attack2_Ult": 1.0,
+        "Attack_INTO_Run>Attack3": 1.0,
+        "Attack_INTO_Run>Death": 1.0,
+        "Attack_INTO_Run>Idle1": 1.0,
+        "Attack_INTO_Run>Spell4": 0.0,
+        "Death>Aatrox_ULT_Idle_anm": 0.0,
+        "Death>Attack1": 0.0,
+        "Death>Attack1_Ult": 0.0,
+        "Death>Attack2": 0.0,
+        "Death>Attack2_Ult": 0.0,
+        "Death>Attack3": 0.0,
+        "Death>Idle1": 0.0,
+        "Death>Passive_Idle": 0.0,
+        "Death>Passive_Run": 0.0,
+        "Death>Run_Base": 0.0,
+        "Death>Spell4": 0.0,
+        "Idle1>Aatrox_ULT_Idle_anm": 0.0,
+        "Idle1>Death": 0.0,
+        "Idle1>Spell4": 0.0,
+        "Passive_Idle>Aatrox_ULT_Idle_anm": 0.0,
+        "Passive_Idle>Attack1": 0.0,
+        "Passive_Idle>Attack1_Ult": 0.0,
+        "Passive_Idle>Attack2": 0.0,
+        "Passive_Idle>Attack2_Ult": 0.0,
+        "Passive_Idle>Attack3": 0.0,
+        "Passive_Idle>Death": 0.0,
+        "Passive_Idle>Idle1": 0.0,
+        "Passive_Idle>Run_Base": 0.0,
+        "Passive_Idle>Spell4": 0.0,
+        "Passive_Run>Aatrox_ULT_Idle_anm": 0.0,
+        "Passive_Run>Attack1": 0.0,
+        "Passive_Run>Attack1_Ult": 0.0,
+        "Passive_Run>Attack2": 0.0,
+        "Passive_Run>Attack2_Ult": 0.0,
+        "Passive_Run>Attack3": 0.0,
+        "Passive_Run>Death": 0.0,
+        "Passive_Run>Idle1": 0.0,
+        "Passive_Run>Run_Base": 0.0,
+        "Passive_Run>Spell4": 0.0,
+        "Run_Base>Aatrox_ULT_Idle_anm": 0.0,
+        "Run_Base>Death": 0.0,
+        "Run_Base>Spell4": 0.0,
+        "Run_Ult>Spell4": 0.0,
+        "Spell4>Run_Ult": 5.0
+      },
+      "packs": {
+        "aatrox.world-ender": [
+          "Spell4"
+        ]
+      },
+      "packFiles": {
+        "aatrox.world-ender": "aatrox-alt-world-ender"
+      }
+    }
+  ],
+  "anivia": [
+    {
+      "asset": "anivia",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.68
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.68
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 48.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Idle1"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "frost_storm": {
+          "clips": [
+            "Spell4"
+          ],
+          "durations": [
+            1.166667
+          ]
+        }
+      },
+      "casts": {
+        "anivia.glacial-storm": {
+          "clip": "Spell4",
+          "action": "frost_storm",
+          "marker": 0.72
+        }
+      },
+      "air": true,
+      "deploy": "Idle1",
+      "hands": [
+        "Head",
+        "Head"
+      ],
+      "clipBlends": {
+        "Attack1>Death": 0.0,
+        "Attack2>Death": 0.0,
+        "Idle1>Death": 0.0,
+        "Run>Death": 0.0,
+        "Spell4>Death": 0.0
+      },
+      "packs": {
+        "anivia.glacial-storm": [
+          "Spell4"
+        ]
+      },
+      "packFiles": {
+        "anivia.glacial-storm": "anivia-glacial-storm"
+      }
+    }
+  ],
+  "anivia_egg": [
+    {
+      "asset": "anivia_egg",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Idle1",
+      "attacks": [],
+      "death": {
+        "clip": "Death",
+        "ticks": 21.33334,
+        "blend": 0
+      },
+      "roles": {
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Idle1"
+        ],
+        "idle": [
+          "Idle1"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "followup": {
+        "asset": "anivia",
+        "clip": "Death",
+        "immediate": true,
+        "ticks": 48.0
+      },
+      "deploy": "Idle1",
+      "clipBlends": {
+        "Idle1>Death": 0.0
+      },
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "aurelionsol": [
+    {
+      "asset": "aurelionsol",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run1B",
+      "attacks": [],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack_enter": [
+          "AurelionSol_Spell1_newtst_anm"
+        ],
+        "attack_loop": [
+          "AurelionSol_Spell1_loop_anm"
+        ],
+        "attack_retarget_enter": [
+          "AurelionSol_Spell1_new_looptoin_anm",
+          "AurelionSol_Spell1_newtst_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run1B"
+        ],
+        "move_cycle": [
+          "Run1B",
+          "Run1C",
+          "Run1D",
+          "Run1A"
+        ],
+        "move_enter": [
+          "RunIn"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Spell4"
+          ],
+          "durations": [
+            1.9333328
+          ],
+          "blend_in": 0.25
+        },
+        "active_strong": {
+          "clips": [
+            "AurelionSol_Spell4_base_anm"
+          ],
+          "durations": [
+            1.8999995
+          ],
+          "blend_in": 0.25
+        }
+      },
+      "casts": {
+        "aurelionsol.falling-star-the-skies-descend": {
+          "clip": "Spell4",
+          "action": "active",
+          "marker": 1.65
+        }
+      },
+      "air": true,
+      "deploy": "Respawn",
+      "channel": "AurelionSol_Spell1_loop_anm",
+      "channelEnter": "AurelionSol_Spell1_newtst_anm",
+      "transitions": {
+        "AurelionSol_Spell1_loop_anm>idle": {
+          "clip": "Spell1_2Idle"
+        },
+        "AurelionSol_Spell1_newtst_anm>idle": {
+          "clip": "Spell1_2Idle"
+        },
+        "Respawn>run": {
+          "clip": "RunIn",
+          "blend": 6.0
+        },
+        "attack>run": {
+          "clip": "Spell1_2Run"
+        }
+      },
+      "clipBlends": {
+        "AurelionSol_Spell4_base_anm>AurelionSol_Spell1_newtst_anm": 0.0,
+        "Idle1_Base>AurelionSol_Spell1_newtst_anm": 0.0,
+        "Respawn>AurelionSol_Spell1_newtst_anm": 0.0,
+        "Run1A>AurelionSol_Spell1_newtst_anm": 0.0,
+        "Run1A>Run1B": 0.0,
+        "Run1B>AurelionSol_Spell1_newtst_anm": 0.0,
+        "Run1B>Run1C": 0.0,
+        "Run1C>AurelionSol_Spell1_newtst_anm": 0.0,
+        "Run1C>Run1D": 0.0,
+        "Run1D>AurelionSol_Spell1_newtst_anm": 0.0,
+        "Run1D>Run1A": 0.0,
+        "RunIn>AurelionSol_Spell1_newtst_anm": 0.0,
+        "RunIn>Run1B": 0.0,
+        "Spell1_2Idle>AurelionSol_Spell1_newtst_anm": 0.0,
+        "Spell1_2Run>AurelionSol_Spell1_newtst_anm": 0.0,
+        "Spell1_2Run>Run1B": 12.0,
+        "Spell4>AurelionSol_Spell1_newtst_anm": 0.0
+      },
+      "timing": {
+        "deploy_clip_ratio": 0.5
+      },
+      "packs": {
+        "aurelionsol.falling-star-the-skies-descend": [
+          "AurelionSol_Spell4_base_anm",
+          "Spell4"
+        ]
+      },
+      "packFiles": {
+        "aurelionsol.falling-star-the-skies-descend": "aurelionsol-falling-star-the-skies-descend"
+      }
+    }
+  ],
+  "azir": [
+    {
+      "asset": "azir",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Azir_Attack1_anm",
+          "marker": 0.25
+        },
+        {
+          "clip": "Azir_Attack2_anm",
+          "marker": 0.25
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 24.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Azir_Attack1_anm",
+          "Azir_Attack2_anm"
+        ],
+        "attack_hit": [
+          "Azir_Attack1_anm",
+          "Azir_Attack2_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Azir_Spell2_anm"
+          ]
+        }
+      },
+      "casts": {
+        "azir.arise": {
+          "clip": "Azir_Spell2_anm",
+          "action": "active",
+          "marker": 0.25
+        }
+      },
+      "air": false,
+      "deploy": "Respawn",
+      "hands": [
+        "Buffbone_Glb_Weapon_1"
+      ],
+      "clipBlends": {
+        "Respawn>Azir_Attack1_anm": 2.4,
+        "Respawn>Azir_Attack2_anm": 2.4,
+        "Respawn>Idle1_Base": 3.5999999999999996,
+        "Respawn>Run": 3.5999999999999996
+      },
+      "timing": {
+        "attack_clip_ranges": [
+          [
+            0.0,
+            0.25
+          ],
+          [
+            0.0,
+            0.25
+          ]
+        ],
+        "attack_hit_clip_ranges": [
+          [
+            0.25,
+            2.3
+          ],
+          [
+            0.25,
+            2.3
+          ]
+        ],
+        "attack_hit_duration": 1.35,
+        "deploy_clip_ratio": 0.5714285714285714
+      },
+      "packs": {
+        "azir.arise": [
+          "Azir_Spell2_anm"
+        ]
+      },
+      "packFiles": {
+        "azir.arise": "azir-arise"
+      }
+    }
+  ],
+  "belveth": [
+    {
+      "asset": "belveth",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle_Ult_anm",
+      "run": "Run_Ult_anm",
+      "attacks": [
+        {
+          "clip": "AttackSwipe1_in_anm",
+          "marker": 0.15
+        },
+        {
+          "clip": "AttackSwipe2_in_anm",
+          "marker": 0.15
+        }
+      ],
+      "death": {
+        "clip": "Idle_Ult_anm",
+        "ticks": 0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "AttackSwipe1_in_anm",
+          "AttackSwipe2_in_anm"
+        ],
+        "attack_hit": [
+          "AttackSwipe1_anm",
+          "AttackSwipe2_anm"
+        ],
+        "deploy": [
+          "Respawn_Ult_anm"
+        ],
+        "idle": [
+          "Idle_Ult_anm"
+        ],
+        "move": [
+          "Run_Ult_anm"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Spell1_ult_in_anm",
+            "Spell1_ult_out_anm"
+          ],
+          "durations": [
+            0.1666667,
+            0.2333333
+          ]
+        }
+      },
+      "casts": {
+        "belveth.void-surge": {
+          "clip": "Spell1_ult_in_anm",
+          "action": "active",
+          "marker": 0.0
+        }
+      },
+      "air": true,
+      "deploy": "Respawn_Ult_anm",
+      "transitions": {
+        "AttackSwipe1_anm>idle": {
+          "clip": "AttackSwipe1_anm"
+        },
+        "AttackSwipe1_anm>run": {
+          "clip": "AttackSwipe1_anm"
+        },
+        "AttackSwipe2_anm>idle": {
+          "clip": "AttackSwipe2_anm"
+        },
+        "AttackSwipe2_anm>run": {
+          "clip": "AttackSwipe2_anm"
+        },
+        "Run_Ult_anm>idle": {
+          "clip": "Idle_Ult_In_anm",
+          "blend": 7.0
+        },
+        "Spell1_ult_out_anm>idle": {
+          "clip": "Spell1_ult_toidle_anm"
+        },
+        "Spell1_ult_out_anm>run": {
+          "clip": "Spell1_ult_torun_anm",
+          "blend": 0.0
+        }
+      },
+      "clipBlends": {
+        "*>Spell1_ult_in_anm": 1.0,
+        "AttackSwipe1_in_anm>AttackSwipe1_anm": 0.0,
+        "AttackSwipe2_in_anm>AttackSwipe2_anm": 0.0,
+        "Run_Ult_anm>Idle_Ult_anm": 7.0,
+        "Spell1_ult_in_anm>Spell1_ult_out_anm": 0.0
+      },
+      "timing": {
+        "attack_hit_duration": 1.5
+      },
+      "packs": {
+        "belveth.void-surge": [
+          "Spell1_ult_in_anm",
+          "Spell1_ult_out_anm",
+          "Spell1_ult_toidle_anm",
+          "Spell1_ult_torun_anm"
+        ]
+      },
+      "packFiles": {
+        "belveth.void-surge": "belveth-void-surge"
+      }
+    }
+  ],
+  "blitzcrank": [
+    {
+      "asset": "blitzcrank",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.77
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.77
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "empowered_attack": [
+          "Spell3"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "auto_pull": {
+          "clips": [
+            "Spell1"
+          ],
+          "durations": [
+            0.65
+          ],
+          "blend_in": 0.0
+        }
+      },
+      "casts": {},
+      "air": false,
+      "packs": {
+        "blitzcrank.power-fist": [
+          "Spell3"
+        ]
+      },
+      "packFiles": {
+        "blitzcrank.power-fist": "blitzcrank-power-fist"
+      }
+    }
+  ],
+  "corki": [
+    {
+      "asset": "corki",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.14
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.14
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Idle1"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Spell4"
+          ],
+          "durations": [
+            0.5
+          ]
+        },
+        "active_big": {
+          "clips": [
+            "Spell4"
+          ],
+          "durations": [
+            0.5
+          ]
+        }
+      },
+      "casts": {
+        "corki.missile-barrage": {
+          "clip": "Spell4",
+          "action": "active",
+          "marker": 0.13
+        }
+      },
+      "air": true,
+      "deploy": "Idle1",
+      "hands": [
+        "gun",
+        "gun"
+      ],
+      "packs": {
+        "corki.missile-barrage": [
+          "Spell4"
+        ]
+      },
+      "packFiles": {
+        "corki.missile-barrage": "corki-missile-barrage"
+      }
+    }
+  ],
+  "daisy": [
+    {
+      "asset": "daisy",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "IvernMinion_idle_anm",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.4
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.4
+        },
+        {
+          "clip": "Attack3",
+          "marker": 0.4
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2",
+          "Attack3"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "IvernMinion_spawn_anm"
+        ],
+        "idle": [
+          "IvernMinion_idle_anm"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "IvernMinion_spawn_anm",
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "darius": [
+    {
+      "asset": "darius",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.3
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.3
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 20.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Idle1"
+        ],
+        "empowered_attack": [
+          "Spell4"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Idle1",
+      "packs": {
+        "darius.noxian-guillotine": [
+          "Spell4"
+        ]
+      },
+      "packFiles": {
+        "darius.noxian-guillotine": "darius-noxian-guillotine"
+      }
+    }
+  ],
+  "ekko": [
+    {
+      "asset": "ekko",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "PunkGenius_Idle01_anm",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "Attack_P_1",
+          "marker": 0.2
+        },
+        {
+          "clip": "Attack_P_2",
+          "marker": 0.2
+        },
+        {
+          "clip": "Attack_P_3",
+          "marker": 0.2
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0,
+        "clipEnd": 1.5
+      },
+      "roles": {
+        "attack": [
+          "Attack_P_1",
+          "Attack_P_2",
+          "Attack_P_3"
+        ],
+        "attack_hit": [
+          "Attack_P_1",
+          "Attack_P_2",
+          "Attack_P_3"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Idle_In"
+        ],
+        "haste_move": [
+          "Run_Haste"
+        ],
+        "idle": [
+          "PunkGenius_Idle01_anm"
+        ],
+        "move": [
+          "Run_Base"
+        ]
+      },
+      "actions": {
+        "rewind": {
+          "clips": [
+            "Spell4"
+          ],
+          "durations": [
+            0.75
+          ],
+          "sequence_blend": 0.0
+        }
+      },
+      "casts": {
+        "ekko.chronobreak": {
+          "clip": "Spell4",
+          "action": "rewind",
+          "marker": 0.75
+        }
+      },
+      "air": false,
+      "deploy": "Idle_In",
+      "transitions": {
+        "Spell4>idle": {
+          "clip": "Spell4_End"
+        },
+        "Spell4>run": {
+          "clip": "Spell4_End_To_Run"
+        },
+        "Spell4_End>idle": {
+          "clip": "Spell4_End_To_Idle"
+        },
+        "Spell4_End>run": {
+          "clip": "Spell4_End_To_Run"
+        }
+      },
+      "timing": {
+        "attack_clip_ranges": [
+          [
+            0.0,
+            0.266667
+          ],
+          [
+            0.0,
+            0.266667
+          ],
+          [
+            0.0,
+            0.266667
+          ]
+        ],
+        "attack_hit_clip_ranges": [
+          [
+            0.266667,
+            2.133333
+          ],
+          [
+            0.266667,
+            2.133333
+          ],
+          [
+            0.266667,
+            2.133333
+          ]
+        ],
+        "attack_hit_duration": [
+          1.4,
+          1.4,
+          1.4
+        ]
+      },
+      "packs": {
+        "ekko.chronobreak": [
+          "Spell4",
+          "Spell4_End",
+          "Spell4_End_To_Idle",
+          "Spell4_End_To_Run"
+        ]
+      },
+      "packFiles": {
+        "ekko.chronobreak": "ekko-chronobreak"
+      }
+    }
+  ],
+  "enraged_reksai": [
+    {
+      "asset": "enraged_reksai",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run1",
+      "attacks": [
+        {
+          "clip": "Spell1",
+          "marker": 0.18
+        },
+        {
+          "clip": "Spell1B",
+          "marker": 0.18
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Spell1",
+          "Spell1B"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "empowered_attack": [
+          "Spell1",
+          "Spell1B",
+          "Spell1"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run1"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Respawn",
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "garen": [
+    {
+      "asset": "garen",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.38
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.38
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn_Base"
+        ],
+        "empowered_attack": [
+          "Spell1"
+        ],
+        "empowered_move": [
+          "Run_Spell1"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run_Base"
+        ]
+      },
+      "actions": {
+        "judgment": {
+          "clips": [
+            "Spell3_0"
+          ],
+          "durations": [
+            3.0
+          ],
+          "blend_in": 0.0,
+          "blend_out": 0.0
+        }
+      },
+      "casts": {
+        "garen.judgment": {
+          "clip": "Spell3_0",
+          "action": "judgment",
+          "marker": 0.0
+        }
+      },
+      "air": false,
+      "deploy": "Respawn_Base",
+      "clipBlends": {
+        "Attack1>Spell1": 2.0,
+        "Attack2>Attack1": 0.0,
+        "Attack2>Spell1": 2.0,
+        "Idle1_Base>Spell1": 2.0,
+        "Respawn_Base>Spell1": 2.0,
+        "Run_Base>Spell1": 2.0,
+        "Run_Spell1>Spell1": 2.0,
+        "Spell1>Spell1": 2.0,
+        "Spell3_0>Spell1": 0.0
+      },
+      "packs": {
+        "garen.decisive-strike": [
+          "Run_Spell1",
+          "Spell1"
+        ],
+        "garen.judgment": [
+          "Spell3_0"
+        ]
+      },
+      "packFiles": {
+        "garen.decisive-strike": "garen-decisive-strike",
+        "garen.judgment": "garen-judgment"
+      }
+    }
+  ],
+  "gnar": [
+    {
+      "asset": "gnar",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "Gnar_Attack1_anm",
+          "marker": 0.3
+        },
+        {
+          "clip": "Gnar_Attack2_anm",
+          "marker": 0.3
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Gnar_Attack1_anm",
+          "Gnar_Attack2_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run_Base"
+        ],
+        "move_enter": [
+          "Run1_In"
+        ]
+      },
+      "actions": {
+        "revert": {
+          "clips": [
+            "gnar_runtime_Revert_Transform"
+          ],
+          "durations": [
+            1.333333
+          ],
+          "blend_out": 0.12
+        }
+      },
+      "casts": {},
+      "air": false,
+      "deploy": "Respawn",
+      "hands": [
+        "L_Buffbone_Glb_Hand_Loc",
+        "R_Buffbone_Glb_Hand_Loc"
+      ],
+      "clipBlends": {
+        "Gnar_Attack1_anm>Gnar_Attack1_anm": 0.0,
+        "Gnar_Attack1_anm>Gnar_Attack2_anm": 0.0,
+        "Gnar_Attack2_anm>Gnar_Attack1_anm": 0.0,
+        "Gnar_Attack2_anm>Gnar_Attack2_anm": 0.0,
+        "Run1_In>Run_Base": 0.0
+      },
+      "packs": {},
+      "packFiles": {}
+    },
+    {
+      "asset": "gnar-alt",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "GnarBig_Attack1_anm",
+          "marker": 0.4
+        },
+        {
+          "clip": "GnarBig_Attack2_anm",
+          "marker": 0.4
+        }
+      ],
+      "death": {
+        "clip": "GnarBig_Death_anm",
+        "ticks": 5.4,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "GnarBig_Attack1_anm",
+          "GnarBig_Attack2_anm"
+        ],
+        "attack_structure": [
+          "GnarBig_Turret_Attack01_anm"
+        ],
+        "death": [
+          "GnarBig_Death_anm"
+        ],
+        "deploy": [
+          "Idle1_Base"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run_Base"
+        ],
+        "move_enter": [
+          "Run_In"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "GnarBig_Spell2_anm"
+          ],
+          "durations": [
+            1.2
+          ],
+          "blend_in": 0.06,
+          "blend_out": 0.12
+        },
+        "transform": {
+          "clips": [
+            "gnar_runtime_Rage_Transform"
+          ],
+          "durations": [
+            1.5
+          ],
+          "blend_out": 0.12
+        },
+        "transform_active": {
+          "clips": [
+            "gnar_runtime_Rage_Spell2_Transform"
+          ],
+          "durations": [
+            1.2
+          ],
+          "blend_out": 0.12
+        }
+      },
+      "casts": {
+        "gnar.rage-burst": {
+          "clip": "GnarBig_Spell2_anm",
+          "action": "active",
+          "marker": 0.8
+        }
+      },
+      "air": false,
+      "followup": {
+        "asset": "gnar",
+        "clip": "Death",
+        "immediate": false,
+        "ticks": 16.0
+      },
+      "deploy": "Idle1_Base",
+      "clipBlends": {
+        "GnarBig_Attack1_anm>GnarBig_Attack1_anm": 2.0,
+        "GnarBig_Attack1_anm>GnarBig_Attack2_anm": 2.0,
+        "GnarBig_Attack2_anm>GnarBig_Attack1_anm": 2.0,
+        "GnarBig_Attack2_anm>GnarBig_Attack2_anm": 2.0,
+        "Run_In>Run_Base": 0.0
+      },
+      "packs": {
+        "gnar.rage-burst": [
+          "GnarBig_Spell2_anm",
+          "gnar_runtime_Rage_Spell2_Transform"
+        ]
+      },
+      "packFiles": {
+        "gnar.rage-burst": "gnar-alt-rage-burst"
+      }
+    }
+  ],
+  "graves": [
+    {
+      "asset": "graves",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "graves_attack1_anm",
+          "marker": 0.14
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "graves_attack1_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ],
+        "reload": [
+          "graves_reload_anm"
+        ],
+        "reload_move": [
+          "ReloadMove"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Spell3"
+          ],
+          "durations": [
+            0.4
+          ]
+        }
+      },
+      "casts": {
+        "graves.quickdraw": {
+          "clip": "Spell3",
+          "action": "active",
+          "marker": 0.0
+        }
+      },
+      "air": false,
+      "hands": [
+        "buffbone_cstm_weapona"
+      ],
+      "packs": {
+        "graves.quickdraw": [
+          "Spell3"
+        ]
+      },
+      "packFiles": {
+        "graves.quickdraw": "graves-quickdraw"
+      }
+    }
+  ],
+  "gwen": [
+    {
+      "asset": "gwen",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle_anm",
+      "run": "Run_anm",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.28
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.28
+        },
+        {
+          "clip": "Attack3",
+          "marker": 0.28
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2",
+          "Attack3"
+        ],
+        "attack_to_move": [
+          "Into_Run",
+          "INTO_Run_-90_anm",
+          "INTO_Run_180_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle_anm"
+        ],
+        "move": [
+          "Run_anm"
+        ],
+        "move_enter": [
+          "Into_Run"
+        ]
+      },
+      "actions": {
+        "active_0": {
+          "clips": [
+            "Spell1_0",
+            "Spell1_C_anm"
+          ],
+          "durations": [
+            0.9493669,
+            0.5506331
+          ],
+          "blend_in": 0.0,
+          "sequence_blend": 0.0
+        },
+        "active_1": {
+          "clips": [
+            "Spell1_0",
+            "Spell1_B",
+            "Spell1_C_anm"
+          ],
+          "durations": [
+            0.7827002,
+            0.1666667,
+            0.5506331
+          ],
+          "clip_ranges": [
+            [
+              0.0,
+              1.374074
+            ],
+            [
+              0.0,
+              0.1666667
+            ],
+            [
+              0.0,
+              0.9666671
+            ]
+          ],
+          "blend_in": 0.0,
+          "sequence_blend": 0.0
+        },
+        "active_2": {
+          "clips": [
+            "Spell1_0",
+            "Spell1_B",
+            "Spell1_B",
+            "Spell1_C_anm"
+          ],
+          "durations": [
+            0.6160335,
+            0.1666667,
+            0.1666667,
+            0.5506331
+          ],
+          "clip_ranges": [
+            [
+              0.0,
+              1.0814813
+            ],
+            [
+              0.0,
+              0.1666667
+            ],
+            [
+              0.0,
+              0.1666667
+            ],
+            [
+              0.0,
+              0.9666671
+            ]
+          ],
+          "blend_in": 0.0,
+          "sequence_blend": 0.0
+        },
+        "active_3": {
+          "clips": [
+            "Spell1_0",
+            "Spell1_B",
+            "Spell1_B",
+            "Spell1_B",
+            "Spell1_C_anm"
+          ],
+          "durations": [
+            0.4493668,
+            0.1666667,
+            0.1666667,
+            0.1666667,
+            0.5506331
+          ],
+          "clip_ranges": [
+            [
+              0.0,
+              0.7888886
+            ],
+            [
+              0.0,
+              0.1666667
+            ],
+            [
+              0.0,
+              0.1666667
+            ],
+            [
+              0.0,
+              0.1666667
+            ],
+            [
+              0.0,
+              0.9666671
+            ]
+          ],
+          "blend_in": 0.0,
+          "sequence_blend": 0.0
+        },
+        "hallowed_mist": {
+          "clips": [
+            "Spell2"
+          ],
+          "blend_in": 0.0
+        }
+      },
+      "casts": {
+        "gwen.snip-snip": {
+          "clip": "Spell1_0",
+          "action": "active_0",
+          "marker": 0.09
+        },
+        "gwen.hallowed-mist": {
+          "clip": "Spell2",
+          "action": "hallowed_mist",
+          "marker": 0.0
+        }
+      },
+      "air": false,
+      "deploy": "Respawn",
+      "transitions": {
+        "Attack1>idle": {
+          "clip": "Attack1_To_Idle"
+        },
+        "Attack2>idle": {
+          "clip": "Attack2_To_Idle"
+        },
+        "Attack3>idle": {
+          "clip": "Attack3_To_Idle"
+        },
+        "Spell1_C_anm>idle": {
+          "clip": "Spell1_C_to_Idle_anm"
+        },
+        "Spell1_C_anm>run": {
+          "clip": "Spell1_C_to_Run_anm"
+        },
+        "Spell2>idle": {
+          "clip": "Spell2_To_Idle"
+        },
+        "Spell2>run": {
+          "clip": "Spell2_To_Run"
+        }
+      },
+      "clipBlends": {
+        "*>Attack1": 0.0,
+        "*>Attack2": 0.0,
+        "*>Attack3": 0.0,
+        "Attack1>Into_Run": 1.0,
+        "Attack2>INTO_Run_-90_anm": 1.0,
+        "Attack3>INTO_Run_180_anm": 1.0,
+        "Idle_anm>Into_Run": 1.0,
+        "Respawn>Into_Run": 1.0,
+        "Spell1_C_anm>Spell1_C_to_Idle_anm": 0.0,
+        "Spell1_C_to_Run_anm>Run_anm": 0.0,
+        "Spell2>Spell2_To_Idle": 0.0,
+        "Spell2>Spell2_To_Run": 0.0,
+        "Spell2_To_Run>Run_anm": 1.0,
+        "Stunned>Attack1": 1.0,
+        "Stunned>Attack2": 1.0,
+        "Stunned>Attack3": 1.0,
+        "Stunned>Spell2": 1.0
+      },
+      "packs": {
+        "gwen.snip-snip": [
+          "Spell1_0",
+          "Spell1_B",
+          "Spell1_C_anm",
+          "Spell1_C_to_Idle_anm",
+          "Spell1_C_to_Run_anm"
+        ],
+        "gwen.hallowed-mist": [
+          "Spell2",
+          "Spell2_To_Idle",
+          "Spell2_To_Run"
+        ]
+      },
+      "packFiles": {
+        "gwen.snip-snip": "gwen-snip-snip",
+        "gwen.hallowed-mist": "gwen-hallowed-mist"
+      }
+    }
+  ],
+  "hecarim": [
+    {
+      "asset": "hecarim",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Hecarim_idle1_anm",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Hecarim_Spell1_anm",
+          "marker": 0.15
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Hecarim_Spell1_anm"
+        ],
+        "charge_move": [
+          "Spell3run"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Hecarim_Idle3_anm"
+        ],
+        "idle": [
+          "Hecarim_idle1_anm"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "active:cast": {
+          "clips": [
+            "Hecarim_Spell2_anm"
+          ],
+          "durations": [
+            1.566667
+          ]
+        },
+        "charge_followthrough": {
+          "clips": [
+            "Spell3"
+          ],
+          "durations": [
+            0.67
+          ],
+          "clip_ranges": [
+            [
+              0.4,
+              1.066667
+            ]
+          ],
+          "blend_in": 0.0
+        },
+        "charge_strike": {
+          "clips": [
+            "Spell3"
+          ],
+          "durations": [
+            0.4
+          ],
+          "clip_ranges": [
+            [
+              0.0,
+              0.4
+            ]
+          ]
+        }
+      },
+      "casts": {
+        "hecarim.spirit-of-dread": {
+          "clip": "Hecarim_Spell2_anm",
+          "action": "active:cast",
+          "marker": 0.44
+        }
+      },
+      "air": false,
+      "deploy": "Hecarim_Idle3_anm",
+      "clipBlends": {
+        "Hecarim_Idle3_anm>Hecarim_Spell1_anm": 2.4,
+        "Hecarim_Idle3_anm>Hecarim_idle1_anm": 2.4,
+        "Hecarim_Idle3_anm>Run": 2.4
+      },
+      "timing": {
+        "deploy_clip_ratio": 0.40000026702898683
+      },
+      "packs": {
+        "hecarim.spirit-of-dread": [
+          "Hecarim_Spell2_anm"
+        ]
+      },
+      "packFiles": {
+        "hecarim.spirit-of-dread": "hecarim-spirit-of-dread"
+      }
+    }
+  ],
+  "imp": [
+    {
+      "asset": "imp",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run1",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.25
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.25
+        },
+        {
+          "clip": "Attack3",
+          "marker": 0.25
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 10.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2",
+          "Attack3"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Spawn1"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run1"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Spawn1",
+      "clipBlends": {
+        "Attack1>Attack2": 2.0,
+        "Attack1>Attack3": 2.0,
+        "Attack1>Death": 0.0,
+        "Attack1>Idle1": 2.0,
+        "Attack2>Attack1": 2.0,
+        "Attack2>Attack3": 2.0,
+        "Attack2>Death": 0.0,
+        "Attack2>Idle1": 2.0,
+        "Attack3>Attack1": 2.0,
+        "Attack3>Attack2": 2.0,
+        "Attack3>Death": 0.0,
+        "Attack3>Idle1": 2.0,
+        "Idle1>Attack1": 2.0,
+        "Idle1>Attack2": 2.0,
+        "Idle1>Attack3": 2.0,
+        "Idle1>Death": 0.0,
+        "Run1>Death": 0.0
+      },
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "ivern": [
+    {
+      "asset": "ivern",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "Ivern_ranged_attack01_anm",
+          "marker": 0.11
+        },
+        {
+          "clip": "Ivern_ranged_attack02_anm",
+          "marker": 0.11
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Ivern_ranged_attack01_anm",
+          "Ivern_ranged_attack02_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run_Base"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Spell4"
+          ]
+        }
+      },
+      "casts": {
+        "ivern.daisy": {
+          "clip": "Spell4",
+          "action": "active",
+          "marker": 0.2
+        }
+      },
+      "air": false,
+      "deploy": "Respawn",
+      "hands": [
+        "C_Buffbone_Glb_Head_Loc"
+      ],
+      "packs": {
+        "ivern.daisy": [
+          "Spell4"
+        ]
+      },
+      "packFiles": {
+        "ivern.daisy": "ivern-daisy"
+      }
+    }
+  ],
+  "jax": [
+    {
+      "asset": "jax",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "Attack_1_anm",
+          "marker": 0.23
+        },
+        {
+          "clip": "Attack_2_anm",
+          "marker": 0.23
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "active_buff_attack": [
+          "Spell3_Attack1",
+          "Spell3_Attack2",
+          "Spell3_Attack3"
+        ],
+        "active_buff_idle": [
+          "Spell3_Idle"
+        ],
+        "active_buff_move": [
+          "Spell3_Run"
+        ],
+        "attack": [
+          "Attack_1_anm",
+          "Attack_2_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run_Base"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Respawn",
+      "transitions": {
+        "Attack1_To_Run>idle": {
+          "clip": "Idle_In"
+        },
+        "Attack2_To_Run>idle": {
+          "clip": "Idle_In"
+        },
+        "Attack_1_anm>idle": {
+          "clip": "Attack1_To_Idle"
+        },
+        "Attack_1_anm>run": {
+          "clip": "Attack1_To_Run"
+        },
+        "Attack_2_anm>idle": {
+          "clip": "Attack2_To_Idle"
+        },
+        "Attack_2_anm>run": {
+          "clip": "Attack2_To_Run"
+        },
+        "Idle1_Base>run": {
+          "clip": "Run_In"
+        },
+        "Idle_In>run": {
+          "clip": "Run_In"
+        },
+        "Run_Base>idle": {
+          "clip": "Idle_In"
+        },
+        "Run_In>idle": {
+          "clip": "Idle_In"
+        },
+        "Spell3b_run>idle": {
+          "clip": "Idle_In"
+        },
+        "active_buff:start>idle": {
+          "clip": "Spell3_Run_Intro_anm",
+          "blend": 0.0
+        },
+        "active_buff:start>run": {
+          "clip": "Spell3_Run_Intro_anm",
+          "blend": 0.0
+        },
+        "counter_strike:explode>idle": {
+          "clip": "Spell3_B_Idle_anm",
+          "blend": 0.0
+        },
+        "counter_strike:explode>run": {
+          "clip": "Spell3b_run",
+          "blend": 0.0
+        }
+      },
+      "packs": {
+        "jax.counter-strike": [
+          "Spell3_Attack1",
+          "Spell3_Attack2",
+          "Spell3_Attack3",
+          "Spell3_Idle",
+          "Spell3_Run"
+        ]
+      },
+      "packFiles": {
+        "jax.counter-strike": "jax-counter-strike"
+      }
+    }
+  ],
+  "jayce": [
+    {
+      "asset": "jayce",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "jayce_ranged_idle1_anm",
+      "run": "Ranged_Run",
+      "attacks": [
+        {
+          "clip": "Ranged_Attack1",
+          "marker": 0.1
+        },
+        {
+          "clip": "Ranged_Attack2",
+          "marker": 0.1
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "active_buff_attack": [
+          "Ranged_Spell2_Attack1",
+          "Ranged_Spell2_Attack2"
+        ],
+        "attack": [
+          "Ranged_Attack1",
+          "Ranged_Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "first_strike_attack": [
+          "Ranged_Attack2"
+        ],
+        "idle": [
+          "jayce_ranged_idle1_anm"
+        ],
+        "move": [
+          "Ranged_Run"
+        ]
+      },
+      "actions": {
+        "transform": {
+          "clips": [
+            "Ranged_Passive"
+          ],
+          "durations": [
+            0.3
+          ]
+        }
+      },
+      "casts": {},
+      "air": false,
+      "hands": [
+        "BUFFBONE_CSTM_WEAPON_1"
+      ],
+      "packs": {
+        "jayce.hyper-charge-lightning-field": [
+          "Ranged_Spell2_Attack1",
+          "Ranged_Spell2_Attack2"
+        ]
+      },
+      "packFiles": {
+        "jayce.hyper-charge-lightning-field": "jayce-hyper-charge-lightning-field"
+      }
+    },
+    {
+      "asset": "jayce-alt",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "jayce_melee_idle1_anm",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.24
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.24
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "first_strike_attack": [
+          "Crit"
+        ],
+        "idle": [
+          "jayce_melee_idle1_anm"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "transform": {
+          "clips": [
+            "Melee_Passive"
+          ],
+          "durations": [
+            0.3
+          ]
+        }
+      },
+      "casts": {},
+      "air": false,
+      "hands": [
+        "BUFFBONE_CSTM_WEAPON_1"
+      ],
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "jinx": [
+    {
+      "asset": "jinx",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Jinx_Rlauncher_idle1_anm",
+      "run": "Jinx_Rlauncher_run_anm",
+      "attacks": [
+        {
+          "clip": "Jinx_Rlauncher_attack1_anm",
+          "marker": 0.22
+        },
+        {
+          "clip": "Jinx_Rlauncher_attack2_anm",
+          "marker": 0.22
+        }
+      ],
+      "death": {
+        "clip": "Jinx_Rlauncher_death_anm",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Jinx_Rlauncher_attack1_anm",
+          "Jinx_Rlauncher_attack2_anm"
+        ],
+        "death": [
+          "Jinx_Rlauncher_death_anm"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Jinx_Rlauncher_idle1_anm"
+        ],
+        "move": [
+          "Jinx_Rlauncher_run_anm"
+        ],
+        "move_enter": [
+          "Jinx_Rlauncher_run_in_anm"
+        ]
+      },
+      "actions": {
+        "transform": {
+          "clips": [
+            "minigun_spell1_weapon2_anm"
+          ],
+          "blend_in": 0.04,
+          "blend_out": 0.04
+        }
+      },
+      "casts": {},
+      "air": false,
+      "deploy": "Respawn",
+      "hands": [
+        "Cstm_Buffbone_Rocket_Launcher"
+      ],
+      "transitions": {
+        "attack>idle": {
+          "clip": "Rlauncher_Idlein1"
+        },
+        "locomotion>idle": {
+          "clip": "Rlauncher_Idlein1"
+        }
+      },
+      "packs": {
+        "jinx.switcheroo": [
+          "minigun_spell1_weapon2_anm"
+        ]
+      },
+      "packFiles": {
+        "jinx.switcheroo": "jinx-switcheroo"
+      }
+    },
+    {
+      "asset": "jinx-alt",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.18
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.18
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run_Base"
+        ],
+        "move_enter": [
+          "Jinx_minigun_run_in_anm"
+        ]
+      },
+      "actions": {
+        "transform": {
+          "clips": [
+            "launcher_spell1_weapon2_anm"
+          ],
+          "blend_in": 0.04,
+          "blend_out": 0.04
+        }
+      },
+      "casts": {},
+      "air": false,
+      "deploy": "Respawn",
+      "hands": [
+        "Cstm_Buffbone_Minigun"
+      ],
+      "transitions": {
+        "attack>idle": {
+          "clip": "IdleIn1"
+        },
+        "locomotion>idle": {
+          "clip": "IdleIn1"
+        }
+      },
+      "packs": {
+        "jinx.switcheroo": [
+          "launcher_spell1_weapon2_anm"
+        ]
+      },
+      "packFiles": {
+        "jinx.switcheroo": "jinx-alt-switcheroo"
+      }
+    }
+  ],
+  "kassadin": [
+    {
+      "asset": "kassadin",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.21
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.21
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run_Base"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Spell4"
+          ]
+        }
+      },
+      "casts": {
+        "kassadin.riftwalk": {
+          "clip": "Spell4",
+          "action": "active",
+          "marker": 0.25
+        }
+      },
+      "air": false,
+      "deploy": "Respawn",
+      "transitions": {
+        "Spell4>run": {
+          "clip": "Spell4_To_Run"
+        }
+      },
+      "clipBlends": {
+        "Respawn>Attack1": 2.8000000000000003,
+        "Respawn>Attack2": 2.8000000000000003,
+        "Respawn>Idle1": 3.5999999999999996,
+        "Respawn>Run_Base": 3.5999999999999996
+      },
+      "packs": {
+        "kassadin.riftwalk": [
+          "Spell4",
+          "Spell4_To_Run"
+        ]
+      },
+      "packFiles": {
+        "kassadin.riftwalk": "kassadin-riftwalk"
+      }
+    }
+  ],
+  "kayle": [
+    {
+      "asset": "kayle",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run1",
+      "attacks": [
+        {
+          "clip": "kayle_attack1_anm",
+          "marker": 0.22
+        },
+        {
+          "clip": "kayle_attack2_anm",
+          "marker": 0.22
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 20.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "kayle_attack1_anm",
+          "kayle_attack2_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run1"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Spell2_0"
+          ],
+          "durations": [
+            0.6
+          ],
+          "blend_in": 0.06,
+          "blend_out": 0.12
+        }
+      },
+      "casts": {
+        "kayle.celestial-blessing": {
+          "clip": "Spell2_0",
+          "action": "active",
+          "marker": 0.0
+        }
+      },
+      "air": true,
+      "deploy": "Respawn",
+      "transitions": {
+        "Idle1_Base>run": {
+          "clip": "Run_In",
+          "blend": 0.0
+        },
+        "Idle_In>run": {
+          "clip": "Run_In",
+          "blend": 0.0
+        },
+        "Respawn>run": {
+          "clip": "Run_In",
+          "blend": 4.8
+        },
+        "Run1>idle": {
+          "clip": "Idle_In",
+          "blend": 0.0
+        },
+        "Run_In>idle": {
+          "clip": "Idle_In",
+          "blend": 0.0
+        }
+      },
+      "packs": {
+        "kayle.celestial-blessing": [
+          "Spell2_0"
+        ]
+      },
+      "packFiles": {
+        "kayle.celestial-blessing": "kayle-celestial-blessing"
+      }
+    }
+  ],
+  "kayle_ranged": [
+    {
+      "asset": "kayle_ranged",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "IdlePassive",
+      "run": "Kayle_RunPassive_anm",
+      "attacks": [
+        {
+          "clip": "Kayle_Attack3_anm",
+          "marker": 0.18
+        },
+        {
+          "clip": "Kayle_Attack4_anm",
+          "marker": 0.18
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 20.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Kayle_Attack3_anm",
+          "Kayle_Attack4_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "IdlePassive"
+        ],
+        "move": [
+          "Kayle_RunPassive_anm"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Spell2_0"
+          ],
+          "durations": [
+            0.6
+          ],
+          "blend_in": 0.06,
+          "blend_out": 0.12
+        }
+      },
+      "casts": {
+        "kayle.celestial-blessing": {
+          "clip": "Spell2_0",
+          "action": "active",
+          "marker": 0.0
+        }
+      },
+      "air": true,
+      "deploy": "Respawn",
+      "hands": [
+        "R_Hand",
+        "R_Hand"
+      ],
+      "transitions": {
+        "IdlePassive>run": {
+          "clip": "Kayle_RunInPassive_anm",
+          "blend": 0.0
+        },
+        "Kayle_IdleInPassive_anm>run": {
+          "clip": "Kayle_RunInPassive_anm",
+          "blend": 0.0
+        },
+        "Kayle_RunInPassive_anm>idle": {
+          "clip": "Kayle_IdleInPassive_anm",
+          "blend": 0.0
+        },
+        "Kayle_RunPassive_anm>idle": {
+          "clip": "Kayle_IdleInPassive_anm",
+          "blend": 0.0
+        },
+        "Respawn>run": {
+          "clip": "Kayle_RunInPassive_anm",
+          "blend": 4.8
+        }
+      },
+      "clipBlends": {
+        "Kayle_RunInPassive_anm>Kayle_RunPassive_anm": 3.5999999999999996
+      },
+      "packs": {
+        "kayle.celestial-blessing": [
+          "Spell2_0"
+        ]
+      },
+      "packFiles": {
+        "kayle.celestial-blessing": "kayle_ranged-celestial-blessing"
+      }
+    }
+  ],
+  "kayn": [
+    {
+      "asset": "kayn",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.16
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.16
+        },
+        {
+          "clip": "Attack3",
+          "marker": 0.16
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 20.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2",
+          "Attack3"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Deploy_Base"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run"
+        ],
+        "terrain_move": [
+          "Spell3_Run"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Spell1_Dash",
+            "Spell1_Stop",
+            "Spell1_Circle"
+          ],
+          "durations": [
+            0.43,
+            0.14,
+            0.43
+          ],
+          "sequence_blend": 0.0
+        }
+      },
+      "casts": {
+        "kayn.reaping-slash": {
+          "clip": "Spell1_Dash",
+          "action": "active",
+          "marker": 0.0
+        }
+      },
+      "air": false,
+      "deploy": "Deploy_Base",
+      "transitions": {
+        "Spell1_Circle>run": {
+          "clip": "Spell1_Exit_To_Run"
+        },
+        "Spell1_Circle>terrain_move": {
+          "clip": "Spell1_Exit_To_Run"
+        }
+      },
+      "packs": {
+        "kayn.reaping-slash": [
+          "Spell1_Circle",
+          "Spell1_Dash",
+          "Spell1_Exit_To_Run",
+          "Spell1_Stop"
+        ]
+      },
+      "packFiles": {
+        "kayn.reaping-slash": "kayn-reaping-slash"
+      }
+    }
+  ],
+  "kayn_assassin": [
+    {
+      "asset": "kayn_assassin",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Kayn_Idle1_Assassin_anm",
+      "run": "Run_Assassin",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.12
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.12
+        },
+        {
+          "clip": "Attack3",
+          "marker": 0.12
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 20.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2",
+          "Attack3"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Deploy_Assassin"
+        ],
+        "idle": [
+          "Kayn_Idle1_Assassin_anm"
+        ],
+        "move": [
+          "Run_Assassin"
+        ],
+        "terrain_move": [
+          "Spell3_Run"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Spell1_Dash",
+            "Spell1_Stop",
+            "Spell1_Circle"
+          ],
+          "durations": [
+            0.43,
+            0.14,
+            0.43
+          ],
+          "sequence_blend": 0.0
+        }
+      },
+      "casts": {
+        "kayn.reaping-slash": {
+          "clip": "Spell1_Dash",
+          "action": "active",
+          "marker": 0.0
+        }
+      },
+      "air": false,
+      "deploy": "Deploy_Assassin",
+      "transitions": {
+        "Spell1_Circle>run": {
+          "clip": "Spell1_Exit_To_Run"
+        },
+        "Spell1_Circle>terrain_move": {
+          "clip": "Spell1_Exit_To_Run"
+        }
+      },
+      "packs": {
+        "kayn.reaping-slash": [
+          "Spell1_Circle",
+          "Spell1_Dash",
+          "Spell1_Exit_To_Run",
+          "Spell1_Stop"
+        ]
+      },
+      "packFiles": {
+        "kayn.reaping-slash": "kayn_assassin-reaping-slash"
+      }
+    }
+  ],
+  "kayn_slayer": [
+    {
+      "asset": "kayn_slayer",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Slayer",
+      "run": "Run_Slayer",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.16
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.16
+        },
+        {
+          "clip": "Attack3",
+          "marker": 0.16
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 20.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2",
+          "Attack3"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Deploy_Slayer"
+        ],
+        "idle": [
+          "Idle1_Slayer"
+        ],
+        "move": [
+          "Run_Slayer"
+        ],
+        "terrain_move": [
+          "Spell3_Run"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Spell1_Dash",
+            "Spell1_Stop",
+            "Spell1_Circle"
+          ],
+          "durations": [
+            0.43,
+            0.14,
+            0.43
+          ],
+          "sequence_blend": 0.0
+        }
+      },
+      "casts": {
+        "kayn.reaping-slash": {
+          "clip": "Spell1_Dash",
+          "action": "active",
+          "marker": 0.0
+        }
+      },
+      "air": false,
+      "deploy": "Deploy_Slayer",
+      "transitions": {
+        "Spell1_Circle>run": {
+          "clip": "Spell2_Slayer_Run"
+        },
+        "Spell1_Circle>terrain_move": {
+          "clip": "Spell1_Exit_To_Run"
+        }
+      },
+      "packs": {
+        "kayn.reaping-slash": [
+          "Spell1_Circle",
+          "Spell1_Dash",
+          "Spell1_Exit_To_Run",
+          "Spell1_Stop",
+          "Spell2_Slayer_Run"
+        ]
+      },
+      "packFiles": {
+        "kayn.reaping-slash": "kayn_slayer-reaping-slash"
+      }
+    }
+  ],
+  "lulu": [
+    {
+      "asset": "lulu",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Lulu_idle0_anm",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.29
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.29
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 20.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Lulu_idle0_anm"
+        ],
+        "idle": [
+          "Lulu_idle0_anm"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "growth": {
+          "clips": [
+            "Spell4"
+          ]
+        }
+      },
+      "casts": {
+        "lulu.wild-growth": {
+          "clip": "Spell4",
+          "action": "growth",
+          "marker": 0.25
+        }
+      },
+      "air": false,
+      "deploy": "Lulu_idle0_anm",
+      "hands": [
+        "BUFFBONE_CSTM_WEAPON_1",
+        "R_hand"
+      ],
+      "packs": {
+        "lulu.wild-growth": [
+          "Spell4"
+        ]
+      },
+      "packFiles": {
+        "lulu.wild-growth": "lulu-wild-growth"
+      }
+    }
+  ],
+  "malphite": [
+    {
+      "asset": "malphite",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.82
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.82
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Spell3"
+          ]
+        }
+      },
+      "casts": {
+        "malphite.ground-slam": {
+          "clip": "Spell3",
+          "action": "active",
+          "marker": 0.25
+        }
+      },
+      "air": false,
+      "packs": {
+        "malphite.ground-slam": [
+          "Spell3"
+        ]
+      },
+      "packFiles": {
+        "malphite.ground-slam": "malphite-ground-slam"
+      }
+    }
+  ],
+  "malzahar": [
+    {
+      "asset": "malzahar",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.35
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.35
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "attack_hit": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Idle1"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "channel": {
+          "clips": [
+            "Spell4"
+          ]
+        },
+        "void_swarm": {
+          "clips": [
+            "Spell2"
+          ]
+        }
+      },
+      "casts": {
+        "malzahar.void-swarm": {
+          "clip": "Spell2",
+          "action": "void_swarm",
+          "marker": 0.25
+        }
+      },
+      "air": true,
+      "deploy": "Idle1",
+      "hands": [
+        "C_BUFFBONE_GLB_CHEST_LOC"
+      ],
+      "clipBlends": {
+        "Attack1>Attack1": 0.0,
+        "Attack2>Attack2": 0.0
+      },
+      "timing": {
+        "attack_clip_ranges": [
+          [
+            0.0,
+            0.29508196721311475
+          ],
+          [
+            0.0,
+            0.26229508196721313
+          ]
+        ],
+        "attack_hit_clip_ranges": [
+          [
+            0.29508196721311475,
+            0.9836061
+          ],
+          [
+            0.26229508196721313,
+            0.9836061
+          ]
+        ],
+        "attack_hit_duration": 0.85
+      },
+      "packs": {
+        "malzahar.nether-grasp": [
+          "Spell4"
+        ],
+        "malzahar.void-swarm": [
+          "Spell2"
+        ]
+      },
+      "packFiles": {
+        "malzahar.nether-grasp": "malzahar-nether-grasp",
+        "malzahar.void-swarm": "malzahar-void-swarm"
+      }
+    }
+  ],
+  "masteryi": [
+    {
+      "asset": "masteryi",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "masteryi_2013_idle1_anm",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "masteryi_2013_attack1_anm",
+          "marker": 0.2
+        },
+        {
+          "clip": "masteryi_2013_attack2_anm",
+          "marker": 0.2
+        },
+        {
+          "clip": "masteryi_2013_passive_anm",
+          "marker": 0.2
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "masteryi_2013_attack1_anm",
+          "masteryi_2013_attack2_anm",
+          "masteryi_2013_passive_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "haste_move": [
+          "2013_Run_Haste"
+        ],
+        "idle": [
+          "masteryi_2013_idle1_anm"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Respawn",
+      "clipBlends": {
+        "masteryi_2013_attack1_anm>masteryi_2013_passive_anm": 2.0,
+        "masteryi_2013_attack2_anm>masteryi_2013_attack1_anm": 2.0,
+        "masteryi_2013_attack2_anm>masteryi_2013_passive_anm": 2.0
+      },
+      "packs": {
+        "masteryi.highlander": [
+          "2013_Run_Haste"
+        ]
+      },
+      "packFiles": {
+        "masteryi.highlander": "masteryi-highlander"
+      }
+    }
+  ],
+  "missfortune": [
+    {
+      "asset": "missfortune",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.12
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.12
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "haste_move": [
+          "Run2"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Respawn",
+      "hands": [
+        "R_WEAPON",
+        "L_WEAPON"
+      ],
+      "transitions": {
+        "Run2>idle": {
+          "clip": "Idle_In"
+        },
+        "Run>idle": {
+          "clip": "Idle_In"
+        }
+      },
+      "packs": {
+        "missfortune.strut": [
+          "Run2"
+        ]
+      },
+      "packFiles": {
+        "missfortune.strut": "missfortune-strut"
+      }
+    }
+  ],
+  "nest_reksai": [
+    {
+      "asset": "nest_reksai",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run1",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.2
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.2
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "empowered_attack": [
+          "Spell1",
+          "Spell1B",
+          "Spell1"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run1"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Respawn",
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "nocturne": [
+    {
+      "asset": "nocturne",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.6
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.6
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0,
+        "clipEnd": 1.5
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Idle1"
+        ],
+        "empowered_attack": [
+          "Attack3"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "effect_shield:start": {
+          "clips": [
+            "Spell2"
+          ],
+          "blend_in": 0.16,
+          "blend_out": 0.18
+        }
+      },
+      "casts": {},
+      "air": true,
+      "deploy": "Idle1",
+      "clipBlends": {
+        "Spell2>Attack1": 3.2,
+        "Spell2>Attack2": 3.2,
+        "Spell2>Attack3": 3.2,
+        "Spell2>Run": 3.5999999999999996
+      },
+      "packs": {
+        "nocturne.umbra-blades": [
+          "Attack3"
+        ],
+        "nocturne.shroud-of-darkness": [
+          "Spell2"
+        ]
+      },
+      "packFiles": {
+        "nocturne.umbra-blades": "nocturne-umbra-blades",
+        "nocturne.shroud-of-darkness": "nocturne-shroud-of-darkness"
+      }
+    }
+  ],
+  "olaf": [
+    {
+      "asset": "olaf",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.3
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.3
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "control_immune_attack": [
+          "Attack3",
+          "Attack3"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Idle4"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Idle4",
+      "packs": {
+        "olaf.ragnarok": [
+          "Attack3"
+        ]
+      },
+      "packFiles": {
+        "olaf.ragnarok": "olaf-ragnarok"
+      }
+    }
+  ],
+  "olaf_single": [
+    {
+      "asset": "olaf",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.3
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.3
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "control_immune_attack": [
+          "Attack3",
+          "Attack3"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Idle4"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Idle4",
+      "packs": {
+        "诸神黄昏": [
+          "Attack3"
+        ]
+      },
+      "packFiles": {
+        "诸神黄昏": "olaf-ragnarok"
+      }
+    }
+  ],
+  "ornn": [
+    {
+      "asset": "ornn",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.26
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.26
+        },
+        {
+          "clip": "Attack3",
+          "marker": 0.26
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 20.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2",
+          "Attack3"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run_Base"
+        ]
+      },
+      "actions": {
+        "ornn_charge": {
+          "clips": [
+            "Spell3",
+            "Spell3_Dash"
+          ],
+          "durations": [
+            0.35,
+            0.5
+          ],
+          "blend_in": 0.05,
+          "blend_out": 0.08,
+          "sequence_blend": 0.04
+        },
+        "ornn_charge_hit": {
+          "clips": [
+            "Spell3_Hit",
+            "Spell3_hit_toIdle"
+          ],
+          "durations": [
+            0.3,
+            0.25
+          ],
+          "blend_in": 0.03,
+          "blend_out": 0.08,
+          "sequence_blend": 0.05
+        },
+        "ornn_charge_miss": {
+          "clips": [
+            "Idle1_Base"
+          ],
+          "blend_in": 0.12,
+          "blend_out": 0.08
+        },
+        "ornn_forge": {
+          "clips": [
+            "Forge"
+          ],
+          "clip_ranges": [
+            [
+              3.1,
+              4.1
+            ]
+          ],
+          "blend_in": 0.1,
+          "blend_out": 0.12
+        }
+      },
+      "casts": {
+        "ornn.searing-charge": {
+          "clip": "Spell3",
+          "action": "ornn_charge",
+          "marker": 0
+        }
+      },
+      "air": false,
+      "deploy": "Respawn",
+      "transitions": {
+        "Forge>idle": {
+          "clip": "Forge_ToIdle",
+          "blend": 1.0
+        },
+        "Forge>run": {
+          "clip": "Forge_ToRun",
+          "blend": 1.0
+        },
+        "Forge_ToIdle>run": {
+          "clip": "Forge_ToRun",
+          "blend": 1.0
+        }
+      },
+      "packs": {
+        "ornn.searing-charge": [
+          "Spell3",
+          "Spell3_Dash",
+          "Spell3_Hit",
+          "Spell3_hit_toIdle"
+        ]
+      },
+      "packFiles": {
+        "ornn.searing-charge": "ornn-searing-charge"
+      }
+    }
+  ],
+  "pantheon": [
+    {
+      "asset": "pantheon",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.28
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.28
+        },
+        {
+          "clip": "Attack3",
+          "marker": 0.28
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.28
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2",
+          "Attack3",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Spell4_Hit",
+          "Spell4_Hit_ToIdle"
+        ],
+        "full_resource_move": [
+          "Run_Passive"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run_Base"
+        ]
+      },
+      "actions": {
+        "spear_tap": {
+          "clips": [
+            "Spell1_Hit"
+          ],
+          "blend_in": 0.0
+        },
+        "spear_tap_empowered": {
+          "clips": [
+            "Spell1_Hit"
+          ],
+          "blend_in": 0.0
+        }
+      },
+      "casts": {
+        "pantheon.comet-spear": {
+          "clip": "Spell1_Hit",
+          "action": "spear_tap",
+          "marker": 0.3
+        }
+      },
+      "air": false,
+      "deploy": "Spell4_Hit",
+      "transitions": {
+        "Attack1>full_resource_move": {
+          "clip": "Attack1_To_PassiveRun"
+        },
+        "Attack2>full_resource_move": {
+          "clip": "Attack2_To_PassiveRun"
+        },
+        "Attack3>full_resource_move": {
+          "clip": "Attack3_To_PassiveRun"
+        },
+        "Spell1_Hit>full_resource_move": {
+          "clip": "Spell1_Hit_To_Passiverun"
+        },
+        "Spell1_Hit>idle": {
+          "clip": "Spell1_Hit_Toidle"
+        },
+        "Spell1_Hit>run": {
+          "clip": "Spell1_Hit_Torun"
+        }
+      },
+      "timing": {
+        "attack_clip_ranges": [
+          [
+            0.0,
+            0.9
+          ],
+          [
+            0.0,
+            0.9
+          ],
+          [
+            0.0,
+            0.9
+          ],
+          [
+            0.0,
+            0.9
+          ]
+        ],
+        "deploy_durations": [
+          0.3,
+          0.7
+        ]
+      },
+      "packs": {
+        "pantheon.comet-spear": [
+          "Spell1_Hit",
+          "Spell1_Hit_To_Passiverun",
+          "Spell1_Hit_Toidle",
+          "Spell1_Hit_Torun"
+        ]
+      },
+      "packFiles": {
+        "pantheon.comet-spear": "pantheon-comet-spear"
+      }
+    }
+  ],
+  "pix": [
+    {
+      "asset": "pix",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.4
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.4
+        }
+      ],
+      "death": {
+        "clip": "Idle1",
+        "ticks": 0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "deploy": [
+          "Idle1"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": true,
+      "deploy": "Idle1",
+      "hands": [
+        "root",
+        "root"
+      ],
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "pix_single": [
+    {
+      "asset": "pix",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.4
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.4
+        }
+      ],
+      "death": {
+        "clip": "Idle1",
+        "ticks": 0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "deploy": [
+          "Idle1"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": true,
+      "deploy": "Idle1",
+      "hands": [
+        "root",
+        "root"
+      ],
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "reksai": [
+    {
+      "asset": "reksai",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run1",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.2
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.2
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Spell2_Knockup"
+        ],
+        "empowered_attack": [
+          "Spell1",
+          "Spell1B",
+          "Spell1"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run1"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Spell2_Knockup",
+      "packs": {
+        "reksai.queen-s-wrath": [
+          "Spell1",
+          "Spell1B"
+        ]
+      },
+      "packFiles": {
+        "reksai.queen-s-wrath": "reksai-queen-s-wrath"
+      }
+    }
+  ],
+  "rift_herald": [
+    {
+      "asset": "rift_herald",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle_Base",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.5
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.5
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 20.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Spawn"
+        ],
+        "idle": [
+          "Idle_Base"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "rush_dash": {
+          "clips": [
+            "Dash"
+          ],
+          "clip_ranges": [
+            [
+              2.5,
+              3.433333
+            ]
+          ]
+        },
+        "rush_hit": {
+          "clips": [
+            "Dash_Hit"
+          ],
+          "durations": [
+            0.65
+          ]
+        },
+        "rush_prepare": {
+          "clips": [
+            "Dash_Windup"
+          ],
+          "durations": [
+            2.5
+          ],
+          "clip_ranges": [
+            [
+              0.0,
+              2.5
+            ]
+          ]
+        },
+        "spinning_punch": {
+          "clips": [
+            "SRU_RiftHerald_spinningpunch_anm"
+          ],
+          "durations": [
+            3.0
+          ]
+        }
+      },
+      "casts": {
+        "rift_herald.sweeping-strike": {
+          "clip": "SRU_RiftHerald_spinningpunch_anm",
+          "action": "spinning_punch",
+          "marker": 1.57
+        }
+      },
+      "air": false,
+      "deploy": "Spawn",
+      "clipBlends": {
+        "Attack1>Attack1": 0.0,
+        "Attack2>Attack2": 0.0,
+        "Attack3>Attack3": 0.0,
+        "Dance>Dance": 0.0,
+        "Dash_Hit>Dash_Hit": 0.2,
+        "Dash_Hit>Dash_Windup": 0.2,
+        "Dash_Windup>Dash_Hit": 0.2,
+        "Dash_Windup>Dash_Windup": 0.2,
+        "Idle_Base>Idle_Base": 0.0,
+        "Run>Run": 0.0,
+        "Spawn>Spawn": 0.0
+      },
+      "packs": {
+        "rift_herald.sweeping-strike": [
+          "SRU_RiftHerald_spinningpunch_anm"
+        ]
+      },
+      "packFiles": {
+        "rift_herald.sweeping-strike": "rift_herald-sweeping-strike"
+      }
+    }
+  ],
+  "samira": [
+    {
+      "asset": "samira",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle_anm",
+      "run": "Run_OOC_anm",
+      "attacks": [
+        {
+          "clip": "Attack1_Gun_Start_anm",
+          "marker": 0.25
+        },
+        {
+          "clip": "Attack2_Gun_Start_anm",
+          "marker": 0.25
+        },
+        {
+          "clip": "Attack1_Sword_anm",
+          "marker": 0.25
+        },
+        {
+          "clip": "Attack2_Sword_anm",
+          "marker": 0.25
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1_Gun_Start_anm",
+          "Attack2_Gun_Start_anm",
+          "Attack1_Sword_anm",
+          "Attack2_Sword_anm"
+        ],
+        "attack_hit": [
+          "Attack1_Gun_Hit_anm",
+          "Attack2_Gun_Hit_anm",
+          "Attack1_Sword_Hit_anm",
+          "Attack2_Sword_Hit_anm"
+        ],
+        "attack_idle": [
+          "Idle_Gun_anm",
+          "Idle_Gun_anm",
+          "Idle_Sword_anm",
+          "Idle_Sword_anm"
+        ],
+        "attack_idle_enter": [
+          "Idle_Gun_IN_anm",
+          "Idle_Gun_IN_anm",
+          "Idle_Sword_IN_anm",
+          "Idle_Sword_IN_anm"
+        ],
+        "attack_move": [
+          "Run_Gun_anm",
+          "Run_Gun_anm",
+          "Run_Sword_anm",
+          "Run_Sword_anm"
+        ],
+        "attack_recover": [
+          "Attack1_Gun_INTO_Idle_anm",
+          "Attack2_Gun_INTO_Idle_anm",
+          "Attack1_Sword_INTO_Idle_anm",
+          "Attack2_Sword_INTO_Idle_anm"
+        ],
+        "attack_sheath_idle": [
+          "Sheath_Gun_Idle_anm",
+          "Sheath_Gun_Idle_anm",
+          "Sheath_Sword_Idle_anm",
+          "Sheath_Sword_Idle_anm"
+        ],
+        "attack_sheath_move": [
+          "Sheath_Gun_Run_anm",
+          "Sheath_Gun_Run_anm",
+          "Sheath_Sword_Run_anm",
+          "Sheath_Sword_Run_anm"
+        ],
+        "attack_to_move": [
+          "Attack_Gun_INTO_Run_Front_anm",
+          "Attack_Gun_INTO_Run_Front_anm",
+          "Attack1_Sword_INTO_Run_anm",
+          "Attack2_Sword_INTO_Run_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle_anm"
+        ],
+        "move": [
+          "Run_OOC_anm"
+        ]
+      },
+      "actions": {
+        "inferno": {
+          "clips": [
+            "Spell4_Start",
+            "Spell4"
+          ],
+          "durations": [
+            0.5,
+            1.5
+          ],
+          "blend_in": 0.0,
+          "sequence_blend": 0.0
+        }
+      },
+      "casts": {
+        "samira.inferno-trigger": {
+          "clip": "Spell4_Start",
+          "action": "inferno",
+          "marker": 0.0
+        }
+      },
+      "air": false,
+      "deploy": "Respawn",
+      "hands": [
+        "Pistol_Muzzle"
+      ],
+      "transitions": {
+        "Spell4>idle": {
+          "clip": "Idle_Gun_IN_anm",
+          "blend": 1.6
+        },
+        "Spell4>run": {
+          "clip": "Spell4_INTO_Run_anm",
+          "blend": 0.0
+        }
+      },
+      "timing": {
+        "attack_stance_duration": 4.0
+      },
+      "packs": {
+        "samira.inferno-trigger": [
+          "Spell4",
+          "Spell4_INTO_Run_anm",
+          "Spell4_Start"
+        ]
+      },
+      "packFiles": {
+        "samira.inferno-trigger": "samira-inferno-trigger"
+      }
+    }
+  ],
+  "sand_soldier": [
+    {
+      "asset": "sand_soldier",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1_BASE",
+          "marker": 0.4
+        },
+        {
+          "clip": "Attack2_BASE",
+          "marker": 0.4
+        },
+        {
+          "clip": "AzirSoldier_Attack3_anm",
+          "marker": 0.4
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1_BASE",
+          "Attack2_BASE",
+          "AzirSoldier_Attack3_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "AzirSoldier_Spawn_anm"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run"
+        ],
+        "move_cycle": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "AzirSoldier_Spawn_anm",
+      "clipBlends": {
+        "Run>Run": 2.4
+      },
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "scuttle_crab": [
+    {
+      "asset": "scuttle_crab",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [],
+      "death": {
+        "clip": "Idle1",
+        "ticks": 0,
+        "blend": 0
+      },
+      "roles": {
+        "attack_loop": [
+          "Crab_Dance"
+        ],
+        "deploy": [
+          "Crab_Spawn"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "followup": {
+        "asset": "scuttle_crab-death",
+        "clip": "scuttle_shrine_sequence",
+        "immediate": true
+      },
+      "deploy": "Crab_Spawn",
+      "channel": "Crab_Dance",
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "sett": [
+    {
+      "asset": "sett",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle_Base",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "Attack1_Start",
+          "marker": 0.3
+        },
+        {
+          "clip": "Attack1_Passive_Start",
+          "marker": 0.3
+        },
+        {
+          "clip": "Attack2_Start",
+          "marker": 0.3
+        },
+        {
+          "clip": "Attack2_Passive_Start",
+          "marker": 0.3
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0,
+        "clipEnd": 1.7
+      },
+      "roles": {
+        "attack": [
+          "Attack1_Start",
+          "Attack1_Passive_Start",
+          "Attack2_Start",
+          "Attack2_Passive_Start"
+        ],
+        "attack_hit": [
+          "Attack1_Hit",
+          "Sett_Attack1_Passive_anm",
+          "Attack2_Hit",
+          "Sett_Attack2_Passive_anm"
+        ],
+        "attack_move": [
+          "Run_Passive",
+          "Run_Base",
+          "Run_Passive",
+          "Run_Base"
+        ],
+        "attack_recover": [
+          "",
+          "Attack1_Passive_Into_Idle",
+          "",
+          "Attack2_Passive_Into_Idle"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle_Base"
+        ],
+        "move": [
+          "Run_Base"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Sett_spell2_anm",
+            "Sett_spell2_anm"
+          ],
+          "durations": [
+            0.8,
+            0.6
+          ],
+          "clip_ranges": [
+            [
+              0.0,
+              0.8
+            ],
+            [
+              0.8,
+              1.5666666
+            ]
+          ],
+          "blend_in": 0.1,
+          "blend_out": 0.1,
+          "sequence_blend": 0.0
+        },
+        "active_strong": {
+          "clips": [
+            "Spell2_Strong",
+            "Spell2_Strong"
+          ],
+          "durations": [
+            0.8,
+            0.6
+          ],
+          "clip_ranges": [
+            [
+              0.0,
+              0.8
+            ],
+            [
+              0.8,
+              1.1666666
+            ]
+          ],
+          "blend_in": 0.04,
+          "blend_out": 0.1,
+          "sequence_blend": 0.0
+        }
+      },
+      "casts": {
+        "sett.haymaker": {
+          "clip": "Sett_spell2_anm",
+          "action": "active",
+          "marker": 0.8
+        }
+      },
+      "air": false,
+      "deploy": "Respawn",
+      "transitions": {
+        "Sett_Attack1_Passive_anm>run": {
+          "clip": "Sett_Passive_INTO_Run_anm"
+        },
+        "Sett_Attack2_Passive_anm>run": {
+          "clip": "Sett_Passive_INTO_Run_anm"
+        },
+        "Sett_spell2_anm>idle": {
+          "clip": "Spell2_Into_Idle"
+        },
+        "Sett_spell2_anm>run": {
+          "clip": "Sett_Spell2_INTO_Run_anm",
+          "blend": 2.0
+        },
+        "Spell2_Strong>idle": {
+          "clip": "Spell2_Strong_Into_Idle"
+        },
+        "Spell2_Strong>run": {
+          "clip": "Sett_Spell2_INTO_Run_anm",
+          "blend": 2.0
+        }
+      },
+      "clipBlends": {
+        "*>Attack1_Start": 2.0,
+        "*>Attack2_Start": 2.0,
+        "Attack1_Passive_Into_Idle>Attack1_Start": 3.0,
+        "Attack1_Passive_Into_Idle>Attack2_Start": 3.0,
+        "Attack1_Passive_Start>Sett_Attack1_Passive_anm": 0.8,
+        "Attack1_Start>Attack1_Hit": 0.4,
+        "Attack2_Passive_Start>Sett_Attack2_Passive_anm": 0.0,
+        "Attack2_Start>Attack2_Hit": 0.0,
+        "Respawn>Attack1_Start": 2.0,
+        "Respawn>Attack2_Start": 2.0,
+        "Sett_Attack1_Passive_anm>Attack1_Passive_Into_Idle": 0.0,
+        "Sett_Attack2_Passive_anm>Attack2_Passive_Into_Idle": 0.0
+      },
+      "timing": {
+        "deploy_clip_ratio": 0.16216216128560992
+      },
+      "packs": {
+        "sett.haymaker": [
+          "Sett_Spell2_INTO_Run_anm",
+          "Sett_spell2_anm",
+          "Spell2_Into_Idle",
+          "Spell2_Strong",
+          "Spell2_Strong_Into_Idle"
+        ]
+      },
+      "packFiles": {
+        "sett.haymaker": "sett-haymaker"
+      }
+    }
+  ],
+  "shurima_guard": [
+    {
+      "asset": "sand_soldier",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1_BASE",
+          "marker": 0.4
+        },
+        {
+          "clip": "Attack2_BASE",
+          "marker": 0.4
+        },
+        {
+          "clip": "AzirSoldier_Attack3_anm",
+          "marker": 0.4
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1_BASE",
+          "Attack2_BASE",
+          "AzirSoldier_Attack3_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "AzirSoldier_Spawn_anm"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run"
+        ],
+        "move_cycle": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "AzirSoldier_Spawn_anm",
+      "clipBlends": {
+        "Run>Run": 2.4
+      },
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "sion": [
+    {
+      "asset": "sion",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack_Tower2",
+          "marker": 0.36
+        },
+        {
+          "clip": "Attack_Tower",
+          "marker": 0.36
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0,
+        "clipEnd": 2.5
+      },
+      "roles": {
+        "attack": [
+          "Attack_Tower2",
+          "Attack_Tower"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Idle_In"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "death_form": {
+          "clips": [
+            "Passive_Death"
+          ],
+          "durations": [
+            2.0
+          ],
+          "clip_ranges": [
+            [
+              0.0,
+              2.0
+            ]
+          ]
+        },
+        "shield:explode": {
+          "clips": [
+            "Spell2_B"
+          ],
+          "blend_in": 0.06,
+          "blend_out": 0.12
+        }
+      },
+      "casts": {},
+      "air": false,
+      "deploy": "Idle_In",
+      "clipBlends": {
+        "*>Attack_Tower": 2.8000000000000003,
+        "*>Attack_Tower2": 2.8000000000000003
+      },
+      "packs": {
+        "sion.soul-furnace": [
+          "Spell2_B"
+        ]
+      },
+      "packFiles": {
+        "sion.soul-furnace": "sion-soul-furnace"
+      }
+    },
+    {
+      "asset": "sion-alt",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Passive_Idle1",
+      "run": "Sion_Passive_Run_anm",
+      "attacks": [
+        {
+          "clip": "Passive_Attack1",
+          "marker": 0.12
+        },
+        {
+          "clip": "Passive_Attack2",
+          "marker": 0.12
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0,
+        "clipEnd": 2.5
+      },
+      "roles": {
+        "attack": [
+          "Passive_Attack1",
+          "Passive_Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "idle": [
+          "Passive_Idle1"
+        ],
+        "move": [
+          "Sion_Passive_Run_anm"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "clipBlends": {
+        "Passive_Death>Passive_Attack1": 3.5999999999999996,
+        "Passive_Death>Passive_Attack2": 3.5999999999999996,
+        "Passive_Death>Passive_Idle1": 3.5999999999999996,
+        "Passive_Death>Sion_Passive_Run_anm": 3.5999999999999996
+      },
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "sivir": [
+    {
+      "asset": "sivir",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Spell1",
+          "marker": 0.25
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Spell1"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Sivir_Base_Respawn_anm"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "attack:return": {
+          "clips": [
+            "Spell1_Catch"
+          ],
+          "durations": [
+            0.2
+          ],
+          "blend_in": 0.03,
+          "blend_out": 0.08
+        }
+      },
+      "casts": {},
+      "air": false,
+      "deploy": "Sivir_Base_Respawn_anm",
+      "hands": [
+        "Buffbone_Glb_Channel_Loc"
+      ],
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "sona": [
+    {
+      "asset": "sona",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.52
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.52
+        },
+        {
+          "clip": "Attack3",
+          "marker": 0.52
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2",
+          "Attack3"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Idle1"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "crescendo": {
+          "clips": [
+            "Spell4"
+          ],
+          "durations": [
+            1.0
+          ],
+          "clip_ranges": [
+            [
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      },
+      "casts": {
+        "sona.crescendo": {
+          "clip": "Spell4",
+          "action": "crescendo",
+          "marker": 0.3
+        }
+      },
+      "air": true,
+      "deploy": "Idle1",
+      "hands": [
+        "WEAPON"
+      ],
+      "packs": {
+        "sona.crescendo": [
+          "Spell4"
+        ]
+      },
+      "packFiles": {
+        "sona.crescendo": "sona-crescendo"
+      }
+    }
+  ],
+  "teemo": [
+    {
+      "asset": "teemo",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "Attack1_ASU_Teemo_anm",
+          "marker": 0.25
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1_ASU_Teemo_anm"
+        ],
+        "attack_hit": [
+          "Attack1_ToIdle"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "empowered_attack": [
+          "Spell1"
+        ],
+        "empowered_attack_hit": [
+          "Spell1_ToIdle"
+        ],
+        "empowered_attack_to_move": [
+          "Spell1_ToRun"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run_Base"
+        ],
+        "move_enter": [
+          "Run_In_ASU_Teemo_anm"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Respawn",
+      "hands": [
+        "Blowgun1"
+      ],
+      "transitions": {
+        "Attack1_ASU_Teemo_anm>idle": {
+          "clip": "Attack1_ToIdle"
+        },
+        "Attack1_ToIdle>idle": {
+          "clip": "Idle_In"
+        },
+        "Respawn>idle": {
+          "clip": "Spawn_toIdle_ASU_Teemo_anm"
+        },
+        "Run_Base>idle": {
+          "clip": "Idle_In"
+        },
+        "Run_In_ASU_Teemo_anm>idle": {
+          "clip": "Idle_In"
+        },
+        "Spell1>idle": {
+          "clip": "Spell1_ToIdle"
+        },
+        "Spell1_ToRun>idle": {
+          "clip": "Idle_In"
+        }
+      },
+      "clipBlends": {
+        "Attack1_ASU_Teemo_anm>Attack1_ASU_Teemo_anm": 1.0,
+        "Attack1_ASU_Teemo_anm>Attack1_ToIdle": 1.0,
+        "Attack1_ASU_Teemo_anm>Spell1": 1.0,
+        "Attack1_ToIdle>Attack1_ASU_Teemo_anm": 1.0,
+        "Attack1_ToIdle>Spell1": 1.0,
+        "Idle1_Base>Spell1": 1.0,
+        "Idle_In>Spell1": 1.0,
+        "Run_Base>Spell1": 1.0,
+        "Run_In_ASU_Teemo_anm>Spell1": 1.0,
+        "Spell1>Spell1": 1.0,
+        "Spell1_ToIdle>Spell1": 1.0,
+        "Spell1_ToRun>Spell1": 1.0
+      },
+      "packs": {
+        "teemo.blinding-dart": [
+          "Spell1",
+          "Spell1_ToIdle",
+          "Spell1_ToRun"
+        ]
+      },
+      "packFiles": {
+        "teemo.blinding-dart": "teemo-blinding-dart"
+      }
+    }
+  ],
+  "tibbers": [
+    {
+      "asset": "tibbers",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "annietibbers_idle1",
+      "run": "annietibbers_run",
+      "attacks": [
+        {
+          "clip": "annietibbers_attack1",
+          "marker": 0.3
+        },
+        {
+          "clip": "annietibbers_attack2",
+          "marker": 0.3
+        }
+      ],
+      "death": {
+        "clip": "annietibbers_death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "annietibbers_attack1",
+          "annietibbers_attack2"
+        ],
+        "death": [
+          "annietibbers_death"
+        ],
+        "idle": [
+          "annietibbers_idle1"
+        ],
+        "move": [
+          "annietibbers_run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "tristana": [
+    {
+      "asset": "tristana",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.12
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.12
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Respawn",
+      "hands": [
+        "Buffbone_Glb_Weapon_1"
+      ],
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "tryndamere": [
+    {
+      "asset": "tryndamere",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "HeldAttack1",
+          "marker": 0.8
+        },
+        {
+          "clip": "HeldAttack2",
+          "marker": 0.8
+        },
+        {
+          "clip": "HeldCrit",
+          "marker": 0.8
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 20.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "HeldAttack1",
+          "HeldAttack2",
+          "HeldCrit"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "DeployIdle"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "DeployIdle",
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "twisted_fate": [
+    {
+      "asset": "twisted_fate",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "twistedfate_2012_idle1_anm",
+      "run": "Run1",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.25
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.25
+        },
+        {
+          "clip": "Attack3",
+          "marker": 0.25
+        },
+        {
+          "clip": "Attack4",
+          "marker": 0.25
+        },
+        {
+          "clip": "Crit",
+          "marker": 0.25
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2",
+          "Attack3",
+          "Attack4",
+          "Crit"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "twistedfate_2012_idle_enter_anm"
+        ],
+        "idle": [
+          "twistedfate_2012_idle1_anm"
+        ],
+        "move": [
+          "Run1"
+        ]
+      },
+      "actions": {
+        "wild_cards": {
+          "clips": [
+            "Spell1"
+          ],
+          "durations": [
+            0.9677415
+          ],
+          "blend_in": 0.06,
+          "blend_out": 0.1
+        }
+      },
+      "casts": {
+        "twisted_fate.wild-cards": {
+          "clip": "Spell1",
+          "action": "wild_cards",
+          "marker": 0.25
+        }
+      },
+      "air": false,
+      "deploy": "twistedfate_2012_idle_enter_anm",
+      "hands": [
+        "L_Hand",
+        "L_Hand",
+        "R_Hand",
+        "L_Hand",
+        "R_Hand"
+      ],
+      "packs": {
+        "twisted_fate.wild-cards": [
+          "Spell1"
+        ]
+      },
+      "packFiles": {
+        "twisted_fate.wild-cards": "twisted_fate-wild-cards"
+      }
+    }
+  ],
+  "twitch": [
+    {
+      "asset": "twitch",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1_Base",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.24
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.24
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "active_buff_attack": [
+          "Spell4"
+        ],
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Respawn"
+        ],
+        "idle": [
+          "Idle1_Base"
+        ],
+        "move": [
+          "Run"
+        ],
+        "stealth_idle": [
+          "Idle_Stealth"
+        ],
+        "stealth_move": [
+          "Run_Stealth"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Respawn",
+      "hands": [
+        "Arrow"
+      ],
+      "clipBlends": {
+        "Attack1>Death": 0.0,
+        "Attack2>Death": 0.0,
+        "Death>Death": 0.0,
+        "Idle1_Base>Death": 0.0,
+        "Idle1_Base>Idle1_Base": 0.0,
+        "Idle_Stealth>Death": 0.0,
+        "Idle_Stealth>Idle_Stealth": 0.0,
+        "Respawn>Death": 0.0,
+        "Respawn>Respawn": 0.0,
+        "Run>Death": 0.0,
+        "Run>Run": 0.0,
+        "Run_Stealth>Death": 0.0,
+        "Run_Stealth>Run_Stealth": 0.0,
+        "Spell4>Death": 0.0
+      },
+      "timing": {
+        "deploy_clip_ratio": 0.30303046066250344
+      },
+      "packs": {
+        "twitch.spray-and-pray": [
+          "Spell4"
+        ]
+      },
+      "packFiles": {
+        "twitch.spray-and-pray": "twitch-spray-and-pray"
+      }
+    }
+  ],
+  "void_scuttle_crab": [
+    {
+      "asset": "void_scuttle_crab",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [],
+      "death": {
+        "clip": "Idle1",
+        "ticks": 0,
+        "blend": 0
+      },
+      "roles": {
+        "attack_loop": [
+          "Crab_Dance"
+        ],
+        "deploy": [
+          "Crab_Spawn"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "followup": {
+        "asset": "void_scuttle_crab-death",
+        "clip": "scuttle_shrine_sequence",
+        "immediate": true
+      },
+      "deploy": "Crab_Spawn",
+      "channel": "Crab_Dance",
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "void_spawn": [
+    {
+      "asset": "void_spawn",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "VoidSpawn_TurretAttack1_anm",
+          "marker": 0.8
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 44.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "VoidSpawn_TurretAttack1_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "VoidSpawn_Spawn_anm"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "VoidSpawn_Spawn_anm",
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "void_spawn_single": [
+    {
+      "asset": "void_spawn",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "VoidSpawn_TurretAttack1_anm",
+          "marker": 0.8
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 44.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "VoidSpawn_TurretAttack1_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "VoidSpawn_Spawn_anm"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "VoidSpawn_Spawn_anm",
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "voidfish": [
+    {
+      "asset": "voidfish",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "attack_1_anm",
+          "marker": 0.41
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 12.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "attack_1_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Idle1"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {
+        "scatter_birth": {
+          "clips": [
+            "Idle1"
+          ],
+          "blend_in": 0.0,
+          "blend_out": 0.08
+        }
+      },
+      "casts": {},
+      "air": true,
+      "deploy": "Idle1",
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "voidfish_ranged": [
+    {
+      "asset": "voidfish_ranged",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "ranged_idle",
+      "run": "ranged_run",
+      "attacks": [
+        {
+          "clip": "ranged_attack",
+          "marker": 0.46
+        }
+      ],
+      "death": {
+        "clip": "ranged_death",
+        "ticks": 12.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "ranged_attack"
+        ],
+        "death": [
+          "ranged_death"
+        ],
+        "deploy": [
+          "ranged_idle"
+        ],
+        "idle": [
+          "ranged_idle"
+        ],
+        "move": [
+          "ranged_run"
+        ],
+        "move_cycle": [
+          "ranged_run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": true,
+      "deploy": "ranged_idle",
+      "hands": [
+        "BackSpine_end"
+      ],
+      "clipBlends": {
+        "ranged_run>ranged_run": 2.4
+      },
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "voidfish_ranged_army": [
+    {
+      "asset": "voidfish_ranged",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "ranged_idle",
+      "run": "ranged_run",
+      "attacks": [
+        {
+          "clip": "ranged_attack",
+          "marker": 0.46
+        }
+      ],
+      "death": {
+        "clip": "ranged_death",
+        "ticks": 12.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "ranged_attack"
+        ],
+        "death": [
+          "ranged_death"
+        ],
+        "deploy": [
+          "ranged_idle"
+        ],
+        "idle": [
+          "ranged_idle"
+        ],
+        "move": [
+          "ranged_run"
+        ],
+        "move_cycle": [
+          "ranged_run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": true,
+      "deploy": "ranged_idle",
+      "hands": [
+        "BackSpine_end"
+      ],
+      "clipBlends": {
+        "ranged_run>ranged_run": 2.4
+      },
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "voidfish_ranged_single": [
+    {
+      "asset": "voidfish_ranged",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "ranged_idle",
+      "run": "ranged_run",
+      "attacks": [
+        {
+          "clip": "ranged_attack",
+          "marker": 0.46
+        }
+      ],
+      "death": {
+        "clip": "ranged_death",
+        "ticks": 12.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "ranged_attack"
+        ],
+        "death": [
+          "ranged_death"
+        ],
+        "deploy": [
+          "ranged_idle"
+        ],
+        "idle": [
+          "ranged_idle"
+        ],
+        "move": [
+          "ranged_run"
+        ],
+        "move_cycle": [
+          "ranged_run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": true,
+      "deploy": "ranged_idle",
+      "hands": [
+        "BackSpine_end"
+      ],
+      "clipBlends": {
+        "ranged_run>ranged_run": 2.4
+      },
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "voidling": [
+    {
+      "asset": "voidling",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.33
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.33
+        },
+        {
+          "clip": "Attack3",
+          "marker": 0.33
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2",
+          "Attack3"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Idle1"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Idle1",
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "voidmite": [
+    {
+      "asset": "voidmite",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Ranged_Run",
+      "attacks": [
+        {
+          "clip": "Ranged_Attack1",
+          "marker": 0.32
+        }
+      ],
+      "death": {
+        "clip": "SRU_Horde_Mini_Death2_anm",
+        "ticks": 26.6,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Ranged_Attack1"
+        ],
+        "death": [
+          "SRU_Horde_Mini_Death2_anm"
+        ],
+        "deploy": [
+          "SRU_Horde_Mini_Hatch_anm"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Ranged_Run"
+        ]
+      },
+      "actions": {
+        "scatter_birth": {
+          "clips": [
+            "SRU_Horde_Mini_Hatch_anm"
+          ],
+          "blend_in": 0.0,
+          "blend_out": 0.08
+        }
+      },
+      "casts": {},
+      "air": false,
+      "deploy": "SRU_Horde_Mini_Hatch_anm",
+      "clipBlends": {
+        "Attack1B>Attack1B": 0.0,
+        "Attack1B>Attack1a": 1.0,
+        "Attack1B>Attack2B": 0.0,
+        "Attack1B>Attack2a": 1.0,
+        "Attack1B>Death1": 0.0,
+        "Attack1B>Death2": 0.0,
+        "Attack1B>Death3": 0.0,
+        "Attack1a>Attack1B": 0.0,
+        "Attack1a>Attack1a": 0.0,
+        "Attack1a>Attack2B": 0.0,
+        "Attack1a>Attack2a": 0.0,
+        "Attack1a>Death1": 0.0,
+        "Attack1a>Death2": 0.0,
+        "Attack1a>Death3": 0.0,
+        "Attack2B>Attack1B": 0.0,
+        "Attack2B>Attack1a": 1.0,
+        "Attack2B>Attack2B": 0.0,
+        "Attack2B>Attack2a": 1.0,
+        "Attack2B>Death1": 0.0,
+        "Attack2B>Death2": 0.0,
+        "Attack2B>Death3": 0.0,
+        "Attack2a>Attack1B": 0.0,
+        "Attack2a>Attack1a": 0.0,
+        "Attack2a>Attack2B": 0.0,
+        "Attack2a>Attack2a": 0.0,
+        "Attack2a>Death1": 0.0,
+        "Attack2a>Death2": 0.0,
+        "Attack2a>Death3": 0.0,
+        "Death1>Death1": 0.0,
+        "Death1>Death2": 0.0,
+        "Death1>Death3": 0.0,
+        "Death2>Death1": 0.0,
+        "Death2>Death2": 0.0,
+        "Death2>Death3": 0.0,
+        "Death3>Death1": 0.0,
+        "Death3>Death2": 0.0,
+        "Death3>Death3": 0.0,
+        "Idle1>Death1": 0.0,
+        "Idle1>Death2": 0.0,
+        "Idle1>Death3": 0.0,
+        "Ranged_Attack1>Death1": 0.0,
+        "Ranged_Attack1>Death2": 0.0,
+        "Ranged_Attack1>Death3": 0.0,
+        "Ranged_Run>Death1": 0.0,
+        "Ranged_Run>Death2": 0.0,
+        "Ranged_Run>Death3": 0.0,
+        "Run1>Death1": 0.0,
+        "Run1>Death2": 0.0,
+        "Run1>Death3": 0.0,
+        "Run1>Run1": 0.0,
+        "Run1>Run2": 1.0,
+        "Run1>Run3": 0.0,
+        "Run2>Death1": 0.0,
+        "Run2>Death2": 0.0,
+        "Run2>Death3": 0.0,
+        "Run2>Run1": 1.0,
+        "Run2>Run2": 0.0,
+        "Run2>Run3": 1.0,
+        "Run3>Death1": 0.0,
+        "Run3>Death2": 0.0,
+        "Run3>Death3": 0.0,
+        "Run3>Run1": 0.0,
+        "Run3>Run2": 1.0,
+        "Run3>Run3": 0.0
+      },
+      "packs": {},
+      "packFiles": {}
+    }
+  ],
+  "xin": [
+    {
+      "asset": "xin",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "IdleBase",
+      "run": "RunBase",
+      "attacks": [
+        {
+          "clip": "Attack1_Hit",
+          "marker": 0.3
+        },
+        {
+          "clip": "Attack3_Hit",
+          "marker": 0.3
+        },
+        {
+          "clip": "Passive_AA_01_XinZhaoRework_anm",
+          "marker": 0.3
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1_Hit",
+          "Attack3_Hit",
+          "Passive_AA_01_XinZhaoRework_anm"
+        ],
+        "attack_hit": [
+          "Attack_AA_01_settle_XinZhaoRework_anm",
+          "Attack_AA_03_settle_XinZhaoRework_anm",
+          "Passive_AA_01_XinZhaoRework_anm"
+        ],
+        "attack_to_move": [
+          "",
+          "",
+          "PassiveAA_to_Run_XinZhaoRework_anm"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Spell4"
+        ],
+        "idle": [
+          "IdleBase"
+        ],
+        "move": [
+          "RunBase"
+        ],
+        "move_enter": [
+          "RunIn"
+        ]
+      },
+      "actions": {
+        "active": {
+          "clips": [
+            "Spell4"
+          ],
+          "durations": [
+            1.0
+          ],
+          "blend_in": 0.0
+        },
+        "charge_strike": {
+          "clips": [
+            "Spell3"
+          ],
+          "durations": [
+            0.35
+          ],
+          "blend_in": 0.0
+        }
+      },
+      "casts": {
+        "xin.crescent-guard": {
+          "clip": "Spell4",
+          "action": "active",
+          "marker": 0.0
+        }
+      },
+      "air": false,
+      "deploy": "Spell4",
+      "transitions": {
+        "Spell3>run": {
+          "clip": "RunIn"
+        },
+        "deploy>run": {
+          "clip": "Spell4_To_Run"
+        },
+        "skill>run": {
+          "clip": "Spell4_To_Run"
+        }
+      },
+      "clipBlends": {
+        "PassiveAA_to_Run_XinZhaoRework_anm>RunBase": 2.0,
+        "Passive_AA_01_XinZhaoRework_anm>Passive_AA_01_XinZhaoRework_anm": 0.0
+      },
+      "timing": {
+        "attack_clip_ranges": [
+          [],
+          [],
+          [
+            0.0,
+            0.3
+          ]
+        ],
+        "attack_hit_clip_ranges": [
+          [],
+          [],
+          [
+            0.3,
+            3.0
+          ]
+        ],
+        "attack_hit_duration": 0.6
+      },
+      "packs": {
+        "xin.audacious-charge": [
+          "Spell3"
+        ]
+      },
+      "packFiles": {
+        "xin.audacious-charge": "xin-audacious-charge"
+      }
+    }
+  ],
+  "yorick": [
+    {
+      "asset": "yorick",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Idle1",
+      "run": "Run_Base",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.27
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.27
+        },
+        {
+          "clip": "Attack3",
+          "marker": 0.27
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2",
+          "Attack3"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "IdleIn"
+        ],
+        "empowered_attack": [
+          "Spell1"
+        ],
+        "idle": [
+          "Idle1"
+        ],
+        "move": [
+          "Run_Base"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "IdleIn",
+      "clipBlends": {
+        "IdleIn>Attack1": 2.4,
+        "IdleIn>Attack2": 2.4,
+        "IdleIn>Attack3": 2.4,
+        "IdleIn>Idle1": 3.5999999999999996,
+        "IdleIn>Run_Base": 3.5999999999999996,
+        "IdleIn>Spell1": 2.4
+      },
+      "packs": {
+        "yorick.last-rites": [
+          "Spell1"
+        ]
+      },
+      "packFiles": {
+        "yorick.last-rites": "yorick-last-rites"
+      }
+    }
+  ],
+  "ziggs": [
+    {
+      "asset": "ziggs",
+      "scale": 40,
+      "groundOffset": 0,
+      "idle": "Ziggs_Idle1_anm",
+      "run": "Run",
+      "attacks": [
+        {
+          "clip": "Attack1",
+          "marker": 0.5
+        },
+        {
+          "clip": "Attack2",
+          "marker": 0.5
+        }
+      ],
+      "death": {
+        "clip": "Death",
+        "ticks": 16.0,
+        "blend": 0
+      },
+      "roles": {
+        "attack": [
+          "Attack1",
+          "Attack2"
+        ],
+        "death": [
+          "Death"
+        ],
+        "deploy": [
+          "Ziggs_Idle1_anm"
+        ],
+        "empowered_attack": [
+          "Spell1"
+        ],
+        "idle": [
+          "Ziggs_Idle1_anm"
+        ],
+        "move": [
+          "Run"
+        ]
+      },
+      "actions": {},
+      "casts": {},
+      "air": false,
+      "deploy": "Ziggs_Idle1_anm",
+      "packs": {
+        "ziggs.bouncing-bomb": [
+          "Spell1"
+        ]
+      },
+      "packFiles": {
+        "ziggs.bouncing-bomb": "ziggs-bouncing-bomb"
+      }
+    }
+  ]
+}

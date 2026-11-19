@@ -1,0 +1,1610 @@
+{
+  "aatrox": [
+    {
+      "base": [
+        "aatrox"
+      ],
+      "aatrox.world-ender": [
+        "aatrox-alt",
+        "aatrox-alt-world-ender",
+        "aatrox-world-ender"
+      ]
+    },
+    {
+      "base": [
+        "aatrox"
+      ],
+      "aatrox.world-ender": [
+        "aatrox-alt",
+        "aatrox-alt-world-ender",
+        "aatrox-world-ender"
+      ]
+    }
+  ],
+  "airdrop_bear": [
+    {
+      "base": [
+        "tibbers"
+      ]
+    },
+    {
+      "base": [
+        "tibbers"
+      ]
+    }
+  ],
+  "anivia": [
+    {
+      "base": [
+        "anivia",
+        "anivia_egg"
+      ],
+      "anivia.glacial-storm": [
+        "anivia-glacial-storm"
+      ]
+    },
+    {
+      "base": [
+        "anivia",
+        "anivia_egg"
+      ],
+      "anivia.glacial-storm": [
+        "anivia-glacial-storm"
+      ]
+    }
+  ],
+  "anivia_egg": [
+    {
+      "base": [
+        "anivia",
+        "anivia_egg"
+      ]
+    },
+    {
+      "base": [
+        "anivia",
+        "anivia_egg"
+      ]
+    }
+  ],
+  "apex_turret": [
+    {
+      "base": [
+        "apex_turret"
+      ],
+      "apex_turret.hextech-piercing-laser": [
+        "apex_turret-hextech-piercing-laser"
+      ]
+    },
+    {
+      "base": [
+        "apex_turret"
+      ],
+      "apex_turret.hextech-piercing-laser": [
+        "apex_turret-hextech-piercing-laser"
+      ]
+    }
+  ],
+  "ashe": [
+    {
+      "base": [
+        "ashe"
+      ],
+      "ashe.volley": [
+        "ashe-volley"
+      ]
+    },
+    {
+      "base": [
+        "ashe"
+      ],
+      "ashe.volley": [
+        "ashe-volley"
+      ]
+    }
+  ],
+  "aurelionsol": [
+    {
+      "base": [
+        "aurelionsol"
+      ],
+      "aurelionsol.falling-star-the-skies-descend": [
+        "aurelionsol-falling-star-the-skies-descend"
+      ]
+    },
+    {
+      "base": [
+        "aurelionsol"
+      ],
+      "aurelionsol.falling-star-the-skies-descend": [
+        "aurelionsol-falling-star-the-skies-descend"
+      ]
+    }
+  ],
+  "azir": [
+    {
+      "base": [
+        "azir",
+        "sand_soldier",
+        "sun_disc-blue"
+      ],
+      "azir.arise": [
+        "azir-arise"
+      ]
+    },
+    {
+      "base": [
+        "azir",
+        "sand_soldier",
+        "sun_disc-red"
+      ],
+      "azir.arise": [
+        "azir-arise"
+      ]
+    }
+  ],
+  "belveth": [
+    {
+      "base": [
+        "belveth",
+        "voidfish"
+      ],
+      "belveth.void-surge": [
+        "belveth-void-surge"
+      ]
+    },
+    {
+      "base": [
+        "belveth",
+        "voidfish"
+      ],
+      "belveth.void-surge": [
+        "belveth-void-surge"
+      ]
+    }
+  ],
+  "blitzcrank": [
+    {
+      "base": [
+        "blitzcrank"
+      ],
+      "blitzcrank.power-fist": [
+        "blitzcrank-power-fist"
+      ]
+    },
+    {
+      "base": [
+        "blitzcrank"
+      ],
+      "blitzcrank.power-fist": [
+        "blitzcrank-power-fist"
+      ]
+    }
+  ],
+  "corki": [
+    {
+      "base": [
+        "corki"
+      ],
+      "corki.missile-barrage": [
+        "corki-missile-barrage"
+      ]
+    },
+    {
+      "base": [
+        "corki"
+      ],
+      "corki.missile-barrage": [
+        "corki-missile-barrage"
+      ]
+    }
+  ],
+  "daisy": [
+    {
+      "base": [
+        "daisy"
+      ]
+    },
+    {
+      "base": [
+        "daisy"
+      ]
+    }
+  ],
+  "darius": [
+    {
+      "base": [
+        "darius"
+      ],
+      "darius.noxian-guillotine": [
+        "darius-noxian-guillotine"
+      ]
+    },
+    {
+      "base": [
+        "darius"
+      ],
+      "darius.noxian-guillotine": [
+        "darius-noxian-guillotine"
+      ]
+    }
+  ],
+  "demacian_standard": [
+    {
+      "base": [
+        "demacian_standard"
+      ]
+    },
+    {
+      "base": [
+        "demacian_standard"
+      ]
+    }
+  ],
+  "ekko": [
+    {
+      "base": [
+        "ekko"
+      ],
+      "ekko.chronobreak": [
+        "ekko-chronobreak"
+      ]
+    },
+    {
+      "base": [
+        "ekko"
+      ],
+      "ekko.chronobreak": [
+        "ekko-chronobreak"
+      ]
+    }
+  ],
+  "enraged_reksai": [
+    {
+      "base": [
+        "enraged_reksai"
+      ]
+    },
+    {
+      "base": [
+        "enraged_reksai"
+      ]
+    }
+  ],
+  "evolution_turret": [
+    {
+      "base": [
+        "evolution_turret"
+      ]
+    },
+    {
+      "base": [
+        "evolution_turret"
+      ]
+    }
+  ],
+  "fiddlesticks": [
+    {
+      "base": [
+        "scarecrow"
+      ]
+    },
+    {
+      "base": [
+        "scarecrow"
+      ]
+    }
+  ],
+  "garen": [
+    {
+      "base": [
+        "garen"
+      ],
+      "garen.decisive-strike": [
+        "garen-decisive-strike"
+      ],
+      "garen.judgment": [
+        "garen-judgment"
+      ]
+    },
+    {
+      "base": [
+        "garen"
+      ],
+      "garen.decisive-strike": [
+        "garen-decisive-strike"
+      ],
+      "garen.judgment": [
+        "garen-judgment"
+      ]
+    }
+  ],
+  "gnar": [
+    {
+      "base": [
+        "gnar",
+        "gnar-alt"
+      ],
+      "gnar.rage-burst": [
+        "gnar-alt-rage-burst"
+      ]
+    },
+    {
+      "base": [
+        "gnar",
+        "gnar-alt"
+      ],
+      "gnar.rage-burst": [
+        "gnar-alt-rage-burst"
+      ]
+    }
+  ],
+  "gold_ward": [
+    {
+      "base": [
+        "gold_ward"
+      ]
+    },
+    {
+      "base": [
+        "gold_ward"
+      ]
+    }
+  ],
+  "graves": [
+    {
+      "base": [
+        "graves"
+      ],
+      "graves.quickdraw": [
+        "graves-quickdraw"
+      ]
+    },
+    {
+      "base": [
+        "graves"
+      ],
+      "graves.quickdraw": [
+        "graves-quickdraw"
+      ]
+    }
+  ],
+  "gwen": [
+    {
+      "base": [
+        "gwen"
+      ],
+      "gwen.snip-snip": [
+        "gwen-snip-snip"
+      ],
+      "gwen.hallowed-mist": [
+        "gwen-hallowed-mist"
+      ]
+    },
+    {
+      "base": [
+        "gwen"
+      ],
+      "gwen.snip-snip": [
+        "gwen-snip-snip"
+      ],
+      "gwen.hallowed-mist": [
+        "gwen-hallowed-mist"
+      ]
+    }
+  ],
+  "heavy_minion_squad": [
+    {
+      "base": [
+        "siege-order",
+        "super-order"
+      ]
+    },
+    {
+      "base": [
+        "siege-chaos",
+        "super-chaos"
+      ]
+    }
+  ],
+  "hecarim": [
+    {
+      "base": [
+        "hecarim"
+      ],
+      "hecarim.spirit-of-dread": [
+        "hecarim-spirit-of-dread"
+      ]
+    },
+    {
+      "base": [
+        "hecarim"
+      ],
+      "hecarim.spirit-of-dread": [
+        "hecarim-spirit-of-dread"
+      ]
+    }
+  ],
+  "imp": [
+    {
+      "base": [
+        "imp"
+      ]
+    },
+    {
+      "base": [
+        "imp"
+      ]
+    }
+  ],
+  "inhibitor": [
+    {
+      "base": [
+        "inhibitor-blue",
+        "melee-order",
+        "ranged-order",
+        "siege-order",
+        "super-order"
+      ]
+    },
+    {
+      "base": [
+        "inhibitor-red",
+        "melee-chaos",
+        "ranged-chaos",
+        "siege-chaos",
+        "super-chaos"
+      ]
+    }
+  ],
+  "ivern": [
+    {
+      "base": [
+        "ivern"
+      ],
+      "ivern.daisy": [
+        "daisy",
+        "ivern-daisy"
+      ]
+    },
+    {
+      "base": [
+        "ivern"
+      ],
+      "ivern.daisy": [
+        "daisy",
+        "ivern-daisy"
+      ]
+    }
+  ],
+  "jack_in_the_box": [
+    {
+      "base": [
+        "jack_in_the_box"
+      ]
+    },
+    {
+      "base": [
+        "jack_in_the_box"
+      ]
+    }
+  ],
+  "jax": [
+    {
+      "base": [
+        "jax"
+      ],
+      "jax.counter-strike": [
+        "jax-counter-strike"
+      ]
+    },
+    {
+      "base": [
+        "jax"
+      ],
+      "jax.counter-strike": [
+        "jax-counter-strike"
+      ]
+    }
+  ],
+  "jayce": [
+    {
+      "base": [
+        "jayce",
+        "jayce-alt"
+      ],
+      "jayce.hyper-charge-lightning-field": [
+        "jayce-hyper-charge-lightning-field"
+      ]
+    },
+    {
+      "base": [
+        "jayce",
+        "jayce-alt"
+      ],
+      "jayce.hyper-charge-lightning-field": [
+        "jayce-hyper-charge-lightning-field"
+      ]
+    }
+  ],
+  "jinx": [
+    {
+      "base": [
+        "jinx"
+      ],
+      "jinx.switcheroo": [
+        "jinx-alt",
+        "jinx-alt-switcheroo",
+        "jinx-switcheroo"
+      ]
+    },
+    {
+      "base": [
+        "jinx"
+      ],
+      "jinx.switcheroo": [
+        "jinx-alt",
+        "jinx-alt-switcheroo",
+        "jinx-switcheroo"
+      ]
+    }
+  ],
+  "kassadin": [
+    {
+      "base": [
+        "kassadin"
+      ],
+      "kassadin.riftwalk": [
+        "kassadin-riftwalk"
+      ]
+    },
+    {
+      "base": [
+        "kassadin"
+      ],
+      "kassadin.riftwalk": [
+        "kassadin-riftwalk"
+      ]
+    }
+  ],
+  "kayle": [
+    {
+      "base": [
+        "kayle",
+        "kayle_ranged"
+      ],
+      "kayle.celestial-blessing": [
+        "kayle-celestial-blessing",
+        "kayle_ranged-celestial-blessing"
+      ]
+    },
+    {
+      "base": [
+        "kayle",
+        "kayle_ranged"
+      ],
+      "kayle.celestial-blessing": [
+        "kayle-celestial-blessing",
+        "kayle_ranged-celestial-blessing"
+      ]
+    }
+  ],
+  "kayle_ranged": [
+    {
+      "base": [
+        "kayle_ranged"
+      ],
+      "kayle.celestial-blessing": [
+        "kayle_ranged-celestial-blessing"
+      ]
+    },
+    {
+      "base": [
+        "kayle_ranged"
+      ],
+      "kayle.celestial-blessing": [
+        "kayle_ranged-celestial-blessing"
+      ]
+    }
+  ],
+  "kayn": [
+    {
+      "base": [
+        "kayn",
+        "kayn_assassin",
+        "kayn_slayer"
+      ],
+      "kayn.reaping-slash": [
+        "kayn-reaping-slash",
+        "kayn_assassin-reaping-slash",
+        "kayn_slayer-reaping-slash"
+      ]
+    },
+    {
+      "base": [
+        "kayn",
+        "kayn_assassin",
+        "kayn_slayer"
+      ],
+      "kayn.reaping-slash": [
+        "kayn-reaping-slash",
+        "kayn_assassin-reaping-slash",
+        "kayn_slayer-reaping-slash"
+      ]
+    }
+  ],
+  "kayn_assassin": [
+    {
+      "base": [
+        "kayn_assassin"
+      ],
+      "kayn.reaping-slash": [
+        "kayn_assassin-reaping-slash"
+      ]
+    },
+    {
+      "base": [
+        "kayn_assassin"
+      ],
+      "kayn.reaping-slash": [
+        "kayn_assassin-reaping-slash"
+      ]
+    }
+  ],
+  "kayn_slayer": [
+    {
+      "base": [
+        "kayn_slayer"
+      ],
+      "kayn.reaping-slash": [
+        "kayn_slayer-reaping-slash"
+      ]
+    },
+    {
+      "base": [
+        "kayn_slayer"
+      ],
+      "kayn.reaping-slash": [
+        "kayn_slayer-reaping-slash"
+      ]
+    }
+  ],
+  "lulu": [
+    {
+      "base": [
+        "lulu",
+        "pix"
+      ],
+      "lulu.wild-growth": [
+        "lulu-wild-growth"
+      ]
+    },
+    {
+      "base": [
+        "lulu",
+        "pix"
+      ],
+      "lulu.wild-growth": [
+        "lulu-wild-growth"
+      ]
+    }
+  ],
+  "malphite": [
+    {
+      "base": [
+        "malphite"
+      ],
+      "malphite.ground-slam": [
+        "malphite-ground-slam"
+      ]
+    },
+    {
+      "base": [
+        "malphite"
+      ],
+      "malphite.ground-slam": [
+        "malphite-ground-slam"
+      ]
+    }
+  ],
+  "malzahar": [
+    {
+      "base": [
+        "malzahar",
+        "voidling"
+      ],
+      "malzahar.nether-grasp": [
+        "malzahar-nether-grasp"
+      ],
+      "malzahar.void-swarm": [
+        "malzahar-void-swarm"
+      ]
+    },
+    {
+      "base": [
+        "malzahar",
+        "voidling"
+      ],
+      "malzahar.nether-grasp": [
+        "malzahar-nether-grasp"
+      ],
+      "malzahar.void-swarm": [
+        "malzahar-void-swarm"
+      ]
+    }
+  ],
+  "masteryi": [
+    {
+      "base": [
+        "masteryi"
+      ],
+      "masteryi.highlander": [
+        "masteryi-highlander"
+      ]
+    },
+    {
+      "base": [
+        "masteryi"
+      ],
+      "masteryi.highlander": [
+        "masteryi-highlander"
+      ]
+    }
+  ],
+  "melee_minion": [
+    {
+      "base": [
+        "melee-order"
+      ]
+    },
+    {
+      "base": [
+        "melee-chaos"
+      ]
+    }
+  ],
+  "melee_minion_squad": [
+    {
+      "base": [
+        "melee-order"
+      ]
+    },
+    {
+      "base": [
+        "melee-chaos"
+      ]
+    }
+  ],
+  "minion_squad": [
+    {
+      "base": [
+        "melee-order",
+        "ranged-order"
+      ]
+    },
+    {
+      "base": [
+        "melee-chaos",
+        "ranged-chaos"
+      ]
+    }
+  ],
+  "missfortune": [
+    {
+      "base": [
+        "missfortune"
+      ],
+      "missfortune.strut": [
+        "missfortune-strut"
+      ]
+    },
+    {
+      "base": [
+        "missfortune"
+      ],
+      "missfortune.strut": [
+        "missfortune-strut"
+      ]
+    }
+  ],
+  "nest_reksai": [
+    {
+      "base": [
+        "nest_reksai"
+      ]
+    },
+    {
+      "base": [
+        "nest_reksai"
+      ]
+    }
+  ],
+  "nocturne": [
+    {
+      "base": [
+        "nocturne"
+      ],
+      "nocturne.shroud-of-darkness": [
+        "nocturne-shroud-of-darkness"
+      ],
+      "nocturne.umbra-blades": [
+        "nocturne-umbra-blades"
+      ]
+    },
+    {
+      "base": [
+        "nocturne"
+      ],
+      "nocturne.shroud-of-darkness": [
+        "nocturne-shroud-of-darkness"
+      ],
+      "nocturne.umbra-blades": [
+        "nocturne-umbra-blades"
+      ]
+    }
+  ],
+  "olaf": [
+    {
+      "base": [
+        "olaf"
+      ],
+      "olaf.ragnarok": [
+        "olaf-ragnarok"
+      ]
+    },
+    {
+      "base": [
+        "olaf"
+      ],
+      "olaf.ragnarok": [
+        "olaf-ragnarok"
+      ]
+    }
+  ],
+  "olaf_single": [
+    {
+      "base": [
+        "olaf"
+      ],
+      "诸神黄昏": [
+        "olaf-ragnarok"
+      ]
+    },
+    {
+      "base": [
+        "olaf"
+      ],
+      "诸神黄昏": [
+        "olaf-ragnarok"
+      ]
+    }
+  ],
+  "ornn": [
+    {
+      "base": [
+        "ornn"
+      ],
+      "ornn.searing-charge": [
+        "ornn-searing-charge"
+      ]
+    },
+    {
+      "base": [
+        "ornn"
+      ],
+      "ornn.searing-charge": [
+        "ornn-searing-charge"
+      ]
+    }
+  ],
+  "pantheon": [
+    {
+      "base": [
+        "pantheon"
+      ],
+      "pantheon.comet-spear": [
+        "pantheon-comet-spear"
+      ]
+    },
+    {
+      "base": [
+        "pantheon"
+      ],
+      "pantheon.comet-spear": [
+        "pantheon-comet-spear"
+      ]
+    }
+  ],
+  "pillar_of_ice": [
+    {
+      "base": [
+        "pillar_of_ice"
+      ]
+    },
+    {
+      "base": [
+        "pillar_of_ice"
+      ]
+    }
+  ],
+  "pix": [
+    {
+      "base": [
+        "pix"
+      ]
+    },
+    {
+      "base": [
+        "pix"
+      ]
+    }
+  ],
+  "pix_single": [
+    {
+      "base": [
+        "pix"
+      ]
+    },
+    {
+      "base": [
+        "pix"
+      ]
+    }
+  ],
+  "powder_keg": [
+    {
+      "base": [
+        "powder_keg"
+      ]
+    },
+    {
+      "base": [
+        "powder_keg"
+      ]
+    }
+  ],
+  "queen_nest": [
+    {
+      "base": [
+        "nest_reksai",
+        "queen_nest"
+      ],
+      "queen_nest.queen-s-wrath": [
+        "enraged_reksai"
+      ]
+    },
+    {
+      "base": [
+        "nest_reksai",
+        "queen_nest"
+      ],
+      "queen_nest.queen-s-wrath": [
+        "enraged_reksai"
+      ]
+    }
+  ],
+  "ranged_minion": [
+    {
+      "base": [
+        "ranged-order"
+      ]
+    },
+    {
+      "base": [
+        "ranged-chaos"
+      ]
+    }
+  ],
+  "ranged_minion_squad": [
+    {
+      "base": [
+        "ranged-order"
+      ]
+    },
+    {
+      "base": [
+        "ranged-chaos"
+      ]
+    }
+  ],
+  "reksai": [
+    {
+      "base": [
+        "reksai"
+      ],
+      "reksai.queen-s-wrath": [
+        "reksai-queen-s-wrath"
+      ]
+    },
+    {
+      "base": [
+        "reksai"
+      ],
+      "reksai.queen-s-wrath": [
+        "reksai-queen-s-wrath"
+      ]
+    }
+  ],
+  "rift_herald": [
+    {
+      "base": [
+        "rift_herald",
+        "voidmite"
+      ],
+      "rift_herald.sweeping-strike": [
+        "rift_herald-sweeping-strike"
+      ]
+    },
+    {
+      "base": [
+        "rift_herald",
+        "voidmite"
+      ],
+      "rift_herald.sweeping-strike": [
+        "rift_herald-sweeping-strike"
+      ]
+    }
+  ],
+  "samira": [
+    {
+      "base": [
+        "samira"
+      ],
+      "samira.inferno-trigger": [
+        "samira-inferno-trigger"
+      ]
+    },
+    {
+      "base": [
+        "samira"
+      ],
+      "samira.inferno-trigger": [
+        "samira-inferno-trigger"
+      ]
+    }
+  ],
+  "sand_soldier": [
+    {
+      "base": [
+        "sand_soldier"
+      ]
+    },
+    {
+      "base": [
+        "sand_soldier"
+      ]
+    }
+  ],
+  "scarecrow": [
+    {
+      "base": [
+        "scarecrow"
+      ]
+    },
+    {
+      "base": [
+        "scarecrow"
+      ]
+    }
+  ],
+  "scuttle_crab": [
+    {
+      "base": [
+        "scuttle_crab",
+        "scuttle_crab-death"
+      ]
+    },
+    {
+      "base": [
+        "scuttle_crab",
+        "scuttle_crab-death"
+      ]
+    }
+  ],
+  "sett": [
+    {
+      "base": [
+        "sett"
+      ],
+      "sett.haymaker": [
+        "sett-haymaker"
+      ]
+    },
+    {
+      "base": [
+        "sett"
+      ],
+      "sett.haymaker": [
+        "sett-haymaker"
+      ]
+    }
+  ],
+  "shurima_guard": [
+    {
+      "base": [
+        "sand_soldier"
+      ]
+    },
+    {
+      "base": [
+        "sand_soldier"
+      ]
+    }
+  ],
+  "siege_minion": [
+    {
+      "base": [
+        "siege-order"
+      ]
+    },
+    {
+      "base": [
+        "siege-chaos"
+      ]
+    }
+  ],
+  "siege_minion_squad": [
+    {
+      "base": [
+        "siege-order"
+      ]
+    },
+    {
+      "base": [
+        "siege-chaos"
+      ]
+    }
+  ],
+  "sion": [
+    {
+      "base": [
+        "sion",
+        "sion-alt"
+      ],
+      "sion.soul-furnace": [
+        "sion-soul-furnace"
+      ]
+    },
+    {
+      "base": [
+        "sion",
+        "sion-alt"
+      ],
+      "sion.soul-furnace": [
+        "sion-soul-furnace"
+      ]
+    }
+  ],
+  "sivir": [
+    {
+      "base": [
+        "sivir"
+      ]
+    },
+    {
+      "base": [
+        "sivir"
+      ]
+    }
+  ],
+  "sona": [
+    {
+      "base": [
+        "sona"
+      ],
+      "sona.crescendo": [
+        "sona-crescendo"
+      ]
+    },
+    {
+      "base": [
+        "sona"
+      ],
+      "sona.crescendo": [
+        "sona-crescendo"
+      ]
+    }
+  ],
+  "soul_tentacle": [
+    {
+      "base": [
+        "soul_tentacle"
+      ]
+    },
+    {
+      "base": [
+        "soul_tentacle"
+      ]
+    }
+  ],
+  "sun_disc": [
+    {
+      "base": [
+        "sun_disc-blue"
+      ]
+    },
+    {
+      "base": [
+        "sun_disc-red"
+      ]
+    }
+  ],
+  "super_minion": [
+    {
+      "base": [
+        "super-order"
+      ]
+    },
+    {
+      "base": [
+        "super-chaos"
+      ]
+    }
+  ],
+  "super_minion_squad": [
+    {
+      "base": [
+        "super-order"
+      ]
+    },
+    {
+      "base": [
+        "super-chaos"
+      ]
+    }
+  ],
+  "target_dummy": [
+    {
+      "base": [
+        "target_dummy-blue"
+      ]
+    },
+    {
+      "base": [
+        "target_dummy-red"
+      ]
+    }
+  ],
+  "teemo": [
+    {
+      "base": [
+        "teemo"
+      ],
+      "teemo.blinding-dart": [
+        "teemo-blinding-dart"
+      ]
+    },
+    {
+      "base": [
+        "teemo"
+      ],
+      "teemo.blinding-dart": [
+        "teemo-blinding-dart"
+      ]
+    }
+  ],
+  "thorn_spitter": [
+    {
+      "base": [
+        "thorn_spitter"
+      ]
+    },
+    {
+      "base": [
+        "thorn_spitter"
+      ]
+    }
+  ],
+  "tibbers": [
+    {
+      "base": [
+        "tibbers"
+      ]
+    },
+    {
+      "base": [
+        "tibbers"
+      ]
+    }
+  ],
+  "tombstone": [
+    {
+      "base": [
+        "imp",
+        "tombstone"
+      ]
+    },
+    {
+      "base": [
+        "imp",
+        "tombstone"
+      ]
+    }
+  ],
+  "tristana": [
+    {
+      "base": [
+        "tristana"
+      ]
+    },
+    {
+      "base": [
+        "tristana"
+      ]
+    }
+  ],
+  "tryndamere": [
+    {
+      "base": [
+        "tryndamere"
+      ]
+    },
+    {
+      "base": [
+        "tryndamere"
+      ]
+    }
+  ],
+  "twisted_fate": [
+    {
+      "base": [
+        "twisted_fate"
+      ],
+      "twisted_fate.wild-cards": [
+        "twisted_fate-wild-cards"
+      ]
+    },
+    {
+      "base": [
+        "twisted_fate"
+      ],
+      "twisted_fate.wild-cards": [
+        "twisted_fate-wild-cards"
+      ]
+    }
+  ],
+  "twitch": [
+    {
+      "base": [
+        "twitch"
+      ],
+      "twitch.spray-and-pray": [
+        "twitch-spray-and-pray"
+      ]
+    },
+    {
+      "base": [
+        "twitch"
+      ],
+      "twitch.spray-and-pray": [
+        "twitch-spray-and-pray"
+      ]
+    }
+  ],
+  "vine_lasher": [
+    {
+      "base": [
+        "vine_lasher"
+      ]
+    },
+    {
+      "base": [
+        "vine_lasher"
+      ]
+    }
+  ],
+  "void_gate": [
+    {
+      "base": [
+        "void_gate",
+        "void_spawn"
+      ]
+    },
+    {
+      "base": [
+        "void_gate",
+        "void_spawn"
+      ]
+    }
+  ],
+  "void_scuttle_crab": [
+    {
+      "base": [
+        "void_scuttle_crab",
+        "void_scuttle_crab-death"
+      ]
+    },
+    {
+      "base": [
+        "void_scuttle_crab",
+        "void_scuttle_crab-death"
+      ]
+    }
+  ],
+  "void_spawn": [
+    {
+      "base": [
+        "void_spawn"
+      ]
+    },
+    {
+      "base": [
+        "void_spawn"
+      ]
+    }
+  ],
+  "void_spawn_single": [
+    {
+      "base": [
+        "void_spawn"
+      ]
+    },
+    {
+      "base": [
+        "void_spawn"
+      ]
+    }
+  ],
+  "void_summoning": [
+    {
+      "base": [
+        "voidfish"
+      ]
+    },
+    {
+      "base": [
+        "voidfish"
+      ]
+    }
+  ],
+  "voidfish": [
+    {
+      "base": [
+        "voidfish"
+      ]
+    },
+    {
+      "base": [
+        "voidfish"
+      ]
+    }
+  ],
+  "voidfish_ranged": [
+    {
+      "base": [
+        "voidfish_ranged"
+      ]
+    },
+    {
+      "base": [
+        "voidfish_ranged"
+      ]
+    }
+  ],
+  "voidfish_ranged_army": [
+    {
+      "base": [
+        "voidfish_ranged"
+      ]
+    },
+    {
+      "base": [
+        "voidfish_ranged"
+      ]
+    }
+  ],
+  "voidfish_ranged_single": [
+    {
+      "base": [
+        "voidfish_ranged"
+      ]
+    },
+    {
+      "base": [
+        "voidfish_ranged"
+      ]
+    }
+  ],
+  "voidling": [
+    {
+      "base": [
+        "voidling"
+      ]
+    },
+    {
+      "base": [
+        "voidling"
+      ]
+    }
+  ],
+  "voidmite": [
+    {
+      "base": [
+        "voidmite"
+      ]
+    },
+    {
+      "base": [
+        "voidmite"
+      ]
+    }
+  ],
+  "xin": [
+    {
+      "base": [
+        "xin"
+      ],
+      "xin.audacious-charge": [
+        "xin-audacious-charge"
+      ]
+    },
+    {
+      "base": [
+        "xin"
+      ],
+      "xin.audacious-charge": [
+        "xin-audacious-charge"
+      ]
+    }
+  ],
+  "yorick": [
+    {
+      "base": [
+        "yorick"
+      ],
+      "yorick.last-rites": [
+        "yorick-last-rites"
+      ]
+    },
+    {
+      "base": [
+        "yorick"
+      ],
+      "yorick.last-rites": [
+        "yorick-last-rites"
+      ]
+    }
+  ],
+  "ziggs": [
+    {
+      "base": [
+        "ziggs"
+      ],
+      "ziggs.bouncing-bomb": [
+        "ziggs-bouncing-bomb"
+      ]
+    },
+    {
+      "base": [
+        "ziggs"
+      ],
+      "ziggs.bouncing-bomb": [
+        "ziggs-bouncing-bomb"
+      ]
+    }
+  ],
+  "princess_tower": [
+    {
+      "base": [
+        "princess_tower-blue"
+      ]
+    },
+    {
+      "base": [
+        "princess_tower-red"
+      ]
+    }
+  ],
+  "nexus": [
+    {
+      "base": [
+        "nexus-blue"
+      ]
+    },
+    {
+      "base": [
+        "nexus-red"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "airdrop_bear": [
+    "tibbers"
+  ],
+  "heavy_minion_squad": [
+    "super_minion",
+    "siege_minion"
+  ],
+  "melee_minion_squad": [
+    "melee_minion"
+  ],
+  "minion_squad": [
+    "melee_minion",
+    "ranged_minion"
+  ],
+  "ranged_minion_squad": [
+    "ranged_minion"
+  ],
+  "siege_minion_squad": [
+    "siege_minion"
+  ],
+  "super_minion_squad": [
+    "super_minion"
+  ],
+  "void_summoning": [
+    "voidfish"
+  ]
+}
