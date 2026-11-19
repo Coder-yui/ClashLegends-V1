@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS matches (
     UNIQUE(room_id, round)
 );
 
--- The future match host claims one frozen handoff. Concurrent claims or
+-- The match host claims one frozen handoff. Concurrent claims or
 -- withdrawn matches return zero rows. This function is server-side only.
 CREATE OR REPLACE FUNCTION claim_pending_match(match_key text)
 RETURNS SETOF jsonb LANGUAGE sql AS $$
@@ -27,3 +27,8 @@ RETURNS SETOF jsonb LANGUAGE sql AS $$
     WHERE id=match_key AND status='pending'
     RETURNING config
 $$;
+
+-- Host checkpoints use the frozen seed and the ordered human input log.
+ALTER TABLE matches ADD COLUMN IF NOT EXISTS battle_tick integer NOT NULL DEFAULT 0;
+ALTER TABLE matches ADD COLUMN IF NOT EXISTS inputs jsonb NOT NULL DEFAULT '[]';
+ALTER TABLE matches ADD COLUMN IF NOT EXISTS result jsonb;

@@ -28,7 +28,7 @@ pub async fn bootstrap(State(app): State<App>, h: HeaderMap) -> Result<Response>
         .query_opt("SELECT room_id FROM members WHERE guest_id=$1", &[&p])
         .await?
         .map(|r| r.get::<_, String>(0));
-    let presets:Vec<Value>=db.query("SELECT id,name,deck,revision FROM presets WHERE owner_id=$1 ORDER BY (id IS NOT DISTINCT FROM (SELECT last_preset FROM guests WHERE id=$1)) DESC,name,id",&[&p]).await?.iter().map(|r|json!({"id":r.get::<_,String>(0),"name":r.get::<_,String>(1),"deck":r.get::<_,Value>(2),"revision":r.get::<_,i64>(3)})).collect();
+    let presets:Vec<Value>=db.query("SELECT id,name,deck,revision FROM presets WHERE owner_id=$1 ORDER BY (id IS NOT DISTINCT FROM (SELECT last_preset FROM guests WHERE id=$1)) DESC,name,id",&[&p]).await?.iter().map(|r|json!({"id":r.get::<_,String>(0),"name":r.get::<_,String>(1),"deck":r.get::<_,Value>(2),"battleDeck":decode::<Deck>(r.get(2)).ok().and_then(|d|app.catalog.room_deck(d)),"revision":r.get::<_,i64>(3)})).collect();
     let mut resp = Json(json!({"name":name,"roomId":room,"presets":presets})).into_response();
     resp.headers_mut()
         .insert("cache-control", "no-store".parse().unwrap());
@@ -55,7 +55,9 @@ pub async fn save_preset(
     Json(input): Json<Preset>,
 ) -> Result<Json<Value>> {
     let p = player(&app, &h).await?;
-    app.catalog.check(&input.deck)?;
+    if app.catalog.check(&input.deck).is_err() {
+        app.collection.check(&input.deck)?;
+    }
     let name = input.name.trim();
     if name.is_empty() || name.chars().count() > 32 {
         return Err(fail("卡组名需为 1–32 个字"));
@@ -101,6 +103,14 @@ pub async fn remove_preset(
 }
 pub async fn live(State(app): State<App>, h: HeaderMap, ws: WebSocketUpgrade) -> Result<Response> {
     let p = player(&app, &h).await?;
+    check_origin(&h)?;
+    Ok(ws.on_upgrade(move |socket| async move {
+        if let Err(e) = stream(app, p, socket).await {
+            eprintln!("socket: {}", e.1)
+        }
+    }))
+}
+pub(super) fn check_origin(h: &HeaderMap) -> Result<()> {
     if let Some(origin) = h.get("origin") {
         let uri = origin
             .to_str()
@@ -112,11 +122,7 @@ pub async fn live(State(app): State<App>, h: HeaderMap, ws: WebSocketUpgrade) ->
             return Err(fail("连接来源无效"));
         }
     }
-    Ok(ws.on_upgrade(move |socket| async move {
-        if let Err(e) = stream(app, p, socket).await {
-            eprintln!("socket: {}", e.1)
-        }
-    }))
+    Ok(())
 }
 async fn stream(app: App, p: String, mut ws: WebSocket) -> Result<()> {
     let mut changes = app.changes.subscribe();

@@ -4,20 +4,20 @@ use model::{Deck, Room, Seat};
 use serde::Deserialize;
 use std::time::Duration;
 
-async fn fetch(tx: &Transaction<'_>, rid: &str) -> Result<Room> {
+pub(super) async fn fetch(tx: &Transaction<'_>, rid: &str) -> Result<Room> {
     let row = tx
         .query_opt("SELECT data FROM rooms WHERE id=$1 FOR UPDATE", &[&rid])
         .await?
         .ok_or_else(|| fail("房间不存在"))?;
     decode(row.get(0))
 }
-async fn store(tx: &Transaction<'_>, r: &mut Room) -> Result<()> {
+pub(super) async fn store(tx: &Transaction<'_>, r: &mut Room) -> Result<()> {
     r.revision += 1;
     tx.execute("UPDATE rooms SET data=$1 WHERE id=$2", &[&json!(r), &r.id])
         .await?;
     Ok(())
 }
-fn notify(app: &App, r: &Room) {
+pub(super) fn notify(app: &App, r: &Room) {
     for s in &r.seats {
         if !s.ai {
             let _ = app.changes.send(s.player.clone());
@@ -37,7 +37,7 @@ async fn seat(tx: &Transaction<'_>, app: &App, p: &str) -> Result<Seat> {
     let deck = row
         .get::<_, Option<Value>>(1)
         .and_then(|v| decode::<Deck>(v).ok())
-        .filter(|d| app.catalog.check(d).is_ok())
+        .and_then(|d| app.catalog.room_deck(d))
         .unwrap_or_else(|| app.catalog.default_loadout());
     tx.execute("UPDATE guests SET last_seen=now() WHERE id=$1", &[&p])
         .await?;
@@ -229,8 +229,9 @@ pub async fn act(
         r.match_id = None;
         r.round += 1;
         r.status = "open".into();
+        r.migrate_decks(&app.catalog)?;
         r.reset_ready();
-    } else if r.status == "locked" {
+    } else if r.status == "locked" || r.status == "playing" {
         return Ok(Json(r.view(&p)?));
     } else {
         if r.settings_version != a.settings_version
@@ -274,6 +275,11 @@ pub async fn act(
                 }
                 r.seats[i].ready = value;
                 if value && r.seats.iter().all(|s| s.ready) {
+                    if std::env::var_os("LOBBY_DRAIN_FILE")
+                        .is_some_and(|p| std::path::Path::new(&p).exists())
+                    {
+                        return Err(fail("当前对局可继续，版本更新期间暂停开新局"));
+                    }
                     let cfg = r.freeze(&app.catalog)?;
                     tx.execute(
                         "INSERT INTO matches(id,room_id,round,config) VALUES($1,$2,$3,$4)",

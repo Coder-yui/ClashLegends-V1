@@ -36,7 +36,78 @@ pub struct Deck {
     pub cards: Vec<String>,
     pub skills: BTreeMap<String, String>,
 }
+pub fn battle_catalog() -> Value {
+    let mut catalog: Value =
+        serde_json::from_str(include_str!("../../content/catalog.json")).unwrap();
+    let test_maps = std::env::var("LOBBY_TEST_MAP").as_deref() == Ok("1");
+    let maps: Vec<_> = clash_battle_core::classic::maps()
+        .iter()
+        .filter(|m| test_maps || !m.test_only)
+        .collect();
+    catalog["modes"] = json!(clash_battle_core::classic::modes()
+        .iter()
+        .map(|mode| {
+            let ids: Vec<_> = mode
+                .map_ids
+                .iter()
+                .filter(|id| maps.iter().any(|m| &&m.id == id))
+                .collect();
+            json!({"id":mode.id,"name":mode.name,"mapIds":ids})
+        })
+        .collect::<Vec<_>>());
+    catalog["maps"] = json!(maps);
+    let deck = clash_battle_core::classic::battle_cards();
+    let cards = catalog["cards"].as_array_mut().unwrap();
+    cards.retain(|entry| deck.iter().any(|card| entry["id"] == card.key));
+    for entry in cards {
+        let card = deck.iter().find(|card| entry["id"] == card.key).unwrap();
+        entry["cost"] = json!(card.cost);
+        entry["skillCost"] = json!(card.skill_cost);
+        entry["homeDeployment"] = json!(card.home_deployment());
+        entry["skills"].as_array_mut().unwrap().retain_mut(|skill| {
+            let Some(choice) = deck
+                .iter()
+                .find(|c| c.key == card.key && skill["id"].as_str() == c.skill_key)
+            else {
+                return false;
+            };
+            skill["cost"] = json!(choice.skill_cost);
+            true
+        });
+    }
+    catalog["defaultDeck"] =
+        json!(clash_battle_core::classic::representative_deck().map(|card| card.key));
+    catalog["version"] = json!(format!("{}-battle-2", catalog["version"].as_str().unwrap()));
+    catalog
+}
+
 impl Catalog {
+    pub fn previous_version(&self) -> String {
+        self.version.trim_end_matches("-battle-2").to_owned() + "-battle-1"
+    }
+    pub fn playable(&self, version: &Value) -> bool {
+        version == &self.version || version == &self.previous_version()
+    }
+    pub fn room_deck(&self, mut deck: Deck) -> Option<Deck> {
+        deck.skills.retain(|id, _| {
+            self.cards
+                .iter()
+                .any(|c| &c.id == id && !c.skills.is_empty())
+        });
+        for key in &deck.cards {
+            if !deck.skills.contains_key(key) {
+                if let Some(first) = self
+                    .cards
+                    .iter()
+                    .find(|c| &c.id == key)
+                    .and_then(|c| c.skills.first())
+                {
+                    deck.skills.insert(key.clone(), first.id.clone());
+                }
+            }
+        }
+        self.check(&deck).ok().map(|_| deck)
+    }
     pub fn default_loadout(&self) -> Deck {
         let mut result = Deck {
             cards: self.default_deck.clone(),
@@ -60,6 +131,7 @@ impl Catalog {
             picks.extend(group.into_iter().take(count));
         }
         picks.shuffle(&mut rng);
+        picks.sort_by_key(|card| card.skills.is_empty());
         let skills = picks
             .iter()
             .filter_map(|card| {
@@ -76,7 +148,12 @@ impl Catalog {
         Ok(result)
     }
     pub fn check(&self, deck: &Deck) -> Result<()> {
-        if deck.cards.len() != 8 {
+        let deck_size = clash_battle_core::classic::modes()
+            .iter()
+            .find(|m| m.id == "classic")
+            .expect("classic mode")
+            .deck_size;
+        if deck.cards.len() != deck_size {
             return Err(fail("经典模式需要八张卡牌"));
         }
         let mut seen = HashSet::new();
@@ -175,6 +252,25 @@ impl Room {
         }
         Ok(())
     }
+    pub fn migrate_decks(&mut self, catalog: &Catalog) -> Result<bool> {
+        let mut changed = false;
+        for seat in &mut self.seats {
+            if catalog.check(&seat.deck).is_ok() {
+                continue;
+            }
+            seat.deck = match catalog.room_deck(seat.deck.clone()) {
+                Some(deck) => deck,
+                None if seat.ai => catalog.ai_loadout()?,
+                None => catalog.default_loadout(),
+            };
+            seat.version += 1;
+            changed = true;
+        }
+        if changed {
+            self.reset_ready();
+        }
+        Ok(changed)
+    }
     pub fn freeze(&mut self, catalog: &Catalog) -> Result<Value> {
         catalog.settings(&self.mode, &self.map)?;
         let mut seats = Vec::new();
@@ -189,9 +285,50 @@ impl Room {
         Ok(json!({
             "id":match_id, "roomId":self.id, "round":self.round, "kind":self.kind,
             "mode":self.mode, "map":self.map, "contentVersion":catalog.version,
-            "rulesVersion":"classic-v1", "seed":id(), "seats":seats
+            "rulesVersion":clash_battle_core::classic::replay::RULESET, "seed":id(), "seats":seats
         }))
     }
+}
+
+/// Publish only the unordered asset set. Slot order and the other seat's hand stay private.
+pub(crate) fn match_model_resources(seats: &[Value]) -> std::collections::BTreeSet<&'static str> {
+    static INDEX: std::sync::OnceLock<Value> = std::sync::OnceLock::new();
+    let index = INDEX.get_or_init(|| {
+        serde_json::from_str(include_str!("../../content/model_resources.json")).unwrap()
+    });
+    let mut files = std::collections::BTreeSet::new();
+    for (team, seat) in seats.iter().enumerate() {
+        let deck = &seat["deck"];
+        let cards = deck["cards"].as_array().unwrap();
+        let active_mirror = cards.iter().take(2).any(|card| card == "mirror");
+        let system = [
+            "princess_tower",
+            "nexus",
+            "melee_minion",
+            "ranged_minion",
+            "super_minion",
+            "siege_minion",
+        ];
+        for (slot, id) in cards
+            .iter()
+            .filter_map(Value::as_str)
+            .chain(system)
+            .enumerate()
+        {
+            let entry = &index[id][team];
+            let skill = if slot < 2 || active_mirror {
+                deck["skills"][id].as_str()
+            } else {
+                None
+            };
+            for key in std::iter::once("base").chain(skill) {
+                if let Some(paths) = entry[key].as_array() {
+                    files.extend(paths.iter().filter_map(Value::as_str));
+                }
+            }
+        }
+    }
+    files
 }
 
 #[cfg(test)]
@@ -199,6 +336,25 @@ mod tests {
     use super::*;
     fn catalog() -> Catalog {
         serde_json::from_str(include_str!("../../content/catalog.json")).unwrap()
+    }
+
+    #[test]
+    fn model_demand_respects_skill_slots_mirror_and_opposing_resources() {
+        let plain = json!({"deck":{"cards":["heal","zap","ashe"],"skills":{"ashe":"ashe.volley"}}});
+        let other = json!({"deck":{"cards":["gold_ward","void_gate"],"skills":{}}});
+        let base = match_model_resources(&[plain.clone(), other.clone()]);
+        assert!(base.contains("ashe") && base.contains("void_gate"));
+        assert!(!base.contains("ashe-volley") && !base.contains("ashe-review"));
+        for active in [
+            json!(["ashe", "heal", "zap"]),
+            json!(["mirror", "heal", "ashe"]),
+        ] {
+            let mut deck = plain.clone();
+            deck["deck"]["cards"] = active;
+            let full = match_model_resources(&[other.clone(), deck]);
+            assert!(full.contains("ashe-volley") && !full.contains("ashe-review"));
+        }
+        assert!(!match_model_resources(&[other.clone(), other]).contains("ashe"));
     }
 
     #[test]
