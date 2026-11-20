@@ -199,6 +199,7 @@ impl ClassicMatch {
         for (pos, def, pre) in placements {
             let id = self.battle.spawn(team, pos, def)?;
             let a = self.battle.actors.get_mut(&id).unwrap();
+            a.card_state.deployment_group = ids.first().copied().unwrap_or(id);
             a.card_state.equipped_skill = card.skill_key.filter(|_| a.def.skill.is_some());
             a.ready_tick = self.battle.tick + u64::from(card.deploy_ticks);
             if pre > 0. {

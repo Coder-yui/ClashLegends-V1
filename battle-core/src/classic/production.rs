@@ -2,7 +2,10 @@ use super::{
     roster::rules,
     units::{stat, ticks, unit},
 };
-use crate::{targeting::Body, vitals::Change, Actor, Battle, Fact, Id, Point, Role, Team};
+use crate::{targeting::Body, vitals::Change, Actor, Battle, Control, Fact, Id, Point, Role, Team};
+mod config;
+pub(crate) use config::Production;
+use config::Side;
 
 #[derive(Clone, Copy, Debug)]
 pub(crate) struct Birth {
@@ -13,6 +16,7 @@ pub(crate) struct Birth {
 }
 #[derive(Clone, Copy)]
 pub(crate) struct Death {
+    pub sound: crate::SoundOrigin,
     pub key: &'static str,
     pub role: Role,
     pub team: Team,
@@ -20,27 +24,59 @@ pub(crate) struct Death {
     pub suppress_enemy: bool,
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SummonFlight {
+    pub source_airborne: bool,
+    pub airborne: bool,
+    pub source_scale: f64,
+    pub source: Id,
+    pub origin: Point,
+    pub destination: Point,
+    pub start: u64,
+    pub arrival: u64,
+}
+pub(crate) struct ReleasedSummon {
+    pub view: SummonFlight,
+    team: Team,
+    birth: Birth,
+}
+
+#[derive(Clone, Copy)]
+struct Site {
+    pos: Point,
+    team: Team,
+    radius: f64,
+}
+impl From<&Actor> for Site {
+    fn from(a: &Actor) -> Self {
+        Self {
+            pos: a.pos,
+            team: a.team,
+            radius: a.def.radius,
+        }
+    }
+}
 fn offset(
-    a: &Actor,
-    key: &str,
+    a: Site,
+    child_radius: f64,
     i: usize,
     count: usize,
-    side: &str,
+    side: Side,
     distance: f64,
     width: f64,
 ) -> Point {
-    let child_radius = stat(&rules()[key], "radius", 14.);
-    let gap = a.def.radius + child_radius + 3.;
+    let gap = a.radius + child_radius + 3.;
     let lateral = if a.pos.x < width / 2. { -1. } else { 1. };
     match side {
-        "map_side" => Point::new(
+        Side::MapSide => Point::new(
             lateral * gap,
             (i as f64 - (count - 1) as f64 / 2.) * (child_radius * 2. + 3.),
         ),
-        "bilateral" => Point::new(if i % 2 == 0 { -distance } else { distance }, 0.),
-        "below" => Point::new(0., if a.team == Team::Blue { gap } else { -gap }),
-        "center" => Point::default(),
-        _ => {
+        Side::Bilateral => Point::new(if i % 2 == 0 { -distance } else { distance }, 0.),
+        Side::Below => Point::new(0., if a.team == Team::Blue { gap } else { -gap }),
+        Side::Center => Point::default(),
+        Side::Ring => {
             let angle = std::f64::consts::TAU * i as f64 / count as f64;
             Point::new(angle.cos(), angle.sin()) * gap
         }
@@ -64,6 +100,7 @@ impl Battle {
         }
     }
     pub(crate) fn advance_production(&mut self) {
+        let mut sequences = vec![];
         let mut born = vec![];
         for entry in std::mem::take(&mut self.pending_births) {
             if entry.3.due <= self.tick {
@@ -72,76 +109,87 @@ impl Battle {
                 self.pending_births.push(entry);
             }
         }
+        self.summon_flights.retain(|f| {
+            if f.view.arrival > self.tick {
+                return true;
+            }
+            born.push((f.view.source, f.team, f.view.destination, f.birth));
+            false
+        });
+        let mut launches = Vec::new();
         for a in self.actors.values_mut() {
-            let Some(s) = a.def.rules else {
-                continue;
-            };
-            if a.ready_tick > self.tick || a.hp <= 0 {
+            if a.production.is_none() || a.ready_tick > self.tick || a.hp <= 0 {
                 continue;
             }
-            let Some(seconds) = s["spawn_interval"].as_f64() else {
+            let blocked = a.production_blocked();
+            let site = Site::from(&*a);
+            let Some(s) = a.production.as_mut().and_then(|p| p.summons.as_mut()) else {
                 continue;
             };
-            let period = u64::from(ticks(seconds));
-            let due = *a
-                .card_state
-                .production_due
-                .get_or_insert(a.ready_tick + u64::from(ticks(stat(s, "spawn_initial_delay", 0.))));
-            if a.disabled() {
-                for member in &mut a.card_state.pending_births {
+            if blocked {
+                for member in &mut s.waiting {
                     member.due += 1;
                 }
                 continue;
             }
-            if due <= self.tick {
-                a.card_state.production_due = Some(self.tick + period);
-                let mut keys = vec![];
-                if let Some(waves) = s["spawn_waves"].as_array() {
-                    let wave = &waves[a.card_state.wave % waves.len()];
-                    a.card_state.wave += 1;
-                    for m in wave.as_array().unwrap() {
-                        let key = m["spawn_id"].as_str().unwrap();
-                        keys.extend(std::iter::repeat_n(
-                            key,
-                            stat(m, "spawn_count", 1.) as usize,
-                        ));
-                    }
-                } else if let Some(key) = s["spawn_id"].as_str() {
-                    keys.resize(stat(s, "spawn_count", 1.) as usize, key);
-                }
-                let count = keys.len();
-                for (i, key) in keys.into_iter().enumerate() {
-                    let delay = ticks(stat(
-                        s,
-                        "spawn_deploy_time",
-                        stat(&rules()[key], "deploy_time", 1.),
-                    ));
-                    let offset = offset(
-                        a,
-                        key,
-                        i,
-                        count,
-                        s["spawn_side"].as_str().unwrap_or("center"),
-                        stat(s, "spawn_distance", 0.),
-                        self.map.width,
-                    );
-                    a.card_state.pending_births.push(Birth {
-                        key,
-                        delay,
-                        offset,
-                        due: self.tick
-                            + i as u64 * u64::from(ticks(stat(s, "spawn_sequence_interval", 0.))),
+            if s.clock.take_due(self.tick, a.ready_tick) {
+                sequences.push(a.id);
+                let wave = &s.waves[s.wave];
+                s.wave = (s.wave + 1) % s.waves.len();
+                for (i, member) in wave.iter().enumerate() {
+                    s.waiting.push(Birth {
+                        key: member.key,
+                        delay: member.deploy,
+                        offset: offset(
+                            site,
+                            member.radius,
+                            i,
+                            wave.len(),
+                            s.side,
+                            s.distance,
+                            self.map.width,
+                        ),
+                        due: self.tick + i as u64 * s.stagger,
                     });
                 }
             }
-            a.card_state.pending_births.retain(|b| {
-                if b.due <= self.tick {
-                    born.push((a.id, a.team, a.pos, *b));
-                    false
-                } else {
-                    true
+            s.waiting.retain(|b| {
+                if b.due > self.tick {
+                    return true;
                 }
+                if s.flight > 0 {
+                    launches.push((a.id, a.team, a.pos, *b, s.flight));
+                } else {
+                    born.push((a.id, a.team, a.pos, *b));
+                }
+                false
             });
+        }
+        for (source, team, origin, mut birth, duration) in launches {
+            let child = unit(birth.key);
+            let actor = &self.actors[&source];
+            if let Ok(destination) = self.spawn_point(team, origin + birth.offset, &child) {
+                birth.offset = Point::default();
+                self.summon_flights.push(ReleasedSummon {
+                    view: SummonFlight {
+                        source,
+                        origin,
+                        destination,
+                        start: self.tick,
+                        arrival: self.tick + duration,
+                        source_airborne: actor.def.layer == crate::Layer::Air,
+                        airborne: child.layer == crate::Layer::Air,
+                        source_scale: actor.def.rules.map_or(1., |s| {
+                            actor.def.radius / stat(s, "radius", actor.def.radius)
+                        }),
+                    },
+                    team,
+                    birth,
+                });
+            }
+        }
+        for id in sequences {
+            self.unit_sound(id, "summon:start", None);
         }
         for (id, team, pos, b) in born {
             self.born(id, team, pos, b);
@@ -150,12 +198,13 @@ impl Battle {
     pub(crate) fn card_death(
         &mut self,
         a: &Actor,
-        blasts: &mut Vec<(Team, u8, Vec<Id>, Vec<Change>)>,
+        blasts: &mut Vec<(crate::SoundOrigin, Point, u8, Vec<Id>, Vec<Change>)>,
     ) {
         if let Some((_, target)) = a.card_state.channel {
             let _ = self.remove_control(target, crate::Control::Stun, a.id);
         }
         self.deaths.push(Death {
+            sound: a.sound_origin(),
             key: a.def.key,
             role: a.def.role,
             team: a.team,
@@ -191,11 +240,11 @@ impl Battle {
             let count = stat(s, "death_spawn_count", 1.) as usize;
             for i in 0..count {
                 let mut displacement = offset(
-                    a,
-                    key,
+                    Site::from(a),
+                    stat(&rules()[key], "radius", 14.),
                     i,
                     count,
-                    s["death_spawn_side"].as_str().unwrap_or("ring"),
+                    Side::from_rule(s["death_spawn_side"].as_str().unwrap_or("ring")),
                     0.,
                     self.map.width,
                 );
@@ -252,11 +301,41 @@ impl Battle {
                 }
             }
             blasts.push((
-                a.team,
+                a.sound_origin(),
+                a.pos,
                 stat(s, "death_burst_reward", 0.) as u8,
                 ids,
                 changes,
             ));
+        }
+    }
+}
+
+impl Actor {
+    pub(crate) fn basic_production(&mut self, tick: u64) -> Option<crate::SpawnBatch> {
+        if self.production.is_none() || self.production_blocked() {
+            return None;
+        }
+        let (period, batch) = self.production.as_mut()?.basic.as_mut()?;
+        period.take_due(tick, self.ready_tick).then_some(*batch)
+    }
+    fn production_blocked(&self) -> bool {
+        self.has(Control::Stun) || self.has(Control::Freeze) || self.has(Control::Stasis)
+    }
+}
+impl super::ClassicMatch {
+    pub(super) fn collect_income(&mut self) {
+        let now = self.tick();
+        for a in self.battle.actors.values_mut() {
+            if a.production.is_none() || a.ready_tick > now || a.production_blocked() {
+                continue;
+            }
+            if let Some((period, amount)) = a.production.as_mut().and_then(|p| p.income.as_mut()) {
+                if period.take_due(now, a.ready_tick) {
+                    let p = &mut self.players[a.team.index()];
+                    p.gold = p.gold.saturating_add(*amount).min(10);
+                }
+            }
         }
     }
 }

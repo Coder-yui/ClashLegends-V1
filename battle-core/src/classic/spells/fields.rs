@@ -87,6 +87,7 @@ impl SpellCast {
         let sk = self.skill;
         let radius = number(s, "radius", 0.);
         let elapsed = tick - self.impact;
+        let sound = self.audio_source();
         if self.kind == CardSpell::Summoning {
             let first = ticks(number(s, "spawn_initial_delay", 0.));
             if elapsed >= first && (elapsed - first).is_multiple_of(self.interval) {
@@ -116,6 +117,11 @@ impl SpellCast {
             source = a.id;
             origin = a.pos;
             center = a.pos;
+        }
+        if let Some((due, at)) = self.matter {
+            if due == tick {
+                battle.sound(sound, "spell:impact", at, None);
+            }
         }
         let ids: Vec<_> = battle.actors.keys().copied().collect();
         for id in ids {
@@ -176,12 +182,14 @@ impl SpellCast {
                         tick,
                     )
                     .is_ok()
-                    && !sk.is_null()
-                    && self.matter.is_none()
-                    && self.contacted.is_empty()
                 {
-                    self.contacted.insert(id);
-                    self.matter = Some((tick + ticks(number(sk, "dark_matter_delay", 0.)), pos));
+                    battle.sound(sound, "spell:hit", pos, Some(id));
+                    if !sk.is_null() && self.matter.is_none() && self.contacted.is_empty() {
+                        self.contacted.insert(id);
+                        self.matter =
+                            Some((tick + ticks(number(sk, "dark_matter_delay", 0.)), pos));
+                        battle.sound(sound, "spell:meteor", pos, Some(id));
+                    }
                 }
                 continue;
             }
@@ -207,18 +215,22 @@ impl SpellCast {
                     let damage = carry.round();
                     *carry -= damage;
                     if damage > 0. {
-                        changes.push(Change::delivered(source, id, -(damage as i32)));
+                        let hit = Change::delivered(source, id, -(damage as i32));
+                        changes.push(if self.struck.insert(id) {
+                            hit.on_sound(sound, "spell:hit")
+                        } else {
+                            hit
+                        });
                     }
                 }
                 if !sk.is_null()
                     && edge <= number(s, "inner_radius", 0.)
                     && (a.def.role == Role::Troop || sk["execute_buildings"] == true)
                 {
-                    changes.push(Change::execute(
-                        source,
-                        id,
-                        number(sk, "execute_health_ratio", 0.),
-                    ));
+                    changes.push(
+                        Change::execute(source, id, number(sk, "execute_health_ratio", 0.))
+                            .on_sound(sound, "spell:execute"),
+                    );
                 }
                 if tick < self.last && a.def.role == Role::Troop && a.flight.is_none() {
                     let delta = center - pos;
@@ -252,6 +264,8 @@ impl SpellCast {
             {
                 if !sk.is_null() {
                     self.bear = Some(id);
+                    battle.actors.get_mut(&id).unwrap().card_state.burning_aura = true;
+                    battle.sound(sound, "spell:enraged", self.pos, None);
                     battle.actors.get_mut(&id).unwrap().empowerment = Some(Empowerment {
                         movement: 1000,
                         attack: (1000. * number(sk, "attack_speed_multiplier", 1.)).round() as u16,
@@ -281,6 +295,7 @@ impl ClassicMatch {
                     continue;
                 }
                 if let Some(n) = s[field].as_f64() {
+                    self.battle.sound(d.sound, "bounty:gain", d.pos, None);
                     let p = &mut self.players[side.index()];
                     p.gold = (p.gold + n as u8).min(10);
                 }

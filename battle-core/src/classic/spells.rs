@@ -27,6 +27,8 @@ pub(super) struct SpellCast {
     team: Team,
     pos: Point,
     id: Id,
+    born: u64,
+    origin: Point,
     impact: u64,
     last: u64,
     interval: u64,
@@ -88,12 +90,20 @@ impl SpellCast {
         let id = game.battle.next_id;
         game.battle.next_id += 1;
         game.battle.emit(crate::Fact::SpellPlayed {
+            range: number(spec, "range", 0.),
+            wave_width: number(spec, "wave_width", 0.),
+            speed: number(spec, "speed", 0.),
+            impact,
+            end: impact + duration,
+            origin,
+            enhanced: !skill.is_null(),
+            radius: number(spec, "radius", 0.),
             id,
             key,
             team,
             position: pos,
         });
-        Self {
+        let cast = Self {
             key,
             kind,
             spec,
@@ -101,6 +111,8 @@ impl SpellCast {
             team,
             pos,
             id,
+            born: game.tick(),
+            origin,
             impact,
             last: impact + duration,
             interval,
@@ -116,16 +128,99 @@ impl SpellCast {
                 vec![]
             },
             damage_remainder: Default::default(),
+        };
+        cast.start_audio(&mut game.battle);
+        cast
+    }
+    fn audio_source(&self) -> crate::SoundOrigin {
+        crate::SoundOrigin {
+            spell: true,
+            owner: self.id,
+            kind: self.key,
+            team: self.team,
+            form: false,
+            action: "spell",
         }
     }
-    fn run(&mut self, game: &mut ClassicMatch, changes: &mut Vec<Change>, pool: &mut BTreeSet<Id>) {
+    fn start_audio(&self, battle: &mut crate::Battle) {
+        use CardSpell::*;
+        let source = self.audio_source();
+        let mut play = |phase, at| battle.sound(source, phase, at, None);
+        match self.kind {
+            Stasis | Cask | InfernoBomb => play("spell:cast", self.origin),
+            Heal | Freeze | SolarFlare | Pool | Horizon | Tidal | Stellar => {
+                play("spell:cast", self.pos)
+            }
+            Pulse => {
+                play("spell:cast", self.pos);
+                play("spell:charge", self.pos);
+            }
+            FinalSpark => {
+                let range =
+                    number(self.spec, "range", 0.) * if self.team == Team::Blue { -1. } else { 1. };
+                play("spell:cast", self.pos);
+                play("spell:middle", self.pos + Point::new(0., range * 0.5));
+                play("spell:end", self.pos + Point::new(0., range));
+            }
+            MediumLightning => {
+                play("spell:cast", self.pos);
+                play("spell:warning", self.pos);
+            }
+            _ => {}
+        }
+    }
+    pub(super) fn active_after(&self, game: &ClassicMatch) -> bool {
+        game.tick() < self.last
+            || self.matter.is_some()
+            || self
+                .bear
+                .is_some_and(|id| game.battle.actors.contains_key(&id))
+    }
+    pub(super) fn run(
+        &mut self,
+        game: &mut ClassicMatch,
+        changes: &mut Vec<Change>,
+        pool: &mut BTreeSet<Id>,
+    ) {
         let tick = game.tick();
+        let sound = self.audio_source();
+        if tick == self.born + ticks(number(self.spec, "spell_windup", 0.)) {
+            match self.kind {
+                CardSpell::Bolt => {
+                    game.battle.sound(sound, "spell:launch", self.pos, None);
+                    game.battle.sound(sound, "spell:warning", self.pos, None);
+                }
+                CardSpell::Bear => game.battle.sound(sound, "spell:cast", self.pos, None),
+                _ => {}
+            }
+        }
+        if self.kind == CardSpell::MediumLightning
+            && tick == self.impact.saturating_sub(20).max(self.born)
+        {
+            game.battle
+                .sound(sound, "spell:warning_enemy", self.pos, None);
+        }
         if tick == self.impact {
+            let phase = match self.kind {
+                CardSpell::Stasis
+                | CardSpell::Cask
+                | CardSpell::InfernoBomb
+                | CardSpell::MediumLightning => Some("spell:strike"),
+                CardSpell::Bolt | CardSpell::SolarFlare | CardSpell::Bear => Some("spell:impact"),
+                CardSpell::Tidal => Some("spell:launch"),
+                _ => None,
+            };
+            if let Some(phase) = phase {
+                game.battle.sound(sound, phase, self.pos, None);
+            }
             game.battle.emit(crate::Fact::SpellImpact {
                 id: self.id,
                 key: self.key,
                 position: self.pos,
             });
+        }
+        if tick == self.last && matches!(self.kind, CardSpell::Stellar | CardSpell::Pool) {
+            game.battle.sound(sound, "spell:zone_end", self.pos, None);
         }
         if tick < self.impact {
             return;
@@ -202,6 +297,13 @@ impl SpellCast {
             targets.sort_by_key(|id| (std::cmp::Reverse(battle.actors[id].hp), *id));
             targets.truncate(1);
             self.struck.extend(&targets);
+        }
+        if self.kind == CardSpell::Zap {
+            battle.sound(sound, "spell:strike", self.pos, None);
+        } else if self.kind == CardSpell::Lightning {
+            if let Some(id) = targets.first() {
+                battle.sound(sound, "spell:strike", battle.actors[id].pos, Some(*id));
+            }
         }
         for id in targets {
             let a = &battle.actors[&id];
@@ -307,6 +409,8 @@ impl SpellCast {
                 CardSpell::MediumLightning if !ally => {
                     damage = base_damage;
                     if role == Role::LaneTower {
+                        a.card_state.tower_disable_audio_until =
+                            tick + ticks(number(s, "stun_duration", 0.));
                         control = Some((Control::Stun, number(s, "stun_duration", 0.)));
                     } else if enhanced && troop {
                         slow = Some((
@@ -429,6 +533,7 @@ impl SpellCast {
                     }
                     if enhanced {
                         a.sunlight = Some((
+                            sound,
                             tick + ticks(number(sk, "duration", 0.)),
                             (number(sk, "damage", 0.)
                                 * if tower {
@@ -456,11 +561,17 @@ impl SpellCast {
                 _ => {}
             }
             if damage > 0. {
-                changes.push(Change::delivered(
+                let change = Change::delivered(
                     game.nexus[self.team.index()],
                     id,
                     -(damage * tower_rate).round() as i32,
-                ));
+                );
+                changes.push(match self.kind {
+                    CardSpell::MediumLightning | CardSpell::Tidal | CardSpell::Pulse => {
+                        change.on_sound(sound, "spell:hit")
+                    }
+                    _ => change,
+                });
             }
             if let Some((kind, duration)) = control {
                 let _ = battle.apply_control(id, kind, self.id, ticks(duration) as u32, tick);
@@ -487,19 +598,13 @@ impl ClassicMatch {
         for cast in &mut casts {
             cast.run(self, changes, &mut pool);
         }
-        casts.retain(|cast| {
-            self.tick() < cast.last
-                || cast.matter.is_some()
-                || cast
-                    .bear
-                    .is_some_and(|id| self.battle.actors.contains_key(&id))
-        });
+        casts.retain(|cast| cast.active_after(self));
         self.spells = casts;
     }
 }
 
 impl ClassicMatch {
     pub fn spell_views(&self) -> impl Iterator<Item = serde_json::Value> + '_ {
-        self.spells.iter().map(|s|serde_json::json!({"id":s.id,"key":s.key,"team":s.team.index(),"position":s.pos,"impact":s.impact,"end":s.last}))
+        self.spells.iter().map(|s|serde_json::json!({"id":s.id,"key":s.key,"team":s.team.index(),"position":s.pos,"born":s.born,"origin":s.origin,"impact":s.impact,"end":s.last,"range":number(s.spec,"range",0.),"waveWidth":number(s.spec,"wave_width",0.),"speed":number(s.spec,"speed",0.),"enhanced":!s.skill.is_null(),"radius":number(s.spec,"radius",0.)}))
     }
 }

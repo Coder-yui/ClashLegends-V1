@@ -66,7 +66,7 @@ impl Battle {
         a.route_goal = None;
         a.avoidance_turn = 0.;
         a.flight = None;
-        a.production_left = 0;
+        a.production = crate::classic::production::Production::from_def(&a.def);
         a.decay_carry = 0;
         a.rounds = a.def.weapon.magazine;
         a.reload_left = 0;

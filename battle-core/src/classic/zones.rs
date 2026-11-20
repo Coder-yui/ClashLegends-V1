@@ -5,6 +5,8 @@ use serde_json::Value;
 use std::collections::BTreeSet;
 
 pub(crate) struct Zone {
+    sound: crate::SoundOrigin,
+    born: u64,
     id: Id,
     ctx: Origin,
     spec: &'static Value,
@@ -29,6 +31,21 @@ impl Zone {
             ),
         };
         crate::AreaView {
+            born: self.born,
+            phase: match self.stage {
+                Phase::Impact => "warning",
+                Phase::Pulses(_) => "sustain",
+                Phase::Ring { .. } => "wave",
+            },
+            source_kind: self.sound.kind,
+            enhanced: self.full,
+            effect: self.sound.action,
+            audio: if matches!(self.stage, Phase::Pulses(_)) {
+                crate::audio_layers::cue(self.sound, "@zone_sustain")
+                    .map(|phase| (self.sound, phase, self.born))
+            } else {
+                None
+            },
             id: self.id,
             caster: self.ctx.caster,
             team: self.ctx.team,
@@ -44,6 +61,7 @@ impl Zone {
 impl Battle {
     fn start_zone(&mut self, mut zone: Zone) {
         zone.id = self.next_id;
+        zone.sound.owner = zone.id;
         self.next_id += 1;
         self.emit(crate::Fact::AreaStarted(zone.id));
         self.zones.push(zone);
@@ -56,7 +74,13 @@ impl Battle {
         delay: u32,
     ) {
         ctx.origin = ctx.origin + ctx.direction * stat(s, "forward_distance", 0.);
+        let sound = self.actors[&ctx.caster].sound_origin();
+        if s["independent_on_creation"] == true && s["zone_duration"].as_f64().unwrap_or(0.) <= 0. {
+            self.sound(sound, "@start", ctx.origin, None);
+        }
         self.start_zone(Zone {
+            born: self.tick,
+            sound,
             id: 0,
             ctx,
             spec: s,
@@ -65,11 +89,18 @@ impl Battle {
             due: self.tick + u64::from(delay),
         });
     }
-    pub(super) fn ground_pulses(&mut self, ctx: Origin, s: &'static Value) {
+    pub(super) fn ground_pulses(
+        &mut self,
+        ctx: Origin,
+        sound: crate::SoundOrigin,
+        s: &'static Value,
+    ) {
         let period = ticks(stat(s, "zone_tick_interval", 1.)).max(1);
         let count = ticks(stat(s, "zone_duration", 0.)) / period;
         if count > 0 {
             self.start_zone(Zone {
+                born: self.tick,
+                sound,
                 id: 0,
                 ctx,
                 spec: s,
@@ -140,11 +171,12 @@ impl Battle {
                 if self.consume_effect_shield(id) {
                     continue;
                 }
-                changes.push(Change::delivered(
-                    z.ctx.caster,
-                    id,
-                    -(damage.round() as i32),
-                ));
+                let hit = Change::delivered(z.ctx.caster, id, -(damage.round() as i32));
+                changes.push(if matches!(z.stage, Phase::Ring { .. }) {
+                    hit.on_sound(z.sound, "@wave_hit")
+                } else {
+                    hit
+                });
                 let a = self.actors.get_mut(&id).unwrap();
                 if a.def.role != Role::Nexus && duration > 0. {
                     a.slows.apply(
@@ -161,7 +193,8 @@ impl Battle {
             }
             match z.stage {
                 Phase::Impact => {
-                    self.ground_pulses(z.ctx, s);
+                    self.sound(z.sound, "@impact", z.ctx.origin, None);
+                    self.ground_pulses(z.ctx, z.sound, s);
                     if z.full && s.get("shockwave_duration").is_some() {
                         z.stage = Phase::Ring {
                             age: 1,
@@ -185,7 +218,10 @@ impl Battle {
                     z.due += 1;
                     self.zones.push(z);
                 }
-                _ => self.emit(crate::Fact::AreaEnded(z.id)),
+                _ => {
+                    self.sound(z.sound, "@zone_end", z.ctx.origin, None);
+                    self.emit(crate::Fact::AreaEnded(z.id));
+                }
             }
         }
         if !changes.is_empty() {
@@ -195,6 +231,7 @@ impl Battle {
 }
 
 pub(crate) struct Wave {
+    sound: crate::SoundOrigin,
     ctx: Origin,
     start: u64,
     travel: f64,
@@ -202,7 +239,33 @@ pub(crate) struct Wave {
     spec: &'static Value,
     hit: BTreeSet<Id>,
 }
+#[derive(Clone, Copy, Debug, PartialEq, serde::Serialize)]
+pub struct WaveView {
+    pub caster: Id,
+    pub team: crate::Team,
+    pub start: u64,
+    pub origin: crate::Point,
+    pub direction: crate::Point,
+    pub travel: f64,
+    pub length: f64,
+    pub width: f64,
+}
 impl Wave {
+    pub(crate) fn view(&self) -> WaveView {
+        let progress = (self.travel / self.length.max(0.001)).clamp(0., 1.);
+        WaveView {
+            caster: self.ctx.caster,
+            team: self.ctx.team,
+            start: self.start,
+            origin: self.ctx.origin,
+            direction: self.ctx.direction,
+            travel: self.travel,
+            length: self.length,
+            width: stat(self.spec, "attack_wave_near_width", 48.)
+                * (1. + progress * (stat(self.spec, "attack_wave_max_scale", 2.) - 1.)),
+        }
+    }
+
     pub(crate) fn new(
         a: &crate::Actor,
         target: crate::targeting::Body,
@@ -212,6 +275,7 @@ impl Wave {
         let direction = (target.pos - a.pos).unit().unwrap_or(a.facing);
         let origin = a.pos + direction * a.def.radius;
         Self {
+            sound: a.sound_origin(),
             ctx: Origin {
                 caster: a.id,
                 team: a.team,
@@ -235,6 +299,9 @@ impl Battle {
                 self.attack_waves.push(w);
                 continue;
             }
+            if w.travel == 0. {
+                self.sound(w.sound, "attack_wave:launch", w.ctx.origin, None);
+            }
             let next = (w.travel + stat(w.spec, "attack_wave_speed", 420.) / 20.).min(w.length);
             for a in self.actors.values() {
                 let offset = a.pos - w.ctx.origin;
@@ -252,11 +319,14 @@ impl Battle {
                     && side <= width + a.def.radius
                     && w.hit.insert(a.id)
                 {
-                    damage.push(Change::new(
-                        w.ctx.caster,
-                        a.id,
-                        -(stat(w.spec, "attack_wave_damage", 0.) as i32),
-                    ));
+                    damage.push(
+                        Change::new(
+                            w.ctx.caster,
+                            a.id,
+                            -(stat(w.spec, "attack_wave_damage", 0.) as i32),
+                        )
+                        .on_sound(w.sound, "attack_wave:hit"),
+                    );
                 }
             }
             if next < w.length {

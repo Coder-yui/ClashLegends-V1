@@ -11,6 +11,7 @@ use crate::{
 };
 use serde_json::Value;
 pub(crate) struct Grant {
+    sound: crate::SoundOrigin,
     target: Id,
     due: u64,
     multiplier: f64,
@@ -25,6 +26,8 @@ impl Battle {
             } else if let Some(a) = self.actors.get_mut(&g.target) {
                 if !a.has(Control::Stasis) {
                     a.card_state.forged = g.multiplier;
+                    let pos = a.pos;
+                    self.sound(g.sound, "forge:arrive", pos, Some(g.target));
                 }
             }
         }
@@ -97,11 +100,14 @@ impl Battle {
                             .insert(other)
                             && !self.consume_effect_shield(other)
                         {
-                            damage.push(Change::delivered(
-                                id,
-                                other,
-                                -(stat(s, "pre_deploy_sweep_damage", 0.) as i32),
-                            ));
+                            damage.push(
+                                Change::delivered(
+                                    id,
+                                    other,
+                                    -(stat(s, "pre_deploy_sweep_damage", 0.) as i32),
+                                )
+                                .on_sound(self.actors[&id].sound_origin(), "deploy:hit"),
+                            );
                         }
                     }
                     self.commit(damage);
@@ -263,6 +269,7 @@ impl Battle {
                     due,
                     stage: Stage::HookLaunch(target),
                 });
+                self.unit_sound(id, "pull:start", None);
             } else if s.get("rush_distance").is_some() {
                 let visible = self.map.ground_obstacles.iter().all(|r| {
                     r.interval(pos, b.pos - pos)
@@ -332,6 +339,7 @@ impl Battle {
         let offset = self.actors.get(&ctx.caster).map_or(14., |a| a.def.radius) + b.def.radius + 1.;
         let dir = (b.pos - ctx.origin).unit().unwrap_or(ctx.direction);
         if !self.consume_effect_shield(target) {
+            self.unit_sound(ctx.caster, "pull:hit", Some(target));
             let _ = self.resolve_motion(
                 target,
                 ctx.origin,
@@ -352,7 +360,9 @@ impl Battle {
         if self.actors[&ctx.caster].disabled() || b.team != ctx.team {
             return;
         }
+        let sound = self.actors[&ctx.caster].sound_origin();
         self.grants.push(Grant {
+            sound,
             target,
             due: self.tick
                 + u64::from(ticks(
@@ -360,5 +370,6 @@ impl Battle {
                 )),
             multiplier: stat(s, "team_attack_boost_multiplier", 1.),
         });
+        self.unit_sound(ctx.caster, "forge:strike", None);
     }
 }

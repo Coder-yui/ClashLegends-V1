@@ -10,6 +10,9 @@ use std::collections::BTreeSet;
 
 #[derive(Clone, Debug)]
 pub(crate) struct Sweep {
+    distance: f64,
+    traveled: f64,
+    next_step: u8,
     start: Point,
     target: Option<Id>,
     hit: BTreeSet<Id>,
@@ -95,6 +98,12 @@ impl Battle {
         {
             return;
         }
+        match kind {
+            Kind::Herald => self.unit_sound(ctx.caster, "rush:start", None),
+            Kind::Terrain => self.unit_sound(ctx.caster, "charge:step", None),
+            Kind::Xin | Kind::Kick => self.unit_sound(ctx.caster, "charge:start", None),
+            _ => (),
+        }
         let a = self.actors.get_mut(&ctx.caster).unwrap();
         a.facing = ctx.direction;
         let action = match kind {
@@ -110,6 +119,9 @@ impl Battle {
             ));
         }
         a.card_state.sweep = Some(Sweep {
+            distance: length,
+            traveled: 0.,
+            next_step: 1,
             start: ctx.origin,
             target,
             hit: Default::default(),
@@ -144,6 +156,15 @@ impl Battle {
             let s = sweep.rules;
             let delta = pos - sweep.start;
             let len = delta.dot(delta);
+            sweep.traveled += len.sqrt();
+            if sweep.kind == Kind::Terrain {
+                while sweep.next_step <= 2
+                    && sweep.traveled >= sweep.distance * f64::from(sweep.next_step * 4) / 13.
+                {
+                    self.unit_sound(id, "charge:step", None);
+                    sweep.next_step += 1;
+                }
+            }
             if matches!(sweep.kind, Kind::Slash | Kind::Terrain | Kind::Herald) {
                 let width = stat(s, "width", radius * 2.) / 2.;
                 let mut heal = false;
@@ -181,7 +202,14 @@ impl Battle {
                         "trail_damage",
                         stat(s, "rush_path_damage", stat(s, "damage", 0.)),
                     ) + extra;
-                    changes.push(Change::delivered(id, other, -(dmg.round() as i32)));
+                    let origin = self.actors[&id].sound_origin();
+                    let hit = Change::delivered(id, other, -(dmg.round() as i32));
+                    changes.push(match sweep.kind {
+                        Kind::Herald => hit.on_sound(origin, "rush:path_hit"),
+                        Kind::Terrain => hit.on_sound(origin, "charge:trail_hit"),
+                        Kind::Slash => hit.group_sound(origin, "@hit", false),
+                        _ => hit,
+                    });
                     heal = true;
                     if sweep.kind == Kind::Herald {
                         let _ = self.resolve_motion(
@@ -232,6 +260,7 @@ impl Battle {
                     self.actors.get_mut(&id).unwrap().card_state.visual_action =
                         Some((name, self.tick, self.tick + 11));
                     if let Some(wall) = sweep.wall {
+                        self.sound(self.actors[&id].sound_origin(), "charge:impact", wall, None);
                         self.nova(
                             Origin {
                                 origin: wall,
@@ -246,11 +275,10 @@ impl Battle {
                     let Some(target) = sweep.target.filter(|i| self.actors.contains_key(i)) else {
                         continue;
                     };
-                    changes.push(Change::new(
-                        id,
-                        target,
-                        -(stat(s, "rush_building_damage", 0.) as i32),
-                    ));
+                    changes.push(
+                        Change::new(id, target, -(stat(s, "rush_building_damage", 0.) as i32))
+                            .on_sound(self.actors[&id].sound_origin(), "rush:hit"),
+                    );
                     let a = self.actors.get_mut(&id).unwrap();
                     a.hp -=
                         (f64::from(a.hp) * stat(s, "rush_self_health_ratio", 0.)).round() as i32;
@@ -301,6 +329,7 @@ impl Battle {
                                 damage: 1000,
                                 until: self.tick + u64::from(ticks(stat(s, "duration", 0.))),
                             });
+                            let origin = a.sound_origin();
                             for b in self.actors.values().filter(|b| {
                                 b.team != team
                                     && b.def.layer == Layer::Ground
@@ -310,12 +339,16 @@ impl Battle {
                             }) {
                                 changes.push(if b.id == target {
                                     Change::attack(id, b.id, dmg, hit)
+                                        .on_sound(origin, "charge:hit")
                                 } else {
                                     Change::new(id, b.id, -dmg)
                                 });
                             }
                         } else {
-                            changes.push(Change::attack(id, target, dmg, hit));
+                            changes.push(
+                                Change::attack(id, target, dmg, hit)
+                                    .on_sound(a.sound_origin(), "charge:hit"),
+                            );
                             let _ = self.resolve_motion(
                                 target,
                                 pos,
@@ -374,11 +407,10 @@ impl Battle {
             if self.consume_effect_shield(other) {
                 continue;
             }
-            changes.push(Change::delivered(
-                id,
-                other,
-                -(stat(s, "deploy_sweep_damage", 0.) as i32),
-            ));
+            changes.push(
+                Change::delivered(id, other, -(stat(s, "deploy_sweep_damage", 0.) as i32))
+                    .on_sound(self.actors[&id].sound_origin(), "deploy:hit"),
+            );
             let _ = self.resolve_motion(
                 other,
                 ctx.origin,

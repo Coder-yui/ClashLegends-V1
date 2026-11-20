@@ -82,7 +82,7 @@ impl UnitDef {
                     period: 1,
                     pulses: 120,
                     shape: crate::Shape::Circle { radius: 110. },
-                    effects: &[crate::Effect::RegenTroops { per_second: 25 }],
+                    pulse: crate::AreaPulse::RegenTroops { per_second: 25. },
                 }),
                 ..Default::default()
             },

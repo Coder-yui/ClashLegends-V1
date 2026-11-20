@@ -1,5 +1,10 @@
 //! Server-owned fixed-step 2D simulation. No clocks, renderer or transport.
+mod audio_layers;
+mod battle_audio;
+pub use audio_layers::AudioState;
+pub use battle_audio::{AttackSound, SoundOrigin};
 pub mod classic;
+pub use classic::production::SummonFlight;
 mod combat;
 mod forms;
 pub use forms::{HealthOnChange, Rebirth, Transform};
@@ -16,7 +21,7 @@ mod skills;
 mod space;
 mod status;
 mod timeline;
-pub use timeline::{AreaAnchor, AreaView, TimedArea};
+pub use timeline::{AreaAnchor, AreaPulse, AreaView, TimedArea};
 mod targeting;
 mod vitals;
 use model::Actor;
@@ -56,8 +61,10 @@ pub struct Battle {
     card_queue: Vec<classic::casts::Pending>,
     volley_hits: BTreeMap<Id, std::collections::BTreeSet<Id>>,
     kayn_forms: [classic::marks::Growth; 2],
+    scheduled_audio: Vec<(u64, SoundOrigin, &'static str, Point)>,
     grants: Vec<classic::specialists::Grant>,
     attack_waves: Vec<classic::zones::Wave>,
+    summon_flights: Vec<classic::production::ReleasedSummon>,
     pending_births: Vec<(Id, Team, Point, classic::production::Birth)>,
     zones: Vec<classic::zones::Zone>,
     deaths: Vec<classic::production::Death>,
@@ -88,9 +95,11 @@ impl Battle {
             sequence: 0,
             events: vec![],
             kayn_forms: Default::default(),
+            scheduled_audio: vec![],
             grants: vec![],
             attack_waves: vec![],
             pending_births: vec![],
+            summon_flights: vec![],
             zones: vec![],
             deaths: vec![],
             gold_rewards: [0; 2],
@@ -225,6 +234,8 @@ impl Battle {
         Snapshot {
             tick: self.tick,
             projectiles: self.shots.clone(),
+            summons: self.summon_flights.iter().map(|f| f.view).collect(),
+            waves: self.attack_waves.iter().map(|w| w.view()).collect(),
             areas: self
                 .areas
                 .values()
@@ -238,6 +249,11 @@ impl Battle {
                     visual: a.visual_state(self.tick),
                     bar: a.bar_indicators(self.tick),
                     dormant: a.card_state.dormant,
+                    attack_sound: a.attack_sound(self.tick),
+                    cast_action: a.card_state.cast_action,
+                    audio_states: a.audio_states(self.tick),
+                    audio_kind: a.audio_kind(),
+                    deployment_group: a.card_state.deployment_group,
                     sight: a.def.sight,
                     range: a.def.range,
                     radius: a.def.radius,
@@ -300,6 +316,11 @@ impl Battle {
         field
             .projectiles
             .retain(|shot| !hidden(&shot.owner) && !hidden(&shot.target));
+        for unit in &mut field.units {
+            unit.visual.drain_targets.retain(|id| !hidden(id));
+        }
+        field.summons.retain(|f| !hidden(&f.source));
+        field.waves.retain(|wave| !hidden(&wave.caster));
         field.areas.retain(|area| !hidden(&area.caster));
         field
     }
@@ -324,6 +345,11 @@ impl Battle {
         }
         self.actors.get_mut(&command.caster).unwrap().next_skill =
             self.tick + u64::from(skill.cooldown);
+        self.actors
+            .get_mut(&command.caster)
+            .unwrap()
+            .card_state
+            .cast_action = "";
         self.emit(Fact::Cast {
             skill: self.actors[&command.caster].card_state.equipped_skill,
             caster: command.caster,
@@ -361,6 +387,15 @@ impl Battle {
     }
     fn begin_step(&mut self) {
         self.tick += 1;
+        if !self.scheduled_audio.is_empty() {
+            for (due, source, phase, pos) in std::mem::take(&mut self.scheduled_audio) {
+                if due <= self.tick {
+                    self.sound(source, phase, pos, None);
+                } else {
+                    self.scheduled_audio.push((due, source, phase, pos));
+                }
+            }
+        }
         self.deaths.clear();
         let mut bursts = vec![];
         for a in self.actors.values_mut() {
@@ -399,6 +434,7 @@ impl Battle {
         }
         let mut changes = vec![];
         for (ctx, s) in bursts {
+            self.unit_sound(ctx.caster, "shield:explode", None);
             self.nova(ctx, s, &mut changes);
         }
         if !changes.is_empty() {
@@ -483,6 +519,7 @@ impl Battle {
             self.emit(f)
         }
         for (source, target, damage) in out.sacrifices {
+            self.unit_sound(source, "sacrifice:start", None);
             let a = self.actors.get_mut(&source).unwrap();
             let s = a.def.rules.unwrap();
             self.card_queue.push(classic::casts::Pending {
@@ -495,7 +532,7 @@ impl Battle {
                 },
                 spec: s,
                 due: self.tick + (s["sacrifice_delay"].as_f64().unwrap() * 20.).ceil() as u64,
-                stage: classic::casts::Stage::Sacrifice(target, damage),
+                stage: classic::casts::Stage::Sacrifice(target, damage, a.sound_origin()),
             });
             a.hp = 0;
         }

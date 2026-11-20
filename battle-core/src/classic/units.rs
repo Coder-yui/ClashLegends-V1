@@ -128,8 +128,9 @@ pub(crate) fn from_stats(key: &'static str, s: &'static Value) -> UnitDef {
             } else {
                 0
             },
-            death_area: if s.get("death_heal_per_second").is_some() {
-                Some(crate::TimedArea {
+            death_area: s["death_heal_per_second"]
+                .as_f64()
+                .map(|rate| crate::TimedArea {
                     anchor: crate::AreaAnchor::Independent,
                     delay: ticks(stat(s, "death_heal_delay", 0.)) + 1,
                     period: 1,
@@ -137,11 +138,8 @@ pub(crate) fn from_stats(key: &'static str, s: &'static Value) -> UnitDef {
                     shape: crate::Shape::Circle {
                         radius: stat(s, "death_heal_radius", 0.),
                     },
-                    effects: &[crate::Effect::RegenTroops { per_second: 25 }],
-                })
-            } else {
-                None
-            },
+                    pulse: crate::AreaPulse::RegenTroops { per_second: rate },
+                }),
             ..Default::default()
         },
     }

@@ -10,6 +10,9 @@ pub(crate) struct Change {
     check_shield: bool,
     overflow: Option<(f64, u64)>,
     execute: Option<f64>,
+    sound: Option<(crate::SoundOrigin, &'static str)>,
+    contact: Option<crate::AttackSound>,
+    group: Option<(crate::SoundOrigin, &'static str, bool)>,
     attack: Option<crate::classic::Attack>,
 }
 impl Change {
@@ -22,6 +25,9 @@ impl Change {
             check_shield: true,
             overflow: None,
             execute: None,
+            contact: None,
+            group: None,
+            sound: None,
             attack: None,
         }
     }
@@ -31,6 +37,23 @@ impl Change {
             steal: hit.steal,
             ..Self::new(source, target, -damage)
         }
+    }
+    pub fn contact(mut self, sound: crate::AttackSound) -> Self {
+        self.contact = Some(sound);
+        self
+    }
+    pub fn on_sound(mut self, source: crate::SoundOrigin, phase: &'static str) -> Self {
+        self.sound = Some((source, phase));
+        self
+    }
+    pub fn group_sound(
+        mut self,
+        source: crate::SoundOrigin,
+        phase: &'static str,
+        center: bool,
+    ) -> Self {
+        self.group = Some((source, phase, center));
+        self
     }
     pub fn execute(source: Id, target: Id, ratio: f64) -> Self {
         Self {
@@ -65,6 +88,9 @@ impl Change {
             check_shield: true,
             overflow: None,
             execute: None,
+            contact: None,
+            group: None,
+            sound: None,
             attack: None,
         }
     }
@@ -83,6 +109,12 @@ struct Layer {
 #[derive(Clone, Debug, Default)]
 pub(crate) struct Shields(Vec<Layer>);
 impl Shields {
+    pub fn pool_active(&self) -> bool {
+        self.0.iter().any(|l| l.pool && l.hp > 0)
+    }
+    pub fn explosive_active(&self) -> bool {
+        self.0.iter().any(|l| l.explosive.is_some() && l.hp > 0)
+    }
     pub fn add(&mut self, hp: i32, expires: u64) {
         let idx = self.0.partition_point(|l| l.expires <= expires);
         self.0.insert(
@@ -238,6 +270,7 @@ impl Shields {
 }
 impl Battle {
     pub(crate) fn commit(&mut self, changes: Vec<Change>) {
+        let mut groups = std::collections::BTreeMap::new();
         let mut extras = vec![];
         for Change {
             source,
@@ -247,6 +280,9 @@ impl Battle {
             check_shield,
             overflow,
             execute,
+            sound,
+            group,
+            contact,
             attack,
         } in changes
         {
@@ -306,10 +342,13 @@ impl Battle {
             if let Some(hit) = attack {
                 amount -= hit.bonus(a);
             }
+            let mut sunlight = None;
+            let position = a.pos;
             if amount < 0 {
-                if let Some((until, bonus)) = a.sunlight.take() {
+                if let Some((origin, until, bonus)) = a.sunlight.take() {
                     if self.tick < until {
                         amount -= bonus;
+                        sunlight = Some(origin);
                     }
                 }
             }
@@ -318,12 +357,17 @@ impl Battle {
                     && f64::from(a.hp) < f64::from(a.def.hp) * ratio
                 {
                     a.hp = 0;
+                    if let Some((origin, phase)) = sound {
+                        self.sound(origin, phase, position, Some(target));
+                    }
                 }
                 continue;
             }
             if amount < 0 {
                 amount = (f64::from(amount) * (1. - a.reduction(self.tick))).round() as i32;
             }
+            let explosive = a.shields.explosive_active();
+            let deployment = a.shields.has_deployment();
             let before = a.hp;
             let delta = if amount < 0 {
                 -a.shields.absorb(-amount)
@@ -353,8 +397,44 @@ impl Battle {
                     a.shields.add(hp, expiry);
                 }
             }
+            let disabled = a.hp > 0 && a.def.role == crate::Role::LaneTower && a.has(Control::Stun);
+            let target_origin = a.sound_origin();
+            let broke_explosive = explosive && !a.shields.explosive_active();
+            let broke_deployment = deployment && !a.shields.has_deployment();
+            if broke_explosive {
+                self.sound(
+                    target_origin,
+                    "explosive_shield:break",
+                    position,
+                    Some(target),
+                );
+            }
+            if broke_deployment {
+                self.sound(
+                    target_origin,
+                    "deployment_shield:break",
+                    position,
+                    Some(target),
+                );
+            }
+            if let Some((origin, phase, center)) = group {
+                let entry = groups
+                    .entry((origin.owner, phase))
+                    .or_insert((origin, false));
+                entry.1 |= center;
+            }
+            if let Some(origin) = sunlight {
+                self.sound(origin, "spell:sunlight", position, Some(target));
+            }
+            if let Some((origin, phase)) = sound {
+                self.sound(origin, phase, position, Some(target));
+                if origin.kind == "medium_lightning" && disabled {
+                    self.sound(origin, "spell:tower_disable", position, Some(target));
+                }
+            }
             if amount < 0 {
                 self.emit(Fact::Damage {
+                    contact,
                     source,
                     target,
                     requested: -amount,
@@ -377,7 +457,15 @@ impl Battle {
                     change,
                 });
             }
+            if attack.is_some() {
+                self.record_structure_attack(source, target);
+            }
             if amount < 0 && before + change == 0 {
+                if attack
+                    .is_some_and(|hit| hit.ability.is_some_and(|s| s["kind"] == "bleeding_execute"))
+                {
+                    self.unit_sound(source, "execute:kill", Some(target));
+                }
                 self.card_kill(source, target);
             }
             if let Some(hit) = attack {
@@ -404,6 +492,20 @@ impl Battle {
                             change: heal,
                         })
                     }
+                }
+            }
+        }
+        for ((id, phase), (origin, center)) in groups {
+            if let Some(pos) = self.actors.get(&id).map(|a| a.pos) {
+                let phased = match (phase, center) {
+                    ("@hit_first", true) => "@hit_first_center",
+                    ("@hit_middle", true) => "@hit_middle_center",
+                    ("@hit_last", true) => "@hit_last_center",
+                    _ => phase,
+                };
+                self.sound(origin, phased, pos, None);
+                if center {
+                    self.sound(origin, "@hit_center", pos, None);
                 }
             }
         }

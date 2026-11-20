@@ -23,10 +23,10 @@ pub(crate) enum Stage {
     Forge(Id),
     Release(bool, u32),
     Pulse(u32),
-    Snip(i32),
+    Snip(i32, &'static str),
     Spawn(u8),
     ExtraHit(Id, i32),
-    Sacrifice(Id, i32),
+    Sacrifice(Id, i32, crate::SoundOrigin),
 }
 
 impl Battle {
@@ -97,6 +97,7 @@ impl Battle {
         }
         a.card_state.last_combat = self.tick;
         a.card_state.use_number = a.card_state.use_number.saturating_add(1);
+        a.card_state.cast_action = a.select_cast_action(s, full, stacks);
         let delay = ticks(if full {
             stat(s, "full_resource_impact_delay", stat(s, "impact_delay", 0.))
         } else {
@@ -120,7 +121,16 @@ impl Battle {
                     ctx,
                     spec: s,
                     due: self.tick + u64::from(ticks(when)),
-                    stage: Stage::Snip(n.as_f64().unwrap() as i32),
+                    stage: Stage::Snip(
+                        n.as_f64().unwrap() as i32,
+                        if i + 1 == seq.len() {
+                            "@hit_last"
+                        } else if i == 0 {
+                            "@hit_first"
+                        } else {
+                            "@hit_middle"
+                        },
+                    ),
                 });
             }
             a.card_state.snip_heal = if full {
@@ -171,12 +181,14 @@ impl Battle {
                 }
                 continue;
             }
-            if let Stage::Sacrifice(id, damage) = job.stage {
+            if let Stage::Sacrifice(id, damage, mut origin) = job.stage {
                 if job.due > self.tick {
                     self.card_queue.push(job);
                 } else if self.actors.get(&id).is_some_and(|b| {
                     b.def.role.structure() && Body::from(b).allows(job.ctx.team, job.ctx.source_pos)
                 }) {
+                    origin.owner = id;
+                    self.sound(origin, "sacrifice:impact", self.actors[&id].pos, Some(id));
                     changes.push(Change::new(job.ctx.caster, id, -damage));
                 }
                 continue;
@@ -197,11 +209,14 @@ impl Battle {
             job.ctx.source_pos = a.pos;
             match job.stage {
                 Stage::Sacrifice(..) => unreachable!(),
-                Stage::Snip(n) => {
-                    self.frontal_amount(job.ctx, job.spec, f64::from(n), &mut changes)
+                Stage::Snip(n, phase) => {
+                    self.frontal_amount(job.ctx, job.spec, f64::from(n), phase, &mut changes)
                 }
                 Stage::Release(full, delay) => self.forward_release(job.ctx, job.spec, full, delay),
-                Stage::Spin => self.nova(job.ctx, job.spec, &mut changes),
+                Stage::Spin => {
+                    self.unit_sound(job.ctx.caster, "active:spin", None);
+                    self.nova(job.ctx, job.spec, &mut changes)
+                }
                 Stage::Charge(target, kind) => self.start_sweep(job.ctx, job.spec, kind, target),
                 Stage::HookLaunch(target) => self.launch_hook(job.ctx, job.spec, target),
                 Stage::Pull(_) => unreachable!(),
@@ -272,12 +287,21 @@ impl Battle {
                 .and_then(Value::as_f64)
                 .unwrap_or(stat(s, "damage", 0.)) as i32;
             if amount > 0 {
-                changes.push(Change::skill_hit(
+                let hit = Change::skill_hit(
                     ctx.caster,
                     id,
                     (f64::from(amount) * multiplier).round() as i32,
                     stat(s, "heal_ratio", 0.),
-                ));
+                );
+                let source = self.actors[&ctx.caster].sound_origin();
+                changes.push(if s["kind"] == "counter_strike" {
+                    hit.on_sound(source, "counter_strike:hit")
+                } else if s["kind"] == "terrain_charge" && self.actors[&id].def.role == Role::Troop
+                {
+                    hit.on_sound(source, "charge:knockup")
+                } else {
+                    hit.group_sound(source, "@hit", false)
+                });
             }
             let b = self.actors.get_mut(&id).unwrap();
             if !matches!(b.def.role, Role::Troop | Role::Building) {
@@ -377,18 +401,21 @@ impl Battle {
                 1.
             }
             * (1. + ratio * (stat(s, "resource_damage_scale_max", 1.) - 1.));
-        self.frontal_amount(ctx, s, damage, changes);
+        self.frontal_amount(ctx, s, damage, "@hit", changes);
     }
     fn frontal_amount(
         &mut self,
         ctx: Origin,
         s: &'static Value,
         damage: f64,
+        phase: &'static str,
         changes: &mut Vec<Change>,
     ) {
         let a = &self.actors[&ctx.caster];
         let radius = a.def.radius;
-        let source_kind = a.def.key;
+        let source_kind = a.audio_kind();
+        let attack_sound = a.attack_sound(self.tick);
+        let cast_action = a.card_state.cast_action;
         let length = stat(s, "length", 0.);
         if s["projectile_stop_on_hit"] == true || s["projectile_piercing"] == true {
             let group = self.next_id;
@@ -418,6 +445,8 @@ impl Battle {
                 let id = self.next_id;
                 self.next_id += 1;
                 self.shots.push(Projectile {
+                    attack_sound,
+                    cast_action,
                     born: self.tick,
                     source_kind,
                     id,
@@ -479,17 +508,19 @@ impl Battle {
                 if !shape.hits(delta, ctx.direction, b.def.radius) {
                     return None;
                 }
-                let amount = if s.get("center_width").is_some()
-                    && side <= stat(s, "center_width", 0.) / 2. + b.def.radius
-                {
+                let center_width = s["center_width"]
+                    .as_f64()
+                    .unwrap_or(near * stat(s, "center_ratio", 0.));
+                let center = center_width > 0. && side <= center_width / 2. + b.def.radius;
+                let amount = if s.get("center_width").is_some() && center {
                     damage * stat(s, "center_damage_multiplier", 1.)
                 } else {
                     damage
                 };
-                Some((b.id, amount.round() as i32))
+                Some((b.id, amount.round() as i32, center))
             })
             .collect();
-        for (id, amount) in candidates {
+        for (id, amount, center) in candidates {
             if self.consume_effect_shield(id) {
                 continue;
             }
@@ -502,7 +533,13 @@ impl Battle {
             } else {
                 0
             };
-            changes.push(Change::delivered(ctx.caster, id, -(amount + bonus)));
+            changes.push(
+                Change::delivered(ctx.caster, id, -(amount + bonus)).group_sound(
+                    self.actors[&ctx.caster].sound_origin(),
+                    phase,
+                    center,
+                ),
+            );
             let heal = std::mem::take(
                 &mut self
                     .actors

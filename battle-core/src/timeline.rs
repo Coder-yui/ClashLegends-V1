@@ -9,6 +9,12 @@ pub enum AreaAnchor {
     /// Pulse follows the owner. Freeze, stasis or death terminate future pulses.
     Caster,
 }
+/// A periodic heal accumulates fractional hit points across its own pulses.
+#[derive(Clone, Copy, Debug)]
+pub enum AreaPulse {
+    Effects(&'static [Effect]),
+    RegenTroops { per_second: f64 },
+}
 #[derive(Clone, Copy, Debug)]
 pub struct TimedArea {
     pub delay: u32,
@@ -16,7 +22,7 @@ pub struct TimedArea {
     pub pulses: u32,
     pub anchor: AreaAnchor,
     pub shape: Shape,
-    pub effects: &'static [Effect],
+    pub pulse: AreaPulse,
 }
 impl TimedArea {
     pub(crate) fn valid(self) -> bool {
@@ -27,20 +33,26 @@ impl TimedArea {
             && self.pulses > 0
             && (self.period > 0 || self.pulses == 1)
             && self.shape.valid()
-            && !self.effects.is_empty()
-            && self.effects.iter().all(|e| match e {
-                Effect::Area(child) => {
-                    allow_release
-                        && self.anchor != AreaAnchor::Independent
-                        && self.pulses == 1
-                        && child.anchor == AreaAnchor::Independent
-                        && child.valid_stage(false)
+            && match self.pulse {
+                AreaPulse::RegenTroops { per_second } => {
+                    per_second.is_finite() && per_second > 0. && self.period > 0
                 }
-                Effect::Transform(_) => false,
-                Effect::RegenTroops { per_second } => *per_second > 0 && self.period > 0,
-                Effect::Motion(m) if m.autonomous() => false,
-                _ => e.valid(),
-            })
+                AreaPulse::Effects(effects) => {
+                    !effects.is_empty()
+                        && effects.iter().all(|e| match e {
+                            Effect::Area(child) => {
+                                allow_release
+                                    && self.anchor != AreaAnchor::Independent
+                                    && self.pulses == 1
+                                    && child.anchor == AreaAnchor::Independent
+                                    && child.valid_stage(false)
+                            }
+                            Effect::Transform(_) => false,
+                            Effect::Motion(m) if m.autonomous() => false,
+                            _ => e.valid(),
+                        })
+                }
+            }
     }
 }
 #[derive(Clone, Copy, Debug)]
@@ -53,6 +65,13 @@ pub(crate) struct Origin {
 }
 #[derive(Clone, Copy, Debug, PartialEq, serde::Serialize)]
 pub struct AreaView {
+    pub born: u64,
+    pub phase: &'static str,
+    pub source_kind: &'static str,
+    pub enhanced: bool,
+    pub effect: &'static str,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio: Option<(crate::SoundOrigin, &'static str, u64)>,
     pub id: Id,
     pub caster: Id,
     pub team: Team,
@@ -97,6 +116,12 @@ impl Battle {
         let id = self.next_id;
         self.next_id += 1;
         let view = AreaView {
+            born: self.tick,
+            phase: "",
+            source_kind: "",
+            enhanced: false,
+            effect: "",
+            audio: None,
             id,
             caster: ctx.caster,
             team: ctx.team,
@@ -154,19 +179,21 @@ impl Battle {
             a.view.next_tick += u64::from(spec.period);
             let finished = a.view.pulses == 0;
             let pulse = u64::from(spec.pulses - v.pulses);
-            let effects: Vec<_> = spec
-                .effects
-                .iter()
-                .map(|&e| match e {
-                    Effect::RegenTroops { per_second } => {
-                        let n = u64::from(per_second) * u64::from(spec.period);
-                        let amount = (u128::from(pulse + 1) * u128::from(n)) / 20
-                            - (u128::from(pulse) * u128::from(n)) / 20;
-                        Effect::HealTroops(amount.min(i32::MAX as u128) as i32)
-                    }
-                    _ => e,
-                })
-                .collect();
+            let heal;
+            let effects = match spec.pulse {
+                AreaPulse::Effects(effects) => effects,
+                AreaPulse::RegenTroops { per_second } => {
+                    let through = |n: u64| {
+                        (n as f64 * f64::from(spec.period) * per_second
+                            / crate::TICKS_PER_SECOND as f64)
+                            .floor()
+                    };
+                    heal = [Effect::HealTroops(
+                        (through(pulse + 1) - through(pulse)) as i32,
+                    )];
+                    &heal[..]
+                }
+            };
             self.resolve_effects(
                 Origin {
                     caster: v.caster,
@@ -176,7 +203,7 @@ impl Battle {
                     direction: v.direction,
                 },
                 spec.shape,
-                &effects,
+                effects,
                 &mut changes,
             );
             if finished && self.areas.remove(&id).is_some() {
@@ -194,7 +221,7 @@ impl Battle {
     ) {
         let mut blocked = std::collections::BTreeSet::new();
         for &effect in effects {
-            if matches!(effect, Effect::Transform(_) | Effect::RegenTroops { .. })
+            if matches!(effect, Effect::Transform(_))
                 || matches!(effect,Effect::Motion(m) if m.autonomous())
             {
                 continue;
@@ -327,10 +354,7 @@ impl Battle {
                             changes.push(Change::new(ctx.caster, id, n))
                         }
                     }
-                    Effect::CardAbility(_)
-                    | Effect::RegenTroops { .. }
-                    | Effect::SelfShield { .. }
-                    | Effect::Transform(_) => {
+                    Effect::CardAbility(_) | Effect::SelfShield { .. } | Effect::Transform(_) => {
                         unreachable!("resolved by action owner")
                     }
                     Effect::Heal(n) => changes.push(crate::vitals::Change::new(ctx.caster, id, n)),

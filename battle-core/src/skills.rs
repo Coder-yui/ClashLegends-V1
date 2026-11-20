@@ -57,9 +57,6 @@ pub enum Effect {
     Area(crate::TimedArea),
     Summon(crate::SpawnBatch),
     Transform(crate::Transform),
-    RegenTroops {
-        per_second: u32,
-    },
     HealTroops(i32),
     Empower {
         movement: u16,
@@ -111,7 +108,6 @@ impl Effect {
         match self {
             Self::CardAbility(s) => s["kind"].is_string(),
             Self::Transform(t) => t.revert_after != Some(0),
-            Self::RegenTroops { per_second } => per_second > 0,
             Self::HealTroops(n) => n >= 0,
             Self::Empower {
                 movement,
@@ -168,10 +164,7 @@ impl Skill {
     pub(crate) fn valid(&self) -> bool {
         let ok = |v: f64| v.is_finite() && v >= 0.;
         !self.effects.is_empty()
-            && self
-                .effects
-                .iter()
-                .all(|effect| effect.valid() && !matches!(effect, Effect::RegenTroops { .. }))
+            && self.effects.iter().all(|effect| effect.valid())
             && self.effects.iter().skip(1).all(|e| {
                 !matches!(e,Effect::Motion(m) if m.autonomous())
                     && !matches!(e, Effect::Transform(_))

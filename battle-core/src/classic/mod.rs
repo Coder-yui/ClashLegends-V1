@@ -12,6 +12,7 @@ pub(crate) mod specialists;
 pub(crate) mod units;
 pub(crate) mod zones;
 pub use bot::{bot_input, roster_bot_input};
+pub use zones::WaveView;
 pub(crate) mod hits;
 pub use hits::Attack;
 mod player;
@@ -583,24 +584,7 @@ impl ClassicMatch {
         {
             self.players[seat].gold = self.players[seat].gold.saturating_add(extra).min(10);
         }
-        for a in self.battle.actors.values_mut() {
-            let Some(s) = a.def.rules.filter(|s| s.get("elixir_interval").is_some()) else {
-                continue;
-            };
-            if self.battle.tick < a.ready_tick {
-                continue;
-            }
-            let interval = u64::from(units::ticks(units::stat(s, "elixir_interval", 0.)));
-            let due = *a
-                .card_state
-                .owner_gold_at
-                .get_or_insert(a.ready_tick + interval);
-            if self.battle.tick >= due && !a.disabled() {
-                let p = &mut self.players[a.team.index()];
-                p.gold = (p.gold + units::stat(s, "elixir_amount", 0.) as u8).min(10);
-                a.card_state.owner_gold_at = Some(self.battle.tick + interval);
-            }
-        }
+        self.collect_income();
         for p in &mut self.players {
             for (members, active) in p.groups.iter_mut().zip(&mut p.active) {
                 members.retain(|id| self.battle.actors.contains_key(id));

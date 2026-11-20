@@ -157,7 +157,7 @@ fn effects_have_independent_and_owned_lifetimes() {
             pulses: 2,
             anchor,
             shape: Shape::Circle { radius: 70. },
-            effects: &[Effect::Damage(30)],
+            pulse: AreaPulse::Effects(&[Effect::Damage(30)]),
         };
         let a = b
             .spawn(Team::Blue, p(100., 200.), caster(vec![Effect::Area(area)]))
@@ -334,7 +334,7 @@ fn released_stage_outlives_interruption_but_windup_can_be_cancelled() {
         pulses: 1,
         anchor: AreaAnchor::Independent,
         shape: Shape::Circle { radius: 50. },
-        effects: &[Effect::Damage(19)],
+        pulse: AreaPulse::Effects(&[Effect::Damage(19)]),
     });
     for (wait_before_freeze, expected) in [(1, 210), (2, 191)] {
         let mut b = world();
@@ -348,7 +348,7 @@ fn released_stage_outlives_interruption_but_windup_can_be_cancelled() {
                     pulses: 1,
                     anchor: AreaAnchor::CastPoint,
                     shape: Shape::Circle { radius: 0. },
-                    effects: &[RELEASE],
+                    pulse: AreaPulse::Effects(&[RELEASE]),
                 })]),
             )
             .unwrap();

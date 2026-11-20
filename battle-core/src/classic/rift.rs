@@ -251,6 +251,9 @@ impl ClassicMatch {
         let t = self.battle.tick;
         let first = self.mode.front_waves.contains(&t);
         let second = self.mode.rear_waves.contains(&t);
+        if self.mode.front_waves.first() == Some(&t) {
+            self.battle.emit(crate::Fact::FirstWave);
+        }
         if first || second {
             self.spawn_wave(first, t >= self.mode.double_gold)
         }

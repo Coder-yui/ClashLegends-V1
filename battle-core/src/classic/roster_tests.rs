@@ -187,6 +187,50 @@ fn every_spell_and_choice_deploys_from_a_frozen_deck_and_advances() {
             }
         }
         let events: Vec<_> = g.drain_events().collect();
+        let cues: Vec<_> = events
+            .iter()
+            .filter_map(|e| match e.fact {
+                Fact::Sound { source, phase, .. } if source.kind == card.key => {
+                    Some((e.tick, phase))
+                }
+                _ => None,
+            })
+            .collect();
+        let expected: &[&str] = match card.key {
+            "mirror" | "void_summoning" | "corrosion" => &[],
+            "airdrop_bear" => &["spell:cast", "spell:impact", "spell:enraged"],
+            "convergent_pulse" => &["spell:cast", "spell:charge", "spell:hit"],
+            "event_horizon" => &["spell:cast"],
+            "explosive_cask" | "mega_inferno_bomb" | "stasis" => &["spell:cast", "spell:strike"],
+            "final_spark" => &["spell:cast", "spell:middle", "spell:end"],
+            "freeze" | "heal" => &["spell:cast"],
+            "lightning" | "zap" => &["spell:strike"],
+            "medium_lightning" => &[
+                "spell:cast",
+                "spell:warning",
+                "spell:warning_enemy",
+                "spell:strike",
+                "spell:hit",
+            ],
+            "severing_bolt" => &["spell:launch", "spell:warning", "spell:impact"],
+            "solar_flare" => &["spell:cast", "spell:impact"],
+            "stellar_convergence" => &["spell:cast", "spell:hit", "spell:zone_end"],
+            "tidal_wave" => &["spell:cast", "spell:launch"],
+            "pool_of_reflection" => &["spell:cast", "spell:zone_end"],
+            k => panic!("unclassified spell {k}"),
+        };
+        for &phase in expected {
+            assert!(
+                cues.iter().any(|(_, p)| *p == phase),
+                "{} {} {cues:?}",
+                card.key,
+                phase
+            );
+        }
+        if card.key == "medium_lightning" {
+            let time = |phase| cues.iter().find(|(_, p)| *p == phase).unwrap().0;
+            assert_eq!(time("spell:strike") - time("spell:warning_enemy"), 20);
+        }
         match card.key {
             "void_summoning" => assert!(
                 g.battle
@@ -296,6 +340,147 @@ fn every_public_deck_choice_resolves_and_mixed_rosters_reach_a_result() {
             g.drain_events().for_each(drop);
         }
         assert!(g.tick() <= 6100);
+    }
+}
+
+#[test]
+fn samira_blades_and_bullets_keep_their_animation_segment_and_contact_source() {
+    for (distance, first_segment) in [(55., 2), (160., 0)] {
+        let mut g = game("samira", 0);
+        play(&mut g, "samira", Point::new(360., 980.)).unwrap();
+        let caster = g.players[0].active[0].unwrap().caster;
+        let a = g.battle.actors.get_mut(&caster).unwrap();
+        a.ready_tick = 0;
+        a.def.speed = 0.;
+        let p = a.pos + a.facing * distance;
+        let target = g.battle.spawn(Team::Red, p, target_dummy(10000)).unwrap();
+        let mut swings = Vec::new();
+        let mut blades = Vec::new();
+        let mut bullets = std::collections::BTreeSet::new();
+        let mut impacts = 0;
+        for _ in 0..110 {
+            g.step(&[]);
+            for event in g.drain_events().collect::<Vec<_>>() {
+                match event.fact {
+                    Fact::AttackStarted(id, victim) if id == caster && victim == target => {
+                        swings.push(g.battle.actors[&caster].attack.unwrap().segment);
+                    }
+                    Fact::Damage {
+                        source,
+                        target: victim,
+                        contact: Some(sound),
+                        ..
+                    } if source == caster && victim == target => blades.push(sound.segment),
+                    Fact::Fired(id, victim, shot) if id == caster && victim == target => {
+                        bullets.insert(shot);
+                    }
+                    Fact::ProjectileHit {
+                        projectile,
+                        target: victim,
+                        ..
+                    } if victim == target && bullets.contains(&projectile) => {
+                        impacts += 1;
+                    }
+                    _ => (),
+                }
+            }
+        }
+        assert_eq!(&swings[..2], &[first_segment, first_segment + 1]);
+        if first_segment == 2 {
+            assert_eq!(&blades[..2], &swings[..2]);
+            assert!(bullets.is_empty());
+        } else {
+            assert!(blades.is_empty());
+            assert!(impacts >= 2);
+        }
+    }
+}
+
+#[test]
+fn gwen_snips_use_saved_stacks_and_confirmed_contact_on_each_slice() {
+    for stacks in 0..=3 {
+        for offset in [None, Some(52.), Some(0.)] {
+            let mut g = game("gwen", 0);
+            play(&mut g, "gwen", Point::new(360., 980.)).unwrap();
+            let caster = g.players[0].active[0].unwrap().caster;
+            let a = g.battle.actors.get_mut(&caster).unwrap();
+            a.ready_tick = 0;
+            a.def.speed = 0.;
+            a.def.action = crate::Action::Idle;
+            a.card_state.resource = stacks as f64;
+            g.players[0].gold = 10;
+            cast(&mut g).unwrap();
+            let a = &g.battle.actors[&caster];
+            let start = a.card_state.cast_start;
+            let action = format!("active_{stacks}");
+            assert_eq!(a.card_state.cast_action, action);
+            assert!(a
+                .audio_states(start)
+                .iter()
+                .any(
+                    |layer| layer.family.sustain == Some(format!("{action}:sustain").as_str())
+                        && !layer.looping
+                ));
+            if let Some(lateral) = offset {
+                let right = Point::new(-a.facing.y, a.facing.x);
+                let pos = a.pos + a.facing * (a.def.radius + 95.);
+                let target = pos + right * lateral;
+                g.battle
+                    .spawn(Team::Red, target, target_dummy(3000))
+                    .unwrap();
+                if lateral == 0. {
+                    g.battle
+                        .spawn(Team::Red, pos + right * 52., target_dummy(3000))
+                        .unwrap();
+                }
+            }
+            for _ in 0..32 {
+                g.step(&[]);
+            }
+            let hits: Vec<_> = g
+                .drain_events()
+                .filter_map(|e| match e.fact {
+                    Fact::Sound { source, phase, .. }
+                        if source.owner == caster && phase.contains(":hit_") =>
+                    {
+                        Some((e.tick - start, phase.to_owned()))
+                    }
+                    _ => None,
+                })
+                .collect();
+            let delays: &[u64] = match stacks {
+                0 => &[2, 21],
+                1 => &[2, 19, 21],
+                2 => &[2, 16, 19, 21],
+                _ => &[2, 13, 16, 19, 21],
+            };
+            let expected: Vec<_> = offset
+                .into_iter()
+                .flat_map(|lateral| {
+                    delays
+                        .iter()
+                        .enumerate()
+                        .map(|(i, t)| {
+                            let phase = if i == 0 {
+                                "first"
+                            } else if i + 1 == delays.len() {
+                                "last"
+                            } else {
+                                "middle"
+                            };
+                            (
+                                *t,
+                                format!(
+                                    "{action}:hit_{phase}{}",
+                                    if lateral == 0. { "_center" } else { "" }
+                                ),
+                            )
+                        })
+                        .collect::<Vec<_>>()
+                })
+                .collect();
+            assert_eq!(hits, expected, "stacks={stacks}, offset={offset:?}");
+        }
     }
 }
 
@@ -692,3 +877,5 @@ fn queued_skill_cancels_on_control_and_refunds_only_a_living_owner() {
         );
     }
 }
+
+mod production;

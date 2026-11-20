@@ -142,11 +142,12 @@ impl Battle {
             .actors
             .get(&target)
             .is_some_and(|a| a.def.role.structure());
-        if let Some(a) = self.actors.get_mut(&id) {
+        if let Some((a, s)) = self
+            .actors
+            .get_mut(&id)
+            .and_then(|a| a.def.rules.map(|s| (a, s)))
+        {
             let key = a.card_state.base_key.unwrap_or(a.def.key);
-            let Some(s) = a.def.rules else {
-                return;
-            };
             let base = &rules()[key];
             if a.card_state.changed_form && base["form_refresh_on_kill"] == true {
                 a.card_state.form_due =
@@ -160,6 +161,14 @@ impl Battle {
                 + stat(s, "skill_resource_kill_gain", 0.))
             .min(stat(s, "skill_resource_max", 0.));
         }
+        let mut audible = vec![];
+        if self
+            .actors
+            .get(&id)
+            .is_some_and(|a| a.card_state.changed_form && a.def.key == "aatrox")
+        {
+            self.unit_sound(id, "form:refresh", None);
+        }
         if structure {
             for a in self.actors.values_mut() {
                 if a.card_state
@@ -167,6 +176,7 @@ impl Battle {
                     .remove(&target)
                     .is_some_and(|until| until >= self.tick)
                 {
+                    audible.push(a.id);
                     let s = &rules()[a.card_state.base_key.unwrap_or(a.def.key)];
                     let until =
                         self.tick + u64::from(ticks(stat(s, "structure_haste_duration", 0.)));
@@ -181,12 +191,17 @@ impl Battle {
                 }
             }
         }
+        for unit in audible {
+            self.unit_sound(unit, "structure_haste:start", None);
+        }
     }
     pub(crate) fn native_death_form(&mut self, id: Id) -> bool {
         let a = &self.actors[&id];
         if a.def.key != "sion" || a.def.rules.is_none() || a.card_state.changed_form {
             return false;
         }
+        self.unit_sound(id, "rebirth:begin", None);
+        self.unit_sound(id, "rebirth:voice", None);
         if !self.switch_card_form(id, false) {
             return false;
         }

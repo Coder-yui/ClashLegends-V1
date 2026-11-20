@@ -17,6 +17,10 @@ pub(super) fn carried(s: &'static Value) -> Skill {
 
 #[derive(Default, Debug, Clone)]
 pub(crate) struct State {
+    pub(crate) persistent_audio_until: u64,
+    pub(crate) burning_aura: bool,
+    pub(crate) tower_disable_audio_until: u64,
+    pub(crate) deployment_group: Id,
     pub(crate) equipped_skill: Option<&'static str>,
     pub(crate) conversion: Option<(u64, Id, crate::Team, &'static Value)>,
     pub(crate) channel: Option<(u64, Id)>,
@@ -43,11 +47,11 @@ pub(crate) struct State {
     pub(crate) dormant: bool,
     pub(crate) aura_attack: u16,
     pub(crate) first_targets: std::collections::BTreeSet<Id>,
-    pub(crate) owner_gold_at: Option<u64>,
     pub(crate) swing: u32,
     pub(crate) empowered: Option<(&'static Value, u8)>,
     pub(crate) lifesteal: Option<(u64, f64, f64)>,
     pub(crate) immunity: u64,
+    pub(crate) cast_action: &'static str,
     pub(crate) cast_start: u64,
     pub(crate) impact_tick: u64,
     pub(crate) cast_end: u64,
@@ -79,12 +83,21 @@ pub(crate) struct State {
     pub(crate) blast_ratio: f64,
     pub(crate) skip_reward: bool,
     pub(crate) permanent_growth: bool,
-    pub(crate) production_due: Option<u64>,
-    pub(crate) wave: usize,
-    pub(crate) pending_births: Vec<super::production::Birth>,
     pub(crate) buff_spec: Option<&'static Value>,
 }
 impl Actor {
+    pub(crate) fn active_skill_buff(&self, tick: u64) -> bool {
+        let s = &self.card_state;
+        s.buff_spec.is_some()
+            || s.prepared_charge.is_some()
+            || s.counter.is_some()
+            || s.undying > tick
+            || self.empowerment.is_some_and(|buff| buff.until > tick)
+            || self.effect_shield_until > tick
+            || s.lifesteal.is_some_and(|b| b.0 > tick)
+            || s.reduction.is_some_and(|b| b.0 > tick)
+            || (s.burst.is_some_and(|b| b.0 > tick && b.1 > 0) && !self.has(Control::Stasis))
+    }
     pub(crate) fn reduction(&self, tick: u64) -> f64 {
         self.card_state
             .reduction
@@ -117,6 +130,7 @@ impl Battle {
                 a.reset_attack();
             }
             "terrain_charge" => {
+                self.unit_sound(ctx.caster, "charge:start", None);
                 self.card_queue.push(super::casts::Pending {
                     ctx,
                     spec: s,
@@ -166,6 +180,7 @@ impl Battle {
                     source_pos: a.pos,
                     ..ctx
                 };
+                self.unit_sound(ctx.caster, "active:land", None);
                 self.nova(ctx, s, changes);
             }
             "timed_form" | "toggle_form" => {
@@ -176,6 +191,7 @@ impl Battle {
             }
             "attack_burst" => {
                 if a.card_state.changed_form {
+                    a.card_state.persistent_audio_until = tick + duration;
                     let period = ticks(stat(s, "tick_interval", 0.5));
                     self.card_queue.push(super::casts::Pending {
                         ctx,
@@ -204,6 +220,7 @@ impl Battle {
                     },
                     tick,
                 ) {
+                    self.unit_sound(ctx.caster, "active:land", None);
                     self.nova(
                         Origin {
                             origin: pos,
@@ -244,7 +261,10 @@ impl Battle {
                     s,
                 );
             }
-            "nova" => self.nova(ctx, s, changes),
+            "nova" => {
+                self.unit_sound(ctx.caster, "active:impact", None);
+                self.nova(ctx, s, changes);
+            }
             "continuous_area" => {
                 if let Some(rate) = s["heal_ratio"].as_f64() {
                     a.card_state.lifesteal = Some((tick + duration, rate, 1.));
@@ -266,6 +286,7 @@ impl Battle {
                     self.actors.get_mut(&ctx.caster).unwrap().hp = 0;
                 }
 
+                self.unit_sound(ctx.caster, "summon:start", None);
                 let count = stat(s, "spawn_count", 1.) as u8;
                 let period = ticks(stat(s, "spawn_sequence_interval", 0.));
                 for i in 0..count {
@@ -417,6 +438,7 @@ impl Battle {
             }
             "area_shield" => {
                 let radius = a.def.radius + stat(s, "radius", 0.);
+                self.unit_sound(ctx.caster, "shield:cast", None);
                 let ids: Vec<_> = self
                     .actors
                     .values()
@@ -555,6 +577,7 @@ impl Battle {
         }
         let mut changes = vec![];
         for (ctx, s, count) in counters {
+            self.unit_sound(ctx.caster, "counter_strike:explode", None);
             self.nova_scaled(
                 ctx,
                 s,
@@ -563,6 +586,7 @@ impl Battle {
             );
         }
         for (id, team, pos, s) in bursts {
+            self.unit_sound(id, "aftershock:explode", None);
             self.resolve_effects(
                 Origin {
                     caster: id,

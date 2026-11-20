@@ -58,6 +58,15 @@ impl Battle {
         }
     }
     pub fn spawn_near(&mut self, team: Team, pos: Point, def: UnitDef) -> Result<Id, crate::Error> {
+        let point = self.spawn_point(team, pos, &def)?;
+        self.spawn(team, point, def)
+    }
+    pub(crate) fn spawn_point(
+        &self,
+        team: Team,
+        pos: Point,
+        def: &UnitDef,
+    ) -> Result<Point, crate::Error> {
         if !pos.finite() || !def.valid() {
             return Err(crate::Error::InvalidPoint);
         }
@@ -72,10 +81,8 @@ impl Battle {
             layer: def.layer,
             radius: def.radius,
         };
-        let point = q
-            .nearest(pos, if team == Team::Blue { -1. } else { 1. })
-            .ok_or(crate::Error::InvalidPoint)?;
-        self.spawn(team, point, def)
+        q.nearest(pos, if team == Team::Blue { -1. } else { 1. })
+            .ok_or(crate::Error::InvalidPoint)
     }
     pub(crate) fn lifecycle_step(&mut self) {
         let mut batches = vec![];
@@ -100,12 +107,8 @@ impl Battle {
             if a.hp == 0 {
                 continue;
             }
-            if let Some((interval, batch)) = spec.production {
-                a.production_left = a.production_left.saturating_sub(1);
-                if a.production_left == 0 && !a.disabled() {
-                    batches.push(Generation::from(a, batch));
-                    a.production_left = interval;
-                }
+            if let Some(batch) = a.basic_production(self.tick) {
+                batches.push(Generation::from(a, batch));
             }
         }
         self.remove_dead();
@@ -145,6 +148,23 @@ impl Battle {
             }
             self.cancel_owned_areas(id);
             if let Some(spec) = a.def.lifecycle.death_area {
+                if let Some(rules) = a.def.rules {
+                    let mut sound = a.sound_origin();
+                    sound.owner = self.next_id;
+                    for (field, phase) in [
+                        ("death_transition_delay", "shrine:leap"),
+                        ("death_shrine_delay", "shrine:start"),
+                    ] {
+                        if let Some(delay) = rules[field].as_f64() {
+                            self.scheduled_audio.push((
+                                self.tick + (delay * 20.).round() as u64,
+                                sound,
+                                phase,
+                                a.pos,
+                            ));
+                        }
+                    }
+                }
                 self.schedule_area(
                     crate::timeline::Origin {
                         caster: id,
@@ -165,9 +185,13 @@ impl Battle {
             }
             self.emit(Fact::Died(id));
         }
-        for (team, reward, ids, changes) in blasts {
+        for (sound, position, reward, ids, changes) in blasts {
+            let team = sound.team;
             self.commit(changes);
             if ids.iter().any(|id| !self.actors.contains_key(id)) {
+                if reward > 0 {
+                    self.sound(sound, "bounty:gain", position, None);
+                }
                 self.gold_rewards[team.index()] =
                     self.gold_rewards[team.index()].saturating_add(reward);
             }

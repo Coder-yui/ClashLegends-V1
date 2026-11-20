@@ -134,6 +134,9 @@ pub(crate) struct Flight {
 /// Tick timeline of one swing, stable across Windup -> Recover and reconnect.
 #[derive(Clone, Copy, Debug, PartialEq, serde::Serialize)]
 pub struct AttackTiming {
+    pub segment: u32,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub first: bool,
     pub start: u64,
     pub release: u64,
     pub end: u64,
@@ -160,6 +163,7 @@ pub(crate) struct Actor {
     pub action_serial: u64,
     pub attack: Option<AttackTiming>,
     pub published_activity: Activity,
+    pub production: Option<Box<crate::classic::production::Production>>,
     pub card_state: crate::classic::abilities::State,
     pub field_shift: Point,
     pub avoidance_turn: f64,
@@ -185,7 +189,7 @@ pub(crate) struct Actor {
     pub steal_carry: u16,
     pub grievous_wounds: bool,
     pub tidal_haste: Option<(u64, u16)>,
-    pub sunlight: Option<(u64, i32)>,
+    pub sunlight: Option<(crate::SoundOrigin, u64, i32)>,
     pub blind: u8,
     pub lives: u8,
     pub revert: Option<crate::forms::Revert>,
@@ -194,7 +198,6 @@ pub(crate) struct Actor {
     pub drain: crate::combat::DrainState,
     pub ready_tick: u64,
     pub decay_carry: i64,
-    pub production_left: u32,
 }
 impl Actor {
     pub fn new(id: Id, team: Team, pos: Point, def: UnitDef) -> Self {
@@ -202,6 +205,7 @@ impl Actor {
             id,
             team,
             pos,
+            production: crate::classic::production::Production::from_def(&def),
             hp: def.hp,
             rounds: def.weapon.magazine,
             lives: def.lifecycle.rebirth.map_or(0, |r| r.charges),
@@ -244,7 +248,6 @@ impl Actor {
             drain: Default::default(),
             ready_tick: 0,
             decay_carry: 0,
-            production_left: 0,
         }
     }
     pub fn has(&self, c: Control) -> bool {
@@ -265,6 +268,8 @@ impl Actor {
 }
 #[derive(Clone, Debug, PartialEq)]
 pub struct Projectile {
+    pub attack_sound: crate::AttackSound,
+    pub cast_action: &'static str,
     pub born: u64,
     pub source_kind: &'static str,
     pub volley: Option<Id>,
@@ -299,6 +304,14 @@ pub struct BarIndicators {
 #[serde(rename_all = "camelCase")]
 pub struct VisualState {
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub aura_start: Option<u64>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub drain_targets: Vec<Id>,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub move_slow: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub attack_slow: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<(&'static str, u64, u64)>,
     #[serde(skip_serializing_if = "std::ops::Not::not")]
     pub empowered: bool,
@@ -330,6 +343,11 @@ pub struct VisualState {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct UnitView {
+    pub deployment_group: Id,
+    pub audio_states: Vec<crate::AudioState>,
+    pub audio_kind: &'static str,
+    pub attack_sound: crate::AttackSound,
+    pub cast_action: &'static str,
     pub visual: VisualState,
     pub bar: Option<BarIndicators>,
     pub dormant: bool,
@@ -373,10 +391,19 @@ pub struct Snapshot {
     pub units: Vec<UnitView>,
     pub projectiles: Vec<Projectile>,
     pub areas: Vec<crate::AreaView>,
+    pub waves: Vec<crate::classic::WaveView>,
+    pub summons: Vec<crate::SummonFlight>,
 }
 #[derive(Clone, Debug, PartialEq, serde::Serialize)]
 #[serde(tag = "kind", content = "data", rename_all = "camelCase")]
 pub enum Fact {
+    Sound {
+        source: crate::SoundOrigin,
+        phase: &'static str,
+        position: Point,
+        target: Option<Id>,
+    },
+    FirstWave,
     EffectBlocked(Id),
     Spawned(Id),
     SpellImpact {
@@ -385,6 +412,15 @@ pub enum Fact {
         position: Point,
     },
     SpellPlayed {
+        range: f64,
+        #[serde(rename = "waveWidth")]
+        wave_width: f64,
+        speed: f64,
+        impact: u64,
+        end: u64,
+        origin: Point,
+        enhanced: bool,
+        radius: f64,
         id: Id,
         key: &'static str,
         team: Team,
@@ -407,6 +443,8 @@ pub enum Fact {
         target: Id,
     },
     Damage {
+        #[serde(skip_serializing_if = "Option::is_none")]
+        contact: Option<crate::AttackSound>,
         source: Id,
         target: Id,
         requested: i32,
@@ -426,6 +464,8 @@ pub enum Fact {
     },
     Fired(Id, Id, Id),
     ProjectileHit {
+        position: Point,
+        source_kind: &'static str,
         projectile: Id,
         target: Id,
     },

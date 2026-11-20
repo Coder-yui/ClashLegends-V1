@@ -110,6 +110,32 @@ impl Attack {
     }
 }
 impl Battle {
+    pub(crate) fn record_structure_attack(&mut self, source: Id, target: Id) {
+        if !self
+            .actors
+            .get(&target)
+            .is_some_and(|a| a.def.role.structure())
+        {
+            return;
+        }
+        if let Some(a) = self.actors.get_mut(&source) {
+            let base = super::roster::rules()
+                .get(a.card_state.base_key.unwrap_or(a.def.key))
+                .unwrap_or(&Value::Null);
+            if base.get("structure_assist_window").is_some() {
+                a.card_state.structure_hits.insert(
+                    target,
+                    self.tick
+                        + u64::from(super::units::ticks(stat(
+                            base,
+                            "structure_assist_window",
+                            0.,
+                        ))),
+                );
+            }
+        }
+    }
+
     pub(crate) fn attack_landed(
         &mut self,
         source: Id,
@@ -129,20 +155,6 @@ impl Battle {
         let s = hit.rules.unwrap_or(&Value::Null);
         let sk = hit.ability.unwrap_or(&Value::Null);
         if let Some(a) = self.actors.get_mut(&source) {
-            let base = super::roster::rules()
-                .get(a.card_state.base_key.unwrap_or(a.def.key))
-                .unwrap_or(&Value::Null);
-            if role.structure() && base.get("structure_assist_window").is_some() {
-                a.card_state.structure_hits.insert(
-                    target,
-                    self.tick
-                        + u64::from(super::units::ticks(stat(
-                            base,
-                            "structure_assist_window",
-                            0.,
-                        ))),
-                );
-            }
             if let Some(ratio) = sk.get("hit_heal").and_then(Value::as_f64) {
                 extras.push(Change::new(source, source, ratio as i32));
             }
@@ -150,11 +162,10 @@ impl Battle {
                 .as_u64()
                 .is_some_and(|n| u64::from(hit.cycle).is_multiple_of(n))
             {
-                extras.push(Change::new(
-                    source,
-                    source,
-                    stat(s, "heal_amount", 0.) as i32,
-                ));
+                extras.push(
+                    Change::new(source, source, stat(s, "heal_amount", 0.) as i32)
+                        .on_sound(a.sound_origin(), "passive_heal"),
+                );
             }
             if let Some(n) = sk.get("heal_ratio").and_then(Value::as_f64) {
                 extras.push(Change::new(
@@ -259,8 +270,10 @@ impl Battle {
                 a.card_state.channel = Some((self.tick + u64::from(duration), target));
                 a.card_state.attack_lock = self.tick + u64::from(duration);
                 a.card_state.move_lock = a.card_state.attack_lock;
+                let mut sound = a.sound_origin();
+                sound.action = "channel";
                 let _ = self.apply_control(target, Control::Stun, source, duration, self.tick);
-                self.ground_pulses(ctx, sk);
+                self.ground_pulses(ctx, sound, sk);
             }
         }
         let b = self.actors.get_mut(&target).unwrap();

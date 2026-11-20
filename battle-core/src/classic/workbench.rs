@@ -4,6 +4,11 @@ use super::*;
 use crate::{Action, Id};
 use serde_json::{json, Value};
 
+// The host's integration tests seed rare card states, then use ordinary battle ticks and inputs.
+#[cfg(feature = "scenario-fixtures")]
+#[doc(hidden)]
+pub mod fixtures;
+
 pub struct Workbench {
     game: ClassicMatch,
     groups: Vec<Vec<Id>>,
@@ -171,6 +176,16 @@ impl Workbench {
             card.skill_key.is_some(),
             &mut changes,
         )?;
+        // Lab edits can arrive between ticks. Resolve the new spell's initial tick
+        // exactly once, including instantaneous fields and the first lightning strike.
+        if matches!(card.play, Play::CardSpell(..)) {
+            if let Some(mut spell) = self.game.spells.pop() {
+                spell.run(&mut self.game, &mut changes, &mut Default::default());
+                if spell.active_after(&self.game) {
+                    self.game.spells.push(spell);
+                }
+            }
+        }
         self.game.battle.commit(changes);
         self.game.spell_deaths();
         if key != "mirror" {

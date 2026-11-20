@@ -116,8 +116,10 @@ pub(crate) fn fire(
         let id = out.next_id;
         out.next_id += 1;
         out.shots.push(Projectile {
+            attack_sound: a.attack_sound(out.tick),
+            cast_action: "",
             born: out.tick,
-            source_kind: a.def.key,
+            source_kind: a.audio_kind(),
             id,
             owner: a.id,
             team: a.team,
@@ -201,8 +203,17 @@ impl Battle {
         let mut changes = vec![];
         let mut events = vec![];
         let mut caught = Vec::new();
+        let mut audio = Vec::new();
         self.shots.retain_mut(|p| {
-            let mut hit = |b: Body| {
+            let sound = crate::SoundOrigin {
+                owner: p.id,
+                kind: p.source_kind,
+                form: p.attack_sound.form,
+                team: p.team,
+                action: p.cast_action,
+                spell: false,
+            };
+            let mut hit = |b: Body, position: Point| {
                 if p.volley
                     .is_some_and(|id| !self.volley_hits.entry(id).or_default().insert(b.id))
                 {
@@ -210,6 +221,8 @@ impl Battle {
                 }
                 changes.push(Change::attack(p.owner, b.id, p.damage, p.on_hit));
                 events.push(Fact::ProjectileHit {
+                    position,
+                    source_kind: p.source_kind,
                     projectile: p.id,
                     target: b.id,
                 });
@@ -228,7 +241,8 @@ impl Battle {
                     };
                     let d = b.pos - p.position;
                     if d.length() <= step + p.radius + b.radius {
-                        hit(b);
+                        let distance = (d.length() - p.radius - b.radius).max(0.);
+                        hit(b, p.position + d.unit().unwrap_or_default() * distance);
                         false
                     } else {
                         p.position = p.position + d.unit().unwrap_or_default() * step;
@@ -266,8 +280,8 @@ impl Battle {
                         }
                     });
                     contacts.sort_by(|a, b| a.0.total_cmp(&b.0).then(a.1.id.cmp(&b.1.id)));
-                    for (_, b) in contacts {
-                        hit(b);
+                    for (distance, b) in contacts {
+                        hit(b, p.position + *direction * distance);
                         if !*pierce {
                             return false;
                         }
@@ -279,6 +293,7 @@ impl Battle {
                         return true;
                     }
                     if *returns && !*inbound {
+                        audio.push((sound, "attack_return:launch", p.position));
                         *inbound = true;
                         already.clear();
                         return true;
@@ -303,15 +318,44 @@ impl Battle {
                     p.position = *destination;
                     view.nearby(p.position, *radius, |b| {
                         if eligible(b) && (b.pos - p.position).length() <= *radius + b.radius {
-                            hit(b)
+                            hit(b, b.pos)
                         }
                     });
+                    let total = p
+                        .on_hit
+                        .ability
+                        .and_then(|s| s["bounce_count"].as_u64())
+                        .unwrap_or(1);
+                    let bounce = total.saturating_sub(u64::from(*bounces));
+                    audio.push((
+                        sound,
+                        if total > 1 {
+                            "bomb:impact"
+                        } else {
+                            "bomb:basic_impact"
+                        },
+                        p.position,
+                    ));
                     *bounces -= 1;
+                    if *bounces > 0 {
+                        audio.push((
+                            sound,
+                            if bounce == 0 {
+                                "bomb:second_launch"
+                            } else {
+                                "bomb:third_launch"
+                            },
+                            p.position,
+                        ));
+                    }
                     *destination = *destination + *direction * *hop_distance;
                     *bounces > 0
                 }
             }
         });
+        for (origin, cue, pos) in audio {
+            self.sound(origin, cue, pos, None);
+        }
         for owner in caught {
             if let Some(a) = self.actors.get_mut(&owner) {
                 a.card_state.visual_action = Some(("attack:return", self.tick, self.tick + 4));

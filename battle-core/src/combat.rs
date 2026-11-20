@@ -2,7 +2,7 @@ use crate::targeting::{gap, Perception};
 use crate::{Action, Activity, Actor, Fact, Id, Projectile, TICKS_PER_SECOND};
 #[derive(Clone, Debug, Default)]
 pub(crate) struct DrainState {
-    targets: Vec<Id>,
+    pub(crate) targets: Vec<Id>,
     active_left: u32,
     pause_left: u32,
 }
@@ -191,16 +191,44 @@ pub(crate) fn decide(a: &mut Actor, view: &Perception, mid: f64, out: &mut Effec
                 // The step that starts a swing also advances its first 50 ms.
                 let due = a.next_attack.max(earliest);
                 a.release_at = Some(due);
+                let close = s["close_attack_range"]
+                    .as_f64()
+                    .is_some_and(|r| distance <= r);
+                let segment = if let Some((_, left, count)) =
+                    a.card_state.empowered.and_then(|(spec, left)| {
+                        spec["attack_count"]
+                            .as_u64()
+                            .map(|count| (spec, left, count as u32))
+                    }) {
+                    count.saturating_sub(u32::from(left))
+                } else if s.get("close_attack_range").is_some() {
+                    (cycle - 1) % 2 + if close { 2 } else { 0 }
+                } else if s.get("rage_crit_multiplier").is_some() {
+                    if s["skill_resource_max"]
+                        .as_f64()
+                        .is_some_and(|max| a.card_state.resource >= max)
+                    {
+                        2
+                    } else {
+                        (cycle - 1) % 2
+                    }
+                } else {
+                    cycle - 1
+                };
                 a.attack = Some(crate::AttackTiming {
+                    segment,
+                    first: (s.get("first_strike_damage_multiplier").is_some()
+                        && !a.card_state.first_targets.contains(&b.id))
+                        || (cycle == 1
+                            && (s.get("form_first_attack_damage").is_some()
+                                || s.get("form_first_attack_health_ratio").is_some())),
                     start: out.tick,
                     release: out.tick,
                     end: out.tick,
                     cycle,
                     released: false,
                     empowered: a.card_state.empowered.is_some(),
-                    close: s["close_attack_range"]
-                        .as_f64()
-                        .is_some_and(|r| distance <= r),
+                    close,
                     structure_target: b.role.structure(),
                 });
                 out.facts.push(Fact::AttackStarted(a.id, b.id));
@@ -277,8 +305,10 @@ pub(crate) fn decide(a: &mut Actor, view: &Perception, mid: f64, out: &mut Effec
                         delta.length() <= reach + body.radius
                     };
                     if body.eligible(a) && inside {
-                        out.health
-                            .push(crate::vitals::Change::attack(a.id, body.id, damage, attack));
+                        out.health.push(
+                            crate::vitals::Change::attack(a.id, body.id, damage, attack)
+                                .contact(a.attack_sound(out.tick)),
+                        );
                     }
                 });
                 return;
@@ -313,8 +343,10 @@ pub(crate) fn decide(a: &mut Actor, view: &Perception, mid: f64, out: &mut Effec
                 };
                 crate::projectiles::fire(a, b, damage, speed, attack, out);
             } else {
-                out.health
-                    .push(crate::vitals::Change::attack(a.id, b.id, damage, attack))
+                out.health.push(
+                    crate::vitals::Change::attack(a.id, b.id, damage, attack)
+                        .contact(a.attack_sound(out.tick)),
+                )
             }
         }
     }

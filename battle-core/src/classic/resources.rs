@@ -79,6 +79,7 @@ impl Battle {
                     self.tick + u64::from(ticks(stat(s, "repeat_hit_haste_duration", 0.))),
                     (1000. * stat(s, "repeat_hit_speed_multiplier", 1.)) as u16,
                 ));
+                self.unit_sound(source, "passive:proc", Some(target));
             }
         }
     }
@@ -211,13 +212,25 @@ impl Actor {
             tick < start + u64::from(if *ticks == 0 { 6 } else { *ticks })
         });
         crate::model::VisualState {
+            drain_targets: if self.activity == crate::Activity::Channeling {
+                self.drain.targets.clone()
+            } else {
+                Vec::new()
+            },
+            aura_start: state.heal_cycle.filter(|&start| {
+                !self.has(Control::Stasis)
+                    && tick >= start
+                    && self.def.rules.is_some_and(|s| {
+                        tick < start + u64::from(ticks(stat(s, "heal_aura_duration", 0.)))
+                    })
+            }),
+            move_slow: self.slows.rates().0 < 1000,
+            attack_slow: self.slows.rates().1 < 1000,
             action: state
                 .visual_action
                 .filter(|v| tick < v.2 && (v.0 != "channel" || state.channel.is_some())),
             empowered: state.empowered.is_some(),
-            buff: state.buff_spec.is_some()
-                || state.counter.is_some()
-                || state.burst.is_some_and(|b| b.0 > tick && b.1 > 0),
+            buff: self.active_skill_buff(tick),
             immune: state.immunity > tick,
             charge: self.def.rules.is_some_and(|s| {
                 s["charge_distance"]
