@@ -372,6 +372,8 @@ export function MatchPage({
             resources={resources}
             frame={frame}
             me={match.me}
+            connected={connected}
+            deck={match.deck.cards}
             selection={selected}
             play={(x, y) => {
               if (selected !== undefined)

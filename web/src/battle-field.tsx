@@ -1,9 +1,17 @@
+import { drawSummonFlight, type SummonFlight } from "./summon-flight";
 import { useLayoutEffect, useRef } from "react";
 import type { Result } from "./api";
 
-import type { BattleEvent, EventWindow, Point } from "./presentation";
+import type {
+  BattleEvent,
+  BattleSound,
+  EventWindow,
+  Point,
+} from "./presentation";
 import { drawHealthBar } from "./health-bars";
+import { BattleAudio } from "./battle-audio";
 import { BattleClock } from "./battle-clock";
+import type { ParticleQuality } from "./native-particles";
 import type { ModelResources, BattleModels } from "./battle-models";
 export interface Unit {
   dormant?: boolean;
@@ -14,6 +22,10 @@ export interface Unit {
     action?: [string, number, number];
     empowered?: boolean;
     buff?: boolean;
+    auraStart?: number;
+    drainTargets?: number[];
+    moveSlow?: boolean;
+    attackSlow?: boolean;
     immune?: boolean;
     charge?: boolean;
     terrain?: boolean;
@@ -31,6 +43,7 @@ export interface Unit {
     release: number;
     end: number;
     cycle: number;
+    segment?: number;
     released: boolean;
     empowered?: boolean;
     close?: boolean;
@@ -50,6 +63,7 @@ export interface Unit {
   skill: string | null;
   id: number;
   kind: string;
+  audioKind?: string;
   name?: string;
   structure?: boolean;
   shield?: number;
@@ -79,6 +93,7 @@ export interface Frame {
   overtime: boolean;
   units: Unit[];
   protocol: typeof import("./presentation").BATTLE_PROTOCOL;
+  summons?: SummonFlight[];
   map: {
     id: string;
     width: number;
@@ -98,6 +113,13 @@ export interface Frame {
   shots: {
     born: number;
     sourceKind: string;
+    cycle?: number;
+    form?: boolean;
+    volley?: boolean;
+    empowered?: boolean;
+    group?: number | null;
+    direction?: Point | null;
+    action?: string;
     id: number;
     owner: number;
     target: number;
@@ -105,7 +127,29 @@ export interface Frame {
     position: Point;
     origin: Point;
   }[];
+  waves?: {
+    caster: number;
+    team: string;
+    start: number;
+    origin: Point;
+    direction: Point;
+    travel: number;
+    length: number;
+    width: number;
+  }[];
   areas: {
+    caster?: number;
+    effect?: string;
+    born?: number;
+    source_kind?: string;
+    phase?: string;
+    enhanced?: boolean;
+    next_tick?: number;
+    audio?: [
+      { kind: string; form: boolean; team: "Blue" | "Red" },
+      string,
+      number,
+    ];
     id: number;
     position: Point;
     direction: Point;
@@ -121,12 +165,21 @@ export interface Frame {
       }
     >;
   }[];
+  soundLayers?: (BattleSound & { loop: boolean })[];
   spells: {
+    team: number;
+    origin: Point;
+    born: number;
     id: number;
     key: string;
     position: Point;
     impact: number;
     end: number;
+    radius?: number;
+    enhanced?: boolean;
+    range?: number;
+    waveWidth?: number;
+    speed?: number;
   }[];
   pending: [number, number, number | null][];
   hand: string[];
@@ -168,6 +221,7 @@ function draw(
   selection?: number,
   models?: BattleModels,
   focusId?: number,
+  geometry = false,
 ) {
   const { width, height, tile } = frame.map;
   const x = (v: number) => (me ? width - v : v);
@@ -213,6 +267,7 @@ function draw(
       rect(0, i, width, 1, "rgba(255,255,255,.14)");
   }
   for (const area of frame.areas) {
+    if (!geometry && models?.effects.areas.has(area.id)) continue;
     const [kind, s] = Object.entries(area.shape)[0];
     ctx.save();
     ctx.translate(x(area.position.x), y(area.position.y));
@@ -238,8 +293,42 @@ function draw(
     ctx.restore();
   }
   for (const spell of frame.spells) {
+    if (
+      (!geometry && models?.effects.spells.has(spell.id)) ||
+      (spell.key === "medium_lightning" &&
+        spell.team !== me &&
+        tick < spell.impact - 20)
+    )
+      continue;
     ctx.strokeStyle = "#f6df99";
-    ctx.strokeRect(x(spell.position.x) - 8, y(spell.position.y) - 8, 16, 16);
+    const sx = x(spell.position.x),
+      sy = y(spell.position.y);
+    if (geometry && spell.range && spell.waveWidth) {
+      const forward = spell.team === me ? -1 : 1;
+      ctx.strokeRect(
+        sx - spell.waveWidth / 2,
+        sy,
+        spell.waveWidth,
+        forward * spell.range,
+      );
+      if (spell.speed && tick >= spell.impact) {
+        const travel = Math.min(
+          spell.range,
+          ((tick - spell.impact) * spell.speed) / 20,
+        );
+        ctx.fillStyle = ctx.strokeStyle;
+        ctx.fillRect(
+          sx - spell.waveWidth / 2,
+          sy + forward * travel,
+          spell.waveWidth,
+          2,
+        );
+      }
+    } else if (geometry && spell.radius) {
+      ctx.beginPath();
+      ctx.arc(sx, sy, spell.radius, 0, 2 * Math.PI);
+      ctx.stroke();
+    } else ctx.strokeRect(sx - 8, sy - 8, 16, 16);
   }
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -286,7 +375,11 @@ function draw(
     }
   }
   ctx.globalAlpha = 1;
+  for (const flight of frame.summons ?? []) {
+    drawSummonFlight(ctx, flight, tick, frame.map.projection, x, y);
+  }
   for (const shot of frame.shots) {
+    if (!geometry && models?.effects.shots.has(shot.id)) continue;
     const { id, team, position, origin } = shot;
     const hand = models?.launches.get(id);
     const color = colors[team === me ? 0 : 1];
@@ -341,6 +434,10 @@ export function Battlefield({
   focusId,
   playback = 1,
   diagnostics = false,
+  effectQuality,
+  geometry = false,
+  connected = true,
+  deck,
   resources,
   play,
 }: {
@@ -350,16 +447,47 @@ export function Battlefield({
   focusId?: number;
   playback?: number;
   diagnostics?: boolean;
+  effectQuality?: ParticleQuality;
+  geometry?: boolean;
+  connected?: boolean;
+  deck?: readonly string[];
   resources?: ModelResources;
   play: (x: number, y: number) => void;
 }) {
   const { width, height } = frame.map;
   const canvas = useRef<HTMLCanvasElement>(null);
   const layer = useRef<HTMLCanvasElement>(null);
-  const current = useRef({ frame, selection, focusId, playback });
+  const current = useRef({
+    frame,
+    selection,
+    focusId,
+    geometry,
+    effectQuality,
+    playback,
+    connected,
+    deck,
+  });
   useLayoutEffect(() => {
-    current.current = { frame, selection, focusId, playback };
-  }, [frame, selection, focusId, playback]);
+    current.current = {
+      frame,
+      selection,
+      focusId,
+      playback,
+      connected,
+      deck,
+      geometry,
+      effectQuality,
+    };
+  }, [
+    frame,
+    selection,
+    focusId,
+    playback,
+    connected,
+    deck,
+    geometry,
+    effectQuality,
+  ]);
   useLayoutEffect(() => {
     const surface = canvas.current!,
       gl = layer.current!;
@@ -368,6 +496,13 @@ export function Battlefield({
     const params = new URLSearchParams(location.search);
     const trace = params.has("animationTrace");
     const collect = diagnostics || trace || params.has("battleMetrics");
+    const audio = new BattleAudio(
+      me,
+      collect
+        ? (detail) =>
+            surface.dispatchEvent(new CustomEvent("battle-audio", { detail }))
+        : undefined,
+    );
     let models: BattleModels | undefined;
     let disposed = false,
       raf = 0,
@@ -392,6 +527,7 @@ export function Battlefield({
     }
     function resume() {
       previous = undefined;
+      audio.reset(current.current.frame.presentation.cursor);
       clock = new BattleClock();
       models?.reset();
     }
@@ -400,10 +536,25 @@ export function Battlefield({
     gl.addEventListener("webglcontextrestored", load);
     load();
     function paint(now: number) {
-      const { frame, selection, focusId, playback } = current.current;
+      const {
+        frame,
+        selection,
+        focusId,
+        playback,
+        connected,
+        deck,
+        geometry,
+        effectQuality,
+      } = current.current;
       const start = collect ? performance.now() : 0;
+      if (models && effectQuality) models.effects.quality = effectQuality;
       if (frame !== previous) {
-        if (clock.push(frame, now)) models?.reset(frame.presentation.cursor);
+        audio.prepare(frame, deck);
+        models?.effects.prepare(frame, deck);
+        if (clock.push(frame, now)) {
+          models?.reset(frame.presentation.cursor);
+          audio.reset(frame.presentation.cursor);
+        }
         if (frame.result && !previous?.result) endedAt = now;
         previous = frame;
       }
@@ -417,7 +568,8 @@ export function Battlefield({
           ? tick + Math.min(160, (now - endedAt) / 50)
           : tick;
       models?.render(shown, tick, visualTick);
-      draw(ctx!, shown, me, tick, selection, models, focusId);
+      audio.render(shown, tick, playback, connected, frame.presentation.cursor);
+      draw(ctx!, shown, me, tick, selection, models, focusId, geometry);
       if (collect)
         surface.dispatchEvent(
           new CustomEvent("battle-render", {
@@ -425,6 +577,8 @@ export function Battlefield({
               tick,
               ms: performance.now() - start,
               ...models?.metrics,
+              vfx: models?.effects.metrics,
+              effects: trace ? models?.effects.trace() : undefined,
               action: models?.playing(focusId),
               actions: trace ? models?.traceActions() : undefined,
             },
@@ -436,6 +590,7 @@ export function Battlefield({
     return () => {
       disposed = true;
       cancelAnimationFrame(raf);
+      audio.dispose();
       document.removeEventListener("visibilitychange", resume);
       gl.removeEventListener("webglcontextlost", lost);
       gl.removeEventListener("webglcontextrestored", load);

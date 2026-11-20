@@ -34,7 +34,7 @@ function levels() {
     );
 }
 subscribePreferences(levels);
-function getMixer() {
+export function getMixer() {
   if (!mixer) {
     const context = new AudioContext();
     const master = context.createGain(),
@@ -81,6 +81,17 @@ export async function playCue(cue: Cue) {
   }
 }
 export function installLobbySounds() {
+  // Direct match links and keyboard-only players also need a user gesture.
+  function unlock() {
+    try {
+      const { context } = getMixer();
+      if (context.state !== "running") void context.resume().catch(() => {});
+    } catch {
+      // Gameplay remains available without an audio device.
+    }
+  }
+  document.addEventListener("pointerup", unlock, true);
+  document.addEventListener("keydown", unlock, true);
   document.addEventListener(
     "click",
     (e) => {

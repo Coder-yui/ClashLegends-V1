@@ -21,6 +21,7 @@ import {
 import { GLTFLoader, type GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { clone } from "three/addons/utils/SkeletonUtils.js";
+import { BattleEffects, type Launch } from "./battle-effects";
 import { GroundMarks } from "./unit-ground-marks";
 import { applyCrystalWell } from "./crystal-well";
 import { visualRadius } from "./health-bars";
@@ -205,6 +206,17 @@ class ActorModel {
     }
     for (const item of this.flashMeshes)
       item.mesh.material = on ? item.flash : item.normal;
+  }
+  private effectMeshes?: Mesh[];
+  skinMeshes() {
+    if (!this.effectMeshes) {
+      this.effectMeshes = [];
+      this.root.traverse((o) => {
+        if (o instanceof Mesh && o.geometry.getAttribute("uv"))
+          this.effectMeshes!.push(o);
+      });
+    }
+    return this.effectMeshes;
   }
   readonly elevation: number;
   private headOffset?: number;
@@ -498,6 +510,12 @@ async function animationPack(name: string, version?: string) {
   const data = await glb(name, version);
   return data.animations;
 }
+// A parked Gnar prop can sit far below the floor in otherwise visible poses.
+export function reviewMesh(mesh: Mesh, asset?: string) {
+  return (
+    asset !== "gnar" || [mesh.material].flat().some((m) => m.name === "Gnar")
+  );
+}
 export async function loadModel(
   profile: ModelProfile,
   mode: "body" | "review" = "body",
@@ -597,13 +615,7 @@ export async function loadModel(
     asset.scene.add(floor);
   }
   asset.scene.traverseVisible((o) => {
-    if (!(o instanceof Mesh)) return;
-    // The small Gnar skeleton parks an unused boomerang far below the floor.
-    if (
-      profile.asset === "gnar" &&
-      ![o.material].flat().some((m) => m.name === "Gnar")
-    )
-      return;
+    if (!(o instanceof Mesh) || !reviewMesh(o, profile.asset)) return;
     for (let i = 0; i < o.geometry.attributes.position.count; i++) {
       o.getVertexPosition(i, v).applyMatrix4(o.matrixWorld);
       bounds.expandByPoint(v);
@@ -694,7 +706,8 @@ export class BattleModels {
   private resources: ModelResources;
   private ownsResources: boolean;
   readonly bars = new Map<number, number>();
-  readonly launches = new Map<number, { tick: number; x: number; y: number }>();
+  readonly launches = new Map<number, Launch>();
+  readonly effects: BattleEffects;
   readonly metrics = {
     actors: 0,
     calls: 0,
@@ -702,6 +715,7 @@ export class BattleModels {
     launches: 0,
     maxMarkerError: 0,
     meleeContacts: 0,
+    hitFrames: [] as { target: number; tick: number }[],
     maxDisplayDelayMs: 0,
   };
 
@@ -711,6 +725,9 @@ export class BattleModels {
     private collect = false,
     resources?: ModelResources,
   ) {
+    this.effects = new BattleEffects(me);
+    const quality = new URLSearchParams(location.search).get("vfx");
+    if (quality === "low" || quality === "off") this.effects.quality = quality;
     this.resources = resources ?? new ModelResources();
     this.ownsResources = !resources;
     this.renderer = new WebGLRenderer({
@@ -721,7 +738,7 @@ export class BattleModels {
     });
     this.renderer.localClippingEnabled = true;
     this.renderer.setClearColor(0, 0);
-    this.scene.add(this.field, this.ground.mesh);
+    this.scene.add(this.field, this.ground.mesh, this.effects.root);
   }
 
   private load(profile: ModelProfile, skill?: string | null) {
@@ -813,9 +830,11 @@ export class BattleModels {
     this.launches.clear();
     this.bars.clear();
     this.seq = cursor;
+    this.effects.reset(cursor);
   }
 
   render(frame: Frame, tick: number, deathTick = tick) {
+    this.metrics.hitFrames.length = 0;
     const { width, height, projection } = frame.map;
     const w = Math.max(
       1,
@@ -912,7 +931,14 @@ export class BattleModels {
       if (event.fact.kind === "damage") {
         const hit = data as { target: number; lost: number; killed: boolean };
         const actor = this.actors.get(hit.target);
-        if (actor && !hit.killed) actor.hit(event.tick, tick);
+        if (actor && !hit.killed) {
+          actor.hit(event.tick, tick);
+          if (this.collect)
+            this.metrics.hitFrames.push({
+              target: hit.target,
+              tick: event.tick,
+            });
+        }
         if (actor && hit.lost > 0 && !hit.killed)
           actor.sequence.trigger(
             actor.profile.events?.hit,
@@ -939,14 +965,16 @@ export class BattleModels {
       if (!actor || !u || (fired && !hand) || (strike && hand)) continue;
       const motion = motionFor(u, actor.profile, event.tick);
       if (
-        motion.release !== event.tick ||
+        (!fired && motion.release !== event.tick) ||
         (!fired && motion.marker === undefined)
       )
         continue;
       actor.sample(motion, event.tick, false);
       if (fired) {
-        hand!.getWorldPosition(this.vector).project(this.camera);
+        const world = hand!.getWorldPosition(this.vector).clone();
+        this.vector.project(this.camera);
         this.launches.set(data[2], {
+          world,
           tick: event.tick,
           x: ((this.vector.x + 1) * width) / 2,
           y: ((1 - this.vector.y) * height) / 2,
@@ -959,7 +987,7 @@ export class BattleModels {
         this.metrics.maxDisplayDelayMs,
         (tick - event.tick) * 50,
       );
-      if (motion.marker !== undefined) {
+      if (motion.marker !== undefined && motion.release === event.tick) {
         const error = Math.abs(
           actor.actions.get(motion.clip)!.time - motion.marker,
         );
@@ -1043,6 +1071,26 @@ export class BattleModels {
     }
     for (const [id, launch] of this.launches)
       if (tick - launch.tick > 3) this.launches.delete(id);
+    this.effects.render(
+      frame,
+      deathTick,
+      this.launches,
+      (id, hand) => {
+        const actor = this.actors.get(id);
+        return hand
+          ? actor?.hands[0]?.getWorldPosition(this.vector)
+          : actor?.root.position;
+      },
+      (id) => this.actors.get(id)?.skinMeshes(),
+    );
+    this.effects.backdrop.capture(
+      this.renderer,
+      this.scene,
+      this.camera,
+      this.effects.root,
+      this.effects.needsBackdrop,
+      frame.map,
+    );
     this.renderer.render(this.scene, this.camera);
     this.metrics.actors = this.actors.size;
     this.metrics.calls = this.renderer.info.render.calls;
@@ -1054,6 +1102,7 @@ export class BattleModels {
     if (this.ownsResources) this.resources.dispose();
     this.assets.clear();
     this.ground.dispose();
+    this.effects.dispose();
     this.renderer.dispose();
   }
 }

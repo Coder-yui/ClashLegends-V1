@@ -667,8 +667,9 @@ function rosterMotion(
       attackRole = "first_strike_attack";
     const starts = roles[attackRole];
     if (starts?.length) {
-      let i = (atk.cycle - 1) % starts.length;
-      if (u.kind === "samira") i = ((atk.cycle - 1) % 2) + (atk.close ? 2 : 0);
+      let i = (atk.segment ?? atk.cycle - 1) % starts.length;
+      if (atk.segment === undefined && u.kind === "samira")
+        i = ((atk.cycle - 1) % 2) + (atk.close ? 2 : 0);
       const prefix =
         attackRole === "empowered_attack" && roles.empowered_attack_hit
           ? "empowered_attack"

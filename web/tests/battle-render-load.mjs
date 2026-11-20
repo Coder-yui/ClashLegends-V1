@@ -28,6 +28,7 @@ const roster = process.argv.includes("--roster")
       "gnar",
     ]
   : undefined;
+const effects = process.argv.includes("--effects");
 function crowded(f, count) {
   if (!count) return f;
   const units = Array.from({ length: count }, (_, i) => {
@@ -61,13 +62,33 @@ function crowded(f, count) {
   return {
     ...f,
     units,
-    shots: [],
+    shots: effects
+      ? units
+          .filter((_, i) => i % 4 === 0)
+          .map((u, i) => {
+            const age = (f.tick + i) % 12,
+              born = f.tick - age;
+            return {
+              id: 100000 + born * count + i,
+              born,
+              team: u.team,
+              owner: u.id,
+              target: 0,
+              sourceKind: "ashe",
+              volley: true,
+              group: born,
+              direction: { x: 0, y: -1 },
+              origin: { x: u.x, y: u.y },
+              position: { x: u.x, y: u.y - age * 13 },
+            };
+          })
+      : [],
     spells: [],
     areas: [],
     presentation: { after: 0, cursor: 0, events: [] },
   };
 }
-async function bench(geometry, count) {
+async function bench(geometry, count, quality = "high") {
   const page = await browser.newPage({
     baseURL: base,
     viewport: { width: 800, height: 900 },
@@ -92,22 +113,26 @@ async function bench(geometry, count) {
     .map((f) => crowded(f, count));
   let stop;
   await page.routeWebSocket("**/api/matches/*/live", (ws) => {
-    // Let the renderer load all three GLBs before timing steady state.
-    ws.send(JSON.stringify(tape[0]));
-    const start = setTimeout(() => {
-      let i = 0;
-      const timer = setInterval(() => {
-        ws.send(JSON.stringify(tape[i++]));
-        if (i === tape.length) clearInterval(timer);
-      }, 50);
-      stop = () => clearInterval(timer);
-    }, 2000);
-    stop = () => clearTimeout(start);
+    ws.send(JSON.stringify({ type: "connected", protocol: 3 }));
+    ws.onMessage((raw) => {
+      if (JSON.parse(raw).type !== "ready") return;
+      ws.send(JSON.stringify(tape[0]));
+      const start = setTimeout(() => {
+        let i = 0;
+        const timer = setInterval(() => {
+          ws.send(JSON.stringify(tape[i++]));
+          if (i === tape.length) clearInterval(timer);
+        }, 50);
+        stop = () => clearInterval(timer);
+      }, 2000);
+      stop = () => clearTimeout(start);
+    });
   });
   await page.goto(
     "/play/matches/" +
       matchId +
-      "?battleMetrics=1" +
+      "?battleMetrics=1&vfx=" +
+      quality +
       (geometry ? "&battleView=debug" : ""),
   );
   await page.waitForFunction(
@@ -128,6 +153,12 @@ async function bench(geometry, count) {
     JSON.stringify({
       case: count || "live",
       roster: !!roster,
+      ...(effects
+        ? {
+            quality,
+            maxParticles: Math.max(...data.map((s) => s.vfx?.particles ?? 0)),
+          }
+        : {}),
       view: geometry ? "debug" : "models",
       samples: data.length,
       cpuP50: p(cpu, 0.5),
@@ -148,9 +179,14 @@ async function bench(geometry, count) {
   await page.close();
 }
 try {
-  for (const count of roster ? [32, 64, 128] : [0, 32, 64, 128])
-    for (const geometry of roster ? [false] : [true, false])
-      await bench(geometry, count);
+  if (effects) {
+    for (const count of [32, 64, 128])
+      for (const quality of ["off", "low", "high"])
+        await bench(false, count, quality);
+  } else
+    for (const count of roster ? [32, 64, 128] : [0, 32, 64, 128])
+      for (const geometry of roster ? [false] : [true, false])
+        await bench(geometry, count);
 } finally {
   await browser.close();
 }

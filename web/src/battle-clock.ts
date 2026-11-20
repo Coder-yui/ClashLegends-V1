@@ -40,6 +40,7 @@ export class BattleClock {
     if (!b || tick <= a.tick) return { frame: a, tick };
     const fraction = (tick - a.tick) / (b.tick - a.tick);
     const units = new Map(b.units.map((u) => [u.id, u]));
+    const waves = new Map(b.waves?.map((w) => [w.caster + "/" + w.start, w]));
     const shots = new Map(b.shots.map((p) => [p.id, p]));
     const lerp = (x: number, y: number) => x + (y - x) * fraction;
     const blinked = new Set(
@@ -71,6 +72,16 @@ export class BattleClock {
       frame: {
         ...a,
         units: a.units.map(interpolate),
+        waves: a.waves?.map((w) => {
+          const next = waves.get(w.caster + "/" + w.start);
+          return next
+            ? {
+                ...w,
+                travel: lerp(w.travel, next.travel),
+                width: lerp(w.width, next.width),
+              }
+            : w;
+        }),
         shots: a.shots.map((p) => {
           const q = shots.get(p.id);
           return q
