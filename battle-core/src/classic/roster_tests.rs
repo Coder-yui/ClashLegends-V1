@@ -28,7 +28,7 @@ fn play(g: &mut ClassicMatch, key: &str, point: Point) -> Result<(), MatchError>
     for _ in 0..5 {
         let view = g.players[0].view();
         if let Some(slot) = view.hand.iter().position(|&c| c == key) {
-            return g.step(&[Input {
+            return g.step_immediate(&[Input {
                 team: Team::Blue,
                 sequence: view.acknowledged + 1,
                 intent: Intent::Play {
@@ -44,7 +44,7 @@ fn play(g: &mut ClassicMatch, key: &str, point: Point) -> Result<(), MatchError>
 }
 fn cast(g: &mut ClassicMatch) -> Result<(), MatchError> {
     let sequence = g.players[0].ack + 1;
-    g.step(&[Input {
+    g.step_immediate(&[Input {
         team: Team::Blue,
         sequence,
         intent: Intent::Activate {

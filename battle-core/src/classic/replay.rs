@@ -1,7 +1,15 @@
 //! Compact input log. Deck order and selected content are supplied at replay
 //! time and must match the header; spectators never receive this private log.
 use super::{Card, ClassicMatch, Input, MatchError};
-pub const RULESET: &str = env!("BATTLE_RULESET");
+pub const CONTENT_VERSION: &str = env!("BATTLE_CONTENT");
+/// Bump the engine revision for changes to authority ordering, AI or simulation semantics.
+pub const RULESET: &str = concat!("classic-3/", env!("BATTLE_CONTENT"));
+#[derive(Clone, Copy, Debug)]
+pub struct RecordedInput {
+    pub received_at: u64,
+    pub input_tick: u64,
+    pub input: Input,
+}
 #[derive(Clone, Debug)]
 pub struct Record {
     pub rules: &'static str,
@@ -12,7 +20,7 @@ pub struct Record {
     pub skills: [[Option<String>; 8]; 2],
     pub decks: [[String; 8]; 2],
     pub steps: u64,
-    pub commands: Vec<(u64, Input)>,
+    pub commands: Vec<RecordedInput>,
 }
 impl Record {
     pub fn new(game: &ClassicMatch, content: &str) -> Result<Self, MatchError> {
@@ -37,14 +45,27 @@ impl Record {
         &mut self,
         game: &mut ClassicMatch,
         inputs: &[Input],
-    ) -> Result<Vec<Result<(), MatchError>>, MatchError> {
+    ) -> Result<Vec<Result<u64, MatchError>>, MatchError> {
+        let tick = game.tick();
+        self.step_stamped(game, inputs.iter().map(|i| (tick, *i)))
+    }
+    pub fn step_stamped(
+        &mut self,
+        game: &mut ClassicMatch,
+        inputs: impl IntoIterator<Item = (u64, Input)>,
+    ) -> Result<Vec<Result<u64, MatchError>>, MatchError> {
         if game.tick() != self.steps || game.result().is_some() {
             return Err(MatchError::Finished);
         }
-        let r = game.step(inputs);
+        let received_at = self.steps;
+        let r = game.step_stamped(inputs.into_iter().inspect(|&(input_tick, input)| {
+            self.commands.push(RecordedInput {
+                received_at,
+                input_tick,
+                input,
+            });
+        }));
         self.steps = game.tick();
-        self.commands
-            .extend(inputs.iter().map(|i| (self.steps, *i)));
         Ok(r)
     }
     pub fn replay(&self, decks: [[Card; 8]; 2], content: &str) -> Result<ClassicMatch, MatchError> {
@@ -66,11 +87,11 @@ impl Record {
             || !super::modes()
                 .iter()
                 .any(|m| m.id == self.mode && self.steps <= m.end)
-            || self.commands.windows(2).any(|w| w[0].0 > w[1].0)
             || self
                 .commands
-                .iter()
-                .any(|(t, _)| *t == 0 || *t > self.steps)
+                .windows(2)
+                .any(|w| w[0].received_at > w[1].received_at)
+            || self.commands.iter().any(|c| c.received_at >= self.steps)
             || !decks
                 .iter()
                 .zip(&self.decks)
@@ -84,15 +105,15 @@ impl Record {
             .ok_or(MatchError::Loadout)?;
         let mut game = ClassicMatch::with_rules(self.seed, decks, map, mode)?;
         let mut inputs = self.commands.iter().peekable();
-        for tick in 1..=self.steps {
+        for tick in 0..self.steps {
             if game.result().is_some() {
                 return Err(MatchError::Finished);
             }
             let mut batch = vec![];
-            while inputs.peek().is_some_and(|(t, _)| *t == tick) {
-                batch.push(inputs.next().unwrap().1)
+            while let Some(cmd) = inputs.next_if(|c| c.received_at == tick) {
+                batch.push((cmd.input_tick, cmd.input));
             }
-            game.step(&batch);
+            game.step_stamped(batch);
             game.drain_events().for_each(drop);
         }
         Ok(game)

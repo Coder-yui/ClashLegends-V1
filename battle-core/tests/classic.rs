@@ -31,7 +31,7 @@ fn invalid_and_replayed_inputs_do_not_spend_or_rotate() {
         [
             Err(MatchError::Placement),
             Err(MatchError::Sequence),
-            Ok(()),
+            Ok(COMMAND_DELAY),
             Err(MatchError::StaleHand)
         ]
     );
@@ -151,15 +151,19 @@ fn active_consumes_once_after_deployment_and_uses_caster_from_slot() {
             ),
             cmd(2, active)
         ]),
-        [Ok(()), Err(MatchError::Rule(Error::Controlled))]
+        [Ok(COMMAND_DELAY), Err(MatchError::NoAbility)]
     );
-    for _ in 0..19 {
+    while g.tick() < COMMAND_DELAY + 20 {
         g.step(&[]);
     }
+    let due = g.tick() + COMMAND_DELAY;
     assert_eq!(
         g.step(&[cmd(3, active), cmd(4, active)]),
-        [Ok(()), Err(MatchError::NoAbility)]
+        [Ok(due), Err(MatchError::NoAbility)]
     );
+    while g.tick() < due {
+        g.step(&[]);
+    }
     let s = g.view(Team::Blue);
     assert_eq!(s.own.gold, 1);
     assert_eq!(s.field.units.iter().filter(|u| u.kind == "imp").count(), 6);
@@ -169,14 +173,40 @@ fn full_match_records_rejections_and_replays_both_private_seats() {
     let d = representative_deck();
     let mut g = ClassicMatch::new(2026, [d, d]).unwrap();
     let mut record = replay::Record::new(&g, "core-test").unwrap();
+    let mut checkpoints = Vec::new();
     while g.result().is_none() {
         let cmds: Vec<_> = [Team::Blue, Team::Red]
             .into_iter()
             .filter_map(|team| bot_input(team, &g.view(team)))
             .collect();
         record.step(&mut g, &cmds).unwrap();
+        if [100, 1000, 2000].contains(&g.tick()) || g.result().is_some() {
+            let view = g.view(Team::Blue);
+            checkpoints.push((
+                g.tick(),
+                view.field.units.len(),
+                view.field
+                    .units
+                    .iter()
+                    .map(|u| i64::from(u.hp))
+                    .sum::<i64>(),
+                view.own.acknowledged,
+                view.own.gold,
+            ));
+        }
         g.drain_events().for_each(drop);
     }
+    // Seed 2026. Pin integers at regulation landmarks so a rules change is reviewed
+    // even when an updated engine and its own replay still agree with each other.
+    assert_eq!(
+        checkpoints,
+        [
+            (100, 14, 18033, 5, 1),
+            (1000, 14, 16625, 44, 1),
+            (2000, 17, 17282, 87, 1),
+            (5471, 20, 13164, 238, 3),
+        ]
+    );
     assert!(record.commands.len() > 30);
     let replay = record.replay([d, d], "core-test").unwrap();
     for team in [Team::Blue, Team::Red] {
@@ -228,4 +258,53 @@ fn frozen_loadout_and_map_are_replay_inputs() {
     );
     record.skills[0][0] = Some("different-ability".to_owned());
     assert!(record.replay_on([deck, deck], "v1", map).is_err());
+}
+
+#[test]
+fn recorded_client_tick_and_receipt_preserve_the_authority_timeline() {
+    let mut game = game();
+    let deck = representative_deck();
+    let mut record = replay::Record::new(&game, "golden").unwrap();
+    let mut trace = Vec::new();
+    let slot = game
+        .view(Team::Blue)
+        .own
+        .hand
+        .iter()
+        .position(|k| *k != "freeze")
+        .unwrap() as u8;
+    let input = Input {
+        team: Team::Blue,
+        sequence: 1,
+        intent: Intent::Play {
+            slot,
+            version: 0,
+            point: Point::new(220., 860.),
+        },
+    };
+    for received in 0..40 {
+        let commands = match received {
+            4 => vec![(1, input)],
+            5 => vec![(1, input)],
+            _ => vec![],
+        };
+        let receipts = record.step_stamped(&mut game, commands).unwrap();
+        if !receipts.is_empty() {
+            trace.push((received, receipts));
+        }
+        let completed = game.take_completions();
+        if game.tick() == 11 {
+            assert_eq!(completed, [(Team::Blue, 1, Ok(()))]);
+        } else {
+            assert!(completed.is_empty());
+        }
+    }
+    assert_eq!(
+        trace,
+        [(4, vec![Ok(11)]), (5, vec![Err(MatchError::Sequence)])]
+    );
+    let restored = record.replay([deck, deck], "golden").unwrap();
+    for team in [Team::Blue, Team::Red] {
+        assert_eq!(game.view(team), restored.view(team));
+    }
 }

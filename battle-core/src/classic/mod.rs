@@ -513,7 +513,29 @@ impl ClassicMatch {
     pub fn take_completions(&mut self) -> Vec<(Team, u64, Result<(), MatchError>)> {
         std::mem::take(&mut self.completed)
     }
-    pub fn step(&mut self, inputs: &[Input]) -> Vec<Result<(), MatchError>> {
+    /// Admit commands against the current seat, then advance one authority tick.
+    pub fn step(&mut self, inputs: &[Input]) -> Vec<Result<u64, MatchError>> {
+        let tick = self.tick();
+        self.step_stamped(inputs.iter().map(|input| (tick, *input)))
+    }
+    /// Network and replay callers retain the original tick observed by the sender.
+    pub fn step_stamped(
+        &mut self,
+        inputs: impl IntoIterator<Item = (u64, Input)>,
+    ) -> Vec<Result<u64, MatchError>> {
+        let receipts = inputs
+            .into_iter()
+            .map(|(tick, input)| self.schedule(tick, input))
+            .collect();
+        self.advance_tick(&[]);
+        receipts
+    }
+    // Mechanism fixtures can start a cast at an exact tick without advancing through admission.
+    #[cfg(test)]
+    fn step_immediate(&mut self, inputs: &[Input]) -> Vec<Result<(), MatchError>> {
+        self.advance_tick(inputs)
+    }
+    fn advance_tick(&mut self, inputs: &[Input]) -> Vec<Result<(), MatchError>> {
         if self.result.is_some() {
             return vec![Err(MatchError::Finished); inputs.len()];
         }
