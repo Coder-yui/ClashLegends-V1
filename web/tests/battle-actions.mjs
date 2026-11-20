@@ -166,6 +166,7 @@ try {
   await Promise.all([blue.goto(path), red.goto(path)]);
   for (const p of [blue, red]) {
     await p.waitForFunction(() => window.renderFrames.length > 0);
+    const seatMatch = await api(p, "matches/" + matchId);
     const requested = await p.evaluate(() =>
       performance
         .getEntriesByType("resource")
@@ -174,7 +175,7 @@ try {
     );
     assert.deepEqual(
       [...new Set(requested)].sort(),
-      match.modelResources.map((name) => name + ".glb").sort(),
+      seatMatch.modelResources.map((name) => name + ".glb").sort(),
     );
     assert.ok(requested.includes("ashe-volley.glb"));
     assert.ok(!requested.includes("ashe-review.glb"));

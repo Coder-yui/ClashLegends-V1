@@ -1,11 +1,11 @@
 import { cardArt } from "./card-art";
-import type { ModelResources } from "./battle-models";
+import { useMatchAssets } from "./use-match-assets";
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { href } from "./api";
 import type { Card, Catalog, Match, Result, Session } from "./api";
 import { ActiveSkillButton } from "./active-skill-button";
-import { BattleEvents } from "./presentation";
+import { BATTLE_PROTOCOL, BattleEvents } from "./presentation";
 import { Battlefield, type Frame } from "./battle-field";
 import { actions, boundAction, keyLabel, usePreferences } from "./preferences";
 import metadata from "./preparation-data.json";
@@ -62,15 +62,6 @@ export function MatchPage({
   session: Session;
   settings: () => void;
 }) {
-  const [resources, setResources] = useState<ModelResources>();
-  const ownedResources = useRef<ModelResources | undefined>(undefined);
-  useEffect(
-    () => () => {
-      ownedResources.current?.dispose();
-      ownedResources.current = undefined;
-    },
-    [match.id],
-  );
   const [frame, setFrame] = useState<Frame>();
   const [ended, setEnded] = useState<Result | null>(match.result);
   const [connected, setConnected] = useState(false),
@@ -81,9 +72,32 @@ export function MatchPage({
   const inflight = useRef<"receipt" | "frame" | null>(null);
   const { bindings } = usePreferences();
   const result = match.result ?? ended;
+  const joinedStream = useRef<string | undefined>(undefined);
   const live = match.playable && match.status !== "withdrawn" && !result;
+  const receive =
+    live ||
+    (joinedStream.current === match.id &&
+      !ended &&
+      match.status !== "withdrawn");
+  const {
+    resources,
+    failed,
+    retry: retryAssets,
+  } = useMatchAssets(match, receive);
+  const [online, setOnline] = useState(false);
+  const [protocolError, setProtocolError] = useState(false);
+  const [greeted, setGreeted] = useState<WebSocket>();
+  const baselineId = useRef(0);
   useEffect(() => {
-    if (!live) return;
+    if (resources && greeted?.readyState === WebSocket.OPEN) {
+      greeted.send(
+        JSON.stringify({ type: "ready", protocol: BATTLE_PROTOCOL }),
+      );
+    }
+  }, [resources, greeted]);
+  useEffect(() => {
+    if (!receive) return;
+    joinedStream.current = match.id;
     let stopped = false,
       done = false,
       retry: number;
@@ -96,6 +110,19 @@ export function MatchPage({
       ws.onmessage = (e) => {
         if (stopped) return;
         const message = JSON.parse(e.data);
+        if (message.type === "connected" || message.type === "frame") {
+          if (message.protocol !== BATTLE_PROTOCOL) {
+            done = true;
+            setProtocolError(true);
+            ws.close();
+            return;
+          }
+        }
+        if (message.type === "connected") {
+          setOnline(true);
+          setGreeted(ws);
+          return;
+        }
         if (message.type === "receipt") {
           inflight.current = "frame";
           setHint(message.error ?? "");
@@ -103,19 +130,14 @@ export function MatchPage({
           return;
         }
         if (message.type === "frame") {
-          if (message.protocol !== 2) {
-            done = true;
-            setHint("对局协议已更新，请刷新页面");
-            ws.close();
-            return;
-          }
           const cues = events.read(message.presentation);
           for (const { fact } of cues)
             if (fact.kind === "commandFinished") {
               const result = fact.data as { error?: string };
               if (result.error) setHint(result.error);
             }
-          const baseline = events.baseline;
+          if (events.reset) baselineId.current++;
+          const baseline = baselineId.current;
           setFrame((previous) => ({
             ...message,
             baseline,
@@ -141,43 +163,25 @@ export function MatchPage({
       ws.onclose = () => {
         if (stopped) return;
         setConnected(false);
+        setOnline(false);
+        setGreeted(undefined);
         setPendingSlot(null);
         select(null);
         inflight.current = null;
         if (!done) retry = window.setTimeout(connect, 650);
       };
     }
-    let assets: ModelResources | undefined;
-    async function prepare() {
-      try {
-        const { ModelResources } = await import("./battle-models");
-        if (stopped) return;
-        assets ??= new ModelResources();
-        await assets.prepare(match.modelResources ?? []);
-        if (stopped) return;
-        ownedResources.current = assets;
-        setResources(assets);
-        setHint("");
-        connect();
-      } catch {
-        if (!stopped) {
-          setHint("模型资源加载失败，正在重试");
-          retry = window.setTimeout(prepare, 1200);
-        }
-      }
-    }
-    void prepare();
+    connect();
     return () => {
-      if (assets !== ownedResources.current) assets?.dispose();
       stopped = true;
       clearTimeout(retry);
       socket.current?.close();
     };
-  }, [match.id, live]);
+  }, [match.id, receive]);
   const card = (id: string) => catalog.cards.find((c) => c.id === id);
   const selected =
     selection?.version === frame?.version ? selection?.slot : undefined;
-  const ready = connected && frame?.started && !result;
+  const ready = resources && connected && frame?.started && !result;
   function send(command: object) {
     if (
       !ready ||
@@ -363,7 +367,7 @@ export function MatchPage({
         </strong>
       </div>
       <div key="battlefield" className="battle-stage">
-        {frame ? (
+        {frame && resources ? (
           <Battlefield
             resources={resources}
             frame={frame}
@@ -382,7 +386,20 @@ export function MatchPage({
           />
         ) : (
           <div className="battle-loading">
-            {hint || (resources ? "正在连接战场…" : "正在准备本局模型与动作…")}
+            {protocolError ? (
+              "对局协议已更新，请刷新页面"
+            ) : failed ? (
+              <>
+                <span role="alert">本局模型加载失败</span>{" "}
+                <button onClick={retryAssets}>重新加载模型</button> {roomLink}
+              </>
+            ) : !online ? (
+              "正在连接战场…"
+            ) : !resources ? (
+              "已连接，正在准备本局模型与动作…"
+            ) : (
+              "正在同步战场…"
+            )}
           </div>
         )}
       </div>
@@ -472,7 +489,9 @@ export function MatchPage({
         )}
         <p className="battle-hint" role="status">
           {!connected
-            ? hint || "正在连接战场…"
+            ? failed || protocolError
+              ? ""
+              : hint || (online ? "正在准备战场" : "正在连接战场…")
             : !ready
               ? "等待另一位玩家进入战场"
               : hint ||

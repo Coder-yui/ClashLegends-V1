@@ -64,6 +64,7 @@ export interface Result {
   tick: number;
 }
 export interface Match {
+  assetVersion?: string;
   modelResources?: string[];
   result: Result | null;
   playable: boolean;

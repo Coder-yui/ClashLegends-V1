@@ -475,20 +475,35 @@ export function releaseAsset(asset: GLTF) {
   });
 }
 
-function glb(name: string) {
+async function glb(name: string, version?: string) {
+  const path = "/play/media/models/";
+  const url =
+    path + name + ".glb" + (version ? "?v=" + encodeURIComponent(version) : "");
+  const abort = new AbortController();
+  const timeout = window.setTimeout(() => abort.abort(), 60_000);
+  let bytes: ArrayBuffer;
+  try {
+    const response = await fetch(url, { signal: abort.signal });
+    if (!response.ok)
+      throw new Error("模型 " + name + " HTTP " + response.status);
+    bytes = await response.arrayBuffer();
+  } finally {
+    window.clearTimeout(timeout);
+  }
   return new GLTFLoader()
     .setMeshoptDecoder(MeshoptDecoder)
-    .loadAsync("/play/media/models/" + name + ".glb");
+    .parseAsync(bytes, path);
 }
-async function animationPack(name: string) {
-  const data = await glb(name);
+async function animationPack(name: string, version?: string) {
+  const data = await glb(name, version);
   return data.animations;
 }
 export async function loadModel(
   profile: ModelProfile,
   mode: "body" | "review" = "body",
+  version?: string,
 ) {
-  const asset = await glb(profile.asset);
+  const asset = await glb(profile.asset, version);
   const castNames = profile.packs
     ? Object.values(profile.packs).flat()
     : Object.values(profile.casts ?? {}).map((a) => a.clip);
@@ -499,7 +514,9 @@ export async function loadModel(
     if (profile.asset === "ashe") extras.push("ashe-review");
     try {
       asset.animations.push(
-        ...(await Promise.all(extras.map(animationPack))).flat(),
+        ...(
+          await Promise.all(extras.map((name) => animationPack(name, version)))
+        ).flat(),
       );
     } catch (error) {
       releaseAsset(asset);
@@ -600,12 +617,14 @@ export async function loadModel(
 
 // One owner per match or lab. Bodies are shared by skilled and unskilled actors.
 export class ModelResources {
+  private disposed = false;
+  constructor(private version?: string) {}
   private bodies = new Map<string, Promise<ModelAsset>>();
   private packs = new Map<string, ReturnType<typeof animationPack>>();
   body(profile: ModelProfile) {
     let task = this.bodies.get(profile.asset);
     if (!task) {
-      task = loadModel(profile).catch((error) => {
+      task = loadModel(profile, "body", this.version).catch((error) => {
         this.bodies.delete(profile.asset);
         throw error;
       });
@@ -616,7 +635,7 @@ export class ModelResources {
   pack(name: string) {
     let task = this.packs.get(name);
     if (!task) {
-      task = animationPack(name).catch((error) => {
+      task = animationPack(name, this.version).catch((error) => {
         this.packs.delete(name);
         throw error;
       });
@@ -626,6 +645,7 @@ export class ModelResources {
   }
   async prepare(names: string[]) {
     const allowed = new Set(names);
+    const prepared = new Set<string>();
     const followups = modelProfiles
       .map(followupProfile)
       .filter((p): p is ModelProfile => !!p);
@@ -634,17 +654,23 @@ export class ModelResources {
         .filter((p) => allowed.has(p.asset))
         .map(async (profile) => {
           const body = await this.body(profile);
+          prepared.add(profile.asset);
           for (const skill of skillPacks(profile)) {
+            if (this.disposed) return;
             const pack = castPack(profile, skill)!;
             if (!allowed.has(pack)) continue;
             const extra = await this.pack(pack);
+            prepared.add(pack);
             if (!body.animations.includes(extra[0]))
               body.animations.push(...extra);
           }
         }),
     );
+    if (!this.disposed && prepared.size !== allowed.size)
+      throw new Error("模型清单与当前客户端不匹配");
   }
   dispose() {
+    this.disposed = true;
     for (const task of this.bodies.values())
       void task.then(releaseAsset, () => {});
     this.bodies.clear();

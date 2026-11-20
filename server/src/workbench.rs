@@ -184,10 +184,14 @@ impl Lab {
         self.selected = self
             .selected
             .filter(|id| view.field.units.iter().any(|u| u.id == *id));
-        let mut frame = field_frame(self.world.game(), view, Team::Blue, true, &self.stream);
+        let mut frame = field_frame(self.world.game(), &view, Team::Blue, true, &self.stream);
+        frame["presentation"] = self.stream.window();
         // The lab can change loadouts between two deployments of the same card.
         for unit in frame["units"].as_array_mut().unwrap() {
-            if let Some(skill) = unit["id"].as_u64().and_then(|id| self.world.equipped(id as Id)) {
+            if let Some(skill) = unit["id"]
+                .as_u64()
+                .and_then(|id| self.world.equipped(id as Id))
+            {
                 unit["equippedSkill"] = json!(skill);
             }
         }

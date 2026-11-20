@@ -221,49 +221,60 @@ try {
   }
   await act(page, "ready", { ready: true });
   const { matchId } = await act(opponent, "ready", { ready: true });
-  const match = await api(page, "matches/" + matchId);
-  const files = match.modelResources;
-  for (const required of [
-    "aatrox-alt",
-    "daisy",
+  const seats = await Promise.all(
+    [page, opponent].map((p) => api(p, "matches/" + matchId)),
+  );
+  const [blue, red] = seats.map((m) => m.modelResources);
+  for (const asset of ["aatrox-alt", "daisy", "jayce-alt"]) {
+    assert.ok(blue.includes(asset) && !red.includes(asset), asset);
+  }
+  for (const asset of [
     "garen-decisive-strike",
     "kayn_slayer-reaping-slash",
-    "jayce-alt",
     "anivia_egg",
     "sion-alt",
     "gnar-alt",
-    "ashe",
-  ])
-    assert.ok(files.includes(required), required);
-  for (const absent of [
-    "ashe-volley",
-    "ashe-review",
-    "jinx-alt",
-    "garen-judgment",
-    "gnar-alt-rage-burst",
-    "samira",
-  ])
-    assert.ok(!files.includes(absent), absent);
+  ]) {
+    assert.ok(red.includes(asset) && !blue.includes(asset), asset);
+  }
+  for (const files of [blue, red]) {
+    assert.ok(files.includes("ashe"));
+    for (const absent of [
+      "ashe-volley",
+      "ashe-review",
+      "jinx-alt",
+      "garen-judgment",
+      "gnar-alt-rage-burst",
+      "samira",
+    ])
+      assert.ok(!files.includes(absent), absent);
+  }
   await Promise.all(
-    [page, opponent].map(async (p) => {
+    [page, opponent].map(async (p, seat) => {
       const observed = new Set();
+      const prepared = new Promise((resolve) =>
+        p.on("websocket", (ws) => {
+          if (!ws.url().includes("/matches/" + matchId + "/live")) return;
+          ws.on("framesent", ({ payload }) => {
+            if (JSON.parse(payload).type === "ready")
+              resolve([...observed].sort());
+          });
+        }),
+      );
       p.on("request", (req) => {
         const path = new URL(req.url()).pathname;
         if (path.endsWith(".glb"))
           observed.add(path.split("/").pop().slice(0, -4));
       });
-      const live = p.waitForEvent("websocket", {
-        predicate: (ws) => ws.url().includes("/matches/" + matchId + "/live"),
-      });
       await p.goto(base + "/play/matches/" + matchId);
-      await live;
-      assert.deepEqual([...observed].sort(), [...files].sort());
+      await p.waitForSelector(".battle-hand button:enabled");
+      assert.deepEqual(await prepared, [...seats[seat].modelResources].sort());
     }),
   );
   console.log(
-    "Both match clients prepared exactly",
-    files.length,
-    "frozen resources.",
+    "Seat-specific model manifests prepared",
+    blue.length,
+    red.length,
   );
 } finally {
   await browser.close();

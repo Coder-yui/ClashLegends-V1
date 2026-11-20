@@ -29,7 +29,7 @@ struct App {
     grace: i64,
 }
 type Result<T> = std::result::Result<T, Error>;
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 struct Error(StatusCode, String);
 fn fail(s: impl Into<String>) -> Error {
     Error(StatusCode::CONFLICT, s.into())
@@ -99,7 +99,7 @@ async fn match_view(
         .ok_or_else(|| fail("你没有这场比赛的席位"))?;
     let result: Option<Value> = row.get(2);
     Ok(Json(
-        json!({"modelResources":model::match_model_resources(seats), "result":result,"playable":battle::compatible(&cfg,&app.catalog),"id":mid,"roomId":cfg["roomId"],"mode":cfg["mode"],"map":cfg["map"],"round":cfg["round"],"me":me,"opponent":seats[1-me]["name"],"deck":seats[me]["deck"],"status":if result.is_some() {"finished".into()} else {row.get::<_,String>(1)}}),
+        json!({"assetVersion":env!("BATTLE_ASSETS"),"modelResources":model::match_model_resources(&seats[me]["deck"],me), "result":result,"playable":battle::compatible(&cfg,&app.catalog),"id":mid,"roomId":cfg["roomId"],"mode":cfg["mode"],"map":cfg["map"],"round":cfg["round"],"me":me,"opponent":seats[1-me]["name"],"deck":seats[me]["deck"],"status":if result.is_some() {"finished".into()} else {row.get::<_,String>(1)}}),
     ))
 }
 #[tokio::main]

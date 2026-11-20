@@ -1,4 +1,3 @@
-import { profileFor } from "./battle-motion";
 import { useLayoutEffect, useRef } from "react";
 import type { Result } from "./api";
 
@@ -79,7 +78,7 @@ export interface Frame {
   remaining: number;
   overtime: boolean;
   units: Unit[];
-  protocol: 2;
+  protocol: typeof import("./presentation").BATTLE_PROTOCOL;
   map: {
     id: string;
     width: number;
@@ -257,7 +256,7 @@ function draw(
       ctx.lineWidth = 3;
       ctx.stroke();
     }
-    if (!profileFor(u)) {
+    if (!models?.bars.has(u.id)) {
       ctx.fillStyle = u.frozen ? "#c6f4ff" : color;
       ctx.beginPath();
       if (u.structure) ctx.rect(cx - r, cy - r, 2 * r, 2 * r);

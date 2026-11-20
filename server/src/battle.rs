@@ -5,23 +5,33 @@ mod presentation;
 #[path = "workbench.rs"]
 pub mod workbench;
 use axum::extract::ws::{Message, WebSocket, WebSocketUpgrade};
+use clash_battle_core::classic::MatchView;
 use clash_battle_core::{
     classic::{
-        bot_input, replay::RULESET, representative_deck, resolve_deck, Card, ClassicMatch, Input,
-        Intent, MatchError, Outcome,
+        replay::RULESET, resolve_deck, roster_bot_input, Card, ClassicMatch, Input, Intent,
+        MatchError, Outcome,
     },
     Aim, Point, Team,
 };
 use model::Deck;
+#[path = "battle_frame.rs"]
+mod battle_frame;
+use battle_frame::{field_frame, SeatFrame, PROTOCOL};
+#[path = "battle_socket.rs"]
+mod battle_socket;
+#[path = "battle_metrics.rs"]
+mod metrics;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, time::Duration};
-use tokio::sync::{mpsc, oneshot, watch, Mutex};
+use tokio::sync::{mpsc, oneshot, watch, Mutex, OnceCell};
 
 const TEAMS: [Team; 2] = [Team::Blue, Team::Red];
-pub type Hosts = Arc<Mutex<HashMap<String, Host>>>;
+type HostSlot = Arc<OnceCell<Result<Host>>>;
+pub type Hosts = Arc<Mutex<HashMap<String, HostSlot>>>;
 #[derive(Clone)]
 pub struct Host {
-    frames: [watch::Sender<String>; 2],
+    frames: [watch::Sender<Arc<SeatFrame>>; 2],
+    ready: [watch::Sender<()>; 2],
     queue: mpsc::Sender<Request>,
 }
 
@@ -103,55 +113,13 @@ fn cards(deck: &Deck, catalog: &[Card]) -> Result<[Card; 8]> {
 fn outcome(out: Outcome, tick: u64) -> Value {
     json!({"winner":out.winner.map(Team::index),"reason":format!("{:?}",out.reason),"tick":tick})
 }
-fn frame(sim: &Simulation, team: Team, started: bool) -> String {
-    field_frame(
-        &sim.game,
-        sim.game.view(team),
-        team,
-        started,
-        &sim.streams[team.index()],
-    )
-    .to_string()
-}
-
-fn field_frame(
-    game: &ClassicMatch,
-    view: clash_battle_core::classic::MatchView,
-    team: Team,
-    started: bool,
-    stream: &presentation::Stream,
-) -> Value {
-    let units: Vec<_> = view.field.units.iter().map(|u| json!({
-        "id":u.id,"kind":u.kind,"team":u.team.index(),"x":u.position.x,"y":u.position.y,
-        "visual":u.visual,"attack":u.attack,"impactTick":u.impact_tick,"movementRate":u.movement_rate,"castStart":u.cast_start,
-        "castEnd":u.cast_end,"skill":u.skill,"bar":u.bar,"dormant":u.dormant,"alternateForm":u.form_changed,"activity":u.activity,"facing":u.facing,"target":u.target,"actionSerial":u.action_serial,"readyTick":u.ready_tick,"deployStart":u.deploy_start,"since":u.since,"controls":u.controls,"name":u.name,"structure":u.structure,"hidden":u.hidden,"shield":u.shield,"radius":u.radius,"hp":u.hp,"maxHp":u.max_hp,"frozen":u.controls.contains(&clash_battle_core::Control::Freeze)
-    })).collect();
-    let shots: Vec<_> = view
-        .field
-        .projectiles
-        .iter()
-        .map(|p| json!({"id":p.id,"born":p.born,"sourceKind":p.source_kind,"team":p.team.index(),"owner":p.owner,"target":p.target,"origin":p.origin,"position":p.position}))
-        .collect();
-    let hand = view.own;
-    let map = clash_battle_core::classic::maps()
-        .iter()
-        .find(|m| m.id == game.map().id)
-        .unwrap();
-    json!({"type":"frame","protocol":2,"map":{"id":map.id,"width":map.width,"height":map.height,"tile":map.tile,"terrain":map.terrain,"projection":map.projection,"backMargin":map.back_margin,"backdropWidth":map.backdrop_width,"obstacles":map.obstacles},"ruinedTowers":game.ruined_towers().map(|(id,t,p)|json!({"id":id,"team":t.index(),"x":p.x,"y":p.y})).collect::<Vec<_>>(),"deployment":game.deployment_regions(team),"presentation":stream.window(),"areas":view.field.areas,"spells":game.spell_views().collect::<Vec<_>>(),"pending":game.pending(team).collect::<Vec<_>>(),"started":started,"tick":game.tick(),"remaining":view.remaining_ticks,
-        "overtime":view.overtime,"units":units,"shots":shots,"hand":hand.hand,"costs":hand.costs,"lastCard":hand.last,"activeCards":hand.active_keys,"next":hand.next,"nextCost":hand.next_cost,
-        "gold":hand.gold,"version":hand.version,"ack":hand.acknowledged,
-        "skillResource":view.skill_resource,"activeWait":view.active_wait,"activeCost":view.active_cost,"active":hand.active.map(|a| a.map(|v| json!({"caster":v.caster,"uses":v.uses}))),
-        "buttons":view.buttons.map(|button| button.map(|b| json!({"locked":b.locked,"cooldownLeft":b.cooldown_left,"cooldownTotal":b.cooldown_total,"freeRecast":b.free_recast}))),
-        "result":view.result.map(|o| outcome(o,game.tick()))})
-}
-
 pub fn compatible(cfg: &Value, catalog: &Catalog) -> bool {
-    cfg["rulesVersion"] == RULESET && catalog.playable(&cfg["contentVersion"])
+    cfg["rulesVersion"] == RULESET && cfg["contentVersion"] == catalog.version
 }
 struct Simulation {
     game: ClassicMatch,
+    views: [MatchView; 2],
     ai: [bool; 2],
-    full_roster: bool,
     streams: [presentation::Stream; 2],
 }
 impl Simulation {
@@ -162,12 +130,7 @@ impl Simulation {
         let uuid: Uuid = decode(cfg["seed"].clone())?;
         let seed = uuid.as_u64_pair().0;
         let seats = &cfg["seats"];
-        let legacy = representative_deck();
-        let choices = if cfg["contentVersion"] == catalog.version {
-            clash_battle_core::classic::battle_cards()
-        } else {
-            &legacy
-        };
+        let choices = clash_battle_core::classic::battle_cards();
         let decks = [
             cards(&decode(seats[0]["deck"].clone())?, choices)?,
             cards(&decode(seats[1]["deck"].clone())?, choices)?,
@@ -181,9 +144,9 @@ impl Simulation {
         let game =
             ClassicMatch::with_rules(seed, decks, map, mode).map_err(|_| fail("无法建立战场"))?;
         Ok(Self {
+            views: TEAMS.map(|team| game.view(team)),
             game,
-            streams: Default::default(),
-            full_roster: cfg["contentVersion"] == catalog.version,
+            streams: std::array::from_fn(presentation::Stream::for_seat),
             ai: [seats[0]["ai"] == true, seats[1]["ai"] == true],
         })
     }
@@ -193,14 +156,9 @@ impl Simulation {
             if !self.ai[team.index()] {
                 continue;
             }
-            let decide = if self.full_roster {
-                clash_battle_core::classic::roster_bot_input
-            } else {
-                bot_input
-            };
             if let Some(Input {
                 sequence, intent, ..
-            }) = decide(team, &self.game.view(team))
+            }) = roster_bot_input(team, &self.views[team.index()])
             {
                 let command = match intent {
                     Intent::Play {
@@ -230,14 +188,12 @@ impl Simulation {
         inputs
     }
     fn step(&mut self, inputs: &[Logged]) -> Vec<std::result::Result<u64, MatchError>> {
-        let receipts = inputs
-            .iter()
-            .map(|l| {
-                self.game
-                    .schedule(l.input_tick, l.command.input(TEAMS[l.seat]))
-            })
-            .collect();
-        self.game.step(&[]);
+        let receipts = self.game.step_stamped(
+            inputs
+                .iter()
+                .map(|l| (l.input_tick, l.command.input(TEAMS[l.seat]))),
+        );
+        self.views = TEAMS.map(|team| self.game.view(team));
         let facts: Vec<_> = self.game.drain_events().collect();
         let done = self.game.take_completions();
         for team in TEAMS {
@@ -249,7 +205,7 @@ impl Simulation {
                 .filter(|(t, _, _)| *t == team)
                 .map(|(_, seq, r)| (*seq, r.err().map(explanation)))
                 .collect();
-            self.streams[team.index()].advance(&self.game.view(team).field, &facts, &completed);
+            self.streams[team.index()].advance(&self.views[team.index()].field, &facts, &completed);
         }
         receipts
     }
@@ -322,28 +278,56 @@ pub async fn initialize(app: &App) -> Result<deadpool_postgres::Object> {
 }
 
 async fn host(app: &App, mid: &str) -> Result<Host> {
-    let mut hosts = app.battles.lock().await;
-    if let Some(h) = hosts.get(mid) {
-        return Ok(h.clone());
+    let slot = app
+        .battles
+        .lock()
+        .await
+        .entry(mid.to_owned())
+        .or_default()
+        .clone();
+    let host = slot.get_or_init(|| load_host(app, mid)).await.clone();
+    if host.is_err() {
+        let mut hosts = app.battles.lock().await;
+        if hosts
+            .get(mid)
+            .is_some_and(|entry| Arc::ptr_eq(entry, &slot))
+        {
+            hosts.remove(mid);
+        }
     }
+    host
+}
+
+async fn load_host(app: &App, mid: &str) -> Result<Host> {
     let db = app.db.get().await?;
     let row = db.query_opt("SELECT config,status,battle_tick,inputs FROM matches WHERE id=$1 AND status <> 'withdrawn' AND result IS NULL", &[&mid]).await?.ok_or_else(|| fail("对局已结束"))?;
     let cfg: Value = row.get(0);
     let started = row.get::<_, String>(1) == "claimed";
-    let mut sim = Simulation::load(&cfg, &app.catalog)?;
-    sim.restore(row.get(2), decode(row.get(3))?)?;
-    let frames = TEAMS.map(|team| watch::channel(frame(&sim, team, started)).0);
+    drop(db);
+    let rid = cfg["roomId"]
+        .as_str()
+        .ok_or_else(|| fail("缺少比赛房间"))?
+        .to_owned();
+    let catalog = app.catalog.clone();
+    let sim = tokio::task::spawn_blocking(move || {
+        let mut sim = Simulation::load(&cfg, &catalog)?;
+        sim.restore(row.get(2), decode(row.get(3))?)?;
+        Ok::<_, Error>(sim)
+    })
+    .await
+    .map_err(|_| fail("战斗恢复任务中断"))??;
+    let frames = TEAMS.map(|team| watch::channel(Arc::new(SeatFrame::new(&sim, team, started))).0);
+    let ready = TEAMS.map(|_| watch::channel(()).0);
     let (queue, rx) = mpsc::channel(64);
     let handle = Host {
         frames: frames.clone(),
+        ready: ready.clone(),
         queue,
     };
-    hosts.insert(mid.to_owned(), handle.clone());
     let app = app.clone();
     let mid = mid.to_owned();
     tokio::spawn(async move {
-        let rid = cfg["roomId"].as_str().unwrap();
-        if let Err(e) = drive(&app, &mid, rid, sim, started, frames, rx).await {
+        if let Err(e) = drive(&app, &mid, &rid, sim, started, frames, ready, rx).await {
             eprintln!("battle {mid}: {}", e.1);
         }
         app.battles.lock().await.remove(&mid);
@@ -401,18 +385,20 @@ async fn drive(
     rid: &str,
     mut sim: Simulation,
     mut started: bool,
-    frames: [watch::Sender<String>; 2],
+    frames: [watch::Sender<Arc<SeatFrame>>; 2],
+    ready: [watch::Sender<()>; 2],
     mut rx: mpsc::Receiver<Request>,
 ) -> Result<()> {
     let mut clock = tokio::time::interval(Duration::from_millis(50));
     clock.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Delay);
     let mut idle = 0;
+    let mut metrics = metrics::Ticks::enabled();
     loop {
         clock.tick().await;
         if !started {
             if !TEAMS
                 .iter()
-                .all(|t| sim.ai[t.index()] || frames[t.index()].receiver_count() > 0)
+                .all(|t| sim.ai[t.index()] || ready[t.index()].receiver_count() > 0)
             {
                 while let Ok(request) = rx.try_recv() {
                     let _ = request.reply.send(Err("正在等待双方进入战场"));
@@ -440,6 +426,7 @@ async fn drive(
             }
             started = true;
         }
+        let began = std::time::Instant::now();
         let mut requests = Vec::new();
         while let Ok(req) = rx.try_recv() {
             requests.push(req);
@@ -454,6 +441,7 @@ async fn drive(
         } else {
             json!([Batch { tick, inputs }])
         };
+        let simulated = std::time::Instant::now();
         if let Some(out) = sim.game.result() {
             finish(app, mid, rid, outcome(out, tick), log, tick as i32).await?;
         } else if has_inputs || tick % 20 == 0 {
@@ -466,13 +454,24 @@ async fn drive(
                 )
                 .await?;
         }
+        let durable = std::time::Instant::now();
         for team in TEAMS {
             if !sim.ai[team.index()] {
-                frames[team.index()].send_replace(frame(&sim, team, true));
+                frames[team.index()].send_replace(Arc::new(SeatFrame::new(&sim, team, true)));
             }
         }
         for (request, receipt) in requests.into_iter().zip(receipts) {
             let _ = request.reply.send(receipt.map_err(explanation));
+        }
+        if let Some(metrics) = &mut metrics {
+            metrics.record(
+                mid,
+                tick,
+                began,
+                simulated,
+                durable,
+                sim.game.result().is_some(),
+            );
         }
         if sim.game.result().is_some() {
             return Ok(());
@@ -513,9 +512,9 @@ pub async fn live(
     }
     let host = host(&app, &mid).await?;
     let frames = host.frames[seat].subscribe();
-    Ok(ws
-        .max_message_size(1024)
-        .on_upgrade(move |socket| stream(socket, seat, frames, host.queue)))
+    Ok(ws.max_message_size(1024).on_upgrade(move |socket| {
+        battle_socket::stream(socket, seat, frames, host.ready[seat].clone(), host.queue)
+    }))
 }
 
 fn explanation(e: MatchError) -> &'static str {
@@ -530,44 +529,21 @@ fn explanation(e: MatchError) -> &'static str {
         _ => "当前无法执行此操作",
     }
 }
-async fn stream(
-    mut socket: WebSocket,
-    seat: usize,
-    mut frames: watch::Receiver<String>,
-    queue: mpsc::Sender<Request>,
-) {
-    loop {
-        let frame = frames.borrow_and_update().clone();
-        if socket.send(Message::Text(frame.into())).await.is_err() {
-            return;
-        }
-        tokio::select! {
-            changed = frames.changed() => if changed.is_err() {return;},
-            message = socket.recv() => match message {
-                Some(Ok(Message::Text(raw))) => {
-                    let (reply, answer) = oneshot::channel();
-                    #[derive(Deserialize)] struct Wire{#[serde(rename="inputTick")] input_tick:u64,#[serde(flatten)]command:Command}
-                    let admitted = match serde_json::from_str::<Wire>(&raw) {
-                        Err(_) => Err("无效指令"),
-                        Ok(Wire{command,input_tick}) => {
-                            if queue.try_send(Request{input:Logged{seat,input_tick,command},reply}).is_err() { return; }
-                            match answer.await {Ok(error) => error, Err(_) => return}
-                        }
-                    };
-                    let receipt = json!({"type":"receipt","error":admitted.err(),"executeTick":admitted.ok()});
-                    if socket.send(Message::Text(receipt.to_string().into())).await.is_err() {return;}
-                }
-                Some(Ok(Message::Ping(_) | Message::Pong(_))) => (),
-                _ => return,
-            }
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    #[test]
+    fn recovery_is_pinned_to_authority_and_accepts_changed_presentation_metadata() {
+        let catalog: Catalog = serde_json::from_value(model::battle_catalog()).unwrap();
+        let mut config = json!({"rulesVersion":RULESET,"contentVersion":catalog.version,"assetVersion":"prior-art","protocol":2});
+        assert!(compatible(&config, &catalog));
+        config["rulesVersion"] = json!("archived-rules");
+        assert!(!compatible(&config, &catalog));
+        config["rulesVersion"] = json!(RULESET);
+        config["contentVersion"] = json!("different-loadout-registry");
+        assert!(!compatible(&config, &catalog));
+    }
     #[test]
     fn checkpoint_restores_both_private_views_and_the_same_outcome() {
         let catalog: Catalog = serde_json::from_value(model::battle_catalog()).unwrap();
@@ -612,7 +588,14 @@ mod tests {
                 .pending(Team::Blue)
                 .eq(restored.game.pending(Team::Blue)));
             for team in TEAMS {
-                assert_eq!(frame(&sim, team, true), frame(&restored, team, true));
+                assert_eq!(
+                    sim.streams[team.index()].window(),
+                    restored.streams[team.index()].window()
+                );
+                assert_eq!(
+                    SeatFrame::new(&sim, team, true).encode(Some(0)),
+                    SeatFrame::new(&restored, team, true).encode(Some(0))
+                );
                 assert_eq!(sim.game.view(team), restored.game.view(team));
             }
             while sim.game.result().is_none() {
@@ -623,5 +606,37 @@ mod tests {
             assert_eq!(sim.game.result(), restored.game.result());
             assert_eq!(sim.game.tick(), restored.game.tick());
         }
+    }
+}
+
+#[cfg(test)]
+mod bandwidth {
+    use super::*;
+    /// Same fixed seed, input stream and seats for incremental and overlapping-window encodings.
+    #[test]
+    #[ignore = "release benchmark of a complete 20 Hz match"]
+    fn complete_match_wire_bytes() {
+        let catalog: Catalog = serde_json::from_value(model::battle_catalog()).unwrap();
+        let deck = catalog.default_loadout();
+        let cfg = json!({"rulesVersion":RULESET, "contentVersion":catalog.version, "mode":"classic", "map":"rift",
+            "seed":"9655102d-42b4-41de-bc01-202611191117","seats":[{"ai":false,"deck":deck},{"ai":false,"deck":deck}]});
+        let mut sim = Simulation::load(&cfg, &catalog).unwrap();
+        let mut delivered = Some(0);
+        let (mut delta, mut overlapping) = (0, 0);
+        while sim.game.result().is_none() {
+            sim.ai = [true, true];
+            let inputs = sim.decisions();
+            sim.ai = [false, false];
+            sim.step(&inputs);
+            let mut frame = SeatFrame::new(&sim, Team::Blue, true);
+            delta += frame.encode(delivered).len();
+            delivered = Some(frame.history.cursor);
+            overlapping += frame.full_window_bytes(sim.streams[0].window());
+        }
+        println!(
+            "ticks={} incremental_bytes={delta} repeated_window_bytes={overlapping}",
+            sim.game.tick()
+        );
+        assert!(delta < overlapping);
     }
 }

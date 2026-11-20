@@ -89,17 +89,11 @@ pub fn battle_catalog() -> Value {
     }
     catalog["defaultDeck"] =
         json!(clash_battle_core::classic::representative_deck().map(|card| card.key));
-    catalog["version"] = json!(format!("{}-battle-2", catalog["version"].as_str().unwrap()));
+    catalog["version"] = json!(clash_battle_core::classic::replay::CONTENT_VERSION);
     catalog
 }
 
 impl Catalog {
-    pub fn previous_version(&self) -> String {
-        self.version.trim_end_matches("-battle-2").to_owned() + "-battle-1"
-    }
-    pub fn playable(&self, version: &Value) -> bool {
-        version == &self.version || version == &self.previous_version()
-    }
     pub fn room_deck(&self, mut deck: Deck) -> Option<Deck> {
         deck.skills.retain(|id, _| {
             self.cards
@@ -302,41 +296,41 @@ impl Room {
     }
 }
 
-/// Publish only the unordered asset set. Slot order and the other seat's hand stay private.
-pub(crate) fn match_model_resources(seats: &[Value]) -> std::collections::BTreeSet<&'static str> {
+/// The private part of the manifest can only depend on this seat's frozen deck.
+pub(crate) fn match_model_resources(
+    deck: &Value,
+    team: usize,
+) -> std::collections::BTreeSet<&'static str> {
     static INDEX: std::sync::OnceLock<Value> = std::sync::OnceLock::new();
     let index = INDEX.get_or_init(|| {
         serde_json::from_str(include_str!("../../content/model_resources.json")).unwrap()
     });
     let mut files = std::collections::BTreeSet::new();
-    for (team, seat) in seats.iter().enumerate() {
-        let deck = &seat["deck"];
-        let cards = deck["cards"].as_array().unwrap();
-        let active_mirror = cards.iter().take(2).any(|card| card == "mirror");
-        let system = [
-            "princess_tower",
-            "nexus",
-            "melee_minion",
-            "ranged_minion",
-            "super_minion",
-            "siege_minion",
-        ];
-        for (slot, id) in cards
-            .iter()
-            .filter_map(Value::as_str)
-            .chain(system)
-            .enumerate()
-        {
-            let entry = &index[id][team];
-            let skill = if slot < 2 || active_mirror {
-                deck["skills"][id].as_str()
-            } else {
-                None
-            };
-            for key in std::iter::once("base").chain(skill) {
-                if let Some(paths) = entry[key].as_array() {
-                    files.extend(paths.iter().filter_map(Value::as_str));
-                }
+    let mut add = |paths: &'static Value| {
+        if let Some(paths) = paths.as_array() {
+            files.extend(paths.iter().filter_map(Value::as_str));
+        }
+    };
+    for id in [
+        "princess_tower",
+        "nexus",
+        "melee_minion",
+        "ranged_minion",
+        "super_minion",
+        "siege_minion",
+    ] {
+        for side in [0, 1] {
+            add(&index[id][side]["base"]);
+        }
+    }
+    let cards = deck["cards"].as_array().unwrap();
+    let active_mirror = cards.iter().take(2).any(|c| c == "mirror");
+    for (slot, id) in cards.iter().filter_map(Value::as_str).enumerate() {
+        let entry = &index[id][team];
+        add(&entry["base"]);
+        if slot < 2 || active_mirror {
+            if let Some(skill) = deck["skills"][id].as_str() {
+                add(&entry[skill]);
             }
         }
     }
@@ -351,11 +345,11 @@ mod tests {
     }
 
     #[test]
-    fn model_demand_respects_skill_slots_mirror_and_opposing_resources() {
+    fn each_seat_prepares_public_armies_and_only_its_own_active_packs() {
         let plain = json!({"deck":{"cards":["heal","zap","ashe"],"skills":{"ashe":"ashe.volley"}}});
         let other = json!({"deck":{"cards":["gold_ward","void_gate"],"skills":{}}});
-        let base = match_model_resources(&[plain.clone(), other.clone()]);
-        assert!(base.contains("ashe") && base.contains("void_gate"));
+        let base = match_model_resources(&plain["deck"], 0);
+        assert!(base.contains("ashe") && !base.contains("void_gate"));
         assert!(!base.contains("ashe-volley") && !base.contains("ashe-review"));
         for active in [
             json!(["ashe", "heal", "zap"]),
@@ -363,10 +357,10 @@ mod tests {
         ] {
             let mut deck = plain.clone();
             deck["deck"]["cards"] = active;
-            let full = match_model_resources(&[other.clone(), deck]);
+            let full = match_model_resources(&deck["deck"], 1);
             assert!(full.contains("ashe-volley") && !full.contains("ashe-review"));
         }
-        assert!(!match_model_resources(&[other.clone(), other]).contains("ashe"));
+        assert!(!match_model_resources(&other["deck"], 1).contains("ashe"));
     }
 
     #[test]

@@ -13,9 +13,8 @@ export class BattleClock {
     const baseline =
       !last ||
       frame.baseline !== last.baseline ||
-      frame.tick < last.tick ||
-      frame.tick - last.tick > 12;
-    if (baseline) {
+      frame.tick < last.tick;
+    if (baseline || frame.tick - last.tick > 12) {
       this.frames = [];
       this.shown = frame.tick;
     }
