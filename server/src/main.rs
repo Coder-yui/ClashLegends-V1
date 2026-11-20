@@ -118,8 +118,8 @@ async fn main() {
         .batch_execute(include_str!("../schema.sql"))
         .await
         .expect("initialize lobby schema");
-    let collection: Catalog =
-        serde_json::from_str(include_str!("../../content/catalog.json")).unwrap();
+    let public_collection = model::collection_catalog();
+    let collection: Catalog = serde_json::from_value(public_collection.clone()).unwrap();
     let addr = std::env::var("LOBBY_ADDR").unwrap_or_else(|_| "127.0.0.1:4317".into());
     let workbench_enabled = std::env::var("LOBBY_WORKBENCH").map_or_else(
         |_| {
@@ -156,12 +156,7 @@ async fn main() {
         .route("/api/session", get(session::bootstrap))
         .route(
             "/api/catalog",
-            get(|| async {
-                (
-                    [(axum::http::header::CONTENT_TYPE, "application/json")],
-                    include_str!("../../content/catalog.json"),
-                )
-            }),
+            get(move || async { Json(public_collection) }),
         )
         .route("/api/battle/catalog", get(move || async { Json(public) }))
         .route("/api/matches/{id}/live", get(battle::live))

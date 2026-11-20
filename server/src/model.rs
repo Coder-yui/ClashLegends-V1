@@ -36,9 +36,21 @@ pub struct Deck {
     pub cards: Vec<String>,
     pub skills: BTreeMap<String, String>,
 }
-pub fn battle_catalog() -> Value {
+pub fn collection_catalog() -> Value {
     let mut catalog: Value =
         serde_json::from_str(include_str!("../../content/catalog.json")).unwrap();
+    let art: BTreeMap<String, Value> =
+        serde_json::from_str(include_str!("../../content/card_art.json")).unwrap();
+    for card in catalog["cards"].as_array_mut().unwrap() {
+        if let Some(entry) = card["id"].as_str().and_then(|id| art.get(id)) {
+            card["image"] = entry["image"].clone();
+        }
+    }
+    catalog
+}
+
+pub fn battle_catalog() -> Value {
+    let mut catalog = collection_catalog();
     let test_maps = std::env::var("LOBBY_TEST_MAP").as_deref() == Ok("1");
     let maps: Vec<_> = clash_battle_core::classic::maps()
         .iter()

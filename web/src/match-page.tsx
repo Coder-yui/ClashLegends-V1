@@ -1,3 +1,4 @@
+import { cardArt } from "./card-art";
 import type { ModelResources } from "./battle-models";
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
@@ -19,20 +20,22 @@ const artwork: Record<
   string,
   { color: string; portrait?: string; resourceColor?: string }
 > = metadata;
-function BattleCardFace({
+export function BattleCardFace({
   card,
   source,
   cost,
+  preview,
 }: {
   card: Card;
   source?: Card;
   cost?: number;
+  preview?: string;
 }) {
   const portrait = source ?? card;
   const title = source ? "镜·" + source.name : card.name;
   return (
     <>
-      <img src={artwork[portrait.id]?.portrait ?? portrait.image} alt="" />
+      <img src={preview || cardArt(portrait, true)} alt="" />
       <span className="card-title">{title}</span>
       {cost !== undefined && (
         <small

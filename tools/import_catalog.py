@@ -67,6 +67,12 @@ def main():
     previous = json.loads(CATALOG.read_text()) if CATALOG.exists() else {"cards": []}
     previous_skills = {s["id"]: s for c in previous["cards"] for s in c["skills"]}
     cards = [public_card(card, previous_skills) for card in raw["cards"] if card["selectable"]]
+    # A legacy snapshot cannot supply cards first authored in V1. Keep their
+    # own catalog records while they still have an active V1 rule definition.
+    source_ids = {card["id"] for card in raw["cards"]}
+    rules = json.loads((ROOT / "content/battle_rules.json").read_text())
+    cards.extend(card for card in previous["cards"] if card["id"] not in source_ids
+                 and card["id"] in rules and rules[card["id"]].get("selectable") is not False)
     ids = {card["id"] for card in cards}
     if len(cards) != len(ids) or not set(DEFAULT_DECK) <= ids:
         raise ValueError("Invalid card IDs or default deck")

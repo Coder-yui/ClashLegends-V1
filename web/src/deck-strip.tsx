@@ -1,3 +1,4 @@
+import { cardArt } from "./card-art";
 import type { Catalog, Deck } from "./api";
 export function DeckStrip({ deck, catalog }: { deck: Deck; catalog: Catalog }) {
   return (
@@ -13,7 +14,7 @@ export function DeckStrip({ deck, catalog }: { deck: Deck; catalog: Catalog }) {
           );
         return (
           <div key={id}>
-            <img src={card.image} alt="" />
+            <img src={cardArt(card)} alt="" />
             <small>{i < 2 ? "主动 " + (i + 1) : i + 1}</small>
             <b>{card.name}</b>
             {deck.skills[id] && (

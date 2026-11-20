@@ -1,3 +1,4 @@
+import { cardArt } from "./card-art";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { Choice, Modal } from "./controls";
@@ -47,20 +48,22 @@ function icon(id: string) {
     />
   );
 }
-function Face({
+export function Face({
   card,
   rune = false,
   empty,
+  preview,
 }: {
   card?: Card;
   rune?: boolean;
   empty?: number;
+  preview?: string;
 }) {
   return card ? (
     <>
       <img
         className="prep-art"
-        src={info[card.id]?.portrait || card.image || undefined}
+        src={preview || cardArt(card, true) || undefined}
         loading="lazy"
         alt=""
       />
@@ -195,6 +198,7 @@ export function CardInformation({
   children?: ReactNode;
 }) {
   const data = info[card.id];
+  const sections = data?.sections ?? [];
   const index = Math.max(
     0,
     card.skills.findIndex((s) => s.id === selected),
@@ -219,7 +223,7 @@ export function CardInformation({
         </button>
       </div>
       <p>{data?.brief || card.description}</p>
-      {data?.sections.map((s, i) => (
+      {sections.map((s, i) => (
         <section key={i}>
           <h4>{s.title}</h4>
           <dl>
