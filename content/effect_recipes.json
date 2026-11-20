@@ -1,0 +1,1263 @@
+{
+  "aatrox/empowered": {
+    "entry": "Characters/Aatrox/Skins/Skin0/Particles/Aatrox_Base_R_SpeedBuff",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Aatrox.wad.client"
+  },
+  "aatrox/hit": {
+    "entry": "Characters/Aatrox/Skins/Skin0/Particles/Aatrox_Base_AA_Hit_Tar01",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Aatrox.wad.client"
+  },
+  "aftershock/native/AOE": {
+    "entry": "Perks/Styles/Resolve/Aftershock/Particles/Perks_Aftershock_AOE",
+    "wad": "Global.wad.client"
+  },
+  "aftershock/native/Buff": {
+    "entry": "Perks/Styles/Resolve/Aftershock/Particles/Perks_Aftershock_Buff",
+    "wad": "Global.wad.client"
+  },
+  "airdrop_bear/arm": {
+    "entry": "Characters/AnnieTibbers/Skins/Skin0/Particles/AnnieTibbers_Base_Idle_arm",
+    "wad": "Champions/Annie.wad.client"
+  },
+  "airdrop_bear/aura": {
+    "entry": "Characters/AnnieTibbers/Skins/Skin0/Particles/AnnieTibbers_Base_Idle_Ground",
+    "wad": "Champions/Annie.wad.client"
+  },
+  "airdrop_bear/body": {
+    "entry": "Characters/AnnieTibbers/Skins/Skin0/Particles/AnnieTibbers_Base_Idle_body",
+    "wad": "Champions/Annie.wad.client"
+  },
+  "airdrop_bear/foot": {
+    "entry": "Characters/AnnieTibbers/Skins/Skin0/Particles/AnnieTibbers_Base_Idle_foot",
+    "wad": "Champions/Annie.wad.client"
+  },
+  "airdrop_bear/hand": {
+    "entry": "Characters/AnnieTibbers/Skins/Skin0/Particles/AnnieTibbers_Base_Idle_hand",
+    "wad": "Champions/Annie.wad.client"
+  },
+  "airdrop_bear/impact": {
+    "entry": "Characters/Annie/Skins/Skin0/Particles/Annie_Base_R_cas",
+    "wad": "Champions/Annie.wad.client"
+  },
+  "airdrop_bear/leg": {
+    "entry": "Characters/AnnieTibbers/Skins/Skin0/Particles/AnnieTibbers_Base_Idle_leg",
+    "wad": "Champions/Annie.wad.client"
+  },
+  "anivia/missile": {
+    "entry": "Characters/Anivia/Skins/Skin0/Particles/Anivia_Base_BA_Mis",
+    "only": [
+      "IcicleSpear"
+    ],
+    "wad": "Champions/Anivia.wad.client"
+  },
+  "anivia/storm": {
+    "entry": "Characters/Anivia/Skins/Skin0/Particles/Anivia_Base_R_AOE_Green",
+    "wad": "Champions/Anivia.wad.client"
+  },
+  "annie/stunned": {
+    "entry": "Characters/Annie/Skins/Skin0/Particles/Annie_Base_P_Stun",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Annie.wad.client"
+  },
+  "ashe/arrow": {
+    "entry": "Characters/Ashe/Skins/Skin0/Particles/Ashe_Base_BA_Mis",
+    "wad": "Champions/Ashe.wad.client"
+  },
+  "ashe/hit": {
+    "entry": "Characters/Ashe/Skins/Skin0/Particles/Ashe_Base_BA_tar",
+    "wad": "Champions/Ashe.wad.client"
+  },
+  "ashe/volley": {
+    "entry": "Characters/Ashe/Skins/Skin0/Particles/Ashe_Base_W_mis",
+    "wad": "Champions/Ashe.wad.client"
+  },
+  "aurelionsol_q": {
+    "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_Q_Beam",
+    "wad": "Champions/AurelionSol.wad.client"
+  },
+  "aurelionsol_r/impact": {
+    "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_R_Impact",
+    "wad": "Champions/AurelionSol.wad.client"
+  },
+  "aurelionsol_r/missile": {
+    "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_R_Mis",
+    "wad": "Champions/AurelionSol.wad.client"
+  },
+  "aurelionsol_r/strong_impact": {
+    "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_R_Calamity_Impact",
+    "wad": "Champions/AurelionSol.wad.client"
+  },
+  "aurelionsol_r/strong_missile": {
+    "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_R_Calamity_Mis",
+    "wad": "Champions/AurelionSol.wad.client"
+  },
+  "aurelionsol_r/strong_tell": {
+    "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_R_Calamity_Tell",
+    "wad": "Champions/AurelionSol.wad.client"
+  },
+  "aurelionsol_r/tell": {
+    "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_R_Tell",
+    "wad": "Champions/AurelionSol.wad.client"
+  },
+  "aurelionsol_r/wave": {
+    "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_R_Calamity_Shockwave",
+    "wad": "Champions/AurelionSol.wad.client"
+  },
+  "azir/cast1": {
+    "entry": "Characters/Azir/Skins/Skin0/Particles/Azir_base_BA_cas",
+    "wad": "Champions/Azir.wad.client"
+  },
+  "azir/cast2": {
+    "entry": "Characters/Azir/Skins/Skin0/Particles/Azir_base_BA2_cas",
+    "wad": "Champions/Azir.wad.client"
+  },
+  "azir/hit": {
+    "entry": "Characters/Azir/Skins/Skin0/Particles/Azir_base_BA_tar",
+    "wad": "Champions/Azir.wad.client"
+  },
+  "azir/shield": {
+    "entry": "Characters/Azir/Skins/Skin0/Particles/Azir_Base_E_Shield",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Azir.wad.client"
+  },
+  "azir/spawn": {
+    "entry": "Characters/Azir/Skins/Skin0/Particles/Azir_Base_W_SpawnIn",
+    "wad": "Champions/Azir.wad.client"
+  },
+  "belveth/dash": {
+    "entry": "Characters/Belveth/Skins/Skin0/Particles/Belveth_Base_Q_Dash",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Belveth.wad.client"
+  },
+  "blitzcrank/ebuf": {
+    "entry": "Characters/Blitzcrank/Skins/Skin0/Particles/Blitzcrank_Base_E_buf",
+    "wad": "Champions/Blitzcrank.wad.client"
+  },
+  "blitzcrank/etar": {
+    "entry": "Characters/Blitzcrank/Skins/Skin0/Particles/Blitzcrank_Base_E_tar_1",
+    "wad": "Champions/Blitzcrank.wad.client"
+  },
+  "blitzcrank/qcas": {
+    "entry": "Characters/Blitzcrank/Skins/Skin0/Particles/Blitzcrank_Base_Q_cas",
+    "wad": "Champions/Blitzcrank.wad.client"
+  },
+  "blitzcrank/qmis": {
+    "entry": "Characters/Blitzcrank/Skins/Skin0/Particles/Blitzcrank_Base_Q_mis",
+    "wad": "Champions/Blitzcrank.wad.client"
+  },
+  "blitzcrank/qreturn": {
+    "entry": "Characters/Blitzcrank/Skins/Skin0/Particles/Blitzcrank_Base_Q_mis_return",
+    "wad": "Champions/Blitzcrank.wad.client"
+  },
+  "convergent_pulse/ball": {
+    "entry": "Characters/Orianna/Skins/Skin0/Particles/Orianna_Base_R_VacuumIndicatorSelfNoRing",
+    "wad": "Champions/Orianna.wad.client"
+  },
+  "convergent_pulse/pulse": {
+    "entry": "Characters/Orianna/Skins/Skin0/Particles/Orianna_Base_R_VacuumIndicator",
+    "wad": "Champions/Orianna.wad.client"
+  },
+  "corki/bullet": {
+    "entry": "Characters/Corki/Skins/Skin0/Particles/Corki_Base_BA_mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Corki.wad.client"
+  },
+  "corki/rocket": {
+    "entry": "Characters/Corki/Skins/Skin0/Particles/Corki_Base_R_mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Corki.wad.client"
+  },
+  "corrosion/area": {
+    "entry": "Characters/Morgana/Skins/Skin0/Particles/Morgana_Base_W_Tar_Update",
+    "wad": "Champions/Morgana.wad.client"
+  },
+  "darius/execute": {
+    "entry": "Characters/Darius/Skins/Skin0/Particles/darius_Base_R_cast_axe",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Darius.wad.client"
+  },
+  "demacian_standard/fall": {
+    "entry": "Characters/JarvanIV/Skins/Skin0/Particles/JarvanIV_Base_E_tar_green",
+    "wad": "Champions/JarvanIV.wad.client"
+  },
+  "demacian_standard/fall_red": {
+    "entry": "Characters/JarvanIV/Skins/Skin0/Particles/JarvanIV_Base_E_tar_red",
+    "wad": "Champions/JarvanIV.wad.client"
+  },
+  "demacian_standard/flag": {
+    "entry": "Characters/JarvanIV/Skins/Skin0/Particles/JarvanIV_Base_E_flag_hld_01",
+    "wad": "Champions/JarvanIV.wad.client"
+  },
+  "demacian_standard/landing": {
+    "entry": "Characters/JarvanIV/Skins/Skin0/Particles/JarvanIV_Base_E_hit_01",
+    "wad": "Champions/JarvanIV.wad.client"
+  },
+  "demacian_standard/nova": {
+    "entry": "Characters/JarvanIV/Skins/Skin0/Particles/JarvanIV_Base_W_nova_01",
+    "wad": "Champions/JarvanIV.wad.client"
+  },
+  "demacian_standard/shield": {
+    "entry": "Characters/JarvanIV/Skins/Skin0/Particles/JarvanIV_Base_W_buf_01",
+    "wad": "Champions/JarvanIV.wad.client"
+  },
+  "ekko/end": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_AOERing",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-ChargeUp": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_ChargeUp",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-RewindIndicator": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_RewindIndicator",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-RewindIndicator_Red": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_RewindIndicator_Red",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-RewindPose1": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_RewindPose1",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-RewindPose2": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_RewindPose2",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-RewindPose3": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_RewindPose3",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-RewindPose4": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_RewindPose4",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-RewindPose5": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_RewindPose5",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-RewindPose6": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_RewindPose6",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-Tar": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_Tar",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-Tar_Impact": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_Tar_Impact",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-TimeDevice_Active": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_TimeDevice_Active",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-TrailEnd": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_TrailEnd",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/r-TrailEnd_Red": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_TrailEnd_Red",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "ekko/vanish": {
+    "entry": "Characters/Ekko/Skins/Skin0/Particles/Ekko_Base_R_Disappear",
+    "wad": "Champions/Ekko.wad.client"
+  },
+  "event_horizon/cage": {
+    "entry": "Characters/Veigar/Skins/Skin0/Particles/Veigar_Base_E_cage_green",
+    "seconds": 6,
+    "wad": "Champions/Veigar.wad.client"
+  },
+  "event_horizon/cage_red": {
+    "entry": "Characters/Veigar/Skins/Skin0/Particles/Veigar_Base_E_cage_red",
+    "seconds": 6,
+    "wad": "Champions/Veigar.wad.client"
+  },
+  "event_horizon/impact": {
+    "entry": "Characters/Veigar/Skins/Skin0/Particles/Veigar_Base_W_aoe_explosion",
+    "seconds": 6,
+    "wad": "Champions/Veigar.wad.client"
+  },
+  "event_horizon/impact_red": {
+    "entry": "Characters/Veigar/Skins/Skin0/Particles/Veigar_Base_W_aoe_explosionRed",
+    "seconds": 6,
+    "wad": "Champions/Veigar.wad.client"
+  },
+  "event_horizon/meteor": {
+    "entry": "Characters/Veigar/Skins/Skin0/Particles/Veigar_Base_W_cas_green",
+    "seconds": 6,
+    "wad": "Champions/Veigar.wad.client"
+  },
+  "event_horizon/meteor_red": {
+    "entry": "Characters/Veigar/Skins/Skin0/Particles/Veigar_Base_W_cas_red",
+    "seconds": 6,
+    "wad": "Champions/Veigar.wad.client"
+  },
+  "event_horizon/warning": {
+    "entry": "Characters/Veigar/Skins/Skin0/Particles/Veigar_Base_E_Warning_Green",
+    "seconds": 6,
+    "wad": "Champions/Veigar.wad.client"
+  },
+  "event_horizon/warning_red": {
+    "entry": "Characters/Veigar/Skins/Skin0/Particles/Veigar_Base_E_Warning_Red",
+    "seconds": 6,
+    "wad": "Champions/Veigar.wad.client"
+  },
+  "evolution_turret/spawn": {
+    "entry": "Characters/HeimerTYellow/Skins/Skin0/Particles/Heimerdinger_Base_Q_Turret_Spawn",
+    "wad": "Champions/Heimerdinger.wad.client"
+  },
+  "explosive_cask/flight": {
+    "entry": "Characters/Gragas/Skins/Skin0/Particles/Gragas_Base_R_Mis",
+    "wad": "Champions/Gragas.wad.client"
+  },
+  "explosive_cask/native_end": {
+    "entry": "Characters/Gragas/Skins/Skin0/Particles/Gragas_Base_R_End",
+    "wad": "Champions/Gragas.wad.client"
+  },
+  "fiddlesticks/channel": {
+    "entry": "Characters/FiddleSticks/Skins/Skin0/Particles/FiddleSticks_Base_W_cas",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/FiddleSticks.wad.client"
+  },
+  "fiddlesticks/tether": {
+    "entry": "Characters/FiddleSticks/Skins/Skin0/Particles/Fiddlesticks_Base_W_Drain",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/FiddleSticks.wad.client"
+  },
+  "final_spark/beam": {
+    "entry": "Characters/Lux/Skins/Skin0/Particles/Lux_Base_R_mis_beam",
+    "fps": 120,
+    "wad": "Champions/Lux.wad.client"
+  },
+  "final_spark/cast": {
+    "entry": "Characters/Lux/Skins/Skin0/Particles/Lux_Base_R_cas",
+    "fps": 120,
+    "wad": "Champions/Lux.wad.client"
+  },
+  "freeze/iceborn": {
+    "entry": "Items/6662/Particles/6662_Slow_Field",
+    "seconds": 6,
+    "wad": "Global.wad.client"
+  },
+  "freeze/trundle": {
+    "entry": "Characters/Trundle/Skins/Skin0/Particles/Trundle_Base_W_ground",
+    "seconds": 6,
+    "wad": "Champions/Trundle.wad.client"
+  },
+  "garen/silence": {
+    "entry": "Characters/Garen/Skins/Skin0/Particles/Garen_Base_Q_Silence",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Garen.wad.client"
+  },
+  "garen/spin": {
+    "entry": "Characters/Garen/Skins/Skin0/Particles/Garen_Base_E_Cas",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Garen.wad.client"
+  },
+  "garen/strike": {
+    "entry": "Characters/Garen/Skins/Skin0/Particles/Garen_Base_Q_Cas",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Garen.wad.client"
+  },
+  "gnar/boomerang": {
+    "entry": "Characters/Gnar/Skins/Skin0/Particles/Gnar_Base_BA_mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Gnar.wad.client"
+  },
+  "gnar/transform": {
+    "entry": "Characters/Gnar/Skins/Skin0/Particles/Gnar_Base_P_Transform_Twister",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Gnar.wad.client"
+  },
+  "graves/dash": {
+    "entry": "Characters/Graves/Skins/Skin0/Particles/Graves_Base_E_cas",
+    "wad": "Champions/Graves.wad.client"
+  },
+  "graves/missile": {
+    "entry": "Characters/Graves/Skins/Skin0/Particles/Graves_Base_BA_mis",
+    "wad": "Champions/Graves.wad.client"
+  },
+  "gwen/snip": {
+    "entry": "Characters/Gwen/Skins/Skin0/Particles/Gwen_Base_Q_ATK_Q1",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Gwen.wad.client"
+  },
+  "gwen_tristana/missile": {
+    "entry": "Characters/Tristana/Skins/Skin0/Particles/Tristana_Base_BA_mis",
+    "wad": "Champions/Tristana.wad.client"
+  },
+  "gwen_tristana/mist": {
+    "entry": "Characters/Gwen/Skins/Skin0/Particles/Gwen_Base_W_MistArea",
+    "wad": "Champions/Gwen.wad.client"
+  },
+  "gwen_tristana/rapid": {
+    "entry": "Characters/Tristana/Skins/Skin0/Particles/Tristana_Base_Q_Buf",
+    "wad": "Champions/Tristana.wad.client"
+  },
+  "hecarim/aoe": {
+    "entry": "Characters/Hecarim/Skins/Skin0/Particles/Hecarim_Base_W_AoE",
+    "wad": "Champions/Hecarim.wad.client"
+  },
+  "hecarim/cas": {
+    "entry": "Characters/Hecarim/Skins/Skin0/Particles/Hecarim_Base_W_cas",
+    "wad": "Champions/Hecarim.wad.client"
+  },
+  "hecarim/qbuf": {
+    "entry": "Characters/Hecarim/Skins/Skin0/Particles/Hecarim_Base_Q_buf",
+    "wad": "Champions/Hecarim.wad.client"
+  },
+  "hecarim/qcas": {
+    "entry": "Characters/Hecarim/Skins/Skin0/Particles/Hecarim_Base_Q_Cas",
+    "wad": "Champions/Hecarim.wad.client"
+  },
+  "hecarim/qtar": {
+    "entry": "Characters/Hecarim/Skins/Skin0/Particles/Hecarim_Base_Q_tar",
+    "wad": "Champions/Hecarim.wad.client"
+  },
+  "heimerdinger/apex": {
+    "entry": "Characters/HeimerTBlue/Skins/Skin0/Particles/Heimerdinger_Base_R_MegaTurret_Mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Heimerdinger.wad.client"
+  },
+  "heimerdinger/beam_charge": {
+    "entry": "Characters/Heimerdinger/Skins/Skin0/Particles/Heimerdinger_Base_Q_Turret_Charge_Up",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Heimerdinger.wad.client"
+  },
+  "heimerdinger/charged": {
+    "entry": "Characters/HeimerTBlue/Skins/Skin0/Particles/Heimerdinger_Base_R_MegaTurret_Charged_Mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Heimerdinger.wad.client"
+  },
+  "heimerdinger/laser": {
+    "entry": "Characters/Heimerdinger/Skins/Skin0/Particles/heimerdinger_hexTech_mis_ult",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Heimerdinger.wad.client"
+  },
+  "heimerdinger/turret": {
+    "entry": "Characters/HeimerTYellow/Skins/Skin0/Particles/Heimerdinger_Base_Q_Turret_Mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Heimerdinger.wad.client"
+  },
+  "ivern/basic": {
+    "entry": "Characters/Ivern/Skins/Skin0/Particles/Ivern_Base_BA_Mis",
+    "wad": "Champions/Ivern.wad.client"
+  },
+  "ivern/slam": {
+    "entry": "Characters/IvernMinion/Skins/Skin0/Particles/IvernMinion_Base_BA_1_FistSlam",
+    "wad": "Champions/Ivern.wad.client"
+  },
+  "ivern/spawn": {
+    "entry": "Characters/IvernMinion/Skins/Skin0/Particles/IvernMinion_Base_Spawn_GroundSlam",
+    "wad": "Champions/Ivern.wad.client"
+  },
+  "jack_in_the_box/aoe": {
+    "entry": "Characters/Shaco/Skins/Skin0/Particles/Shaco_Base_W_box_aoe",
+    "wad": "Champions/Shaco.wad.client"
+  },
+  "jack_in_the_box/missile": {
+    "entry": "Characters/Shaco/Skins/Skin0/Particles/Shaco_Base_W_Box_Mis",
+    "wad": "Champions/Shaco.wad.client"
+  },
+  "janna/heal": {
+    "entry": "Characters/Janna/Skins/Skin0/Particles/Janna_Base_R_Heal_Tar",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Janna.wad.client"
+  },
+  "jax/buf": {
+    "entry": "Characters/Jax/Skins/Skin0/Particles/Jax_base_E_buf",
+    "wad": "Champions/Jax.wad.client"
+  },
+  "jax/cas": {
+    "entry": "Characters/Jax/Skins/Skin0/Particles/Jax_base_E_cas",
+    "wad": "Champions/Jax.wad.client"
+  },
+  "jax/tar": {
+    "entry": "Characters/Jax/Skins/Skin0/Particles/Jax_base_E_tar",
+    "wad": "Champions/Jax.wad.client"
+  },
+  "jayce/bullet": {
+    "entry": "Characters/Jayce/Skins/Skin0/Particles/Jayce_Base_Range_Basic_Mis",
+    "wad": "Champions/Jayce.wad.client"
+  },
+  "jayce/field": {
+    "entry": "Characters/Jayce/Skins/Skin0/Particles/Jayce_Base_StaticStormShock",
+    "wad": "Champions/Jayce.wad.client"
+  },
+  "jayce/field_hit": {
+    "entry": "Characters/Jayce/Skins/Skin0/Particles/Jayce_Base_StaticStorm_Hit",
+    "wad": "Champions/Jayce.wad.client"
+  },
+  "jayce/first_hit_m": {
+    "entry": "Characters/Jayce/Skins/Skin0/Particles/Jayce_Base_P_charged_hit",
+    "wad": "Champions/Jayce.wad.client"
+  },
+  "jayce/first_hit_r": {
+    "entry": "Characters/Jayce/Skins/Skin0/Particles/Jayce_Base_P_charged_hit_ranged",
+    "wad": "Champions/Jayce.wad.client"
+  },
+  "jayce/ready_m": {
+    "entry": "Characters/Jayce/Skins/Skin0/Particles/Jayce_Base_PassiveReadyMelee",
+    "wad": "Champions/Jayce.wad.client"
+  },
+  "jayce/ready_r": {
+    "entry": "Characters/Jayce/Skins/Skin0/Particles/Jayce_Base_PassiveReadyRange",
+    "wad": "Champions/Jayce.wad.client"
+  },
+  "jayce/stance_hammer": {
+    "entry": "Characters/Jayce/Skins/Skin0/Particles/Jayce_Base_Stance_Range_Hammer",
+    "wad": "Champions/Jayce.wad.client"
+  },
+  "jayce/stance_m": {
+    "entry": "Characters/Jayce/Skins/Skin0/Particles/Jayce_Base_Stance_Melee",
+    "wad": "Champions/Jayce.wad.client"
+  },
+  "jayce/stance_r": {
+    "entry": "Characters/Jayce/Skins/Skin0/Particles/Jayce_Base_Stance_Range",
+    "wad": "Champions/Jayce.wad.client"
+  },
+  "jayce/swap_m": {
+    "entry": "Characters/Jayce/Skins/Skin0/Particles/Jayce_Base_Model_Swap",
+    "wad": "Champions/Jayce.wad.client"
+  },
+  "jayce/swap_r": {
+    "entry": "Characters/Jayce/Skins/Skin0/Particles/Jayce_Base_Model_Swap2",
+    "wad": "Champions/Jayce.wad.client"
+  },
+  "jayce/w_ready2": {
+    "entry": "Characters/Jayce/Skins/Skin0/Particles/Jayce_Base_Hex_Buff_Ready2",
+    "wad": "Champions/Jayce.wad.client"
+  },
+  "jinx/bullet": {
+    "entry": "Characters/Jinx/Skins/Skin0/Particles/Jinx_Base_Q_Minigun_Mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Jinx.wad.client"
+  },
+  "jinx/rocket": {
+    "entry": "Characters/Jinx/Skins/Skin0/Particles/Jinx_Base_Q_Rocket_mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Jinx.wad.client"
+  },
+  "kassadin/appear": {
+    "entry": "Characters/Kassadin/Skins/Skin0/Particles/Kassadin_Base_R_appear",
+    "wad": "Champions/Kassadin.wad.client"
+  },
+  "kassadin/idle_blade": {
+    "entry": "Characters/Kassadin/Skins/Skin0/Particles/Kassadin_Base_idle_blade",
+    "wad": "Champions/Kassadin.wad.client"
+  },
+  "kassadin/vanish": {
+    "entry": "Characters/Kassadin/Skins/Skin0/Particles/Kassadin_Base_R_vanish",
+    "wad": "Champions/Kassadin.wad.client"
+  },
+  "kayle/blessing": {
+    "entry": "Characters/Kayle/Skins/Skin0/Particles/Kayle_Base_W_Tar",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Kayle.wad.client"
+  },
+  "kayle/native/sword": {
+    "entry": "Characters/Kayle/Skins/Skin0/Particles/Kayle_Base_BA_Ranged",
+    "wad": "Champions/Kayle.wad.client"
+  },
+  "kayle/native/wave": {
+    "entry": "Characters/Kayle/Skins/Skin0/Particles/Kayle_Base_P_Enraged_Mis_2",
+    "wad": "Champions/Kayle.wad.client"
+  },
+  "kayn/dash": {
+    "entry": "Characters/Kayn/Skins/Skin0/Particles/Kayn_Base_Primary_Q1",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Kayn.wad.client"
+  },
+  "kayn/sweep": {
+    "entry": "Characters/Kayn/Skins/Skin0/Particles/Kayn_Base_Primary_Q2",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Kayn.wad.client"
+  },
+  "lightning_spells/electrocute": {
+    "entry": "Perks/Styles/Domination/Electrocute/Particles/Perks_Electrocute_AOE",
+    "wad": "Global.wad.client"
+  },
+  "lightning_spells/stormsurge": {
+    "entry": "Items/4646/Particles/4646_Lightning_Bolt_Large",
+    "wad": "Global.wad.client"
+  },
+  "locket": {
+    "entry": "Items/3190/Particles/3190_Buff_Activate",
+    "wad": "Global.wad.client"
+  },
+  "lulu/bolt": {
+    "entry": "Characters/Lulu/Skins/Skin0/Particles/Lulu_Base_BA_mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Lulu.wad.client"
+  },
+  "lulu/growth": {
+    "entry": "Characters/Lulu/Skins/Skin0/Particles/Lulu_Base_R_cas",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Lulu.wad.client"
+  },
+  "lulu/pix": {
+    "entry": "Characters/Lulu/Skins/Skin0/Particles/Lulu_Base_Pix_BA_mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Lulu.wad.client"
+  },
+  "malphite/aoe": {
+    "entry": "Characters/Malphite/Skins/Skin0/Particles/Malphite_Base_E_hit_aoe",
+    "wad": "Champions/Malphite.wad.client"
+  },
+  "malphite/break": {
+    "entry": "Characters/Malphite/Skins/Skin0/Particles/Malphite_Base_P_shield_break",
+    "wad": "Champions/Malphite.wad.client"
+  },
+  "malphite/cas": {
+    "entry": "Characters/Malphite/Skins/Skin0/Particles/Malphite_Base_E_cas",
+    "wad": "Champions/Malphite.wad.client"
+  },
+  "malphite/shield": {
+    "entry": "Characters/Malphite/Skins/Skin0/Particles/Malphite_Base_P_Shield_Refresh",
+    "wad": "Champions/Malphite.wad.client"
+  },
+  "malzahar/basic": {
+    "entry": "Characters/Malzahar/Skins/Skin0/Particles/Malzahar_Base_BA_mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Malzahar.wad.client"
+  },
+  "malzahar/cast": {
+    "entry": "Characters/Malzahar/Skins/Skin0/Particles/Malzahar_Base_W_cas",
+    "wad": "Champions/Malzahar.wad.client"
+  },
+  "malzahar/grasp": {
+    "entry": "Characters/Malzahar/Skins/Skin0/Particles/Malzahar_Base_R_beam",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Malzahar.wad.client"
+  },
+  "malzahar/portal_end": {
+    "entry": "Characters/Malzahar/Skins/Skin0/Particles/Malzahar_Base_W_Portal_End",
+    "wad": "Champions/Malzahar.wad.client"
+  },
+  "malzahar/portal_start": {
+    "entry": "Characters/Malzahar/Skins/Skin0/Particles/Malzahar_Base_W_Portal_Start",
+    "wad": "Champions/Malzahar.wad.client"
+  },
+  "malzahar/spawn": {
+    "entry": "Characters/Malzahar/Skins/Skin0/Particles/Malzahar_Base_W_VoidlingSpawn",
+    "wad": "Champions/Malzahar.wad.client"
+  },
+  "masteryi/rush": {
+    "entry": "Characters/MasterYi/Skins/Skin0/Particles/MasterYi_Base_R_Cas",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/MasterYi.wad.client"
+  },
+  "medium_lightning/disabled": {
+    "entry": "Characters/Volibear/Skins/Skin0/Particles/Volibear_Base_R_disabledTower_A",
+    "wad": "Champions/Volibear.wad.client"
+  },
+  "medium_lightning/strike": {
+    "entry": "Characters/Volibear/Skins/Skin0/Particles/Volibear_Base_E_AOE",
+    "wad": "Champions/Volibear.wad.client"
+  },
+  "medium_lightning/tower_crack": {
+    "entry": "Characters/Volibear/Skins/Skin0/Particles/Volibear_Base_R_towerHitCrack_01",
+    "wad": "Champions/Volibear.wad.client"
+  },
+  "medium_lightning/tower_hit": {
+    "entry": "Characters/Volibear/Skins/Skin0/Particles/Volibear_Base_R_towerHit_01",
+    "wad": "Champions/Volibear.wad.client"
+  },
+  "medium_lightning/warning": {
+    "entry": "Characters/Volibear/Skins/Skin0/Particles/Volibear_Base_E_AOE_Warning",
+    "wad": "Champions/Volibear.wad.client"
+  },
+  "medium_lightning/warning_enemy": {
+    "entry": "Characters/Volibear/Skins/Skin0/Particles/Volibear_Base_E_AOE_Warning_Enemy",
+    "wad": "Champions/Volibear.wad.client"
+  },
+  "mega_inferno_bomb/impact": {
+    "entry": "Characters/Ziggs/Skins/Skin0/Particles/Ziggs_Base_R_explosion",
+    "wad": "Champions/Ziggs.wad.client"
+  },
+  "mega_inferno_bomb/missile": {
+    "entry": "Characters/Ziggs/Skins/Skin0/Particles/Ziggs_Base_R_mis",
+    "wad": "Champions/Ziggs.wad.client"
+  },
+  "mega_inferno_bomb/warning_ally": {
+    "entry": "Characters/Ziggs/Skins/Skin0/Particles/Ziggs_Base_R_flames_green",
+    "wad": "Champions/Ziggs.wad.client"
+  },
+  "mega_inferno_bomb/warning_enemy": {
+    "entry": "Characters/Ziggs/Skins/Skin0/Particles/Ziggs_Base_R_flames_red",
+    "wad": "Champions/Ziggs.wad.client"
+  },
+  "missfortune/bullet": {
+    "entry": "Characters/MissFortune/Skins/Skin0/Particles/MissFortune_Base_BA_mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/MissFortune.wad.client"
+  },
+  "missfortune_w/end_left": {
+    "entry": "Characters/MissFortune/Skins/Skin0/Particles/MissFortune_Base_W_Buf_End_LWeapon",
+    "wad": "Champions/MissFortune.wad.client"
+  },
+  "missfortune_w/end_right": {
+    "entry": "Characters/MissFortune/Skins/Skin0/Particles/MissFortune_Base_W_Buf_End_RWeapon",
+    "wad": "Champions/MissFortune.wad.client"
+  },
+  "missfortune_w/left": {
+    "entry": "Characters/MissFortune/Skins/Skin0/Particles/MissFortune_Base_W_Buf_LWeapon",
+    "wad": "Champions/MissFortune.wad.client"
+  },
+  "missfortune_w/right": {
+    "entry": "Characters/MissFortune/Skins/Skin0/Particles/MissFortune_Base_W_Buf_RWeapon",
+    "wad": "Champions/MissFortune.wad.client"
+  },
+  "missfortune_w/trail": {
+    "entry": "Characters/MissFortune/Skins/Skin0/Particles/MissFortune_Base_W_Max",
+    "wad": "Champions/MissFortune.wad.client"
+  },
+  "morgana/rooted": {
+    "entry": "Characters/Morgana/Skins/Skin0/Particles/Morgana_Base_Q_Tar_Buf_Update",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Morgana.wad.client"
+  },
+  "nocturne/cleave": {
+    "entry": "Characters/Nocturne/Skins/Skin0/Particles/Nocturne_Base_P_cleave_AoE",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Nocturne.wad.client"
+  },
+  "nocturne/shield": {
+    "entry": "Characters/Nocturne/Skins/Skin0/Particles/Nocturne_Base_W_Shield_01",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Nocturne.wad.client"
+  },
+  "olaf/buf_blood": {
+    "entry": "Characters/Olaf/Skins/Skin0/Particles/Olaf_Base_W_buf_blood",
+    "wad": "Champions/Olaf.wad.client"
+  },
+  "olaf/buf_glow": {
+    "entry": "Characters/Olaf/Skins/Skin0/Particles/Olaf_Base_W_buf_glow",
+    "wad": "Champions/Olaf.wad.client"
+  },
+  "olaf/cas": {
+    "entry": "Characters/Olaf/Skins/Skin0/Particles/Olaf_Base_W_cas",
+    "wad": "Champions/Olaf.wad.client"
+  },
+  "olaf/r_buf": {
+    "entry": "Characters/Olaf/Skins/Skin0/Particles/Olaf_Base_R_buf",
+    "wad": "Champions/Olaf.wad.client"
+  },
+  "olaf/r_buff_weap": {
+    "entry": "Characters/Olaf/Skins/Skin0/Particles/Olaf_Base_R_buff_weap",
+    "wad": "Champions/Olaf.wad.client"
+  },
+  "olaf/r_cas": {
+    "entry": "Characters/Olaf/Skins/Skin0/Particles/Olaf_Base_R_cas",
+    "wad": "Champions/Olaf.wad.client"
+  },
+  "olaf/shield": {
+    "entry": "Characters/Olaf/Skins/Skin0/Particles/Olaf_Base_W_shield",
+    "wad": "Champions/Olaf.wad.client"
+  },
+  "ornn/charge": {
+    "entry": "Characters/Ornn/Skins/Skin0/Particles/Ornn_Base_E_headglow",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Ornn.wad.client"
+  },
+  "ornn/impact": {
+    "entry": "Characters/Ornn/Skins/Skin0/Particles/Ornn_Base_E_Explosion",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Ornn.wad.client"
+  },
+  "pantheon/spear": {
+    "entry": "Characters/Pantheon/Skins/Skin0/Particles/Pantheon_Base_Q_update_missile",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Pantheon.wad.client"
+  },
+  "pillar_of_ice/pillar": {
+    "entry": "Characters/Trundle/Skins/Skin0/Particles/Trundle_Base_E_PlagueBlock",
+    "wad": "Champions/Trundle.wad.client"
+  },
+  "pool_of_reflection/area": {
+    "entry": "Characters/Hwei/Skins/Skin0/Particles/Hwei_Base_W_W_AoE",
+    "seconds": 6,
+    "wad": "Champions/Hwei.wad.client"
+  },
+  "pool_of_reflection/area_red": {
+    "entry": "Characters/Hwei/Skins/Skin0/Particles/Hwei_Base_W_W_AoE_Red",
+    "seconds": 6,
+    "wad": "Champions/Hwei.wad.client"
+  },
+  "pool_of_reflection/break": {
+    "entry": "Characters/Hwei/Skins/Skin0/Particles/Hwei_Base_W_W_Shield_Break",
+    "seconds": 6,
+    "wad": "Champions/Hwei.wad.client"
+  },
+  "pool_of_reflection/shield": {
+    "entry": "Characters/Hwei/Skins/Skin0/Particles/Hwei_Base_W_W_Shield",
+    "seconds": 6,
+    "wad": "Champions/Hwei.wad.client"
+  },
+  "powder_keg/explosion": {
+    "entry": "Characters/Gangplank/Skins/Skin0/Particles/Gangplank_Base_E_Explosion",
+    "wad": "Champions/Gangplank.wad.client"
+  },
+  "reksai/buff": {
+    "entry": "Characters/RekSai/Skins/Skin0/Particles/RekSai_Base_Q_cas_frenzy",
+    "wad": "Champions/RekSai.wad.client"
+  },
+  "reksai/emerge": {
+    "entry": "Characters/RekSai/Skins/Skin0/Particles/RekSai_Base_Burrowed_W_knock_up_self",
+    "wad": "Champions/RekSai.wad.client"
+  },
+  "reksai/emerge_cast": {
+    "entry": "Characters/RekSai/Skins/Skin0/Particles/RekSai_Base_Burrowed_W_cas",
+    "wad": "Champions/RekSai.wad.client"
+  },
+  "reksai/swipe": {
+    "entry": "Characters/RekSai/Skins/Skin0/Particles/RekSai_Base_Q_swipe_cas",
+    "wad": "Champions/RekSai.wad.client"
+  },
+  "reksai/swipe_second": {
+    "entry": "Characters/RekSai/Skins/Skin0/Particles/RekSai_Base_Q_swipe_2nd_cas",
+    "wad": "Champions/RekSai.wad.client"
+  },
+  "reksai/travel": {
+    "entry": "Characters/RekSai/Skins/Skin0/Particles/RekSai_Base_Burrowed_W_movement_idle",
+    "wad": "Champions/RekSai.wad.client"
+  },
+  "samira/bullet": {
+    "entry": "Characters/Samira/Skins/Skin0/Particles/Samira_Base_BA_Mis",
+    "wad": "Champions/Samira.wad.client"
+  },
+  "samira/cas": {
+    "entry": "Characters/Samira/Skins/Skin0/Particles/Samira_Base_R_Cas",
+    "wad": "Champions/Samira.wad.client"
+  },
+  "samira/ready": {
+    "entry": "Characters/Samira/Skins/Skin0/Particles/Samira_Base_P_Ult_Ready",
+    "wad": "Champions/Samira.wad.client"
+  },
+  "scuttle_crab/normal_ward_antenna_wake": {
+    "entry": "Characters/Sru_Crab/Skins/Skin0/Particles/SRU_Crab_Base_Ward_antenna_wake",
+    "wad": "Maps/Shipping/Map11.wad.client"
+  },
+  "scuttle_crab/randuin": {
+    "entry": "Items/3143/Particles/3143_Active_Cas",
+    "wad": "Global.wad.client"
+  },
+  "scuttle_crab/shrine_green": {
+    "entry": "Characters/Sru_Crab/Skins/Skin0/Particles/SRU_Crab_Base_Z_VisionRing_Green",
+    "wad": "Maps/Shipping/Map11.wad.client"
+  },
+  "scuttle_crab/shrine_red": {
+    "entry": "Characters/Sru_Crab/Skins/Skin0/Particles/SRU_Crab_Base_Z_VisionRing_Red",
+    "wad": "Maps/Shipping/Map11.wad.client"
+  },
+  "scuttle_crab/void_ward_antenna_wake": {
+    "entry": "Characters/Sru_Crab/Skins/Skin5/Particles/Sru_Crab_Skin05_Ward_antenna_wake",
+    "wad": "Maps/Shipping/Map11.wad.client"
+  },
+  "scuttle_crab/void_z_visionring_green": {
+    "entry": "Characters/Sru_Crab/Skins/Skin5/Particles/Sru_Crab_Skin05_Z_VisionRing_Green",
+    "wad": "Maps/Shipping/Map11.wad.client"
+  },
+  "scuttle_crab/void_z_visionring_red": {
+    "entry": "Characters/Sru_Crab/Skins/Skin5/Particles/Sru_Crab_Skin05_Z_VisionRing_Red",
+    "wad": "Maps/Shipping/Map11.wad.client"
+  },
+  "sett/cast_body": {
+    "entry": "Characters/Sett/Skins/Skin0/Particles/Sett_Base_W_Max_Warning_Avatar",
+    "wad": "Champions/Sett.wad.client"
+  },
+  "sett/full_body": {
+    "entry": "Characters/Sett/Skins/Skin0/Particles/Sett_Base_W_Max_Buf_Avatar",
+    "wad": "Champions/Sett.wad.client"
+  },
+  "sett/max": {
+    "entry": "Characters/Sett/Skins/Skin0/Particles/Sett_Base_W_Max_AoE",
+    "wad": "Champions/Sett.wad.client"
+  },
+  "sett/min": {
+    "entry": "Characters/Sett/Skins/Skin0/Particles/Sett_Base_W_Min_AoE",
+    "wad": "Champions/Sett.wad.client"
+  },
+  "sett/warning": {
+    "entry": "Characters/Sett/Skins/Skin0/Particles/Sett_Base_W_Shared_Warning_Player",
+    "wad": "Champions/Sett.wad.client"
+  },
+  "severing_bolt/hit": {
+    "entry": "Characters/Hwei/Skins/Skin0/Particles/Hwei_Base_Q_W_Tar",
+    "wad": "Champions/Hwei.wad.client"
+  },
+  "severing_bolt/impact": {
+    "entry": "Characters/Hwei/Skins/Skin0/Particles/Hwei_Base_Q_W_AoE",
+    "wad": "Champions/Hwei.wad.client"
+  },
+  "severing_bolt/warning": {
+    "entry": "Characters/Hwei/Skins/Skin0/Particles/Hwei_Base_Q_W_warning",
+    "wad": "Champions/Hwei.wad.client"
+  },
+  "severing_bolt/warning_red": {
+    "entry": "Characters/Hwei/Skins/Skin0/Particles/Hwei_Base_Q_W_warning_red",
+    "wad": "Champions/Hwei.wad.client"
+  },
+  "sion_w/Cas": {
+    "entry": "Characters/Sion/Skins/Skin0/Particles/Sion_Base_W_Cas",
+    "wad": "Champions/Sion.wad.client"
+  },
+  "sion_w/Nova": {
+    "entry": "Characters/Sion/Skins/Skin0/Particles/Sion_Base_W_Nova",
+    "wad": "Champions/Sion.wad.client"
+  },
+  "sion_w/Shield": {
+    "entry": "Characters/Sion/Skins/Skin0/Particles/Sion_Base_W_Shield",
+    "wad": "Champions/Sion.wad.client"
+  },
+  "sivir/blade": {
+    "entry": "Characters/Sivir/Skins/Skin0/Particles/Sivir_Base_basicattack_mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Sivir.wad.client"
+  },
+  "sivir/shield": {
+    "entry": "Characters/Sivir/Skins/Skin0/Particles/Sivir_Base_E_shield",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Sivir.wad.client"
+  },
+  "sivir/shield_impact": {
+    "entry": "Characters/Sivir/Skins/Skin0/Particles/Sivir_Base_E_proc",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Sivir.wad.client"
+  },
+  "solar_flare/consume": {
+    "entry": "Characters/Leona/Skins/Skin0/Particles/Leona_Base_P_tar_hit",
+    "wad": "Champions/Leona.wad.client"
+  },
+  "solar_flare/impact": {
+    "entry": "Characters/Leona/Skins/Skin0/Particles/Leona_Base_R_hit_impact",
+    "wad": "Champions/Leona.wad.client"
+  },
+  "solar_flare/mark": {
+    "entry": "Characters/Leona/Skins/Skin0/Particles/Leona_Base_P_tar_buf_champ",
+    "wad": "Champions/Leona.wad.client"
+  },
+  "solar_flare/warning": {
+    "entry": "Characters/Leona/Skins/Skin0/Particles/Leona_Base_R_hit_aoe_green",
+    "wad": "Champions/Leona.wad.client"
+  },
+  "solar_flare/warning_red": {
+    "entry": "Characters/Leona/Skins/Skin0/Particles/Leona_Base_R_hit_aoe_red",
+    "wad": "Champions/Leona.wad.client"
+  },
+  "sona/basic": {
+    "entry": "Characters/Sona/Skins/Skin0/Particles/Sona_Base_BA_Mis",
+    "wad": "Champions/Sona.wad.client"
+  },
+  "sona/cast": {
+    "entry": "Characters/Sona/Skins/Skin0/Particles/Sona_Base_R_Cas",
+    "wad": "Champions/Sona.wad.client"
+  },
+  "sona/heal_self": {
+    "entry": "Characters/Sona/Skins/Skin0/Particles/Sona_Base_W_Zone_Self",
+    "fps": 120,
+    "wad": "Champions/Sona.wad.client"
+  },
+  "sona/wave": {
+    "entry": "Characters/Sona/Skins/Skin0/Particles/Sona_Base_R_Missile",
+    "fps": 120,
+    "motion": "sona-wave",
+    "seconds": 2,
+    "wad": "Champions/Sona.wad.client"
+  },
+  "soul_tentacle/activation": {
+    "entry": "Characters/Illaoi/Skins/Skin0/Particles/Illaoi_Base_P_TentacleAvatarActive",
+    "wad": "Champions/Illaoi.wad.client"
+  },
+  "soul_tentacle/avatar": {
+    "entry": "Characters/Illaoi/Skins/Skin0/Particles/Illaoi_Base_P_TentacleAvatarActive",
+    "wad": "Champions/Illaoi.wad.client"
+  },
+  "soul_tentacle/base_active": {
+    "entry": "Characters/Illaoi/Skins/Skin0/Particles/Illaoi_Base_P_TentacleBaseActive",
+    "wad": "Champions/Illaoi.wad.client"
+  },
+  "soul_tentacle/indicator_blue": {
+    "entry": "Characters/Illaoi/Skins/Skin0/Particles/Illaoi_Base_P_IndicatorBLU",
+    "wad": "Champions/Illaoi.wad.client"
+  },
+  "soul_tentacle/indicator_red": {
+    "entry": "Characters/Illaoi/Skins/Skin0/Particles/Illaoi_Base_P_IndicatorRed",
+    "wad": "Champions/Illaoi.wad.client"
+  },
+  "soul_tentacle/slam": {
+    "entry": "Characters/Illaoi/Skins/Skin0/Particles/Illaoi_Base_P_TentacleCas",
+    "wad": "Champions/Illaoi.wad.client"
+  },
+  "sru_orderminionranged/bolt": {
+    "entry": "Characters/SRU_OrderMinionRanged/Skins/Skin0/Particles/SRU_OrderMinionRanged_Base_BA_Mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Maps/Shipping/Map11.wad.client"
+  },
+  "sru_riftherald/swipe": {
+    "entry": "Characters/Sru_RiftHerald/Skins/Skin0/Particles/SRU_RiftHerald_Base_SpinAttack_Swipe",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Maps/Shipping/Map11.wad.client"
+  },
+  "stasis/native/flight": {
+    "entry": "Characters/Bard/Skins/Skin0/Particles/Bard_Base_R_mis",
+    "wad": "Champions/Bard.wad.client"
+  },
+  "stasis/native/impact": {
+    "entry": "Characters/Bard/Skins/Skin0/Particles/Bard_Base_R_explo",
+    "wad": "Champions/Bard.wad.client"
+  },
+  "stasis/native/warning": {
+    "entry": "Characters/Bard/Skins/Skin0/Particles/Bard_Base_R_Stasis_tar_warn_green",
+    "wad": "Champions/Bard.wad.client"
+  },
+  "stellar_convergence/core": {
+    "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_E_ExecuteZone_ChildParticle",
+    "seconds": 6,
+    "wad": "Champions/AurelionSol.wad.client"
+  },
+  "stellar_convergence/core_red": {
+    "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_E_ExecuteZone_ChildParticle_Enemy",
+    "seconds": 6,
+    "wad": "Champions/AurelionSol.wad.client"
+  },
+  "stellar_convergence/execute": {
+    "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_E_Execute_Minion",
+    "seconds": 6,
+    "wad": "Champions/AurelionSol.wad.client"
+  },
+  "stellar_convergence/zone": {
+    "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_E_AoE_ChildParticle",
+    "seconds": 6,
+    "wad": "Champions/AurelionSol.wad.client"
+  },
+  "stellar_convergence/zone_red": {
+    "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_E_AoE_ChildParticle_Enemy",
+    "seconds": 6,
+    "wad": "Champions/AurelionSol.wad.client"
+  },
+  "teemo/blind": {
+    "entry": "Characters/Teemo/Skins/Skin0/Particles/Teemo_Base_Q_mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Teemo.wad.client"
+  },
+  "teemo/bolt": {
+    "entry": "Characters/Teemo/Skins/Skin0/Particles/Teemo_Base_BA_mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Teemo.wad.client"
+  },
+  "thorn_spitter/buff": {
+    "entry": "Characters/Zyra/Skins/Skin0/Particles/Zyra_Base_P_Enrage",
+    "only": [
+      "star"
+    ],
+    "wad": "Champions/Zyra.wad.client"
+  },
+  "thorn_spitter/missile": {
+    "entry": "Characters/Zyra/Skins/Skin0/Particles/Zyra_Base_Q_Plant_Mis",
+    "only": [
+      "vine_thorn"
+    ],
+    "wad": "Champions/Zyra.wad.client"
+  },
+  "tidal_wave/wave": {
+    "entry": "Characters/Nami/Skins/Skin0/Particles/Nami_Base_R_mis",
+    "wad": "Champions/Nami.wad.client"
+  },
+  "trundle/domain": {
+    "entry": "Characters/Trundle/Skins/Skin0/Particles/Trundle_Base_W_ground",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Trundle.wad.client"
+  },
+  "tryndamere/rage": {
+    "entry": "Characters/Tryndamere/Skins/Skin0/Particles/Tryndamere_Base_R_buf_01",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Tryndamere.wad.client"
+  },
+  "twistedfate/card": {
+    "entry": "Characters/TwistedFate/Skins/Skin0/Particles/TwistedFate_Base_BA_Mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/TwistedFate.wad.client"
+  },
+  "twistedfate/fan": {
+    "entry": "Characters/TwistedFate/Skins/Skin0/Particles/TwistedFate_Base_Q_Mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/TwistedFate.wad.client"
+  },
+  "twitch/bolt": {
+    "entry": "Characters/Twitch/Skins/Skin0/Particles/Twitch_Base_AA_mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Twitch.wad.client"
+  },
+  "twitch/pierce": {
+    "entry": "Characters/Twitch/Skins/Skin0/Particles/Twitch_Base_R_mis",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Twitch.wad.client"
+  },
+  "twitch/spray": {
+    "entry": "Characters/Twitch/Skins/Skin0/Particles/Twitch_Base_R_Buff",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Twitch.wad.client"
+  },
+  "void_gate/death": {
+    "entry": "Characters/Jade_VoidGate/Skins/Skin0/Particles/Jade_VoidGate_Base_Death_01",
+    "wad": "Maps/Shipping/Map12.wad.client"
+  },
+  "void_gate/idle": {
+    "entry": "Characters/Jade_VoidGate/Skins/Skin0/Particles/Jade_VoidGate_Base_Portal_Idle",
+    "wad": "Maps/Shipping/Map12.wad.client"
+  },
+  "void_gate/spawn": {
+    "entry": "Characters/Jade_VoidGate/Skins/Skin0/Particles/Jade_VoidGate_Base_Portal",
+    "wad": "Maps/Shipping/Map12.wad.client"
+  },
+  "void_gate/spit": {
+    "entry": "Characters/Jade_VoidGate/Skins/Skin0/Particles/Jade_VoidGate_Base_BirthSpit",
+    "wad": "Maps/Shipping/Map12.wad.client"
+  },
+  "void_spawn/burst": {
+    "entry": "Characters/Jade_VoidSpawn/Skins/Skin0/Particles/Jade_VoidSpawn_Base_TurretDeath",
+    "wad": "Maps/Shipping/Map12.wad.client"
+  },
+  "void_spawn/death": {
+    "entry": "Characters/Jade_VoidSpawn/Skins/Skin0/Particles/Jade_VoidSpawn_Base_NormalDeath_Explosion",
+    "wad": "Maps/Shipping/Map12.wad.client"
+  },
+  "void_spawn/energy": {
+    "entry": "Characters/Jade_VoidSpawn/Skins/Skin0/Particles/Jade_VoidSpawn_Base_TurretDeath_EnergyBuildUP",
+    "wad": "Maps/Shipping/Map12.wad.client"
+  },
+  "void_spawn/glow": {
+    "entry": "Characters/Jade_VoidSpawn/Skins/Skin0/Particles/Jade_VoidSpawn_Base_BuildUpGlow",
+    "wad": "Maps/Shipping/Map12.wad.client"
+  },
+  "void_spawn/spawn": {
+    "entry": "Characters/Jade_VoidSpawn/Skins/Skin0/Particles/Jade_VoidSpawn_Base_SpawnSplat",
+    "wad": "Maps/Shipping/Map12.wad.client"
+  },
+  "void_spawn/trail": {
+    "entry": "Characters/Jade_VoidSpawn/Skins/Skin0/Particles/Jade_VoidSpawn_Base_Trail",
+    "wad": "Maps/Shipping/Map12.wad.client"
+  },
+  "void_summoning": {
+    "entry": "Items/223069/Particles/223069_Indicator_On",
+    "seconds": 6,
+    "wad": "Global.wad.client"
+  },
+  "voidfish_ranged/missile": {
+    "entry": "Characters/Belveth/Skins/Skin0/Particles/Belveth_Base_R_Voidling_BA_Mis",
+    "wad": "Champions/Belveth.wad.client"
+  },
+  "voidfish_ranged/spawn": {
+    "entry": "Characters/Belveth/Skins/Skin0/Particles/Belveth_Base_R_Minion_Transform",
+    "wad": "Champions/Belveth.wad.client"
+  },
+  "xin_dash/buff": {
+    "entry": "Characters/XinZhao/Skins/Skin0/Particles/XinZhao_Base_W_HandGlow_Cas",
+    "wad": "Champions/XinZhao.wad.client"
+  },
+  "xin_dash/hit": {
+    "entry": "Characters/XinZhao/Skins/Skin0/Particles/XinZhao_Base_E_AOE_Swirl_Tar",
+    "wad": "Champions/XinZhao.wad.client"
+  },
+  "xinzhao/crescent": {
+    "entry": "Characters/XinZhao/Skins/Skin0/Particles/XinZhao_Base_R_Cas",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/XinZhao.wad.client"
+  },
+  "xinzhao/guard": {
+    "entry": "Characters/XinZhao/Skins/Skin0/Particles/XinZhao_Base_R_IndicatorRing",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/XinZhao.wad.client"
+  },
+  "yorick/rites": {
+    "entry": "Characters/Yorick/Skins/Skin0/Particles/Yorick_Base_Q_Buf",
+    "fps": 30,
+    "seconds": 2,
+    "wad": "Champions/Yorick.wad.client"
+  },
+  "ziggs/basic": {
+    "entry": "Characters/Ziggs/Skins/Skin0/Particles/Ziggs_Base_BA_mis",
+    "wad": "Champions/Ziggs.wad.client"
+  },
+  "ziggs/hit": {
+    "entry": "Characters/Ziggs/Skins/Skin0/Particles/Ziggs_Base_Q_explosion",
+    "wad": "Champions/Ziggs.wad.client"
+  },
+  "ziggs/missile": {
+    "entry": "Characters/Ziggs/Skins/Skin0/Particles/Ziggs_Base_Q_mis_01",
+    "wad": "Champions/Ziggs.wad.client"
+  },
+  "ziggs/missile2": {
+    "entry": "Characters/Ziggs/Skins/Skin0/Particles/Ziggs_Base_Q_mis_02",
+    "wad": "Champions/Ziggs.wad.client"
+  },
+  "ziggs/missile3": {
+    "entry": "Characters/Ziggs/Skins/Skin0/Particles/Ziggs_Base_Q_mis_03",
+    "wad": "Champions/Ziggs.wad.client"
+  },
+  "ziggs/passive": {
+    "entry": "Characters/Ziggs/Skins/Skin0/Particles/Ziggs_Base_P_buf",
+    "wad": "Champions/Ziggs.wad.client"
+  }
+}
