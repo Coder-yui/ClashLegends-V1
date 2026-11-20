@@ -1,0 +1,222 @@
+{
+  "anivia/0/冰雪风暴": {
+    "visual_action": "frost_storm"
+  },
+  "anivia/0/anivia.glacial-storm": {
+    "visual_action": "frost_storm"
+  },
+  "apex_turret/0/海克斯穿透激光": {
+    "visual_action": "laser"
+  },
+  "apex_turret/0/apex_turret.hextech-piercing-laser": {
+    "visual_action": "laser"
+  },
+  "ashe/0/万箭齐发": {
+    "visual_action": "active"
+  },
+  "ashe/0/ashe.volley": {
+    "visual_action": "active"
+  },
+  "aurelionsol/0/星落/天瀑": {
+    "full_resource_visual_action": "active_strong",
+    "visual_action": "active"
+  },
+  "aurelionsol/0/aurelionsol.falling-star-the-skies-descend": {
+    "full_resource_visual_action": "active_strong",
+    "visual_action": "active"
+  },
+  "azir/0/沙兵现身": {
+    "visual_action": "active"
+  },
+  "azir/0/azir.arise": {
+    "visual_action": "active"
+  },
+  "belveth/0/虚空激流": {
+    "visual_action": "active"
+  },
+  "belveth/0/belveth.void-surge": {
+    "visual_action": "active"
+  },
+  "corki/0/火箭轰击": {
+    "visual_action": "active",
+    "visual_actions_by_use": [
+      "active",
+      "active",
+      "active_big"
+    ]
+  },
+  "corki/0/corki.missile-barrage": {
+    "visual_action": "active",
+    "visual_actions_by_use": [
+      "active",
+      "active",
+      "active_big"
+    ]
+  },
+  "ekko/0/时空断裂": {
+    "visual_action": "rewind"
+  },
+  "ekko/0/ekko.chronobreak": {
+    "visual_action": "rewind"
+  },
+  "garen/0/审判": {
+    "visual_action": "judgment"
+  },
+  "garen/0/garen.judgment": {
+    "visual_action": "judgment"
+  },
+  "gnar/0/怒气爆发": {
+    "visual_action": "active"
+  },
+  "gnar/0/gnar.rage-burst": {
+    "visual_action": "active"
+  },
+  "graves/0/快速拔枪": {
+    "visual_action": "active"
+  },
+  "graves/0/graves.quickdraw": {
+    "visual_action": "active"
+  },
+  "gwen/0/丝缕缠流": {
+    "visual_action": "hallowed_mist"
+  },
+  "gwen/0/gwen.hallowed-mist": {
+    "visual_action": "hallowed_mist"
+  },
+  "gwen/0/快刀乱剪": {
+    "resource_visual_actions": [
+      "active_0",
+      "active_1",
+      "active_2",
+      "active_3"
+    ],
+    "visual_action": "active_0"
+  },
+  "gwen/0/gwen.snip-snip": {
+    "resource_visual_actions": [
+      "active_0",
+      "active_1",
+      "active_2",
+      "active_3"
+    ],
+    "visual_action": "active_0"
+  },
+  "hecarim/0/恐惧之灵": {
+    "visual_action": "active:cast"
+  },
+  "hecarim/0/hecarim.spirit-of-dread": {
+    "visual_action": "active:cast"
+  },
+  "ivern/0/小菊！": {
+    "visual_action": "active"
+  },
+  "ivern/0/ivern.daisy": {
+    "visual_action": "active"
+  },
+  "kassadin/0/虚空行走": {
+    "visual_action": "active"
+  },
+  "kassadin/0/kassadin.riftwalk": {
+    "visual_action": "active"
+  },
+  "kayle/0/星界恩典": {
+    "visual_action": "active"
+  },
+  "kayle/0/kayle.celestial-blessing": {
+    "visual_action": "active"
+  },
+  "kayle_ranged/0/星界恩典": {
+    "visual_action": "active"
+  },
+  "kayle_ranged/0/kayle.celestial-blessing": {
+    "visual_action": "active"
+  },
+  "kayn/0/巨镰横扫": {
+    "visual_action": "active"
+  },
+  "kayn/0/kayn.reaping-slash": {
+    "visual_action": "active"
+  },
+  "kayn_assassin/0/巨镰横扫": {
+    "visual_action": "active"
+  },
+  "kayn_assassin/0/kayn.reaping-slash": {
+    "visual_action": "active"
+  },
+  "kayn_slayer/0/巨镰横扫": {
+    "visual_action": "active"
+  },
+  "kayn_slayer/0/kayn.reaping-slash": {
+    "visual_action": "active"
+  },
+  "lulu/0/狂野生长": {
+    "visual_action": "growth"
+  },
+  "lulu/0/lulu.wild-growth": {
+    "visual_action": "growth"
+  },
+  "malphite/0/大地震颤": {
+    "visual_action": "active"
+  },
+  "malphite/0/malphite.ground-slam": {
+    "visual_action": "active"
+  },
+  "malzahar/0/虚空虫群": {
+    "visual_action": "void_swarm"
+  },
+  "malzahar/0/malzahar.void-swarm": {
+    "visual_action": "void_swarm"
+  },
+  "ornn/0/熔铸冲锋": {
+    "visual_action": "ornn_charge"
+  },
+  "ornn/0/ornn.searing-charge": {
+    "visual_action": "ornn_charge"
+  },
+  "pantheon/0/贯星长枪": {
+    "full_resource_visual_action": "spear_tap_empowered",
+    "visual_action": "spear_tap"
+  },
+  "pantheon/0/pantheon.comet-spear": {
+    "full_resource_visual_action": "spear_tap_empowered",
+    "visual_action": "spear_tap"
+  },
+  "rift_herald/0/旋转重拳": {
+    "visual_action": "spinning_punch"
+  },
+  "rift_herald/0/rift_herald.sweeping-strike": {
+    "visual_action": "spinning_punch"
+  },
+  "samira/0/炼狱扳机": {
+    "visual_action": "inferno"
+  },
+  "samira/0/samira.inferno-trigger": {
+    "visual_action": "inferno"
+  },
+  "sett/0/蓄意轰拳": {
+    "full_resource_visual_action": "active_strong",
+    "visual_action": "active"
+  },
+  "sett/0/sett.haymaker": {
+    "full_resource_visual_action": "active_strong",
+    "visual_action": "active"
+  },
+  "sona/0/狂舞终乐章": {
+    "visual_action": "crescendo"
+  },
+  "sona/0/sona.crescendo": {
+    "visual_action": "crescendo"
+  },
+  "twisted_fate/0/万能牌": {
+    "visual_action": "wild_cards"
+  },
+  "twisted_fate/0/twisted_fate.wild-cards": {
+    "visual_action": "wild_cards"
+  },
+  "xin/0/新月护卫": {
+    "visual_action": "active"
+  },
+  "xin/0/xin.crescent-guard": {
+    "visual_action": "active"
+  }
+}
