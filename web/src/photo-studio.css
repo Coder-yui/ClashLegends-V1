@@ -1,0 +1,99 @@
+.photo-layout .photo-tools {
+  overflow: auto;
+  min-height: 0;
+  scrollbar-width: thin;
+}
+.photo-tools nav,
+.photo-tools footer,
+.photo-tools > p {
+  margin: 0.65rem;
+}
+.photo-tools section {
+  display: grid;
+  gap: 0.5rem;
+}
+.photo-tools label.photo-slider {
+  display: grid;
+  grid-template-columns: 6.5em minmax(40px, 1fr) 3em;
+  gap: 0.3rem;
+}
+.photo-slider input {
+  width: 100%;
+}
+.photo-slider output {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.photo-tools .choice {
+  min-width: 0;
+}
+.photo-tools .choice-list {
+  position: relative;
+  top: auto;
+  bottom: auto;
+  max-height: 160px;
+  overflow: auto;
+}
+.photo-stage {
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  container-type: size;
+  background: #101a20;
+}
+.photo-stage canvas {
+  display: block;
+  width: min(100cqw, 55cqh);
+  height: auto;
+  aspect-ratio: 308/560;
+  touch-action: none;
+  cursor: grab;
+  background: repeating-conic-gradient(#273037 0 25%, #303b43 0 50%) 0/18px 18px;
+}
+.photo-stage canvas[hidden] {
+  display: none;
+}
+.photo-proof {
+  --u: 0.85px;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.6rem;
+}
+.photo-proof h2 {
+  width: 100%;
+  text-align: center;
+}
+.photo-proof figure {
+  margin: 0;
+  text-align: center;
+}
+.photo-proof figcaption {
+  margin-top: 0.5rem;
+}
+.photo-proof .prep-collection {
+  display: block;
+  width: 105px;
+  padding: 0;
+}
+.photo-proof .prep-identity {
+  padding: 0;
+  border: 0;
+}
+.photo-proof .battle-card {
+  width: calc(124 * var(--u));
+  height: calc(108 * var(--u));
+}
+@media (max-width: 740px) and (orientation: portrait) {
+  .wb-layout.photo-layout {
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .photo-layout .photo-tools {
+    grid-row: 2;
+  }
+}

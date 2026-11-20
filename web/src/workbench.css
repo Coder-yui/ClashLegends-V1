@@ -10,15 +10,14 @@
   gap: 0.55rem;
   flex-wrap: wrap;
 }
-.wb-head,
 .wb-title {
   justify-content: space-between;
 }
 .wb-head {
-  margin-bottom: 1rem;
+  flex: none;
 }
 .wb h1 {
-  font-size: clamp(24px, 3vw, 36px);
+  font-size: clamp(20px, 2.4vw, 30px);
   margin: 0;
 }
 .wb h2 {
@@ -59,7 +58,6 @@
 }
 .wb-layout {
   display: grid;
-  grid-template-columns: minmax(285px, 0.7fr) minmax(0, 1.3fr);
   gap: 1rem;
 }
 .wb-tools,
@@ -72,11 +70,7 @@
 }
 .wb-tools {
   overflow: visible;
-  align-self: start;
-}
-.wb-tools section,
-.wb-preview-controls {
-  padding: 0.9rem 1rem;
+  align-self: stretch;
 }
 .wb-tools section + section {
   border-top: 1px solid #39484f;
@@ -98,13 +92,11 @@
   color: #d6bc78;
   margin-right: 0.4rem;
 }
-.wb-display {
-  align-self: start;
-}
 .wb-arena {
   position: relative;
   container-type: size;
-  height: clamp(340px, 69dvh, 840px);
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
   background: #23382e;
 }
@@ -139,7 +131,8 @@
 }
 .wb-log {
   font-size: 0.78rem;
-  height: 12rem;
+  min-height: 0;
+  margin: 0;
   overflow: auto;
   padding-left: 0;
   list-style: none;
@@ -154,7 +147,8 @@
   color: #aebdc3;
 }
 .wb-view {
-  height: clamp(270px, 50dvh, 680px);
+  flex: 1;
+  min-height: 0;
   background: radial-gradient(
     ellipse at 50% 65%,
     #526267,
@@ -174,68 +168,155 @@
   inset: 40% 0 auto;
   text-align: center;
 }
-.wb-preview-controls {
-  display: grid;
-  gap: 0.6rem;
-}
 .wb-preview-controls input[type="range"] {
   flex: 1;
   min-width: 30px;
 }
 .wb-picker .wb-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
   gap: 0.4rem;
   max-height: 44dvh;
   overflow: auto;
   margin: 0.8rem 0;
 }
-.wb-grid button {
-  display: grid;
-  align-content: start;
-  gap: 0.35rem;
-}
 .wb-grid img {
-  width: 100%;
-  height: 54px;
-  object-fit: cover;
   border-radius: 0.2rem;
 }
 dialog:has(.wb-picker) {
-  width: min(680px, 96vw);
+  width: min(760px, 96vw);
 }
-.wb-picker .wb-row input {
-  min-width: 0;
+.wb-picker-filters,
+.wb-categories {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+.wb-picker-filters {
+  gap: 0.6rem;
+}
+.wb-picker-filters input {
+  width: clamp(120px, 20vw, 165px);
+}
+.wb-categories button {
+  gap: 0.3rem;
+  white-space: nowrap;
+}
+.wb-categories img {
+  width: 18px;
+  height: 18px;
+}
+
+#root:has(.wb) {
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+main:has(.wb) {
+  align-self: stretch;
+  margin-block: 0;
+  width: min(1440px, 96%);
+  padding: clamp(6px, 1.4dvh, 16px) 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.wb {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  gap: clamp(6px, 1.3dvh, 14px);
+}
+.wb-head > .wb-row {
+  margin-left: auto;
+}
+.wb .wb-object {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  min-height: 36px;
+  border-color: #8c7958;
+}
+.wb-object img {
+  width: 24px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.wb-object span {
+  color: #cdbb98;
+}
+.wb-layout {
+  flex: 1;
+  min-height: 0;
+  grid-template-columns: minmax(290px, 0.72fr) minmax(0, 1.5fr);
+  grid-template-rows: minmax(0, 1fr);
+}
+.wb-display {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+.wb-tools {
+  max-height: 100%;
+}
+.wb-tools section,
+.wb-preview-controls {
+  padding: clamp(8px, 1.4dvh, 16px);
+}
+.wb-tools section > .choice + .choice {
+  margin-top: 0.45rem;
+}
+.wb-tool-tabs {
+  display: flex;
+  padding: 0.5rem;
+  gap: 0.4rem;
+  border-bottom: 1px solid #39484f;
+}
+.wb-tool-tabs button {
   flex: 1;
 }
-@media (max-width: 740px) {
-  .wb-layout {
-    grid-template-columns: 1fr;
-  }
-  .wb-display {
-    grid-row: 1;
-  }
-  .wb-arena {
-    height: 48dvh;
-  }
-  .wb-head h1 {
-    font-size: 22px;
-  }
-  .wb-view {
-    height: 36dvh;
-  }
+.wb-battle-tools {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
-.wb-info {
-  padding: 1rem;
+.wb-battle-tools > section[hidden] {
+  display: none;
 }
-.wb-tools section > .game-list {
-  margin-top: 0.65rem;
+.wb-battle-tools .wb-events {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
 }
-.wb-info .prep-card {
-  min-height: 112px;
+.wb-events small {
+  color: var(--muted);
+}
+.wb-placement > .wb-row {
+  padding-right: 0.5rem;
+  border-right: 1px solid #516069;
 }
 .wb-preview-controls {
+  gap: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   border-top: 1px solid #39484f;
+}
+.wb-tools:has(.wb-preview-controls) {
+  display: flex;
+  flex-direction: column;
+}
+.wb-preview-controls {
+  flex: 1;
+}
+.wb-preview-controls .game-list {
+  flex: 1;
+  max-height: none;
+  min-height: 2rem;
 }
 .wb-preview-controls label {
   flex-wrap: wrap;
@@ -243,6 +324,821 @@ dialog:has(.wb-picker) {
 .wb-preview-controls input {
   flex-basis: 100%;
 }
-.wb-view {
-  height: clamp(340px, 64dvh, 780px);
+.wb-audio-panel,
+.wb-info,
+.wb-empty {
+  padding: clamp(12px, 2vw, 24px);
+  border: 1px solid #405057;
+  border-radius: 0.55rem;
+  background: #17252c;
+}
+.wb-audio-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  flex: 1;
+  min-height: 0;
+}
+.wb-audio-panel h2,
+.wb-fx h2 {
+  margin: 0;
+}
+.wb-segments {
+  display: flex;
+  gap: 0.2rem;
+}
+.wb-clip-catalog {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  display: grid;
+  align-content: start;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 235px), 1fr));
+  gap: 0.5rem;
+}
+.wb-clip-catalog section {
+  padding: 0.55rem;
+  background: #112029;
+  border: 1px solid #33464e;
+  border-radius: 0.3rem;
+}
+.wb-clip-catalog h3 {
+  font: 600 0.84rem/1.35 monospace;
+  color: var(--event-color);
+  overflow-wrap: anywhere;
+  margin: 0 0 0.4rem;
+}
+.wb-clip-catalog section > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+.wb-clip-catalog button {
+  color: var(--event-color);
+  padding: 0.18rem 0.4rem;
+  gap: 0.25rem;
+  font-variant-numeric: tabular-nums;
+}
+.wb-clip-catalog small {
+  color: #ccd4d6;
+}
+.wb-player {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 0.75rem;
+  border-top: 1px solid #405057;
+  padding-top: 0.5rem;
+}
+.wb-player > input,
+.wb-player > .wb-row {
+  grid-column: 1/-1;
+}
+.wb-player label {
+  justify-content: space-between;
+}
+.wb-player output {
+  color: #c3cbca;
+  font-variant-numeric: tabular-nums;
+}
+.wb-player input {
+  margin: 0;
+  width: 100%;
+  accent-color: var(--gold);
+}
+.wb-info {
+  position: relative;
+  min-height: 0;
+  overflow: auto;
+  flex: 1;
+}
+.wb-info-open {
+  position: absolute;
+  right: clamp(12px, 2vw, 24px);
+  top: clamp(12px, 2vw, 24px);
+}
+.wb-info .prep-identity {
+  padding: 0 9.5rem 0.4rem 0;
+}
+.wb-info .prep-identity .prep-card {
+  width: clamp(38px, 6.5dvh, 62px);
+}
+.wb-info .prep-detail > section {
+  padding-block: 0.35rem;
+  border-top: 1px solid #39484f;
+}
+.wb-info .prep-detail h4,
+.wb-info .prep-detail p {
+  margin: 0.2rem 0;
+}
+.wb-info .prep-detail dl {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+}
+.wb-info .prep-options {
+  display: inline-flex;
+  vertical-align: middle;
+  margin: 0 0.75rem 0 0;
+}
+.wb-info .prep-skin {
+  display: none;
+}
+.wb-picker .wb-grid {
+  align-content: start;
+  grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+}
+.wb-grid > p {
+  grid-column: 1/-1;
+}
+.wb-picker .wb-grid button {
+  display: flex;
+  flex-direction: column;
+  padding: 0.33rem;
+  gap: 0.25rem;
+  line-height: 1.25;
+  justify-content: flex-start;
+}
+.wb-grid img,
+.wb-placeholder {
+  width: 100%;
+  height: clamp(68px, 11dvh, 104px);
+  object-fit: cover;
+  object-position: center 30%;
+}
+.wb-placeholder {
+  display: grid;
+  place-items: center;
+  background: #18242b;
+  color: #cdbb98;
+}
+.wb-grid button > span:last-child {
+  margin-block: auto;
+}
+.wb-picker .wb-slots {
+  margin-bottom: 0;
+}
+
+.wb-fx {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(315px, 0.88fr) minmax(0, 1.4fr);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0.8rem;
+}
+.wb-fx aside,
+.wb-fx-stage {
+  min-width: 0;
+  background: #17252c;
+  border: 1px solid #405057;
+  border-radius: 0.55rem;
+}
+.wb-fx aside {
+  padding: clamp(0.55rem, 1.4dvh, 1rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.wb-fx-settings {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.8rem;
+  align-items: end;
+}
+.wb-fx-settings label {
+  white-space: nowrap;
+  min-width: 0;
+}
+.wb-fx .choice-list {
+  width: 100%;
+  max-width: none;
+}
+.wb-fx .choice button {
+  overflow-wrap: anywhere;
+}
+.wb-emitters {
+  border-top: 1px solid #405057;
+  padding-top: 0.5rem;
+}
+.wb-emitter-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(145px, 100%), 1fr));
+  gap: 0.35rem 0.6rem;
+  margin-top: 0.45rem;
+}
+.wb-emitter-list label {
+  font: 0.82rem/1.35 monospace;
+  overflow-wrap: anywhere;
+}
+.wb-emitter-list input {
+  flex: none;
+  margin: 0;
+}
+.wb-fx-stage {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  padding: 0.45rem;
+  gap: 0.45rem;
+  position: relative;
+}
+.wb-fx-stage canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: block;
+}
+.wb-fx-stage p {
+  position: absolute;
+  top: 2rem;
+  left: 1rem;
+}
+.wb-fx-options {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  z-index: 2;
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.25rem 0.45rem;
+  background: #18222ae6;
+  color: #fff;
+  font-size: 0.75rem;
+}
+.wb-fx-options label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.wb-fx-path {
+  overflow-wrap: anywhere;
+}
+
+/* Give short screens the full width for descriptions and attribute values. */
+
+.wb-zoom label {
+  white-space: nowrap;
+}
+.wb-zoom label input {
+  width: clamp(64px, 12vw, 180px);
+}
+.wb-stats {
+  right: auto;
+  max-width: calc(100% - 1rem);
+  top: auto;
+  bottom: 0.5rem;
+}
+
+.wb-info .choice-list {
+  top: auto;
+  bottom: 100%;
+}
+
+@media (max-width: 740px) and (min-height: 541px),
+  (max-width: 740px) and (orientation: portrait) {
+  #root:has(.wb) .top {
+    height: 46px;
+  }
+  .wb-head {
+    gap: 0.35rem;
+  }
+  .wb-head > .wb-row {
+    width: 100%;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.25rem;
+  }
+  .wb-head > .wb-row button {
+    padding-inline: 0.08rem;
+    white-space: nowrap;
+    font-size: clamp(11px, 3.1vw, 14px);
+  }
+  .wb-object {
+    margin-left: auto;
+  }
+  .wb-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 0.4rem;
+  }
+  .wb-display {
+    grid-row: 1;
+  }
+  .wb-layout > .wb-tools .choice-list {
+    top: auto;
+    bottom: 100%;
+  }
+  .wb-zoom {
+    padding: 0.2rem 0.55rem;
+  }
+  .wb-tools h2,
+  .wb-tools p {
+    margin-block: 0.2rem;
+  }
+  .wb-tools section,
+  .wb-preview-controls {
+    padding: 0.45rem 0.6rem;
+  }
+  .wb-tool-tabs {
+    padding: 0.25rem 0.5rem;
+  }
+  .wb button {
+    padding: 0.29rem 0.5rem;
+  }
+  .wb-preview-controls {
+    gap: 0.3rem;
+  }
+  .wb-preview-controls .game-list {
+    max-height: clamp(42px, 11dvh, 100px);
+  }
+  .wb-preview-controls small {
+    display: none;
+  }
+  .wb-battle-tools .wb-events {
+    max-height: 22dvh;
+  }
+  .wb-info .prep-detail dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2px 5px;
+  }
+  .wb-info .prep-detail dl div {
+    padding: 1px 3px;
+  }
+  .wb-categories button {
+    padding: 0.28rem 0.42rem;
+    gap: 0.15rem;
+  }
+  .wb-categories img {
+    width: 15px;
+    height: 15px;
+  }
+  .wb-picker-filters input {
+    width: 130px;
+  }
+  .wb-clip-catalog {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-height: 741px) and (min-width: 741px) {
+  .wb-battle-tools section {
+    padding: clamp(16px, 2.3dvh, 28px);
+  }
+  .wb-battle-tools .wb-deploy {
+    flex: 0 1 auto;
+    min-height: 38%;
+  }
+  .wb-battle-tools .wb-deploy > .wb-row,
+  .wb-battle-tools .wb-unit > .wb-row {
+    margin-top: 0.85rem;
+  }
+  .wb-battle-tools section button {
+    min-height: 38px;
+  }
+}
+
+@media (max-height: 740px) {
+  .wb-battle-tools .wb-deploy,
+  .wb-battle-tools .wb-unit {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    align-items: center;
+    gap: 0.2rem 0.55rem;
+    line-height: 1.3;
+  }
+  .wb-battle-tools > section[hidden] {
+    display: none;
+  }
+  .wb-battle-tools .wb-slots {
+    flex: 1 1 70%;
+    flex-wrap: wrap;
+    overflow: visible;
+    gap: 2px;
+  }
+  .wb-battle-tools .wb-slots button {
+    padding: 0.1rem 0.28rem;
+    font-size: 0.74rem;
+    gap: 0.2rem;
+  }
+  .wb-slots small {
+    margin: 0;
+  }
+  .wb-battle-tools .wb-placement,
+  .wb-battle-tools .wb-unit > .wb-row {
+    width: 100%;
+  }
+  .wb-battle-tools section :is(p, h2, .wb-slots, .wb-row) {
+    margin-block: 0;
+  }
+  .wb-battle-tools section h2 {
+    font-size: 0.86rem;
+  }
+}
+.wb-battle-tools .wb-slots:has(> button:nth-child(5)) {
+  display: grid;
+  flex-basis: 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.2rem;
+}
+.wb-battle-tools .wb-slots:has(> button:nth-child(5)) button {
+  gap: 0.2rem;
+  padding: 0.24rem 0.15rem;
+  font-size: 0.76rem;
+  line-height: 1.2;
+}
+.wb-battle-tools .wb-slots small {
+  margin-right: 0;
+}
+@media (min-width: 741px) and (max-width: 1150px) and (min-height: 541px) {
+  .wb-layout:has(.wb-battle-tools) {
+    grid-template-columns: minmax(350px, 0.85fr) minmax(0, 1.2fr);
+  }
+}
+@media (max-height: 800px) and (orientation: landscape) {
+  .wb-info {
+    padding: 0.5rem 0.75rem;
+  }
+  .wb-info .prep-detail {
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  .wb-info .prep-detail > section {
+    display: grid;
+    grid-template-columns: minmax(74px, 12%) minmax(0, 1fr);
+    gap: 2px 0.65rem;
+    align-items: start;
+    padding: 0.26rem 0;
+  }
+  .wb-info .prep-detail > section > * {
+    grid-column: 2;
+  }
+  .wb-info .prep-detail > section > h4 {
+    grid-column: 1;
+    grid-row: 1 / span 4;
+    margin: 0;
+    font-size: 1em;
+  }
+  .wb-info .prep-detail dl {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 2px 5px;
+  }
+  .wb-info .prep-detail dl div {
+    padding: 1px 4px;
+    gap: 3px;
+  }
+  .wb-info .prep-detail p {
+    line-height: 1.35;
+    margin: 0.15rem 0;
+  }
+  .wb-info .prep-options {
+    justify-self: start;
+  }
+  .wb-info .prep-options img {
+    width: 23px;
+    height: 23px;
+  }
+}
+
+@media (max-width: 740px) and (orientation: portrait) {
+  .wb-fx {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 0.4rem;
+  }
+  .wb-fx-stage {
+    grid-row: 1;
+  }
+  .wb-fx aside {
+    gap: 0.35rem;
+  }
+  .wb-fx .choice-list {
+    top: auto;
+    bottom: 100%;
+  }
+  .wb-info {
+    padding: 0.55rem 0.65rem;
+  }
+  .wb-info .prep-detail {
+    font-size: 12.5px;
+    line-height: 1.28;
+  }
+  .wb-info .prep-identity {
+    padding-bottom: 0.2rem;
+    gap: 0.5rem;
+  }
+  .wb-info .prep-identity .prep-card {
+    width: 36px;
+  }
+  .wb-info .prep-identity h3 {
+    font-size: 1.3em;
+    margin-bottom: 0.18rem;
+  }
+  .wb-info .prep-detail h4 {
+    font-size: 1.05em;
+    margin: 0 0 0.14rem;
+  }
+  .wb-info .prep-detail > section {
+    padding: 0.22rem 0;
+  }
+  .wb-info .prep-detail p {
+    margin: 0.16rem 0;
+    line-height: 1.35;
+  }
+  .wb-info .prep-detail dl {
+    gap: 2px 4px;
+  }
+  .wb-info .prep-options img {
+    width: 24px;
+    height: 24px;
+  }
+  .wb-info .prep-detail dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 3px;
+  }
+  .wb-info .prep-detail dl div {
+    flex: 1 0 auto;
+    gap: 6px;
+  }
+}
+
+@media (max-height: 540px) and (orientation: landscape) {
+  #root:has(.wb) .top {
+    height: 38px;
+  }
+  .wb-layout {
+    display: grid;
+    grid-template-columns: minmax(240px, 0.9fr) minmax(0, 1.3fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+  .wb-battle-tools .wb-deploy > .wb-slots {
+    order: 1;
+  }
+  .wb-battle-tools .wb-deploy > .wb-placement {
+    order: 2;
+  }
+  .wb-battle-tools section > .wb-row {
+    gap: 0.25rem;
+  }
+  .wb-battle-tools .wb-placement > .wb-row {
+    padding-right: 0.3rem;
+    gap: 0.25rem;
+  }
+  .wb-display {
+    grid-column: 2;
+  }
+  .wb-layout:has(.wb-battle-tools) {
+    grid-template-columns: minmax(350px, 1.15fr) minmax(0, 1fr);
+  }
+  .wb-battle-tools section {
+    font-size: 0.8rem;
+  }
+  .wb-preview-controls small {
+    display: none;
+  }
+
+  .wb button {
+    padding: 0.2rem 0.5rem;
+  }
+  .wb-battle-tools .wb-slots button {
+    flex: none;
+  }
+  .wb-battle-tools section > .wb-row,
+  .wb-battle-tools .wb-slots {
+    margin-block: 0;
+  }
+  .wb-tool-tabs,
+  .wb-tools section,
+  .wb-preview-controls {
+    padding: 0.3rem 0.55rem;
+  }
+  .wb-preview-controls {
+    gap: 0.25rem;
+  }
+  .wb-info .prep-identity .prep-card {
+    width: 28px;
+  }
+  .wb-fx {
+    grid-template-columns: minmax(320px, 1fr) minmax(0, 1.1fr);
+  }
+  .wb-fx aside {
+    gap: 0.1rem;
+    font-size: 0.76rem;
+    line-height: 1.28;
+    padding: 0.35rem;
+  }
+  .wb-emitter-list {
+    gap: 0.15rem 0.4rem;
+    margin: 0;
+  }
+  .wb-fx .choice .field-label {
+    display: inline;
+    margin-right: 0.4rem;
+  }
+  .wb-fx .choice {
+    display: flex;
+    align-items: center;
+  }
+  .wb-fx .choice > .field-label {
+    flex: none;
+  }
+  .wb-info .prep-detail {
+    font-size: 12px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0 0.6rem;
+  }
+  .wb-info .prep-identity {
+    padding: 0;
+    border: 0;
+    gap: 0.5rem;
+  }
+  .wb-info .prep-identity h3 {
+    font-size: 1.15em;
+    margin: 0;
+  }
+  .wb-info .prep-detail > p {
+    margin-right: 8.5rem;
+  }
+  .wb-info .prep-detail > section {
+    grid-column: 1/-1;
+    padding: 0.13rem 0;
+    gap: 1px 0.5rem;
+  }
+  .wb-info .prep-detail dl div {
+    padding: 1px 2px;
+  }
+  .wb-info .prep-detail > section:has(.prep-options) {
+    grid-template-columns: 12% auto minmax(0, 1fr);
+    align-items: center;
+  }
+  .wb-info .prep-detail > section > small {
+    grid-column: 3;
+  }
+  .wb-info .prep-detail > section:has(.prep-options) > p {
+    grid-column: 2/-1;
+  }
+  .wb-info .prep-detail dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 4px;
+  }
+  .wb-info .prep-detail dl div {
+    flex: 1 0 auto;
+    gap: 6px;
+  }
+  .wb-info .prep-detail h4 {
+    align-self: start;
+  }
+}
+
+@media (max-width: 740px) and (max-height: 540px) and (orientation: landscape) {
+  .wb-head {
+    gap: 0.3rem;
+  }
+  .wb-head h1 {
+    font-size: 1rem;
+  }
+  .wb-head > .wb-row {
+    gap: 0.2rem;
+  }
+  .wb-head button {
+    font-size: 0.72rem;
+  }
+  .wb-layout:has(.wb-battle-tools) {
+    grid-template-columns: minmax(360px, 1.65fr) minmax(0, 1fr);
+  }
+  .wb-info {
+    padding: 0.25rem 0.5rem;
+  }
+  .wb-info .prep-detail {
+    line-height: 1.22;
+  }
+  .wb-info .prep-detail > section,
+  .wb-info .prep-detail > section:has(.prep-options) {
+    display: block;
+  }
+  .wb-info .prep-detail h4,
+  .wb-info .prep-detail h4 + p {
+    display: inline;
+  }
+  .wb-info .prep-detail h4 {
+    margin-right: 0.4rem;
+  }
+  .wb-info .prep-detail p {
+    margin: 0;
+    line-height: 1.25;
+  }
+  .wb-info .prep-detail > section:has(dl) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 1px 4px;
+  }
+  .wb-info .prep-detail dl {
+    display: contents;
+  }
+  .wb-info .prep-detail dl div {
+    padding: 0 2px;
+    line-height: 1.2;
+  }
+  .wb-info .prep-options {
+    margin-right: 0.4rem;
+  }
+  .wb-info .prep-options button {
+    padding: 0 0.25rem;
+  }
+}
+
+@media (max-width: 740px) and (max-height: 740px) and (orientation: portrait) {
+  .wb-info {
+    padding: 0.4rem 0.5rem;
+  }
+  .wb-info .prep-detail {
+    font-size: 12px;
+    line-height: 1.24;
+  }
+  .wb-info .prep-identity {
+    min-height: 30px;
+    gap: 0.3rem;
+  }
+  .wb-info .prep-identity .prep-card {
+    width: 23px;
+  }
+  .wb-info .prep-identity h3 {
+    display: inline;
+    margin-right: 0.35rem;
+  }
+  .wb-info .wb-info-open {
+    top: 0.4rem;
+    right: 0.5rem;
+  }
+  .wb-info .prep-detail > section {
+    padding: 0.13rem 0;
+  }
+  .wb-info .prep-detail > section:has(dl) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 1px 3px;
+  }
+  .wb-info .prep-detail dl {
+    display: contents;
+  }
+  .wb-info .prep-detail dl div {
+    padding: 1px 2px;
+    gap: 4px;
+  }
+  .wb-info .prep-detail h4 {
+    display: inline;
+    margin-right: 0.35rem;
+  }
+  .wb-info .prep-detail h4 + p {
+    display: inline;
+  }
+  .wb-info .prep-detail p {
+    margin: 0.1rem 0;
+    line-height: 1.28;
+  }
+  .wb-info .prep-options {
+    margin-right: 0.25rem;
+  }
+  .wb-info .prep-options button {
+    padding: 0.12rem 0.35rem;
+  }
+}
+
+@media (max-width: 960px) and (max-height: 540px) and (orientation: landscape) {
+  .wb-head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: .35rem;
+  }
+  .wb-head > .wb-row {
+    flex-wrap: nowrap;
+    gap: .2rem;
+  }
+  .wb-head .wb-object {
+    min-width: 0;
+    max-width: 100%;
+    justify-self: start;
+  }
+  .wb-head .wb-object b {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .wb-head .wb-object span {
+    white-space: nowrap;
+  }
+  .wb-head > .wb-row button {
+    padding-inline: .35rem;
+  }
+}
+@media (max-width: 740px) and (max-height: 540px) and (orientation: landscape) {
+  .wb-head .wb-object span:first-of-type {
+    display: none;
+  }
 }

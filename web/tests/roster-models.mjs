@@ -52,7 +52,7 @@ try {
       errors.push(m.text());
   });
   await page.goto(base + "/play/workbench?view=models&model=princess_tower");
-  const object = page.getByLabel("对象", { exact: true }),
+  const object = page.getByRole("button", { name: "选择对象", exact: true }),
     clip = page.getByLabel("动作片段");
   const thumbnails = [];
   let sampledClips = 0;
@@ -60,7 +60,7 @@ try {
     for (let form = 0; form < profiles[kind].length; form++) {
       await object.click();
       await page
-        .getByRole("listbox", { name: "对象", exact: true })
+        .getByRole("dialog", { name: "选择对象", exact: true })
         .locator('[data-value="' + kind + '"]')
         .click();
       if (profiles[kind].length > 1) {

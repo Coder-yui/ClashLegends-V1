@@ -52,7 +52,7 @@ try {
       errors.push(m.text());
   });
   await page.goto(base + "/play/workbench?view=models&model=princess_tower");
-  const object = page.getByLabel("对象", { exact: true }),
+  const object = page.getByRole("button", { name: "选择对象", exact: true }),
     clip = page.getByLabel("动作片段");
   const thumbnails = [];
   let sampledClips = 0;
@@ -60,7 +60,7 @@ try {
     for (const team of both.has(kind) ? [0, 1] : [0]) {
       await object.click();
       await page
-        .getByRole("listbox", { name: "对象", exact: true })
+        .getByRole("dialog", { name: "选择对象", exact: true })
         .locator('[data-value="' + kind + '"]')
         .click();
       await page
@@ -165,6 +165,8 @@ try {
   await page.waitForFunction(() => window.modelCount === 6);
   await page.screenshot({ path: join(dest, "地图建筑.png") });
   const b = (name) => page.getByRole("button", { name, exact: true });
+  await b("场景与事件").click();
+  await b("暂停战斗").click();
   for (const kind of [
     ...buildings,
     "ranged_minion",
@@ -172,10 +174,9 @@ try {
     "super_minion",
   ]) {
     const name = rules[kind].name;
-    await b("选择实验卡").click();
+    await b("选择对象").click();
     await page.getByLabel("搜索卡牌").fill(kind);
     await b(name).click();
-    await page.getByRole("button", { name: /完成 ·/ }).click();
     const epoch = frames.at(-1).lab.epoch;
     await b("重建场景").click();
     for (let i = 0; i < 100 && frames.at(-1).lab.epoch === epoch; i++)
@@ -185,15 +186,14 @@ try {
       kind + " " + (await page.getByRole("alert").allTextContents()),
     );
     await page.waitForFunction(() => window.modelCount >= 8);
-    await b("选择实验卡").click();
+    await b("选择对象").click();
     await b("移除 " + kind).click();
-    await page.getByRole("button", { name: /完成 ·/ }).click();
+    await b("关闭").click();
   }
   await b("清场").click();
-  await b("选择实验卡").click();
+  await b("选择对象").click();
   await page.getByLabel("搜索卡牌").fill("explosive_cask");
   await b("爆破酒桶").click();
-  await page.getByRole("button", { name: /完成 ·/ }).click();
   const tower = frames
     .at(-1)
     .units.find((u) => u.kind === "princess_tower" && u.team === 1);

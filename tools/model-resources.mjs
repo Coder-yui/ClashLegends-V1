@@ -82,7 +82,12 @@ if (process.argv.includes("--clips")) {
     return [...result].sort();
   }
   const members = {};
+  const photoGroups = {};
   for (const [id, rule] of Object.entries(rules)) {
+    if (rule.spawn_plan?.members?.length)
+      photoGroups[id] = rule.spawn_plan.members;
+    else if (rule.deployment_count > 1)
+      photoGroups[id] = Array(rule.deployment_count).fill(id);
     if (profileFor({ kind: id, team: 0 })) continue;
     const ids = [
       ...new Set(
@@ -94,6 +99,10 @@ if (process.argv.includes("--clips")) {
   writeFileSync(
     new URL("../web/src/model-members.json", import.meta.url),
     JSON.stringify(members, null, 2) + "\n",
+  );
+  writeFileSync(
+    new URL("../web/src/photo-groups.json", import.meta.url),
+    JSON.stringify({ ...members, ...photoGroups }, null, 2) + "\n",
   );
   const index = {};
   for (const id of [...Object.keys(rules), "princess_tower", "nexus"]) {

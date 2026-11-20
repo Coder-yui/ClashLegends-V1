@@ -86,7 +86,7 @@ try {
   }
   const scene = (card, skill = null, scenario = "dummy") =>
     reset({ action: "scene", scene: scenario, card, skill, team: 0 });
-  await page.waitForFunction(() => window.frame?.lab.paused);
+  await page.waitForFunction(() => window.frame && !window.frame.lab.paused);
   const profiles = JSON.parse(
     readFileSync(new URL("../src/roster-models.json", import.meta.url)),
   );

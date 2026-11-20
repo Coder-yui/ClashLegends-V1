@@ -941,3 +941,18 @@ summary::before {
 details[open] > summary::before {
   content: "▾";
 }
+
+button,
+input {
+  appearance: none;
+  -webkit-appearance: none;
+}
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  background: transparent;
+}
+
+@media (max-width: 540px) {
+  .top .brand span {display:none;}
+  .top nav a {white-space:nowrap;}
+}
