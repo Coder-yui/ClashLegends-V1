@@ -30,7 +30,7 @@ try {
     };
   });
   await page.goto(base + "/play/workbench");
-  const field = page.getByLabel("对战战场");
+  const field = page.locator(".battle-overlay");
   await page.waitForFunction(() =>
     document.querySelector(".wb-stats")?.textContent.includes("模型 6"),
   );
@@ -51,7 +51,7 @@ try {
           : -76;
       const w = nexus ? 160 : 120;
       const at = (x, y) =>
-        Array.from(ctx.getImageData(x, y, 1, 1).data).join(",");
+        Array.from(ctx.getImageData(x + ctx.getTransform().e, y + ctx.getTransform().f, 1, 1).data).join(",");
       const y = Math.floor(u.y + offset / map.projection);
       const x = u.x - w / 2;
       const color = u.team === 0 ? "71,224,71,255" : "242,71,66,255";
@@ -94,7 +94,7 @@ try {
         width = Math.ceil(w * 1.5) + 4;
       const pixels = canvas
         .getContext("2d")
-        .getImageData(left, top, width, 112).data;
+        .getImageData(left + (canvas.width - window.frame.map.width)/2, top + (canvas.height - window.frame.map.height)/2, width, 112).data;
       let best = { life: 0, shield: 0 };
       for (let y = 0; y < 112; y++) {
         let life = 0,
@@ -217,7 +217,7 @@ try {
   await clock(true);
   await page.waitForFunction(() => window.frame.lab.paused);
   await page.waitForFunction(() => {
-    const canvas = document.querySelector('canvas[aria-label="对战战场"]');
+    const canvas = document.querySelector('.battle-overlay');
     const ctx = canvas.getContext("2d");
     for (const u of window.frame.units.filter(
       (u) => u.kind.startsWith("pix") && u.hp >= 1.45 * u.maxHp && u.shield > 0,
@@ -227,7 +227,7 @@ try {
       const projection = window.frame.map.projection;
       const lift = 2.3 * 40 * Math.sqrt(1 - projection ** 2) / projection;
       const height = 90;
-      const { data } = ctx.getImageData(u.x - 25, u.y - lift - height, 65, height);
+      const { data } = ctx.getImageData(u.x + ctx.getTransform().e - 25, u.y + ctx.getTransform().f - lift - height, 65, height);
       for (let y = 0; y < height; y++) {
         let stage = 0;
         for (let x = 0; x < 65; x++) {

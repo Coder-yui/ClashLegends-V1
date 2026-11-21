@@ -17,6 +17,7 @@ import {
   type ParticleQuality,
 } from "./native-particles";
 
+import { previewFloor } from "./battle-terrain";
 import { Choice } from "./controls";
 import { ModelResources } from "./battle-models";
 import { profileFor } from "./battle-motion";
@@ -118,7 +119,8 @@ export function EffectInspector({
     renderer.setClearColor(0x18222a);
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     const grid = new GridHelper(4000, 40, 0x566671, 0x34414a);
-    scene.add(grid);
+    const floor = previewFloor();
+    scene.add(floor, grid);
     const library = new ParticleLibrary(),
       backdrop = new ParticleBackdrop(library);
     let body: Object3D | undefined, mixer: AnimationMixer | undefined;
@@ -210,7 +212,8 @@ export function EffectInspector({
             scene,
             camera,
             actor.root,
-            actor.distortion,
+            actor.inputs,
+            body ? [body] : [],
           );
           renderer.render(scene, camera);
           surface.dataset.system = name;
@@ -238,6 +241,8 @@ export function EffectInspector({
       backdrop.dispose();
       library.dispose();
       grid.dispose();
+      floor.geometry.dispose();
+      floor.material.dispose();
       renderer.dispose();
       if (!surface.isConnected) renderer.forceContextLoss();
     };

@@ -1,6 +1,6 @@
 import { Mesh, Vector3 } from "three";
 
-// The battlefield is a baked background. Clip the model's underground fragments
+// Match each structure's foundation to the opening in the terrain. Clip fragments
 // to the circular opening where their viewing rays intersect the ground.
 export function applyCrystalWell(
   mesh: Mesh,

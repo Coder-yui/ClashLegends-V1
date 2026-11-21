@@ -47,6 +47,16 @@ try {
       body: bundle.outputFiles[0].text,
     }),
   );
+  if (!process.env.LOBBY_URL) {
+    await page.route("**/play/media/**", (route) => {
+      const path = new URL(route.request().url()).pathname.slice(
+        "/play/".length,
+      );
+      return route.fulfill({
+        path: fileURLToPath(new URL("../public/" + path, import.meta.url)),
+      });
+    });
+  }
   await page.goto(
     (process.env.LOBBY_URL ?? "http://127.0.0.1:4432") +
       "/test-effect-inspector",

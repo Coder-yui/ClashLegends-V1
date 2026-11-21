@@ -1,5 +1,9 @@
+import { drawPlacement, states } from "./deployment-preview";
+import type { DeploymentField } from "./use-deployment-input";
+import { fieldMargin, fieldPoint } from "./battle-geometry";
+import type { CaptureFrame } from "./video-recording";
 import { drawSummonFlight, type SummonFlight } from "./summon-flight";
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, type CSSProperties } from "react";
 import type { Result } from "./api";
 
 import type {
@@ -20,9 +24,23 @@ export interface Unit {
   alternateForm?: boolean;
   visual?: {
     action?: [string, number, number];
+    firstReady?: boolean;
+    rewindReady?: boolean;
+    rewindPosition?:Point;
+    regenerationUntil?: number;
+    lifestealStart?: number;
+    sandWardUntil?: number;
+    fieldUntil?: number;
+    slowFieldRadius?: number;
     empowered?: boolean;
     buff?: boolean;
     auraStart?: number;
+    sanctuary?: [Point, number, number];
+    sunlightUntil?: number;
+    burningAura?: boolean;
+    poolShield?: boolean;
+    explosiveShield?: boolean;
+    deploymentShield?: boolean;
     drainTargets?: number[];
     moveSlow?: boolean;
     attackSlow?: boolean;
@@ -48,6 +66,7 @@ export interface Unit {
     empowered?: boolean;
     close?: boolean;
     structureTarget?: boolean;
+    first?: boolean;
   } | null;
   castStart: number;
   impactTick: number;
@@ -66,6 +85,9 @@ export interface Unit {
   audioKind?: string;
   name?: string;
   structure?: boolean;
+  footprint?: number;
+  air?: boolean;
+  inFlight?: boolean;
   shield?: number;
   bar?: {
     shieldCapacity: number;
@@ -86,7 +108,18 @@ export interface Unit {
   maxHp: number;
   frozen: boolean;
 }
+export interface EffectPath {
+  owner: number;
+  team: "Blue" | "Red";
+  kind: "pantheon" | "reksai" | "sacrifice" | "hook";
+  target?: number | null;
+  path: Point[];
+  start: number;
+  impact: number;
+  end: number;
+}
 export interface Frame {
+  effectPaths?: EffectPath[];
   tick: number;
   started: boolean;
   remaining: number;
@@ -113,6 +146,7 @@ export interface Frame {
   shots: {
     born: number;
     sourceKind: string;
+    bounce?: number;
     cycle?: number;
     form?: boolean;
     volley?: boolean;
@@ -138,6 +172,7 @@ export interface Frame {
     width: number;
   }[];
   areas: {
+    team?: "Blue" | "Red";
     caster?: number;
     effect?: string;
     born?: number;
@@ -183,6 +218,7 @@ export interface Frame {
   }[];
   pending: [number, number, number | null][];
   hand: string[];
+  handForms?: (string | null)[];
   lastCard: string | null;
   activeCards: (string | null)[];
   costs: number[];
@@ -218,7 +254,7 @@ function draw(
   frame: Frame,
   me: number,
   tick: number,
-  selection?: number,
+  regions?: Frame["deployment"][number],
   models?: BattleModels,
   focusId?: number,
   geometry = false,
@@ -236,8 +272,13 @@ function draw(
     ctx.fillStyle = color;
     ctx.fillRect(left, top, w, h);
   }
-  ctx.clearRect(0, 0, width, height);
-  if (!frame.map.terrain)
+  ctx.clearRect(
+    -fieldMargin,
+    -fieldMargin,
+    width + 2 * fieldMargin,
+    height + 2 * fieldMargin,
+  );
+  if (!frame.map.terrain && !models)
     for (const [x0, y0, x1, y1] of frame.map.obstacles) {
       rect(
         Math.min(x(x0), x(x1)),
@@ -247,8 +288,8 @@ function draw(
         "#44647a",
       );
     }
-  if (selection !== undefined) {
-    for (const r of frame.deployment[selection]) {
+  if (regions) {
+    for (const r of regions) {
       const left = r.x * tile,
         top = r.y * tile,
         w = r.width * tile,
@@ -294,7 +335,7 @@ function draw(
   }
   for (const spell of frame.spells) {
     if (
-      (!geometry && models?.effects.spells.has(spell.id)) ||
+      !geometry ||
       (spell.key === "medium_lightning" &&
         spell.team !== me &&
         tick < spell.impact - 20)
@@ -303,7 +344,7 @@ function draw(
     ctx.strokeStyle = "#f6df99";
     const sx = x(spell.position.x),
       sy = y(spell.position.y);
-    if (geometry && spell.range && spell.waveWidth) {
+    if (spell.range && spell.waveWidth) {
       const forward = spell.team === me ? -1 : 1;
       ctx.strokeRect(
         sx - spell.waveWidth / 2,
@@ -324,15 +365,16 @@ function draw(
           2,
         );
       }
-    } else if (geometry && spell.radius) {
+    } else if (spell.radius) {
       ctx.beginPath();
       ctx.arc(sx, sy, spell.radius, 0, 2 * Math.PI);
       ctx.stroke();
-    } else ctx.strokeRect(sx - 8, sy - 8, 16, 16);
+    }
   }
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   for (const u of frame.units) {
+    if((u.deployStart??0)>tick)continue;
     const cx = x(u.x),
       cy = y(u.y),
       r = u.radius;
@@ -414,6 +456,7 @@ function draw(
     ctx.restore();
   }
   for (const u of frame.units) {
+    if((u.deployStart??0)>tick)continue;
     drawHealthBar(
       ctx,
       u,
@@ -430,7 +473,7 @@ function draw(
 export function Battlefield({
   frame,
   me,
-  selection,
+  deployment,
   focusId,
   playback = 1,
   diagnostics = false,
@@ -439,11 +482,14 @@ export function Battlefield({
   connected = true,
   deck,
   resources,
+  onPrepared,
+  onPaint,
+  cinema = false,
   play,
 }: {
   frame: Frame;
   me: number;
-  selection?: number;
+  deployment?: DeploymentField;
   focusId?: number;
   playback?: number;
   diagnostics?: boolean;
@@ -452,14 +498,24 @@ export function Battlefield({
   connected?: boolean;
   deck?: readonly string[];
   resources?: ModelResources;
-  play: (x: number, y: number) => void;
+  onPrepared?: () => void;
+  onPaint?: CaptureFrame;
+  cinema?: boolean;
+  play?: (x: number, y: number) => void;
 }) {
   const { width, height } = frame.map;
   const canvas = useRef<HTMLCanvasElement>(null);
   const layer = useRef<HTMLCanvasElement>(null);
+  const selection = deployment?.slot;
+  const placement = deployment?.placement;
+  const shot = useRef({ cinema, onPaint });
+  useLayoutEffect(() => {
+    shot.current = { cinema, onPaint };
+  }, [cinema, onPaint]);
   const current = useRef({
     frame,
     selection,
+    placement,
     focusId,
     geometry,
     effectQuality,
@@ -471,6 +527,7 @@ export function Battlefield({
     current.current = {
       frame,
       selection,
+      placement,
       focusId,
       playback,
       connected,
@@ -481,6 +538,7 @@ export function Battlefield({
   }, [
     frame,
     selection,
+    placement,
     focusId,
     playback,
     connected,
@@ -509,6 +567,8 @@ export function Battlefield({
       previous: Frame | undefined;
     let clock = new BattleClock();
     let endedAt = 0;
+    let rendererReady = params.get("battleView") === "debug";
+    let notifyPrepared = onPrepared;
     function load() {
       if (params.get("battleView") === "debug") return;
       void import("./battle-models")
@@ -516,9 +576,13 @@ export function Battlefield({
           if (!disposed && !models) {
             models = new BattleModels(gl, me, collect, resources);
             models.reset(current.current.frame.presentation.cursor);
+            models.effects.prepare(current.current.frame, current.current.deck);
           }
         })
-        .catch((error) => console.warn("战场使用几何视图", error));
+        .catch((error) => console.warn("战场使用几何视图", error))
+        .finally(() => {
+          rendererReady = true;
+        });
     }
     function lost(e: Event) {
       e.preventDefault();
@@ -539,6 +603,7 @@ export function Battlefield({
       const {
         frame,
         selection,
+        placement,
         focusId,
         playback,
         connected,
@@ -567,9 +632,34 @@ export function Battlefield({
         shown.result && playback > 0
           ? tick + Math.min(160, (now - endedAt) / 50)
           : tick;
-      models?.render(shown, tick, visualTick);
+      const free = !!models && shot.current.cinema;
+      models?.render(shown, tick, visualTick, free, placement);
       audio.render(shown, tick, playback, connected, frame.presentation.cursor);
-      draw(ctx!, shown, me, tick, selection, models, focusId, geometry);
+      if (!free) {
+        ctx!.setTransform(1, 0, 0, 1, fieldMargin, fieldMargin);
+        draw(
+          ctx!,
+          shown,
+          me,
+          tick,
+          selection === undefined ? undefined : frame.deployment[selection],
+          models,
+          focusId,
+          geometry,
+        );
+        if (placement) drawPlacement(ctx!, placement, frame, me);
+      }
+      surface.style.visibility = free ? "hidden" : "";
+      shot.current.onPaint?.(shown, gl, surface, free);
+      if (
+        notifyPrepared &&
+        rendererReady &&
+        !models?.preparingTerrain &&
+        (frame.started || (!audio.preparing && !models?.effects.preparing))
+      ) {
+        notifyPrepared();
+        notifyPrepared = undefined;
+      }
       if (collect)
         surface.dispatchEvent(
           new CustomEvent("battle-render", {
@@ -596,26 +686,50 @@ export function Battlefield({
       gl.removeEventListener("webglcontextrestored", load);
       models?.dispose();
     };
-  }, [me, diagnostics, resources]);
+  }, [me, diagnostics, resources, onPrepared]);
   return (
-    <>
+    <div
+      className={"battle-input" + (cinema ? " cinema" : "")}
+      style={{ "--field-margin": fieldMargin } as CSSProperties}
+      aria-label="对战战场"
+      data-tick={frame.tick}
+      data-aiming={selection !== undefined || undefined}
+      ref={deployment?.ref}
+      {...deployment?.events}
+      onClick={
+        play &&
+        ((e) => {
+          const point = fieldPoint(
+            e.currentTarget,
+            frame.map,
+            me,
+            e.clientX,
+            e.clientY,
+          );
+          if (point) play(point.x, point.y);
+        })
+      }
+    >
+      {placement && (
+        <span
+          className="placement-state"
+          data-state={placement.state}
+          style={{ color: states[placement.state].color }}
+          role="status"
+        >
+          {placement.spell && placement.state === "legal"
+            ? "可以施放"
+            : states[placement.state].label}
+        </span>
+      )}
       <canvas ref={layer} className="battle-models" aria-hidden="true" />
       <canvas
         ref={canvas}
-        width={width}
-        height={height}
-        aria-label="对战战场"
-        data-tick={frame.tick}
-        onClick={(e) => {
-          const box = e.currentTarget.getBoundingClientRect();
-          play(
-            ((me ? box.right - e.clientX : e.clientX - box.left) * width) /
-              box.width,
-            ((me ? box.bottom - e.clientY : e.clientY - box.top) * height) /
-              box.height,
-          );
-        }}
+        className="battle-overlay"
+        aria-hidden="true"
+        width={width + 2 * fieldMargin}
+        height={height + 2 * fieldMargin}
       />
-    </>
+    </div>
   );
 }

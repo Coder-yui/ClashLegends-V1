@@ -23,6 +23,10 @@ import { GLTFLoader, type GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { clone } from "three/addons/utils/SkeletonUtils.js";
 import { BattleEffects, type Launch } from "./battle-effects";
+import { states as placementStates, type Placement } from "./deployment-preview";
+import { fieldMargin } from "./battle-geometry";
+import { ReplayCamera } from "./replay-camera";
+import { BattleTerrain, openingRadius } from "./battle-terrain";
 import { GroundMarks } from "./unit-ground-marks";
 import { applyCrystalWell } from "./crystal-well";
 import { visualRadius } from "./health-bars";
@@ -234,10 +238,13 @@ class ActorModel {
   private active?: AnimationAction;
   private key = "";
   private baseMeshes: Mesh[] = [];
+  private sockets = new Map<string, Object3D>();
+  socket(name: string) { return this.sockets.get(name.toLowerCase()); }
   private anchorYaw?: number;
   private additive?: AnimationAction;
   private transition = 0;
   private loopTime = 0;
+  sacrificeOffset?: Vector3;
   lastUnit?: Unit;
   private previousTick?: number;
   death?: number;
@@ -248,6 +255,16 @@ class ActorModel {
     asset: ModelAsset,
   ) {
     this.root = clone(asset.scene);
+    this.root.traverse((o) => { if (o.type === "Bone") this.sockets.set(o.name.toLowerCase(), o); });
+    if (profile.asset === "sivir") {
+      const center = this.socket("C_Buffbone_Glb_Center_Loc");
+      if (center) {
+        const rest = new Object3D();
+        this.root.add(rest);
+        this.root.worldToLocal(center.getWorldPosition(rest.position));
+        this.sockets.set("shieldrestcenter", rest);
+      }
+    }
     this.surfaces = modelSurfaces(this.root, profile);
     if (profile.asset.startsWith("sun_disc-"))
       this.root.traverse((o) => {
@@ -600,11 +617,7 @@ export async function loadModel(
         ruin
       ) {
         const nexus = profile.asset.startsWith("nexus-");
-        const radius = nexus
-          ? 1.35
-          : profile.surfaceMode === "crystal"
-            ? 0.82
-            : 1.04;
+        const radius = openingRadius(profile) / 40;
         applyCrystalWell(
           o,
           (radius * 40) / profile.scale,
@@ -676,9 +689,14 @@ export class ModelResources {
     }
     return task;
   }
-  async prepare(names: string[]) {
+  async prepare(names: string[], progress?: (completed: number) => void) {
     const allowed = new Set(names);
     const prepared = new Set<string>();
+    function mark(name: string) {
+      if (prepared.has(name)) return;
+      prepared.add(name);
+      progress?.(prepared.size);
+    }
     const followups = modelProfiles
       .map(followupProfile)
       .filter((p): p is ModelProfile => !!p);
@@ -687,13 +705,13 @@ export class ModelResources {
         .filter((p) => allowed.has(p.asset))
         .map(async (profile) => {
           const body = await this.body(profile);
-          prepared.add(profile.asset);
+          mark(profile.asset);
           for (const skill of skillPacks(profile)) {
             if (this.disposed) return;
             const pack = castPack(profile, skill)!;
             if (!allowed.has(pack)) continue;
             const extra = await this.pack(pack);
-            prepared.add(pack);
+            mark(pack);
             if (!body.animations.includes(extra[0]))
               body.animations.push(...extra);
           }
@@ -715,8 +733,13 @@ export class BattleModels {
   private renderer: WebGLRenderer;
   private scene = new Scene();
   private field = new Group();
+  private terrain = new BattleTerrain();
+  get preparingTerrain() {
+    return this.terrain.preparing;
+  }
   private ground = new GroundMarks(32);
   private camera = new OrthographicCamera();
+  private orbit?: ReplayCamera;
   private assets = new Map<string, ModelAsset | null>();
   private actors = new Map<number, ActorModel>();
   private disposed = false;
@@ -731,6 +754,7 @@ export class BattleModels {
   readonly effects: BattleEffects;
   readonly metrics = {
     actors: 0,
+    previewModels: 0,
     calls: 0,
     triangles: 0,
     launches: 0,
@@ -759,7 +783,7 @@ export class BattleModels {
     });
     this.renderer.localClippingEnabled = true;
     this.renderer.setClearColor(0, 0);
-    this.scene.add(this.field, this.ground.mesh, this.effects.root);
+    this.scene.add(this.terrain.root, this.field, this.ground.mesh, this.effects.root);
   }
 
   private load(profile: ModelProfile, skill?: string | null) {
@@ -797,6 +821,88 @@ export class BattleModels {
       });
   }
 
+  // Preview instances own their pose and translucent materials. Their geometry
+  // and textures come from the same body cache as deployed actors.
+  private ghosts: {
+    model: ActorModel;
+    materials: Map<Material, Material>;
+    state?: Placement["state"];
+  }[] = [];
+
+  private trimGhosts(count: number) {
+    while (this.ghosts.length > count) {
+      const ghost = this.ghosts.pop()!;
+      ghost.model.dispose();
+      for (const material of ghost.materials.values()) material.dispose();
+    }
+  }
+
+  private placeGhosts(frame: Frame, placement?: Placement) {
+    const members = placement?.members ?? [];
+    this.trimGhosts(members.length);
+    for (const [index, member] of members.entries()) {
+      const profile = profileFor({ kind: member.kind, team: this.me });
+      let ghost = this.ghosts[index];
+      if (!profile || ghost?.model.profile !== profile) {
+        this.trimGhosts(index);
+        const asset = profile && this.load(profile);
+        if (!profile || !asset) break;
+        const model = new ActorModel(profile, asset);
+        const copies = new Map<Material, Material>();
+        function translucent(source: Material) {
+          let copy = copies.get(source);
+          if (!copy) {
+            copy = source.clone();
+            copy.onBeforeCompile = source.onBeforeCompile;
+            copy.customProgramCacheKey = () => source.customProgramCacheKey();
+            copy.transparent = true;
+            copy.opacity *= 0.58;
+            copy.alphaTest *= 0.58;
+            copy.depthWrite = false;
+            copies.set(source, copy);
+          }
+          return copy;
+        }
+        model.root.traverse((o) => {
+          if (o instanceof Mesh)
+            o.material = Array.isArray(o.material)
+              ? o.material.map(translucent)
+              : translucent(o.material);
+        });
+        model.sample(
+          { clip: profile.idle, key: "preview", start: 0 },
+          0,
+          false,
+        );
+        this.field.add(model.root);
+        ghost = { model, materials: copies };
+        this.ghosts.push(ghost);
+      }
+      if (placement && ghost.state !== placement.state) {
+        ghost.state = placement.state;
+        const tint = new Color(placementStates[placement.state].color);
+        for (const [source, copy] of ghost.materials) {
+          if (
+            "color" in source &&
+            source.color instanceof Color &&
+            "color" in copy &&
+            copy.color instanceof Color
+          )
+            copy.color.copy(source.color).lerp(tint, 0.38);
+        }
+      }
+      const { model } = ghost;
+      const sign = this.me ? -1 : 1;
+      model.root.position.set(
+        sign * (member.x - frame.map.width / 2),
+        model.elevation,
+        sign * (member.y - frame.map.height / 2),
+      );
+      model.root.rotation.y = Math.PI + (profile.yaw ?? 0);
+      if (member.kind === "sun_disc") model.shareRuin(!!placement?.ruin);
+    }
+  }
+
   private actorFor(id: number, profile: ModelProfile, skill?: string | null) {
     const asset = this.load(profile, skill);
     if (!asset) return;
@@ -819,6 +925,7 @@ export class BattleModels {
   private place(actor: ActorModel, u: Unit, frame: Frame) {
     const { width, height } = frame.map;
     const sign = this.me ? -1 : 1;
+    actor.root.visible=true;
     actor.root.position.set(
       sign * (u.x - width / 2),
       actor.elevation,
@@ -846,6 +953,7 @@ export class BattleModels {
   }
 
   reset(cursor = 0) {
+    this.trimGhosts(0);
     for (const actor of this.actors.values()) actor.dispose();
     this.actors.clear();
     this.launches.clear();
@@ -854,9 +962,13 @@ export class BattleModels {
     this.effects.reset(cursor);
   }
 
-  render(frame: Frame, tick: number, deathTick = tick) {
+  render(frame: Frame, tick: number, deathTick = tick, cinema = false, placement?: Placement) {
+    this.placeGhosts(frame, placement);
+    this.metrics.previewModels = this.ghosts.length;
     this.metrics.hitFrames.length = 0;
     const { width, height, projection } = frame.map;
+    const viewWidth = width + 2 * fieldMargin;
+    const viewHeight = height + 2 * fieldMargin;
     const w = Math.max(
       1,
       Math.round(this.canvas.clientWidth * Math.min(devicePixelRatio, 2)),
@@ -868,16 +980,16 @@ export class BattleModels {
     if (
       w !== this.width ||
       h !== this.height ||
-      this.camera.right !== width / 2
+      this.camera.right !== viewWidth / 2
     ) {
       this.width = w;
       this.height = h;
       this.renderer.setSize(w, h, false);
       Object.assign(this.camera, {
-        left: -width / 2,
-        right: width / 2,
-        top: (height * projection) / 2,
-        bottom: (-height * projection) / 2,
+        left: -viewWidth / 2,
+        right: viewWidth / 2,
+        top: (viewHeight * projection) / 2,
+        bottom: (-viewHeight * projection) / 2,
         near: 1,
         far: height * 5,
       });
@@ -890,6 +1002,14 @@ export class BattleModels {
       this.camera.updateProjectionMatrix();
       this.camera.updateMatrixWorld();
     }
+    if (cinema) {
+      this.orbit ??= new ReplayCamera(this.scene, this.canvas, frame.map);
+      this.orbit.resize(w,h);
+    } else if (this.orbit) {
+      this.orbit.dispose();
+      this.orbit = undefined;
+    }
+    const camera = this.orbit?.camera ?? this.camera;
     if (frame.units.length > this.ground.capacity) {
       this.ground.dispose();
       this.ground = new GroundMarks(
@@ -897,10 +1017,11 @@ export class BattleModels {
       );
       this.scene.add(this.ground.mesh);
     }
-    this.ground.update(frame.units, this.me, width, height, tick);
+    const deployed = frame.units.filter(u=>(u.deployStart??0)<=tick);
+    this.ground.update(deployed, this.me, width, height, tick);
     this.bars.clear();
     const visible = new Set<number>();
-    for (const u of frame.units) {
+    for (const u of deployed) {
       const profile = profileFor(u);
       if (!profile) continue;
       const actor = this.actorFor(u.id, profile, u.equippedSkill ?? u.skill);
@@ -981,7 +1102,9 @@ export class BattleModels {
       const owner = fired ? data[0] : (data as { source: number }).source;
       const actor = this.actors.get(owner);
       const u = units.get(owner) ?? actor?.lastUnit;
-      const hand =
+      const wildCard = fired && u?.kind === "twisted_fate" &&
+        frame.shots.some((shot) => shot.id === data[2] && shot.volley);
+      const hand = wildCard ? actor?.socket("R_Hand") :
         actor?.hands[((u?.attack?.cycle ?? 1) - 1) % actor.hands.length];
       if (!actor || !u || (fired && !hand) || (strike && hand)) continue;
       const motion = motionFor(u, actor.profile, event.tick);
@@ -993,12 +1116,11 @@ export class BattleModels {
       actor.sample(motion, event.tick, false);
       if (fired) {
         const world = hand!.getWorldPosition(this.vector).clone();
-        this.vector.project(this.camera);
         this.launches.set(data[2], {
           world,
           tick: event.tick,
-          x: ((this.vector.x + 1) * width) / 2,
-          y: ((1 - this.vector.y) * height) / 2,
+          x: world.x + width / 2,
+          y: world.z + height / 2 - world.y * Math.sqrt(1 - projection ** 2) / projection,
         });
         this.metrics.launches++;
       } else {
@@ -1018,7 +1140,61 @@ export class BattleModels {
         );
       }
     }
+    const leaps = new Map(
+      (frame.effectPaths ?? [])
+        .filter((p) => p.kind === "sacrifice")
+        .map((p) => [p.owner, p]),
+    );
+    for (const p of leaps.values()) {
+      if (!this.actors.has(p.owner)) {
+        const profile = profileFor({
+          kind: "void_spawn",
+          team: p.team === "Blue" ? 0 : 1,
+        });
+        if (profile) this.actorFor(p.owner, profile);
+      }
+    }
     for (const [id, actor] of this.actors) {
+      const leap = leaps.get(id);
+      if (leap) {
+        actor.root.visible = tick < leap.impact;
+        actor.death = undefined;
+        const a = leap.path[0],
+          b = leap.path[1],
+          sign = this.me ? -1 : 1;
+        const progress = Math.min(
+          1,
+          Math.max(0, (tick - leap.start) / (leap.impact - leap.start)),
+        );
+        actor.root.rotation.y =
+          Math.atan2(sign * (b.x - a.x), sign * (b.y - a.y)) +
+          (actor.profile.yaw ?? 0);
+        const motion = {
+          key: "sacrifice",
+          clip: actor.profile.attacks[0].clip,
+          start: leap.start,
+          end: leap.impact,
+          clipEnd: 23 / 30,
+          blend: 0,
+        };
+        if (!actor.sacrificeOffset) {
+          actor.sample(motion, leap.impact, false);
+          actor.sacrificeOffset =
+            actor
+              .socket("Buffbone_Glb_Channel_Loc")
+              ?.getWorldPosition(new Vector3())
+              .sub(actor.root.position) ?? new Vector3();
+        }
+        actor.root.position.set(
+          sign * (a.x + (b.x - a.x) * progress - width / 2) -
+            actor.sacrificeOffset.x * progress,
+          actor.elevation,
+          sign * (a.y + (b.y - a.y) * progress - height / 2) -
+            actor.sacrificeOffset.z * progress,
+        );
+        actor.sample(motion, tick, false);
+        continue;
+      }
       actor.flash(
         tick,
         ruins.has(id) ||
@@ -1103,16 +1279,19 @@ export class BattleModels {
           : actor?.root.position;
       },
       (id) => this.actors.get(id)?.skinMeshes(),
+      (id, name) => this.actors.get(id)?.socket(name),
+      (id) => this.actors.get(id)?.root,
     );
+    this.terrain.update(frame, this.me);
     this.effects.backdrop.capture(
       this.renderer,
       this.scene,
-      this.camera,
+      camera,
       this.effects.root,
       this.effects.needsBackdrop,
-      frame.map,
+      [this.field, this.ground.mesh],
     );
-    this.renderer.render(this.scene, this.camera);
+    this.renderer.render(this.scene, camera);
     this.metrics.actors = this.actors.size;
     this.metrics.calls = this.renderer.info.render.calls;
     this.metrics.triangles = this.renderer.info.render.triangles;
@@ -1120,8 +1299,10 @@ export class BattleModels {
   dispose() {
     this.disposed = true;
     this.reset();
+    this.terrain.dispose();
     if (this.ownsResources) this.resources.dispose();
     this.assets.clear();
+    this.orbit?.dispose();
     this.ground.dispose();
     this.effects.dispose();
     this.renderer.dispose();

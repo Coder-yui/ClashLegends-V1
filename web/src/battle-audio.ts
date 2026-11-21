@@ -108,6 +108,10 @@ export class BattleAudio {
   private disposed = false;
   private abort = new AbortController();
 
+  get preparing() {
+    return this.loading.size > 0;
+  }
+
   constructor(
     private me: number,
     private trace?: (event: SoundTrace) => void,

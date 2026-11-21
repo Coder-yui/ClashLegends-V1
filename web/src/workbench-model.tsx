@@ -8,6 +8,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from "three";
+import { previewFloor, openingRadius } from "./battle-terrain";
 import { ChoiceList } from "./controls";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import type { GLTF } from "three/addons/loaders/GLTFLoader.js";
@@ -48,6 +49,9 @@ export default function ModelPreview({
     }
     const scene = new Scene(),
       camera = new PerspectiveCamera(34, 1, 0.1, 6000);
+    const floor = previewFloor(openingRadius(profile) / profile.scale);
+    floor.position.y = -profile.groundOffset / profile.scale;
+    scene.add(floor);
     scene.add(new HemisphereLight(0xffffff, 0xc5d4d1, 2));
     const orbit = new OrbitControls(camera, canvas);
     orbit.enablePan = false;
@@ -79,6 +83,7 @@ export default function ModelPreview({
         const box = gltf.bounds;
         const surfaces = modelSurfaces(asset.scene, profile);
         renderer.localClippingEnabled = true;
+        if (profile.air) floor.position.y = box.min.y - 92 / profile.scale;
         const center = box.getCenter(new Vector3());
         const size = box.getSize(new Vector3()).length();
         orbit.target.copy(center);
@@ -157,6 +162,8 @@ export default function ModelPreview({
       cancelAnimationFrame(frame);
       resize.disconnect();
       orbit.dispose();
+      floor.geometry.dispose();
+      floor.material.dispose();
       mixer?.stopAllAction();
       if (asset) {
         mixer?.uncacheRoot(asset.scene);

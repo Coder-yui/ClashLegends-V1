@@ -77,6 +77,10 @@ try {
   const deploy = (card, team, x, y) =>
     edit({ action: "deploy", card, skill: null, team, x, y });
 
+  // The workbench auto-plays on entry. Start the tick-zero check on a paused
+  // baseline so cold model and terrain loads cannot skip the hold pose.
+  await page.waitForFunction(() => window.frame && !window.frame.lab.paused);
+  await reset({ action: "clear" });
   await seen("nexus-blue", "Nexus_spawn_hold.anm");
   await clock(false);
   await seen("nexus-red", "Nexus_spawn.anm");

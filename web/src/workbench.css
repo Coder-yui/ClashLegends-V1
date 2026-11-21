@@ -104,7 +104,7 @@
   --tray-height: 0px;
   --ground-x: min(
     calc(100cqw / var(--map-width)),
-    calc(100cqh / var(--map-height) / var(--projection))
+    calc(100cqh / var(--ground-depth) / var(--projection))
   );
   --ground-y: calc(var(--ground-x) * var(--projection));
   transform-origin: center;

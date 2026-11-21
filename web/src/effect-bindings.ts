@@ -8,6 +8,8 @@ export type SpellLayer = {
   start: number;
   stop?: number;
   height?: number;
+  sampleOffset?: number;
+  sampleRate?: number;
   motion?: "arc" | "tidal";
 };
 export const missiles: Record<string, Binding> = {
@@ -15,35 +17,44 @@ export const missiles: Record<string, Binding> = {
   anivia: { system: "anivia/missile", scale: 0.44 },
   sona: { system: "sona/basic", scale: 0.4 },
   jayce: { system: "jayce/bullet", scale: 0.38 },
-  graves: { system: "graves/missile", scale: 0.4 },
+  graves: { system: "graves/missile", scale: 0.6 },
   ivern: { system: "ivern/basic", scale: 0.4 },
   samira: { system: "samira/bullet", scale: 0.408 },
   thorn_spitter: { system: "thorn_spitter/missile", scale: 0.5333 },
   tristana: { system: "gwen_tristana/missile", scale: 0.4 },
+  voidfish_ranged_army: { system: "voidfish_ranged/missile", scale: 0.56 },
   voidfish_ranged: { system: "voidfish_ranged/missile", scale: 0.56 },
   voidfish_ranged_single: { system: "voidfish_ranged/missile", scale: 0.56 },
-  jack_in_the_box: { system: "jack_in_the_box/missile", scale: 0.4 },
+  jack_in_the_box: { system: "jack_in_the_box/missile", scale: 0.28 },
   kayle_ranged: { system: "kayle/native/sword", scale: 0.12 },
-  ziggs: { system: "ziggs/basic", scale: 0.4 },
+  ziggs: { system: "ziggs/basic", scale: 0.56 },
 };
 export function missile(
   shot: Pick<
     Frame["shots"][number],
-    "sourceKind" | "volley" | "form" | "empowered"
-  >,
+    "sourceKind" | "volley" | "form" | "empowered" | "bounce" | "direction"
+  > & { id?: number; group?: number | null },
 ) {
   if (shot.sourceKind === "apex_turret" && shot.volley)
-    return { system: "heimerdinger/charged", scale: 0.4 };
+    return { system: "heimerdinger/laser", scale: 0.4 };
   if (shot.sourceKind === "teemo" && shot.empowered)
     return { system: "teemo/blind", scale: 0.4 };
-  if (shot.sourceKind === "twitch" && shot.empowered)
+  if (shot.sourceKind === "twitch" && shot.direction)
     return { system: "twitch/pierce", scale: 0.4 };
   if (shot.sourceKind === "jinx" && shot.form)
     return { system: "jinx/rocket", scale: 0.4 };
+  if (shot.sourceKind === "twisted_fate") {
+    const cards = ["twistedfate/fan", "twistedfate/red", "twistedfate/blue"];
+    return {
+      system: shot.volley
+        ? cards[((shot.id ?? 0) - (shot.group ?? 0)) % 3]
+        : "twistedfate/card",
+      scale: 0.48,
+    };
+  }
   if (shot.volley) {
     const flight: Record<string, string> = {
       corki: "corki/rocket",
-      twisted_fate: "twistedfate/fan",
       pantheon: "pantheon/spear",
     };
     if (flight[shot.sourceKind])
@@ -54,7 +65,13 @@ export function missile(
   if (shot.sourceKind === "sona" && shot.volley)
     return { system: "sona/wave", scale: 0.5 };
   if (shot.sourceKind === "ziggs" && shot.empowered)
-    return { system: "ziggs/missile", scale: 0.4 };
+    return {
+      system:
+        ["ziggs/missile", "ziggs/missile2", "ziggs/missile3"][
+          shot.bounce ?? 0
+        ] ?? "ziggs/missile",
+      scale: 0.56,
+    };
   return missiles[shot.sourceKind];
 }
 
@@ -98,7 +115,7 @@ export function spellLayers(s: Spell, seat: number): SpellLayer[] {
     case "stellar_convergence":
       return [
         layer("zone" + red, r / 377.428, s.born, s.end),
-        layer("core" + red, 80 / 255.28, s.born, s.end),
+        layer("core" + red, (r * 60) / (160 * 255.28), s.born, s.end),
       ];
     case "pool_of_reflection":
       return [
@@ -112,33 +129,46 @@ export function spellLayers(s: Spell, seat: number): SpellLayer[] {
       }));
     case "severing_bolt":
       return [
-        layer("warning" + red, r / 225, s.born, s.impact),
+        layer("warning", r / 225, s.born + 10),
+        ...(enemy ? [layer("warning_red", r / 225, s.born + 10)] : []),
         layer("impact", r / 225, s.impact),
       ];
     case "mega_inferno_bomb":
       return [
-        layer(
-          enemy ? "warning_enemy" : "warning_ally",
-          r / 476,
-          s.born,
-          s.impact,
-        ),
+        {
+          ...layer(
+            enemy ? "warning_enemy" : "warning_ally",
+            r / 476,
+            s.born,
+            s.impact,
+          ),
+          sampleRate: 30 / Math.max(1, s.impact - s.born),
+        },
         { ...layer("missile", r / 476, s.born, s.impact), motion: "arc" },
         layer("impact", r / 476, s.impact),
       ];
     case "stasis":
       return [
-        layer("native/warning", r / 200, s.born, s.impact),
-        { ...layer("native/flight", r / 350, s.born, s.impact), motion: "arc" },
+        {
+          ...layer("native/warning", r / 200, s.born, s.impact),
+          sampleOffset: 0.6,
+          sampleRate: 16 / Math.max(1, s.impact - s.born),
+        },
+        {
+          ...layer("native/flight", 110 / 350, s.born, s.impact),
+          motion: "arc",
+        },
         layer("native/impact", r / 350, s.impact),
       ];
     case "freeze":
       return [
-        layer(
-          s.enhanced ? "trundle" : "iceborn",
-          r / (s.enhanced ? 790 : 310),
-          s.impact,
-        ),
+        {
+          ...layer("iceborn", r / 310, s.impact, s.impact + 60),
+          sampleRate: 2 / 3,
+        },
+        ...(s.enhanced
+          ? [layer("trundle", (1.25 * r) / 790, s.impact, s.end)]
+          : []),
       ];
     case "tidal_wave":
       return [
@@ -152,17 +182,17 @@ export function spellLayers(s: Spell, seat: number): SpellLayer[] {
     case "heal":
       return [{ system: "janna/heal", scale: 0.4, start: s.impact }];
     case "corrosion":
-      return [layer("area", r / 300, s.impact, s.end)];
+      return [layer("area", r / 284.64396, s.impact, s.end)];
     case "explosive_cask":
       return [
-        { ...layer("flight", r / 350, s.born, s.impact), motion: "arc" },
+        { ...layer("flight", 0.00365 * 40, s.born, s.impact), motion: "arc" },
         layer("native_end", r / 350, s.impact),
       ];
     case "void_summoning":
       return [
         {
           system: "void_summoning",
-          scale: r / 400,
+          scale: r / 420,
           start: s.impact,
           stop: s.end,
         },
@@ -175,33 +205,24 @@ export const castEffects: Record<string, Binding[]> = {
   "sona.crescendo": [{ system: "sona/cast", scale: 0.4 }],
   "malphite.ground-slam": [{ system: "malphite/cas", scale: 0.4 }],
   "hecarim.spirit-of-dread": [{ system: "hecarim/cas", scale: 0.4 }],
-  "samira.inferno-trigger": [{ system: "samira/cas", scale: 0.4 }],
-  "sett.haymaker": [
-    { system: "sett/cast_body", scale: 0.4 },
-    { system: "sett/warning", scale: 0.4 },
-  ],
+  "samira.inferno-trigger": [{ system: "samira/cas", scale: 0.3 }],
   "sion.soul-furnace": [{ system: "sion_w/Cas", scale: 0.4 }],
-  "graves.quickdraw": [{ system: "graves/dash", scale: 0.4 }],
+  "graves.quickdraw": [{ system: "graves/dash", scale: 0.6 }],
   "kassadin.riftwalk": [{ system: "kassadin/vanish", scale: 0.4 }],
-  "azir.arise": [{ system: "azir/cast1", scale: 0.4 }],
   "ekko.chronobreak": [{ system: "ekko/r-ChargeUp", scale: 0.4 }],
   "demacian_standard.golden-aegis": [
     { system: "demacian_standard/nova", scale: 0.4 },
   ],
-  "olaf.vicious-strikes": [{ system: "olaf/cas", scale: 0.4 }],
-  "olaf.ragnarok": [{ system: "olaf/r_cas", scale: 0.4 }],
   "reksai.queen-s-wrath": [{ system: "reksai/buff", scale: 0.4 }],
   "xin.audacious-charge": [{ system: "xin_dash/buff", scale: 0.4 }],
   "jax.counter-strike": [{ system: "jax/buf", scale: 0.4 }],
 };
 export const buffEffects: Record<string, string> = {
   jax: "jax/buf",
-  sion: "sion_w/Shield",
-  samira: "samira/ready",
+
   tristana: "gwen_tristana/rapid",
   hecarim: "hecarim/aoe",
-  gwen: "gwen_tristana/mist",
-  missfortune: "missfortune_w/trail",
+
   thorn_spitter: "thorn_spitter/buff",
   vine_lasher: "thorn_spitter/buff",
   target_dummy: "aftershock/native/Buff",
@@ -213,6 +234,8 @@ export const spawnEffects: Record<string, string> = {
   evolution_turret: "evolution_turret/spawn",
   void_spawn_single: "void_spawn/spawn",
   voidfish_ranged: "voidfish_ranged/spawn",
+  voidfish_ranged_army: "voidfish_ranged/spawn",
+  voidfish_ranged_single: "voidfish_ranged/spawn",
   sand_soldier: "azir/spawn",
 };
 export const deathEffects: Record<string, string> = {
@@ -222,11 +245,10 @@ export const deathEffects: Record<string, string> = {
   powder_keg: "powder_keg/explosion",
 };
 export const ambientEffects: Record<string, string[]> = {
-  soul_tentacle: ["soul_tentacle/base_active"],
+  soul_tentacle: ["soul_tentacle/base_active", "soul_tentacle/avatar"],
   void_gate: ["void_gate/idle"],
-  kassadin: ["kassadin/idle_blade"],
+
   pillar_of_ice: ["pillar_of_ice/pillar"],
-  demacian_standard: ["demacian_standard/flag"],
 };
 
 // Game identities may refer to the same native character in several deployed forms.
@@ -262,21 +284,20 @@ const nativeCasts: Record<string, string> = {
   "garen.decisive-strike": "garen/strike",
   "garen.judgment": "garen/spin",
   "gwen.snip-snip": "gwen/snip",
-  "gwen.hallowed-mist": "gwen_tristana/mist",
+
   "gnar.rage-burst": "gnar/transform",
   "jack_in_the_box.fright": "jack_in_the_box/aoe",
-  "jayce.hyper-charge-lightning-field": "jayce/w_ready2",
   "lulu.wild-growth": "lulu/growth",
   "masteryi.highlander": "masteryi/rush",
   "malzahar.void-swarm": "malzahar/cast",
-  "missfortune.strut": "missfortune_w/left",
+
   "nocturne.shroud-of-darkness": "nocturne/shield",
   "nocturne.umbra-blades": "nocturne/cleave",
   "pillar_of_ice.frozen-domain": "trundle/domain",
   "scuttle_crab.humility": "scuttle_crab/randuin",
   "shurima_guard.sand-aegis": "azir/shield",
   "sivir.spell-shield": "sivir/shield",
-  "sun_disc.solar-aegis": "azir/shield",
+
   "target_dummy.aftershock": "aftershock/native/Buff",
   "thorn_spitter.deadly-spines": "thorn_spitter/buff",
   "tombstone.gather-the-fallen": "malzahar/portal_start",
@@ -303,15 +324,16 @@ Object.assign(buffEffects, {
   sivir: "sivir/shield",
   xin: "xinzhao/guard",
   tryndamere: "tryndamere/rage",
-  olaf: "olaf/buf_glow",
   pix: "lulu/pix",
   voidfish_ranged: "void_spawn/energy",
+  voidfish_ranged_army: "void_spawn/energy",
   voidfish_ranged_single: "void_spawn/energy",
   reksai: "reksai/buff",
   void_spawn: "void_spawn/energy",
   soul_tentacle: "soul_tentacle/activation",
 });
 Object.assign(castEffects, {
+  "sun_disc.solar-aegis": [{ system: "locket", scale: 260 / 800 }],
   "xin.crescent-guard": [{ system: "xinzhao/crescent", scale: 0.4 }],
   "ornn.searing-charge": [{ system: "ornn/charge", scale: 0.4 }],
   "kayn.reaping-slash": [{ system: "kayn/dash", scale: 0.4 }],
@@ -323,13 +345,12 @@ Object.assign(castEffects, {
   "void_scuttle_crab.return-to-the-void": [
     { system: "void_spawn/burst", scale: 0.4 },
   ],
-  "gold_ward.perfect-timing": [{ system: "stasis/native/impact", scale: 0.2 }],
 });
 export const impacts: Record<string, string> = {
   ashe: "ashe/hit",
   azir: "azir/hit",
   aatrox: "aatrox/hit",
-  daisy: "ivern/slam",
+
   sand_soldier: "azir/hit",
 };
 export const controlEffects: Record<string, string> = {
@@ -337,24 +358,37 @@ export const controlEffects: Record<string, string> = {
   Stun: "annie/stunned",
   Silence: "garen/silence",
   Freeze: "freeze/iceborn",
-  Stasis: "stasis/native/impact",
+  Stasis: "stasis/native/body",
 };
 
 // Additional independent effects use a public, position-bearing combat phase.
 export const phaseEffects: Record<string, Record<string, string>> = {
-  lightning: { "spell:strike": "lightning_spells/stormsurge" },
-  zap: { "spell:strike": "lightning_spells/electrocute" },
+  lightning: { "spell:strike": "lightning_spells/electrocute" },
+  zap: { "spell:strike": "lightning_spells/stormsurge" },
+  jax: { "counter_strike:explode": "jax/cas", "counter_strike:hit": "jax/tar" },
+  target_dummy: { "aftershock:explode": "aftershock/native/AOE" },
+  xin: { "charge:hit": "xin_dash/hit" },
+  kassadin: { "active:land": "kassadin/appear" },
+  ekko: { "active:land": "ekko/r-Tar" },
+  kayn: { "active:spin": "kayn/sweep" },
+  reksai: { "deploy:hit": "reksai/emerge" },
   event_horizon: {
     "spell:meteor": "event_horizon/meteor",
     "spell:impact": "event_horizon/impact",
   },
   medium_lightning: { "spell:tower_disable": "medium_lightning/disabled" },
   solar_flare: { "spell:sunlight": "solar_flare/consume" },
-  severing_bolt: { "spell:hit": "severing_bolt/hit" },
+
   stellar_convergence: { "spell:execute": "stellar_convergence/execute" },
   ornn: { "charge:impact": "ornn/impact" },
-  sion: { "explosive_shield:break": "sion_w/Nova" },
-  malphite: { "deployment_shield:break": "malphite/break" },
+  sion: {
+    "explosive_shield:break": "sion_w/Nova",
+    "shield:explode": "sion_w/Nova",
+  },
+  malphite: {
+    "deployment_shield:break": "malphite/break",
+    "active:impact": "malphite/aoe",
+  },
   ziggs: { "bomb:impact": "ziggs/hit", "bomb:basic_impact": "ziggs/hit" },
 };
 export const channelSystems: Record<string, string> = {
@@ -363,9 +397,132 @@ export const channelSystems: Record<string, string> = {
   fiddlesticks: "fiddlesticks/tether",
   scarecrow: "fiddlesticks/tether",
 };
+// Effects chosen by a combat phase, area, target state or model socket in BattleEffects.
+const stagedSystems: Record<string, string[]> = {
+  gold_ward: ["stasis/native/body"],
+  stasis: ["stasis/native/body"],
+  anivia: ["anivia/storm"],
+  aurelionsol: [
+    "aurelionsol_q/end",
+    ...[
+      "tell",
+      "missile",
+      "impact",
+      "strong_tell",
+      "strong_missile",
+      "strong_impact",
+      "wave",
+    ].map((k) => "aurelionsol_r/" + k),
+  ],
+  azir: ["azir/beam", "azir/cast1", "azir/cast2"],
+  blitzcrank: ["etar", "qcas", "qmis", "qreturn"].map((k) => "blitzcrank/" + k),
+  apex_turret: ["heimerdinger/laser", "heimerdinger/charged"],
+  pantheon: ["comet", "slide", "landing", "damage", "aftershock", "spear"].map(
+    (k) => "pantheon/" + k,
+  ),
+  ekko: [
+    "end",
+    "vanish",
+    "r-TimeDevice_Active",
+    "r-TrailEnd",
+    "r-TrailEnd_Red",
+    "r-RewindIndicator",
+    "r-RewindIndicator_Red",
+    "r-Tar_Impact",
+    ...Array.from({ length: 6 }, (_, i) => "r-RewindPose" + (i + 1)),
+  ].map((k) => "ekko/" + k),
+  malzahar: ["malzahar/portal_start", "malzahar/portal_end"],
+  scarecrow: ["fiddlesticks/channel"],
+  void_spawn: ["void_spawn/trail"],
+  daisy: ["ivern/slam"],
+  demacian_standard: [
+    "demacian_standard/fall",
+    "demacian_standard/fall_red",
+    "demacian_standard/landing",
+    "demacian_standard/flag",
+    "demacian_standard/shield",
+  ],
+  event_horizon: ["event_horizon/meteor_red", "event_horizon/impact_red"],
+  explosive_cask: ["explosive_cask/hit"],
+  gwen: ["gwen_tristana/mist"],
+  hecarim: ["hecarim/qcas", "hecarim/qbuf", "hecarim/qtar"],
+  jayce: [
+    "field",
+    "w_ready2",
+    "field_hit",
+    "ready_m",
+    "ready_r",
+    "stance_hammer",
+    "stance_m",
+    "stance_r",
+    "first_hit_m",
+    "first_hit_r",
+    "swap_r",
+    "swap_m",
+  ].map((k) => "jayce/" + k),
+  kassadin: ["kassadin/idle_blade"],
+  kayle: ["kayle/native/wave"],
+  malphite: ["malphite/shield"],
+  medium_lightning: [
+    "medium_lightning/tower_hit",
+    "medium_lightning/tower_crack",
+  ],
+  missfortune: ["trail", "left", "right", "end_left", "end_right"].map(
+    (k) => "missfortune_w/" + k,
+  ),
+  olaf: [
+    "cas",
+    "shield",
+    "buf_glow",
+    "buf_blood",
+    "r_cas",
+    "r_buf",
+    "r_buff_weap",
+  ].map((k) => "olaf/" + k),
+  pool_of_reflection: ["pool_of_reflection/shield", "pool_of_reflection/break"],
+  samira: ["samira/ready"],
+  twitch: ["twitch/pierce"],
+  twisted_fate: ["twistedfate/red", "twistedfate/blue"],
+  reksai: [
+    "reksai/knockup",
+    "reksai/emerge_cast",
+    "reksai/travel",
+    "reksai/swipe",
+    "reksai/swipe_second",
+  ],
+  scuttle_crab: [
+    "scuttle_crab/normal_ward_antenna_wake",
+    "scuttle_crab/shrine_green",
+    "scuttle_crab/shrine_red",
+  ],
+  sett: ["full_body", "cast_body", "warning", "min", "max"].map(
+    (k) => "sett/" + k,
+  ),
+  severing_bolt: ["severing_bolt/hit"],
+  sion: ["sion_w/Shield"],
+  sivir: ["sivir/shield_impact"],
+  solar_flare: ["solar_flare/mark"],
+  sona: ["sona/heal_self"],
+  soul_tentacle: ["slam", "indicator_blue", "indicator_red"].map(
+    (k) => "soul_tentacle/" + k,
+  ),
+  tibbers: ["aura", "body", "arm", "hand", "leg", "foot"].map(
+    (k) => "airdrop_bear/" + k,
+  ),
+  void_scuttle_crab: [
+    "scuttle_crab/void_ward_antenna_wake",
+    "scuttle_crab/void_z_visionring_green",
+    "scuttle_crab/void_z_visionring_red",
+  ],
+  ziggs: ["ziggs/missile2", "ziggs/missile3", "ziggs/passive"],
+};
 const relatedForms: Record<string, string[]> = {
   voidfish_ranged_army: ["voidfish_ranged"],
   ivern: ["daisy"],
+  malzahar: ["voidling"],
+  queen_nest: ["reksai"],
+  shurima_guard: ["sand_soldier"],
+  scarecrow: ["fiddlesticks"],
   inhibitor: ["super_minion"],
   kayle: ["kayle_ranged"],
 };
@@ -384,6 +541,7 @@ export function associatedSystems(
       buffEffects[id],
       impacts[id],
       ...(ambientEffects[id] ?? []),
+      ...(stagedSystems[id] ?? []),
       ...Object.values(phaseEffects[id] ?? {}),
     ])
       if (name) result.add(name);
@@ -417,3 +575,17 @@ export function associatedSystems(
     for (const b of castEffects[skill] ?? []) result.add(b.system);
   return [...result];
 }
+
+// Skin0 idleParticlesEffects and the reference character wrappers name these
+// sockets explicitly. A missing socket must not move its emitter to the feet.
+export const bearFireBones = {
+  body: ["spine1"],
+  arm: ["R_Elbow", "L_Elbow"],
+  hand: ["R_Buffbone_Glb_hand_Loc", "L_Buffbone_Glb_hand_Loc"],
+  leg: ["R_KneeLower", "L_KneeLower"],
+  foot: ["R_foot", "L_foot"],
+};
+export const strutBones = {
+  left: "buffbone_cstm_weapon_2",
+  right: "buffbone_glb_weapon_1",
+};

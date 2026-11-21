@@ -171,8 +171,9 @@ async function record(p) {
         bgHeight,
       );
       const models = field.parentElement.querySelector(".battle-models");
-      if (models) c.drawImage(models, 0, 0, width, height);
-      c.drawImage(field, 0, 0, width, height);
+      const dw = width * field.width / map.width, dh = height * field.height / map.height;
+      if (models) c.drawImage(models, (width-dw)/2, (height-dh)/2, dw, dh);
+      c.drawImage(field, (width-dw)/2, (height-dh)/2, dw, dh);
       c.fillStyle = "#11201ccd";
       c.fillRect(0, 0, width, 28);
       c.fillStyle = "#fff";

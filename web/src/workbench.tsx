@@ -266,6 +266,7 @@ function Stage({
             "--terrain": m.terrain ? 'url("' + m.terrain + '")' : "none",
             "--map-width": m.width,
             "--map-height": m.height,
+            "--ground-depth": m.height + 2*m.backMargin,
             "--projection": m.projection,
             "--backdrop-width": m.backdropWidth,
             transform:
