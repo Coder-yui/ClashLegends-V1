@@ -67,10 +67,10 @@ pub(super) fn field_frame(
         "result": view.result.map(|o| outcome(o, game.tick())),
         "units": view.field.units.iter().map(unit).collect::<Vec<_>>(),
         "shots": view.field.projectiles.iter().map(shot).collect::<Vec<_>>(),
-        "areas": view.field.areas, "waves": view.field.waves, "summons": view.field.summons,
+        "effectPaths": view.field.effect_paths, "areas": view.field.areas, "waves": view.field.waves, "summons": view.field.summons,
         "spells": game.spell_views().collect::<Vec<_>>(), "soundLayers": stream.layers(),
         "pending": game.pending(team).collect::<Vec<_>>(), "ack": hand.acknowledged,
-        "hand": hand.hand, "costs": hand.costs, "lastCard": hand.last, "activeCards": hand.active_keys,
+        "hand": hand.hand, "handForms": game.hand_forms(team), "costs": hand.costs, "lastCard": hand.last, "activeCards": hand.active_keys,
         "next": hand.next, "nextCost": hand.next_cost, "gold": hand.gold, "version": hand.version,
         "skillResource": view.skill_resource, "activeWait": view.active_wait, "activeCost": view.active_cost,
         "active": hand.active.map(|a| a.map(|v| json!({"caster":v.caster, "uses":v.uses}))),
@@ -84,6 +84,7 @@ fn unit(u: &clash_battle_core::UnitView) -> Value {
         "id":u.id, "kind":u.kind, "name":u.name, "audioKind":u.audio_kind, "team":u.team.index(),
         "x":u.position.x, "y":u.position.y, "facing":u.facing, "target":u.target, "radius":u.radius,
         "hp":u.hp, "maxHp":u.max_hp, "shield":u.shield, "bar":u.bar, "structure":u.structure,
+        "footprint":u.footprint, "air":u.air, "inFlight":u.in_flight,
         "movementRate":u.movement_rate, "controls":u.controls, "hidden":u.hidden, "dormant":u.dormant,
         "frozen":u.controls.contains(&clash_battle_core::Control::Freeze),
         "visual":u.visual, "alternateForm":u.form_changed, "activity":u.activity, "attack":u.attack,
@@ -99,8 +100,16 @@ fn shot(p: &clash_battle_core::Projectile) -> Value {
         }
         _ => None,
     };
+    let bounce = match &p.trajectory {
+        Trajectory::Ground { bounces, .. }
+            if p.source_kind == "ziggs" && p.attack_sound.empowered =>
+        {
+            3_u8.saturating_sub(*bounces)
+        }
+        _ => 0,
+    };
     json!({
-        "id":p.id, "born":p.born, "sourceKind":p.source_kind, "team":p.team.index(),
+        "bounce":bounce,"id":p.id, "born":p.born, "sourceKind":p.source_kind, "team":p.team.index(),
         "owner":p.owner, "target":p.target, "origin":p.origin, "position":p.position, "direction":direction,
         "cycle":p.attack_sound.cycle, "empowered":p.attack_sound.empowered, "form":p.attack_sound.form,
         "volley":p.volley.is_some(), "group":p.volley, "action":p.cast_action,

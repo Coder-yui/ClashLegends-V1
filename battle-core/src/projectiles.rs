@@ -221,6 +221,7 @@ impl Battle {
                 }
                 changes.push(Change::attack(p.owner, b.id, p.damage, p.on_hit));
                 events.push(Fact::ProjectileHit {
+                    first: p.attack_sound.first,
                     position,
                     source_kind: p.source_kind,
                     projectile: p.id,

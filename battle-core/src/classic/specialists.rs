@@ -321,10 +321,21 @@ impl Battle {
         {
             return;
         }
+        let impact = self.tick + u64::from(ticks(stat(s, "auto_pull_flight", 0.3)));
+        self.effect_paths.push(crate::model::EffectPath {
+            owner: ctx.caster,
+            team: ctx.team,
+            kind: "hook",
+            target: Some(target),
+            path: vec![a.pos, b.pos],
+            start: self.tick,
+            impact,
+            end: impact + u64::from(ticks(stat(s, "auto_pull_duration", 0.3))),
+        });
         self.card_queue.push(Pending {
             ctx,
             spec: s,
-            due: self.tick + u64::from(ticks(stat(s, "auto_pull_flight", 0.3))),
+            due: impact,
             stage: Stage::Pull(target),
         });
     }

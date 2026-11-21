@@ -112,13 +112,18 @@ impl Battle {
         self.emit(Fact::EffectBlocked(id));
         true
     }
-    pub(crate) fn schedule_area(&mut self, ctx: Origin, spec: TimedArea) {
+    pub(crate) fn schedule_area(
+        &mut self,
+        ctx: Origin,
+        spec: TimedArea,
+        source_kind: &'static str,
+    ) {
         let id = self.next_id;
         self.next_id += 1;
         let view = AreaView {
             born: self.tick,
             phase: "",
-            source_kind: "",
+            source_kind,
             enhanced: false,
             effect: "",
             audio: None,
@@ -233,7 +238,11 @@ impl Battle {
                 continue;
             }
             if let Effect::Area(spec) = effect {
-                self.schedule_area(ctx, spec);
+                self.schedule_area(
+                    ctx,
+                    spec,
+                    self.actors.get(&ctx.caster).map_or("", |a| a.def.key),
+                );
                 continue;
             }
             match effect {

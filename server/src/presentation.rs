@@ -48,7 +48,9 @@ impl Stream {
         let mut fired = BTreeSet::new();
         for event in facts {
             let visible = match &event.fact {
-                Fact::EffectBlocked(id)
+                Fact::SkillImpact { caster: id, .. }
+                | Fact::SpellContact { target: id, .. }
+                | Fact::EffectBlocked(id)
                 | Fact::Spawned(id)
                 | Fact::Died(id)
                 | Fact::Controlled(id, _)

@@ -605,6 +605,102 @@ fn target_dummy(hp: i32) -> UnitDef {
 }
 
 #[test]
+fn walking_preserves_attack_intervals_except_on_configured_swings() {
+    // Ticks from one release to the next, including the time spent chasing.
+    for (key, swing, chase_ticks, expected) in [
+        ("darius", 1, 1, 24),
+        ("darius", 1, 25, 31), // The interval elapsed while walking. Only windup remains.
+        ("ashe", 1, 1, 20),
+        ("sett", 1, 1, 12),
+        ("sett", 2, 0, 28),
+        ("sett", 2, 1, 7),
+        ("graves", 1, 1, 4),
+        ("tryndamere", 1, 13, 34),
+        ("tryndamere", 1, 14, 30),
+    ] {
+        let mut field = practice_field();
+        let p = Point::new(300., 300.);
+        let def = units::unit(key);
+        let reach = def.radius + def.range + target_dummy(5000).radius;
+        let source = field.spawn(Team::Blue, p, def).unwrap();
+        let close = p + Point::new(50., 0.);
+        let target = field.spawn(Team::Red, close, target_dummy(5000)).unwrap();
+        while field.actors[&source].card_state.swing < swing {
+            field.step(&[]);
+            assert!(field.tick < 100, "{key} failed to attack");
+        }
+        let released = field.tick;
+        for _ in 0..chase_ticks {
+            let before = field.actors[&source].pos;
+            field.actors.get_mut(&target).unwrap().pos = before + Point::new(reach + 20., 0.);
+            field.step(&[]);
+            assert_ne!(field.actors[&source].pos, before, "{key} failed to chase");
+        }
+        field.actors.get_mut(&target).unwrap().pos =
+            field.actors[&source].pos + Point::new(50., 0.);
+        while field.actors[&source].card_state.swing == swing {
+            field.step(&[]);
+            assert!(
+                field.tick - released <= expected,
+                "{key} swing {swing} was late"
+            );
+        }
+        assert_eq!(
+            field.tick - released,
+            expected,
+            "{key} swing {swing}, {chase_ticks} chase ticks"
+        );
+    }
+}
+
+#[test]
+fn forced_movement_counts_toward_the_existing_attack_interval() {
+    let mut field = practice_field();
+    let p = Point::new(300., 300.);
+    let source = field.spawn(Team::Blue, p, units::unit("darius")).unwrap();
+    field
+        .spawn(Team::Red, p + Point::new(50., 0.), target_dummy(5000))
+        .unwrap();
+    for _ in 0..6 {
+        field.step(&[]);
+    }
+    assert_eq!(field.actors[&source].card_state.swing, 1);
+    field
+        .displace(source, Point::new(0., 1.), 10., 40., 0.)
+        .unwrap();
+    for _ in 0..23 {
+        field.step(&[]);
+    }
+    assert_ne!(field.actors[&source].pos, p);
+    assert_eq!(field.actors[&source].card_state.swing, 1);
+    field.step(&[]);
+    assert_eq!(field.actors[&source].card_state.swing, 2);
+}
+
+#[test]
+fn losing_a_target_and_reacquiring_without_walking_preserves_setts_interval() {
+    let mut field = practice_field();
+    let p = Point::new(300., 300.);
+    let source = field.spawn(Team::Blue, p, units::unit("sett")).unwrap();
+    let close = p + Point::new(50., 0.);
+    let target = field.spawn(Team::Red, close, target_dummy(5000)).unwrap();
+    for _ in 0..18 {
+        field.step(&[]);
+    }
+    assert_eq!(field.actors[&source].card_state.swing, 2);
+    field.actors.get_mut(&target).unwrap().pos = Point::new(900., 900.);
+    field.step(&[]);
+    assert_eq!(field.actors[&source].activity, crate::Activity::Idle);
+    field.actors.get_mut(&target).unwrap().pos = close;
+    for _ in 0..26 {
+        field.step(&[]);
+    }
+    assert_eq!(field.actors[&source].card_state.swing, 2);
+    field.step(&[]);
+    assert_eq!(field.actors[&source].card_state.swing, 3);
+}
+
+#[test]
 fn conversion_mark_and_channel_zone_outlive_their_source() {
     let pos = Point::new(300., 300.);
     let mut field = practice_field();

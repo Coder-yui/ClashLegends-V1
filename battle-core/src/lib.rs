@@ -64,6 +64,7 @@ pub struct Battle {
     scheduled_audio: Vec<(u64, SoundOrigin, &'static str, Point)>,
     grants: Vec<classic::specialists::Grant>,
     attack_waves: Vec<classic::zones::Wave>,
+    effect_paths: Vec<model::EffectPath>,
     summon_flights: Vec<classic::production::ReleasedSummon>,
     pending_births: Vec<(Id, Team, Point, classic::production::Birth)>,
     zones: Vec<classic::zones::Zone>,
@@ -99,6 +100,7 @@ impl Battle {
             grants: vec![],
             attack_waves: vec![],
             pending_births: vec![],
+            effect_paths: vec![],
             summon_flights: vec![],
             zones: vec![],
             deaths: vec![],
@@ -232,6 +234,7 @@ impl Battle {
     }
     pub fn snapshot(&self) -> Snapshot {
         Snapshot {
+            effect_paths: self.effect_paths.clone(),
             tick: self.tick,
             projectiles: self.shots.clone(),
             summons: self.summon_flights.iter().map(|f| f.view).collect(),
@@ -268,6 +271,9 @@ impl Battle {
                     kind: a.def.key,
                     name: a.def.rules.and_then(|s| s["name"].as_str()),
                     structure: a.def.role.structure(),
+                    footprint: a.def.lifecycle.footprint.max(1),
+                    air: a.def.layer == Layer::Air,
+                    in_flight: a.flight.is_some(),
                     team: a.team,
                     position: a.pos,
                     facing: a.facing,
@@ -319,6 +325,10 @@ impl Battle {
         for unit in &mut field.units {
             unit.visual.drain_targets.retain(|id| !hidden(id));
         }
+        field.effect_paths.retain(|p| {
+            p.target.is_none_or(|id| !hidden(&id))
+                && (matches!(p.kind, "pantheon" | "reksai") || !hidden(&p.owner))
+        });
         field.summons.retain(|f| !hidden(&f.source));
         field.waves.retain(|wave| !hidden(&wave.caster));
         field.areas.retain(|area| !hidden(&area.caster));
@@ -372,6 +382,7 @@ impl Battle {
     }
     /// Commands arrive in host-accepted order. Validation failure does not spend cooldown.
     pub fn step(&mut self, commands: &[(Team, Cast)]) {
+        self.effect_paths.retain(|p| p.end > self.tick);
         self.begin_step();
         let mut changes = vec![];
         for &(team, cmd) in commands {
@@ -520,6 +531,22 @@ impl Battle {
         }
         for (source, target, damage) in out.sacrifices {
             self.unit_sound(source, "sacrifice:start", None);
+            let to = &self.actors[&target];
+            let from = &self.actors[&source];
+            let dir = (to.pos - from.pos).unit().unwrap_or(from.facing);
+            let impact = self.tick
+                + (from.def.rules.unwrap()["sacrifice_delay"].as_f64().unwrap() * 20.).ceil()
+                    as u64;
+            self.effect_paths.push(model::EffectPath {
+                owner: source,
+                team: from.team,
+                kind: "sacrifice",
+                target: Some(target),
+                path: vec![from.pos, to.pos - dir * to.def.radius],
+                start: self.tick,
+                impact,
+                end: impact + 1,
+            });
             let a = self.actors.get_mut(&source).unwrap();
             let s = a.def.rules.unwrap();
             self.card_queue.push(classic::casts::Pending {

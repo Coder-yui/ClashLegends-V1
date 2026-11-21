@@ -174,6 +174,7 @@ impl Battle {
                         direction: a.facing,
                     },
                     spec,
+                    a.def.key,
                 );
             }
 

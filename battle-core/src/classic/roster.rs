@@ -196,7 +196,7 @@ impl ClassicMatch {
         let placements = self.formation_placements(card, form, team, point)?;
         let rule = &rules()[card.key];
         let mut ids = Vec::with_capacity(placements.len());
-        for (pos, def, pre) in placements {
+        for (pos, def, pre, path) in placements {
             let id = self.battle.spawn(team, pos, def)?;
             let a = self.battle.actors.get_mut(&id).unwrap();
             a.card_state.deployment_group = ids.first().copied().unwrap_or(id);
@@ -217,6 +217,18 @@ impl ClassicMatch {
                 a.hidden_until = landed;
                 a.deploy_start = landed;
                 a.ready_tick += u64::from(super::units::ticks(pre));
+                if matches!(card.key, "pantheon" | "reksai") {
+                    self.battle.effect_paths.push(crate::model::EffectPath {
+                        owner: id,
+                        team,
+                        kind: card.key,
+                        target: None,
+                        path: if path.is_empty() { vec![pos] } else { path },
+                        start: self.battle.tick,
+                        impact: landed,
+                        end: landed + if card.key == "pantheon" { 19 } else { 60 },
+                    });
+                }
             }
             if rule.get("deploy_sweep_radius").is_some() {
                 a.card_state.landing_due = Some(if pre > 0. {
@@ -237,7 +249,7 @@ impl ClassicMatch {
         form: &'static str,
         team: Team,
         point: Point,
-    ) -> Result<Vec<(Point, UnitDef, f64)>, MatchError> {
+    ) -> Result<Vec<(Point, UnitDef, f64, Vec<Point>)>, MatchError> {
         let rule = &rules()[card.key];
         let defs = if matches!(card.play, Play::RosterUnit(_)) {
             vec![super::units::unit(form); rule["deployment_count"].as_u64().unwrap_or(1) as usize]
@@ -342,6 +354,7 @@ impl ClassicMatch {
                     },
                 );
             }
+            let mut entry_path = Vec::new();
             let pre = if let Some(speed) = rule["pre_deploy_burrow_speed"].as_f64() {
                 let nexus = self.map.sides[team.index()].nexus;
                 let radius = self
@@ -363,11 +376,14 @@ impl ClassicMatch {
                         d
                     })
                     .sum::<f64>();
+                entry_path.push(pos);
+                entry_path.extend(path);
+                entry_path.reverse();
                 (length / speed).max(super::units::stat(rule, "pre_deploy_time", 0.))
             } else {
                 super::units::stat(rule, "pre_deploy_time", 0.)
             };
-            placements.push((pos, def, pre));
+            placements.push((pos, def, pre, entry_path));
         }
         Ok(placements)
     }

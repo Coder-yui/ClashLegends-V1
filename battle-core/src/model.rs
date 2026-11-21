@@ -259,10 +259,13 @@ impl Actor {
             || self.has(Control::Freeze)
             || self.flight.is_some()
     }
-    pub fn reset_attack(&mut self) {
+    pub fn cancel_attack(&mut self) {
         self.attack = None;
         self.drain = Default::default();
         self.release_at = None;
+    }
+    pub fn reset_attack(&mut self) {
+        self.cancel_attack();
         self.next_attack = 0;
     }
 }
@@ -303,6 +306,34 @@ pub struct BarIndicators {
 #[derive(Clone, Debug, PartialEq, Default, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct VisualState {
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub first_ready: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub rewind_ready: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rewind_position: Option<Point>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regeneration_until: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifesteal_start: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sand_ward_until: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_until: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slow_field_radius: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sanctuary: Option<(Point, f64, u64)>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sunlight_until: Option<u64>,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub burning_aura: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub pool_shield: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub explosive_shield: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub deployment_shield: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aura_start: Option<u64>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
@@ -364,6 +395,9 @@ pub struct UnitView {
     pub kind: &'static str,
     pub name: Option<&'static str>,
     pub structure: bool,
+    pub footprint: u8,
+    pub air: bool,
+    pub in_flight: bool,
     pub team: Team,
     pub position: Point,
     pub facing: Point,
@@ -385,8 +419,21 @@ pub struct UnitView {
     pub attack_rate: u16,
     pub damage_rate: u16,
 }
+/// Public visual paths with an independent lifetime (including after the source despawns).
+#[derive(Clone, Debug, PartialEq, serde::Serialize)]
+pub struct EffectPath {
+    pub owner: Id,
+    pub team: Team,
+    pub kind: &'static str,
+    pub target: Option<Id>,
+    pub path: Vec<Point>,
+    pub start: u64,
+    pub impact: u64,
+    pub end: u64,
+}
 #[derive(Clone, Debug, PartialEq)]
 pub struct Snapshot {
+    pub effect_paths: Vec<EffectPath>,
     pub tick: u64,
     pub units: Vec<UnitView>,
     pub projectiles: Vec<Projectile>,
@@ -406,6 +453,18 @@ pub enum Fact {
     FirstWave,
     EffectBlocked(Id),
     Spawned(Id),
+    SkillImpact {
+        caster: Id,
+        skill: &'static str,
+        position: Point,
+        direction: Point,
+        enhanced: bool,
+    },
+    SpellContact {
+        key: &'static str,
+        target: Id,
+        position: Point,
+    },
     SpellImpact {
         id: Id,
         key: &'static str,
@@ -464,6 +523,8 @@ pub enum Fact {
     },
     Fired(Id, Id, Id),
     ProjectileHit {
+        #[serde(skip_serializing_if = "std::ops::Not::not")]
+        first: bool,
         position: Point,
         source_kind: &'static str,
         projectile: Id,

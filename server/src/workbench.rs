@@ -311,3 +311,7 @@ mod tests {
         }
     }
 }
+
+#[cfg(test)]
+#[path = "workbench_effect_tests.rs"]
+mod effect_stages;

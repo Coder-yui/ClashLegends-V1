@@ -17,6 +17,7 @@ pub(super) fn carried(s: &'static Value) -> Skill {
 
 #[derive(Default, Debug, Clone)]
 pub(crate) struct State {
+    pub(crate) lifesteal_start: Option<u64>,
     pub(crate) persistent_audio_until: u64,
     pub(crate) burning_aura: bool,
     pub(crate) tower_disable_audio_until: u64,
@@ -86,6 +87,16 @@ pub(crate) struct State {
     pub(crate) buff_spec: Option<&'static Value>,
 }
 impl Actor {
+    pub(crate) fn slow_field_radius(&self, tick: u64) -> Option<f64> {
+        let rules = self.def.rules?;
+        let base = rules.get("debuff_aura_radius")?.as_f64()?;
+        Some(if self.card_state.aura_until > tick {
+            stat(rules, "debuff_aura_active_radius", base)
+        } else {
+            base
+        })
+    }
+
     pub(crate) fn active_skill_buff(&self, tick: u64) -> bool {
         let s = &self.card_state;
         s.buff_spec.is_some()
@@ -324,6 +335,7 @@ impl Battle {
                 );
             }
             "attack_lifesteal" => {
+                a.card_state.lifesteal_start.get_or_insert(tick);
                 a.card_state.lifesteal = Some((
                     u64::MAX,
                     stat(s, "heal_ratio", 0.),
@@ -622,7 +634,7 @@ impl Battle {
                 turrets.push(a.id);
             }
             if s.get("haste_aura_radius").is_some() || s.get("debuff_aura_radius").is_some() {
-                fields.push((a.id, a.team, a.pos, s, a.card_state.aura_until > self.tick));
+                fields.push((a.id, a.team, a.pos, s, a.slow_field_radius(self.tick)));
             }
         }
         for id in turrets {
@@ -634,14 +646,12 @@ impl Battle {
             });
             self.actors.get_mut(&id).unwrap().card_state.dormant = dormant;
         }
-        for (id, team, pos, s, enhanced) in fields {
+        for (id, team, pos, s, slow_radius) in fields {
             let haste = s.get("haste_aura_radius").is_some();
             let radius = if haste {
                 stat(s, "haste_aura_radius", 0.)
-            } else if enhanced {
-                stat(s, "debuff_aura_active_radius", 0.)
             } else {
-                stat(s, "debuff_aura_radius", 0.)
+                slow_radius.unwrap_or(0.)
             };
             for b in self.actors.values_mut() {
                 if b.id == id

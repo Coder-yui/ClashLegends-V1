@@ -212,6 +212,32 @@ impl Actor {
             tick < start + u64::from(if *ticks == 0 { 6 } else { *ticks })
         });
         crate::model::VisualState {
+            slow_field_radius: self.slow_field_radius(tick),
+            first_ready: self.audio_kind() == "jayce" && state.swing == 0,
+            rewind_ready: state.equipped_skill == Some("ekko.chronobreak") && state.use_number == 0,
+            rewind_position: if state.equipped_skill == Some("ekko.chronobreak")
+                && (state.use_number == 0 || casting)
+            {
+                state
+                    .rewind
+                    .or_else(|| state.history.front().map(|(_, p)| *p))
+            } else {
+                None
+            },
+            regeneration_until: state.death_spawn.filter(|v| v.0 > tick).map(|v| v.0),
+            lifesteal_start: state.lifesteal_start,
+            sand_ward_until: self.shields.restoration_until(),
+            field_until: (state.persistent_audio_until > tick)
+                .then_some(state.persistent_audio_until),
+            sanctuary: self
+                .sanctuary
+                .filter(|s| s.until > tick)
+                .map(|s| (s.center, s.radius, s.until)),
+            sunlight_until: self.sunlight.filter(|s| s.1 > tick).map(|s| s.1),
+            burning_aura: state.burning_aura && !self.has(Control::Stasis),
+            pool_shield: self.shields.pool_active(),
+            explosive_shield: self.shields.explosive_active(),
+            deployment_shield: self.shields.has_deployment(),
             drain_targets: if self.activity == crate::Activity::Channeling {
                 self.drain.targets.clone()
             } else {

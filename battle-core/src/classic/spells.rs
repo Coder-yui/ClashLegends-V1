@@ -566,6 +566,13 @@ impl SpellCast {
                     id,
                     -(damage * tower_rate).round() as i32,
                 );
+                if matches!(self.kind, CardSpell::Cask | CardSpell::Bolt) {
+                    battle.emit(crate::Fact::SpellContact {
+                        key: self.key,
+                        target: id,
+                        position: battle.actors[&id].pos,
+                    });
+                }
                 changes.push(match self.kind {
                     CardSpell::MediumLightning | CardSpell::Tidal | CardSpell::Pulse => {
                         change.on_sound(sound, "spell:hit")

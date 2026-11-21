@@ -109,6 +109,13 @@ struct Layer {
 #[derive(Clone, Debug, Default)]
 pub(crate) struct Shields(Vec<Layer>);
 impl Shields {
+    pub fn restoration_until(&self) -> Option<u64> {
+        self.0
+            .iter()
+            .filter(|l| l.restore && l.hp > 0)
+            .map(|l| l.expires)
+            .max()
+    }
     pub fn pool_active(&self) -> bool {
         self.0.iter().any(|l| l.pool && l.hp > 0)
     }

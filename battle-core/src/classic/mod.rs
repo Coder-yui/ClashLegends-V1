@@ -382,6 +382,24 @@ impl ClassicMatch {
     pub fn result(&self) -> Option<Outcome> {
         self.result
     }
+    fn play_form(&self, player: &Player, card: Card, team: Team, mirror: bool) -> &'static str {
+        if mirror {
+            player.last_form.unwrap_or(card.key)
+        } else {
+            self.battle.deployment_form(card.key, team, player.gold)
+        }
+    }
+
+    pub fn hand_forms(&self, team: Team) -> [Option<&'static str>; 4] {
+        let player = &self.players[team.index()];
+        std::array::from_fn(|slot| {
+            let card = player.deck[player.lookup(slot as u8, player.version).ok()?];
+            let mirror = matches!(card.play, Play::Mirror);
+            let source = if mirror { player.last_card? } else { card };
+            Some(self.play_form(player, source, team, mirror))
+        })
+    }
+
     pub fn view(&self, team: Team) -> MatchView {
         let player = &self.players[team.index()];
         let sources = player
@@ -637,11 +655,8 @@ impl ClassicMatch {
                     p.deck[index]
                 };
                 let original = card;
-                let form = if mirror {
-                    p.last_form.unwrap_or(card.key)
-                } else {
-                    self.battle.deployment_form(card.key, i.team, p.gold)
-                };
+                let p = &self.players[seat];
+                let form = self.play_form(p, card, i.team, mirror);
                 if !mirror {
                     card.cost = p.deploy_cost(card);
                 }

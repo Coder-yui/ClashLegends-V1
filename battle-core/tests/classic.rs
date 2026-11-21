@@ -203,8 +203,8 @@ fn full_match_records_rejections_and_replays_both_private_seats() {
         [
             (100, 14, 18033, 5, 1),
             (1000, 14, 16625, 44, 1),
-            (2000, 17, 17282, 87, 1),
-            (5471, 20, 13164, 238, 3),
+            (2000, 20, 17750, 87, 0),
+            (3700, 38, 16548, 161, 3),
         ]
     );
     assert!(record.commands.len() > 30);

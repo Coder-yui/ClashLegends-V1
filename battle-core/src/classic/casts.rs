@@ -188,7 +188,18 @@ impl Battle {
                     b.def.role.structure() && Body::from(b).allows(job.ctx.team, job.ctx.source_pos)
                 }) {
                     origin.owner = id;
-                    self.sound(origin, "sacrifice:impact", self.actors[&id].pos, Some(id));
+                    let position = self
+                        .effect_paths
+                        .iter()
+                        .find(|p| {
+                            p.owner == job.ctx.caster
+                                && p.kind == "sacrifice"
+                                && p.impact == self.tick
+                        })
+                        .and_then(|p| p.path.last())
+                        .copied()
+                        .unwrap_or(self.actors[&id].pos);
+                    self.sound(origin, "sacrifice:impact", position, Some(id));
                     changes.push(Change::new(job.ctx.caster, id, -damage));
                 }
                 continue;
@@ -287,6 +298,20 @@ impl Battle {
                 .and_then(Value::as_f64)
                 .unwrap_or(stat(s, "damage", 0.)) as i32;
             if amount > 0 {
+                if matches!(
+                    s["id"].as_str(),
+                    Some("jayce.hyper-charge-lightning-field" | "ekko.chronobreak")
+                ) {
+                    self.emit(crate::Fact::SpellContact {
+                        key: if s["kind"] == "rewind_nova" {
+                            "rewind_hit"
+                        } else {
+                            "field_hit"
+                        },
+                        target: id,
+                        position: self.actors[&id].pos,
+                    });
+                }
                 let hit = Change::skill_hit(
                     ctx.caster,
                     id,
@@ -401,6 +426,15 @@ impl Battle {
                 1.
             }
             * (1. + ratio * (stat(s, "resource_damage_scale_max", 1.) - 1.));
+        if s["id"] == "sett.haymaker" {
+            self.emit(crate::Fact::SkillImpact {
+                caster: ctx.caster,
+                skill: "sett.haymaker",
+                enhanced: ratio >= 0.999,
+                position: ctx.origin + ctx.direction * a.def.radius,
+                direction: ctx.direction,
+            });
+        }
         self.frontal_amount(ctx, s, damage, "@hit", changes);
     }
     fn frontal_amount(

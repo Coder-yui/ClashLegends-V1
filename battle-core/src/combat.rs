@@ -30,6 +30,11 @@ impl Effects {
 }
 pub(crate) fn decide(a: &mut Actor, view: &Perception, mid: f64, out: &mut Effects) {
     crate::projectiles::reload_tick(a);
+    let (_, attack, damage_rate) = a.rates();
+    let rate = u64::from(attack);
+    let scale = u64::from(crate::status::NORMAL);
+    let start = a.attack_clock;
+    a.attack_clock += rate;
     if a.disabled() || a.def.action == Action::Idle {
         a.activity = if a.flight.is_some() {
             Activity::Displaced
@@ -38,16 +43,11 @@ pub(crate) fn decide(a: &mut Actor, view: &Perception, mid: f64, out: &mut Effec
         };
         return;
     }
-    let (_, attack, damage_rate) = a.rates();
-    let rate = u64::from(attack);
-    let scale = u64::from(crate::status::NORMAL);
-    let start = a.attack_clock;
-    a.attack_clock += rate;
     let Some((b, march)) = view.choose(a, mid) else {
         crate::projectiles::start_reload(a);
         a.target = None;
         a.activity = Activity::Idle;
-        a.reset_attack();
+        a.cancel_attack();
         a.route_goal = None;
         a.heal_remainder = 0;
         return;
@@ -73,7 +73,7 @@ pub(crate) fn decide(a: &mut Actor, view: &Perception, mid: f64, out: &mut Effec
         } else {
             Activity::Chase
         };
-        a.reset_attack();
+        a.cancel_attack();
         a.heal_remainder = 0;
         return;
     }

@@ -64,7 +64,7 @@ impl Battle {
             step: speed / TICKS_PER_SECOND as f64,
             lock_until,
         });
-        a.reset_attack();
+        a.cancel_attack();
         a.route_goal = None;
         a.activity = Activity::Displaced;
         self.emit(Fact::Displaced(id, end));
@@ -169,7 +169,7 @@ impl Battle {
                 a.pos = end;
                 a.flight = None;
                 a.route_goal = None;
-                a.reset_attack();
+                a.cancel_attack();
                 self.emit(Fact::Blinked(id, end));
                 Ok(end)
             }
@@ -226,7 +226,7 @@ impl Battle {
                 let a = self.actors.get_mut(&id).unwrap();
                 a.pos = pos;
                 a.route_goal = None;
-                a.reset_attack();
+                a.cancel_attack();
                 a.activity = Activity::Displaced;
                 a.flight = Some(Flight {
                     kind: MotionKind::Knockback,

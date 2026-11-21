@@ -3,7 +3,7 @@
 use super::{Card, ClassicMatch, Input, MatchError};
 pub const CONTENT_VERSION: &str = env!("BATTLE_CONTENT");
 /// Bump the engine revision for changes to authority ordering, AI or simulation semantics.
-pub const RULESET: &str = concat!("classic-3/", env!("BATTLE_CONTENT"));
+pub const RULESET: &str = concat!("classic-4/", env!("BATTLE_CONTENT"));
 #[derive(Clone, Copy, Debug)]
 pub struct RecordedInput {
     pub received_at: u64,

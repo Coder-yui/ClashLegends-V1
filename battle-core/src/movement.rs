@@ -114,13 +114,45 @@ fn walk(
                 a.route_goal = None;
                 return;
             }
-            a.pos = p;
+            if p != a.pos {
+                cancel_recovery_on_walk(a);
+                a.pos = p;
+            }
             a.facing = dir;
         }
         if (next - a.pos).length() < 1e-8 {
             a.route.pop_front();
         }
     }
+}
+fn cancel_recovery_on_walk(a: &mut Actor) {
+    if a.next_attack <= a.attack_clock {
+        return;
+    }
+    let Some(rules) = a.def.rules else { return };
+    let Some(every) = rules["attack_recovery_cancel_every_hits"].as_u64() else {
+        return;
+    };
+    let swing = u64::from(a.card_state.swing);
+    if every == 0 || swing == 0 || swing % every != 0 {
+        return;
+    }
+    if let Some(window) = rules["attack_recovery_cancel_window"]
+        .as_f64()
+        .filter(|w| *w > 0.)
+    {
+        let windup = match a.def.action {
+            crate::Action::Strike { windup, .. } | crate::Action::Shot { windup, .. } => windup,
+            _ => return,
+        };
+        // The deadline is the next release. Recovery ends one windup earlier.
+        let scale = u64::from(crate::status::NORMAL);
+        let remaining = (a.next_attack - a.attack_clock).saturating_sub(u64::from(windup) * scale);
+        if remaining > (window * TICKS_PER_SECOND as f64 * scale as f64).round() as u64 {
+            return;
+        }
+    }
+    a.next_attack = 0;
 }
 fn fly(q: &Query, a: &mut Actor, tick: u64) -> Option<Fact> {
     let mut flight = a.flight?;
