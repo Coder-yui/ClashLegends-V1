@@ -1,119 +1,137 @@
+import { useEffect, useState, type ReactNode } from "react";
 import { Choice, useConfirmation } from "./controls";
 import { internalLink, navigate } from "./navigation";
-import { useEffect, useState, type ReactNode } from "react";
 import { Preparation } from "./preparation";
-import { api, defaultDeck, go, updateRoom } from "./api";
-import type { Catalog, Deck, Room, Session } from "./api";
-interface Draft {
-  deck: Deck;
-  name: string;
-  preset: string;
+import {
+  go,
+  updateRoom,
+  type Catalog,
+  type Room,
+  type Session,
+  type Slot,
+} from "./api";
+import {
+  activeSlot,
+  defaultName,
+  saveField,
+  selectSlot,
+  slotFor,
+  slotKeys,
+} from "./player-data";
+
+interface Draft extends Slot {
+  before: Slot | null;
+}
+interface TabState {
+  roomView?: boolean;
+  index: number;
+  edits: Record<number, Draft>;
   version?: number;
   settings?: number;
-  presetRevision?: number;
 }
-function restoreDraft(key: string, catalog: Catalog): Draft | undefined {
+function readTab(key: string): TabState | null {
   try {
-    const d = JSON.parse(sessionStorage.getItem(key) ?? "null");
+    const tab = JSON.parse(sessionStorage.getItem(key) ?? "null");
     if (
-      d &&
-      typeof d.name === "string" &&
-      typeof d.preset === "string" &&
-      Array.isArray(d.deck?.cards) &&
-      d.deck.cards.length === 8 &&
-      d.deck.cards.every(
-        (key: unknown) => key === "" || catalog.cards.some((x) => x.id === key),
-      ) &&
-      d.deck.skills &&
-      typeof d.deck.skills === "object"
+      tab &&
+      slotKeys[tab.index] &&
+      tab.edits &&
+      Object.values(tab.edits).every((v) => {
+        const d = v as Draft;
+        return (
+          typeof d?.name === "string" &&
+          d.deck?.cards?.length === 8 &&
+          d.deck.skills
+        );
+      })
     )
-      return d;
-  } catch {
-    /* Storage may be unavailable. */
-  }
+      return tab;
+  } catch {}
+  return null;
 }
-function needsApply(deck: Deck, room?: Room) {
-  return Boolean(
-    room &&
-    deck.cards.some(
-      (id, index) =>
-        id !== room.deck.cards[index] ||
-        deck.skills[id] !== room.deck.skills[id],
-    ),
-  );
-}
+
 export function Editor({
-  catalog: c,
+  catalog,
   session,
   room,
-  collection = false,
   reload,
+  reloadFields,
+  collection = false,
   online = true,
   management,
 }: {
   catalog: Catalog;
   session: Session;
   room?: Room;
-  collection?: boolean;
   reload: () => Promise<void>;
+  reloadFields: () => Promise<void>;
+  collection?: boolean;
   online?: boolean;
   management?: ReactNode;
 }) {
   const { ask, confirmation } = useConfirmation();
-  const draftKey = [
-    "clashlegends.draft",
-    c.version,
-    session.name,
-    room?.id ?? "presets",
+  const tabKey = [
+    "clashlegends.deck-editor.v2",
+    session.role ? session.name : "guest",
+    catalog.version,
+    room?.id ?? "decks",
     room?.round ?? 0,
   ].join(":");
-  const [draft] = useState(() => restoreDraft(draftKey, c));
-  const [preset, setPreset] = useState(draft?.preset ?? ""),
-    [name, setName] = useState(draft?.name ?? "我的卡组"),
-    [deck, setDeck] = useState<Deck>(() =>
-      structuredClone(draft?.deck ?? room?.deck ?? defaultDeck(c)),
+  const [tab, setTab] = useState<TabState>(() => {
+    const previous = readTab(tabKey);
+    if (previous && (room || Object.keys(previous.edits).length))
+      return previous;
+    return {
+      index: activeSlot(session),
+      edits: {},
+      version: room?.deckVersion,
+      settings: room?.settingsVersion,
+    };
+  });
+  const [msg, setMsg] = useState(""),
+    [busy, setBusy] = useState(false);
+  const { index, edits } = tab;
+  const key = slotKeys[index];
+  const saved = slotFor(session, catalog, index);
+  const initialRoomSlot =
+    room &&
+    tab.roomView !== false &&
+    index === activeSlot(session) &&
+    (room.round > 1 || room.deckVersion > 1 || saved.deck.cards.every(Boolean));
+  const current = edits[index] ?? {
+    ...saved,
+    deck: initialRoomSlot ? room.deck : saved.deck,
+    before: session.fields?.[key] ?? null,
+  };
+  const dirty = Object.keys(edits).length > 0;
+  const modifiedElsewhere =
+    !!edits[index] &&
+    JSON.stringify(edits[index].before) !==
+      JSON.stringify(session.fields?.[key] ?? null);
+  const stale =
+    !!room &&
+    (tab.version !== room.deckVersion || tab.settings !== room.settingsVersion);
+  const changed =
+    room &&
+    current.deck.cards.some(
+      (id, i) =>
+        id !== room.deck.cards[i] ||
+        current.deck.skills[id] !== room.deck.skills[id],
     );
-  const [dirty, setDirty] = useState(Boolean(draft)),
-    [msg, setMsg] = useState(""),
-    [busy, setBusy] = useState(false),
-    [version, setVersion] = useState(draft?.version ?? room?.deckVersion),
-    [settings, setSettings] = useState(
-      draft?.settings ?? room?.settingsVersion,
-    ),
-    [presetRevision, setPresetRevision] = useState<number | undefined>(
-      draft?.presetRevision,
-    );
-  const byId = new Map(c.cards.map((x) => [x.id, x]));
+
   useEffect(() => {
-    if (
-      !room ||
-      dirty ||
-      (room.deckVersion === version && room.settingsVersion === settings)
-    )
-      return;
-    setDeck(structuredClone(room.deck));
-    setVersion(room.deckVersion);
-    setSettings(room.settingsVersion);
-  }, [room, dirty, version, settings]);
+    if (!room || dirty || !stale) return;
+    setTab((t) => ({
+      ...t,
+      version: room.deckVersion,
+      settings: room.settingsVersion,
+    }));
+  }, [dirty, stale, room]);
   useEffect(() => {
     try {
-      if (dirty)
-        sessionStorage.setItem(
-          draftKey,
-          JSON.stringify({
-            deck,
-            name,
-            preset,
-            version,
-            settings,
-            presetRevision,
-          }),
-        );
-      else sessionStorage.removeItem(draftKey);
-    } catch {
-      /* Editing still works when tab storage is unavailable. */
-    }
-  }, [dirty, draftKey, deck, name, preset, version, settings, presetRevision]);
+      sessionStorage.setItem(tabKey, JSON.stringify(tab));
+    } catch {}
+  }, [tabKey, tab]);
   useEffect(() => {
     if (!dirty) return;
     const guard = async (e: MouseEvent) => {
@@ -123,211 +141,172 @@ export function Editor({
       if (
         await ask(
           "离开备战编辑器",
-          "离开后将放弃当前草稿，已保存的个人预设可以再次载入。",
+          "离开后将放弃尚未保存的卡组修改。",
           "放弃并离开",
         )
       ) {
-        try {
-          sessionStorage.removeItem(draftKey);
-        } catch {}
+        sessionStorage.removeItem(tabKey);
         navigate(link.href);
       }
     };
     document.addEventListener("click", guard, true);
     return () => document.removeEventListener("click", guard, true);
-  }, [dirty, draftKey, ask]);
-  function change(d: Deck) {
-    setDeck(d);
-    setDirty(true);
+  }, [dirty, tabKey, ask]);
+  function edit(patch: Partial<Slot>) {
+    if (busy) return;
+    setTab((t) => ({
+      ...t,
+      edits: { ...t.edits, [index]: { ...current, ...patch } },
+    }));
     setMsg("");
   }
-  const presetsForMenu = !collection
-    ? session.presets.filter((p) => p.battleDeck)
-    : session.presets;
-  async function choosePreset(key: string) {
-    if (
-      dirty &&
-      !(await ask("载入卡组", "载入后将替换当前未保存的修改。", "载入卡组"))
-    )
-      return;
-    const p = session.presets.find((x) => x.id === key);
-    const d = structuredClone(
-      (collection ? p?.deck : p?.battleDeck) ?? room?.deck ?? defaultDeck(c),
-    );
-    for (const id of d.cards) {
-      const first = byId.get(id)?.skills[0];
-      if (first && !d.skills[id]) d.skills[id] = first.id;
-    }
-    setPreset(key);
-    setPresetRevision(p?.revision);
-    setName(p?.name ?? "我的卡组");
-    setDeck(d);
-    setDirty(needsApply(d, room));
-    setVersion(room?.deckVersion);
-    setSettings(room?.settingsVersion);
+  function switchSlot(i: number) {
+    selectSlot(session, i);
+    setTab((t) => ({ ...t, index: i, roomView: false }));
     setMsg("");
   }
-  async function submit(
-    action: "ready" | "apply" | "save" | "copy" | "delete",
-  ) {
+  async function submit(action: "ready" | "apply" | "save") {
     if (busy) return;
     setBusy(true);
     setMsg("");
     try {
-      if (action === "delete") {
-        if (
-          !(await ask("删除个人预设", "确定删除「" + name + "」？", "确认删除"))
-        )
-          return;
-        await api("presets/" + preset, undefined, "DELETE");
-        setPreset("");
-        setPresetRevision(undefined);
-        await reload();
-        setMsg("预设已删除");
-        return;
-      }
-      const empty = deck.cards.findIndex((x) => !x);
-      if (empty >= 0) throw new Error("请先填满第 " + (empty + 1) + " 个卡位");
-      if ((action === "apply" || action === "ready") && room) {
-        let current = {
-          ...room,
-          deckVersion: version!,
-          settingsVersion: settings!,
+      if (action === "save") {
+        const value = {
+          name: current.name.trim() || defaultName(index),
+          deck: current.deck,
         };
-        const changed = needsApply(deck, room);
-        if (changed) {
-          current = await updateRoom(current, "deck", {
-            deck,
-            presetId: preset || undefined,
+        await saveField(session, key, value, current.before);
+        selectSlot(session, index);
+        await reloadFields();
+        setTab((t) => {
+          const edits = { ...t.edits };
+          delete edits[index];
+          return { ...t, edits, roomView: false };
+        });
+        setMsg("个人预设已保存");
+      } else if (room) {
+        if (current.deck.cards.some((id) => !id))
+          throw new Error("请先填满八个卡位");
+        let r = {
+          ...room,
+          deckVersion: tab.version!,
+          settingsVersion: tab.settings!,
+        };
+        if (changed) r = await updateRoom(r, "deck", { deck: current.deck });
+        if (action === "ready")
+          r = await updateRoom(r, "ready", {
+            ready: changed || !r.seats[r.me].ready,
           });
-          setVersion(current.deckVersion);
-          setSettings(current.settingsVersion);
-        }
-        if (action === "ready") {
-          current = await updateRoom(current, "ready", {
-            ready: changed || !current.seats[current.me].ready,
-          });
-        }
-        setDirty(false);
-        try {
-          sessionStorage.removeItem(draftKey);
-        } catch {}
-        if (current.matchId) go("matches/" + current.matchId);
+        setTab((t) => ({
+          ...t,
+          version: r.deckVersion,
+          settings: r.settingsVersion,
+        }));
+        if (r.matchId) go("matches/" + r.matchId);
         else {
           await reload();
           setMsg(action === "apply" ? "已应用到本局" : "");
         }
-        return;
       }
-      const p = await api<{ id: string }>("presets", {
-        id: action === "copy" ? undefined : preset || undefined,
-        name,
-        deck,
-        revision: presetRevision,
-      });
-      setPreset(p.id);
-      setPresetRevision(
-        action === "copy" || !preset ? 1 : (presetRevision ?? 0) + 1,
-      );
-      await reload();
-      setDirty(needsApply(deck, room));
-      setMsg("个人预设已保存");
     } catch (e) {
       setMsg((e as Error).message);
-      await reload();
+      await (action === "save" ? reloadFields() : reload()).catch(() => {});
     } finally {
       setBusy(false);
     }
   }
-  const stale =
-    room && (version !== room.deckVersion || settings !== room.settingsVersion);
-  const changed = needsApply(deck, room);
-  const caption = room
-    ? room.kind === "ai"
-      ? "开始游戏"
-      : room.seats[room.me].ready && !changed
-        ? "取消准备"
-        : "准备"
-    : "保存预设";
-  const presets = (
-    <div className="prep-presets">
-      <Choice
-        label="个人预设"
-        value={preset}
-        items={[
-          { id: "", name: room ? "本局卡组" : "默认卡组" },
-          ...presetsForMenu,
-        ]}
-        onChange={choosePreset}
-      />
-      <label>
-        预设名称
-        <input
-          value={name}
-          maxLength={32}
-          onChange={(e) => {
-            setName(e.target.value);
-            setDirty(true);
-          }}
-        />
-      </label>
-      <div className="footer-actions">
-        <button disabled={busy} onClick={() => submit("save")}>
-          保存预设
-        </button>
-        {preset && (
-          <>
-            <button disabled={busy} onClick={() => submit("copy")}>
-              另存一套
-            </button>
-            <button disabled={busy} onClick={() => submit("delete")}>
-              删除预设
-            </button>
-          </>
-        )}
-        {room && (
-          <button disabled={busy || !!stale} onClick={() => submit("apply")}>
-            应用到本局
-          </button>
-        )}
-      </div>
-      {!room && (
-        <a href={collection ? "/play/decks" : "/play/decks/collection"}>
-          {collection ? "查看实战卡组" : "管理全部收藏预设"}
-        </a>
-      )}
-      {msg && <p role="status">{msg}</p>}
-    </div>
-  );
   return (
     <>
       {confirmation}
       <Preparation
-        catalog={c}
+        catalog={catalog}
         collection={collection}
-        deck={deck}
-        change={change}
         room={room}
-        busy={busy}
         management={management}
-        presets={presets}
-        caption={caption}
-        readyDisabled={Boolean(
-          room &&
+        deck={current.deck}
+        change={(deck) => edit({ deck })}
+        busy={busy}
+        index={index}
+        switchSlot={switchSlot}
+        name={current.name}
+        rename={(name) => edit({ name })}
+        save={() => submit("save")}
+        apply={() => submit("apply")}
+        legacy={
+          collection &&
+          session.presets.length > 0 && (
+            <Choice
+              label="载入旧版预设"
+              value=""
+              items={[{ id: "", name: "选择旧版预设" }, ...session.presets]}
+              onChange={(id) => {
+                const p = session.presets.find((p) => p.id === id);
+                if (p)
+                  edit({
+                    name: [...p.name].slice(0, 8).join(""),
+                    deck: p.deck,
+                  });
+              }}
+            />
+          )
+        }
+        readyDisabled={
+          !!room &&
           (!online ||
             stale ||
             room.seats.length !== 2 ||
-            room.seats.some((seat) => !seat.online)),
-        )}
+            room.seats.some((s) => !s.online))
+        }
+        caption={
+          room
+            ? room.kind === "ai"
+              ? "开始游戏"
+              : room.seats[room.me].ready && !changed
+                ? "取消准备"
+                : "准备"
+            : "保存预设"
+        }
         submit={() => submit(room ? "ready" : "save")}
         footerMessage={msg}
         back="/play/"
         notice={
-          stale && (
+          modifiedElsewhere ? (
             <div className="notice">
-              房间配置已更新。
-              <button onClick={() => choosePreset("")}>重新载入本局配置</button>
+              这套卡组已有新的保存记录。
+              <button
+                onClick={() => {
+                  setTab((t) => {
+                    const edits = { ...t.edits };
+                    delete edits[index];
+                    return { ...t, edits, roomView: false };
+                  });
+                  setMsg("");
+                }}
+              >
+                载入已保存的卡组
+              </button>
             </div>
+          ) : (
+            stale && (
+              <div className="notice">
+                房间配置已更新。
+                <button
+                  onClick={() => {
+                    setTab((t) => ({
+                      ...t,
+                      version: room!.deckVersion,
+                      settings: room!.settingsVersion,
+                      edits: {
+                        ...t.edits,
+                        [index]: { ...current, deck: room!.deck },
+                      },
+                    }));
+                  }}
+                >
+                  重新载入本局配置
+                </button>
+              </div>
+            )
           )
         }
       />

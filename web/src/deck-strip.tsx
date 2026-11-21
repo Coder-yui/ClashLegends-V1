@@ -7,9 +7,9 @@ export function DeckStrip({ deck, catalog }: { deck: Deck; catalog: Catalog }) {
         const card = catalog.cards.find((x) => x.id === id);
         if (!card)
           return (
-            <div key={id}>
-              <small>旧版卡位 {i + 1}</small>
-              <b>{id}</b>
+            <div key={i}>
+              <small>卡位 {i + 1}</small>
+              <b>{id || "空位"}</b>
             </div>
           );
         return (

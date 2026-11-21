@@ -7,6 +7,8 @@ try {
   const context = await browser.newContext({
     baseURL: process.env.LOBBY_URL ?? "http://127.0.0.1:4317",
     viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    isMobile: true,
   });
   const problems = [];
   context.on("dialog", async (d) => {
@@ -32,6 +34,20 @@ try {
   const button = (name) => page.getByRole("button", { name, exact: true });
   await button("游戏设置").click();
   const dialog = page.getByRole("dialog");
+  const mode = dialog.getByRole("combobox", { name: "开局自动录制" });
+  await mode.tap();
+  await dialog.getByRole("option", { name: "回放和视频" }).tap();
+  assert.match(await mode.innerText(), /回放和视频/);
+  await mode.press("Home");
+  await mode.press("Enter");
+  assert.match(await mode.innerText(), /关闭/);
+  const audio = dialog.getByLabel("录入游戏声音");
+  assert.equal(
+    await audio.evaluate((el) => getComputedStyle(el).appearance),
+    "none",
+  );
+  await audio.tap();
+  assert.equal(await audio.isChecked(), false);
   const binding = dialog.getByRole("button", { name: "绑定手牌 1" });
   const labels = [
     "手牌 1",
@@ -127,50 +143,37 @@ try {
   assert.deepEqual(await readBindings(), expected);
   await button("完成").click();
   await page.getByRole("link", { name: "我的卡组", exact: true }).click();
-  const openPresets = () => button("预设").click();
   await button("随机").click();
   const randomDeck = await page
     .locator(".prep-slots button")
     .evaluateAll((nodes) => nodes.map((n) => n.dataset.card));
   assert.equal(randomDeck.filter(Boolean).length, 8);
   assert.equal(new Set(randomDeck).size, 8);
-  const closePresets = () =>
-    dialog.getByRole("button", { name: "关闭", exact: true }).click();
-  await openPresets();
-  await page.getByLabel("预设名称").fill("未保存草稿");
+  await page.getByLabel("卡组名称").fill("未保存草稿");
   await page.reload();
-  await openPresets();
-  assert.equal(await page.getByLabel("预设名称").inputValue(), "未保存草稿");
-  await closePresets();
+  assert.equal(await page.getByLabel("卡组名称").inputValue(), "未保存草稿");
   await page.getByRole("link", { name: "返回大厅", exact: true }).click();
   await dialog.getByRole("button", { name: "取消", exact: true }).click();
   await page.goBack();
   await page.getByRole("heading", { name: "对战大厅" }).waitFor();
   await page.goForward();
-  await openPresets();
-  assert.equal(await page.getByLabel("预设名称").inputValue(), "未保存草稿");
-  await closePresets();
+  assert.equal(await page.getByLabel("卡组名称").inputValue(), "未保存草稿");
   await button("建筑").click();
   assert.equal(await button("建筑").getAttribute("aria-pressed"), "true");
   await page.getByRole("link", { name: "返回大厅", exact: true }).click();
   await dialog.getByRole("button", { name: "放弃并离开" }).click();
   await page.getByRole("link", { name: "我的卡组", exact: true }).click();
-  await openPresets();
-  assert.equal(await page.getByLabel("预设名称").inputValue(), "我的卡组");
-  await page.getByLabel("预设名称").fill("网页确认测试");
-  await dialog.getByRole("button", { name: "保存预设", exact: true }).click();
-  await dialog.getByText("个人预设已保存").waitFor();
-  await button("删除预设").click();
-  await page
-    .getByRole("dialog", { name: "删除个人预设" })
-    .getByRole("button", { name: "取消", exact: true })
-    .click();
-  await button("删除预设").click();
-  await page
-    .getByRole("dialog", { name: "删除个人预设" })
-    .getByRole("button", { name: "确认删除", exact: true })
-    .click();
-  await dialog.getByText("预设已删除").waitFor();
+  assert.equal(await page.getByLabel("卡组名称").inputValue(), "卡组 1");
+  await page.getByLabel("卡组名称").fill("网页确认测试");
+  await button("保存预设").click();
+  await page.getByText("个人预设已保存").waitFor();
+  await button("卡组 2").tap();
+  assert.equal(await page.locator('.prep-slots [data-card=""]').count(), 8);
+  await button("保存预设").tap();
+  await page.getByText("个人预设已保存").waitFor();
+  await button("卡组 1").focus();
+  await page.keyboard.press("Enter");
+  assert.equal(await page.getByLabel("卡组名称").inputValue(), "网页确认测试");
   assert.deepEqual(problems, []);
   console.log(
     "Web controls, native-dialog guard, audio output/mute, persisted volumes and key bindings, draft navigation and refresh passed",

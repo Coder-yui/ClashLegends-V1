@@ -694,15 +694,23 @@ fieldset label {
 .game-dialog .footer-actions {
   flex-wrap: wrap;
 }
-.settings-trigger {
+.header-actions {
+  display: flex;
+  gap: 6px;
   margin-left: auto;
+}
+.fullscreen-trigger,
+.settings-trigger {
   background: none;
   border-color: var(--line);
   color: var(--gold);
   gap: 5px;
   padding: 6px 10px;
 }
-.settings-trigger + .profile {
+.fullscreen-trigger {
+  min-height: 32px;
+}
+.header-actions + .profile {
   margin-left: 0;
 }
 .choice {
@@ -762,6 +770,7 @@ fieldset label {
 }
 .modal .choice-list {
   position: relative;
+  top: auto;
   width: 100%;
 }
 .game-dialog .volume-controls,
@@ -841,15 +850,21 @@ input[type="range"]::-moz-range-thumb {
   box-shadow: inset 0 0 0 3px #19272e;
 }
 @media (max-width: 700px) {
+  .fullscreen-trigger {
+    padding: 5px;
+  }
   .settings-trigger {
     padding: 5px;
     white-space: nowrap;
     font-size: 12px;
   }
-  .settings-trigger + .profile {
+  .fullscreen-trigger span {
+    display: none;
+  }
+  .header-actions + .profile {
     font-size: 0;
   }
-  .settings-trigger + .profile i {
+  .header-actions + .profile i {
     margin: 0;
   }
   .top {
@@ -956,3 +971,20 @@ input[type="range"]::-moz-range-track {
   .top .brand span {display:none;}
   .top nav a {white-space:nowrap;}
 }
+
+button.profile { position: relative; display: inline-flex; align-items: center; gap: 7px; background: transparent; border: 0; padding: 3px; white-space: nowrap; }
+.profile img, .player-identity img, .avatar-choices img { object-fit: cover; object-position: center 30%; border-radius: 50%; }
+.profile img { width: 32px; height: 32px; border: 1px solid var(--gold); }
+.profile i { position: absolute; left: 27px; bottom: 3px; outline: 2px solid #101b21; }
+.player-card, .player-card label { display: grid; gap: 12px; }
+.player-identity, .avatar-choices { display: flex; align-items: center; gap: 12px; }
+.player-identity img { width: 62px; height: 62px; border: 1px solid var(--gold); }
+.player-identity h3 { margin: 0 0 4px; }
+.player-card fieldset { min-width: 0; border: 1px solid var(--line); }
+.player-card legend { color: var(--gold); }
+.avatar-choices { flex-wrap: wrap; gap: 8px; margin: 4px 0 12px; }
+.avatar-choices button { border-radius: 50%; padding: 2px; line-height: 0; }
+.avatar-choices button[aria-pressed="true"] { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+.avatar-choices img { width: 34px; height: 34px; }
+.player-card textarea { width: 100%; box-sizing: border-box; resize: vertical; font: inherit; color: var(--ink); background: #101b21; border: 1px solid var(--line); padding: 8px; }
+@media(max-width:700px) { button.profile { gap: 0; } }

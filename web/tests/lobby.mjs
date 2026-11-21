@@ -63,7 +63,7 @@ async function open(p, ai) {
   await p.waitForURL("**/rooms/*");
 }
 async function exercise(page, requireBothSkills) {
-  const field = page.locator(".battle-stage canvas[aria-label]");
+  const field = page.locator(".battle-stage .battle-input");
   const hand = page.locator(".battle-hand button");
   await page.waitForSelector(".battle-hand button:enabled");
   assert.equal(await page.locator(".battle-skills kbd").count(), 0);
@@ -278,11 +278,9 @@ try {
     .click();
   await a.getByText(/金币消耗.*冷却/).waitFor();
   await a.getByRole("button", { name: "返回备战" }).click();
-  await a.getByRole("button", { name: "预设", exact: true }).click();
-  await a.getByLabel("预设名称").fill("测试预设");
+  await a.getByLabel("卡组名称").fill("测试预设");
   await a.getByRole("button", { name: "保存预设" }).click();
-  await a.getByRole("dialog").getByText("个人预设已保存").waitFor();
-  await a.getByRole("button", { name: "关闭", exact: true }).click();
+  await a.getByText("个人预设已保存").waitFor();
   await a.getByRole("button", { name: "开始游戏" }).click();
   await a.waitForURL("**/matches/*");
   await a.getByRole("heading", { name: "晴昼峡谷", exact: true }).waitFor();
@@ -327,10 +325,8 @@ try {
     .locator(".prep-slots button")
     .nth(0)
     .dragTo(g.locator(".prep-slots button").nth(1));
-  await g.getByRole("button", { name: "预设", exact: true }).click();
   await g.getByRole("button", { name: "应用到本局" }).click();
-  await g.getByRole("dialog").getByText("已应用到本局").waitFor();
-  await g.getByRole("button", { name: "关闭", exact: true }).click();
+  await g.getByText("已应用到本局").waitFor();
   await g.waitForURL("**/rooms/" + rid);
   const guestRoom = await json(g, "rooms/" + rid);
   assert.equal(guestRoom.deck.cards[0], visible.deck.cards[1]);
@@ -402,7 +398,7 @@ try {
       if (key) {
         await h.keyboard.press(key);
         const field = await h
-          .locator(".battle-stage canvas[aria-label]")
+          .locator(".battle-stage .battle-input")
           .boundingBox();
         if (field) {
           const x = [0.23, 0.31, 0.17, 0.39][push++ % 4];

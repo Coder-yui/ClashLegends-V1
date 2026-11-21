@@ -1,6 +1,9 @@
+import { RecordingSettings } from "./recording-options";
 import { cardArt } from "./card-art";
+import { FullscreenButton } from "./fullscreen";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
+import { usePreparationDrag } from "./use-preparation-drag";
 import { Choice, Modal } from "./controls";
 import type { Card, Catalog, Deck, Room } from "./api";
 import metadata from "./preparation-data.json";
@@ -292,7 +295,13 @@ interface Props {
   busy: boolean;
   submit: () => void;
   caption: string;
-  presets: ReactNode;
+  index: number;
+  switchSlot: (i: number) => void;
+  name: string;
+  rename: (name: string) => void;
+  save: () => void;
+  apply: () => void;
+  legacy?: ReactNode;
   management?: ReactNode;
   notice?: ReactNode;
   readyDisabled: boolean;
@@ -309,7 +318,7 @@ export function Preparation(p: Props) {
     [context, setContext] = useState<Context | null>(null),
     [pending, setPending] = useState(-1);
   const [detail, setDetail] = useState<Card | null>(null),
-    [panel, setPanel] = useState<"room" | "presets" | null>(null);
+    [panel, setPanel] = useState<"room" | "recording" | null>(null);
   const [preferences, setPreferences] = useState<Record<string, string>>({});
   const pool = useRef<HTMLDivElement>(null);
   const filled = deck.cards.filter(Boolean),
@@ -348,26 +357,55 @@ export function Preparation(p: Props) {
   useEffect(() => {
     pool.current?.scrollTo({ top: 0 });
   }, [filter, sort, desc, search]);
-  function assign(c: Card, index: number) {
-    if (index < 0 || deck.cards[index] || filled.includes(c.id)) return;
+  function setSlot(index: number, card?: Card) {
+    if (
+      p.busy ||
+      index < 0 ||
+      index >= deck.cards.length ||
+      (card && filled.includes(card.id))
+    )
+      return;
     const next = structuredClone(deck);
-    next.cards[index] = c.id;
-    if (c.skills.length)
-      next.skills[c.id] = preferences[c.id] ?? c.skills[0].id;
+    const previous = next.cards[index];
+    if (previous) {
+      const skill = next.skills[previous];
+      if (skill) setPreferences((old) => ({ ...old, [previous]: skill }));
+      delete next.skills[previous];
+    }
+    next.cards[index] = card?.id ?? "";
+    if (card?.skills.length)
+      next.skills[card.id] = preferences[card.id] ?? card.skills[0].id;
     p.change(next);
     setPending(-1);
     setContext(null);
   }
-  function remove(c: Card, index: number) {
-    const next = structuredClone(deck);
-    next.cards[index] = "";
-    if (next.skills[c.id])
-      setPreferences((old) => ({ ...old, [c.id]: next.skills[c.id] }));
-    delete next.skills[c.id];
-    p.change(next);
-    setPending(-1);
-    setContext(null);
-  }
+  const { drag, ghost, ghostStyle, boardProps } = usePreparationDrag(
+    p.busy,
+    p.index,
+    empty,
+    () => {
+      setContext(null);
+      setPending(-1);
+    },
+    (source, target) => {
+      const from = source.slot;
+      if (from !== null && deck.cards[from] !== source.id) return;
+      if (target === "pool") {
+        if (from !== null) setSlot(from);
+      } else if (from === null) {
+        const card = byId.get(source.id);
+        if (card) setSlot(target, card);
+      } else {
+        const next = structuredClone(deck);
+        [next.cards[from], next.cards[target]] = [
+          next.cards[target],
+          next.cards[from],
+        ];
+        p.change(next);
+      }
+    },
+  );
+  const draggedCard = drag && byId.get(drag.source.id);
   function randomize() {
     const choices = [...catalog.cards],
       next: Deck = { cards: [], skills: {} };
@@ -388,7 +426,7 @@ export function Preparation(p: Props) {
   }
   function show(c: Card, slot: number | null, anchor: HTMLButtonElement) {
     if (pending >= 0 && slot === null && !deck.cards[pending]) {
-      assign(c, pending);
+      setSlot(pending, c);
       return;
     }
     setPending(-1);
@@ -397,32 +435,68 @@ export function Preparation(p: Props) {
   const other = room?.seats[1 - room.me];
   return (
     <section className="prep-screen" aria-label="备战">
-      <div className="prep-board">
+      {room && (
+        <link rel="preload" as="image" href="/play/match-loading.webp" />
+      )}
+      <div className="prep-board" {...boardProps}>
         <div className="prep-header">
           <a className="prep-tool square" href={p.back} aria-label="返回大厅">
             {icon("back")}
           </a>
           <h1>{room ? "备战" : p.collection ? "收藏预设" : "我的卡组"}</h1>
+          <FullscreenButton className="prep-tool square" />
           {room && (
             <button className="prep-tool" onClick={() => setPanel("room")}>
               房间
             </button>
           )}
-          <button className="prep-tool" onClick={() => setPanel("presets")}>
-            预设
-          </button>
-          <button className="prep-tool" onClick={randomize}>
-            {icon("shuffle")}随机
+          {room && (
+            <button className="prep-tool" disabled={p.busy} onClick={p.save}>
+              保存预设
+            </button>
+          )}
+          <button
+            className="prep-tool square prep-shuffle"
+            aria-label="随机"
+            onClick={randomize}
+          >
+            {icon("shuffle")}
+            <span role="tooltip">随机</span>
           </button>
         </div>
         <div className="prep-loadout">
-          <div className="prep-section-title">
-            <h2>出战卡组</h2>
-            <span>
-              {pending >= 0 && !deck.cards[pending]
-                ? `第 ${pending + 1} 席待选`
-                : `${filled.length} / 8`}
-            </span>
+          <div className="prep-section-title prep-deck-heading">
+            <input
+              className="deck-name"
+              aria-label="卡组名称"
+              title="卡组名称，最多 8 个字"
+              maxLength={8}
+              placeholder={"卡组 " + (p.index + 1)}
+              value={p.name}
+              disabled={p.busy}
+              onChange={(e) => p.rename(e.target.value)}
+            />
+            <span>{filled.length} / 8</span>
+            <div className="prep-switch" role="group" aria-label="切换卡组">
+              {[0, 1, 2, 3].map((i) => (
+                <button
+                  key={i}
+                  className="prep-tool"
+                  aria-label={"卡组 " + (i + 1)}
+                  aria-pressed={p.index === i}
+                  disabled={p.busy}
+                  onClick={() => {
+                    p.switchSlot(i);
+                    setPending(-1);
+                    setContext(null);
+                    setDetail(null);
+                    setPreferences({});
+                  }}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
             <strong>
               {icon("coin")}
               {average}
@@ -434,6 +508,8 @@ export function Preparation(p: Props) {
               return (
                 <div
                   key={i}
+                  data-deck-slot={i}
+                  data-drop-target={drag?.target === i || undefined}
                   className={"prep-cradle" + (i < 2 ? " runic" : "")}
                 >
                   <button
@@ -442,27 +518,7 @@ export function Preparation(p: Props) {
                     aria-label={`${i < 2 ? "主动槽" : "卡位"} ${i + 1} · ${c?.name ?? "空位"}`}
                     aria-pressed={context?.slot === i || pending === i}
                     style={style(c)}
-                    draggable={Boolean(c)}
-                    onDragStart={(e) => {
-                      setContext(null);
-                      e.dataTransfer.setData(
-                        "application/x-deck-slot",
-                        String(i),
-                      );
-                    }}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      const n = e.dataTransfer.getData(
-                        "application/x-deck-slot",
-                      );
-                      if (!/^[0-7]$/.test(n) || Number(n) === i) return;
-                      const d = structuredClone(deck);
-                      [d.cards[i], d.cards[+n]] = [d.cards[+n], d.cards[i]];
-                      p.change(d);
-                      setPending(-1);
-                      setContext(null);
-                    }}
+                    data-drag-source={drag?.source.slot === i || undefined}
                     onClick={(e) => {
                       if (c) show(c, i, e.currentTarget);
                       else {
@@ -480,7 +536,9 @@ export function Preparation(p: Props) {
         </div>
         <div className="prep-library-heading prep-section-title">
           <h2>卡牌库</h2>
-          <span>{cards.length} 张</span>
+          <span>
+            {cards.length} 张<small className="prep-touch-hint">长按拖动</small>
+          </span>
           <input
             type="search"
             aria-label="搜索卡牌"
@@ -523,12 +581,18 @@ export function Preparation(p: Props) {
             </button>
           ))}
         </div>
-        <div className="prep-pool" ref={pool} aria-label="卡牌库">
+        <div
+          className="prep-pool"
+          data-drop-target={drag?.target === "pool" || undefined}
+          ref={pool}
+          aria-label="卡牌库"
+        >
           <div className="prep-collection">
             {cards.map((c) => (
               <button
                 className="prep-card"
                 key={c.id}
+                data-drag-source={drag?.source.id === c.id || undefined}
                 style={style(c)}
                 aria-label={c.name}
                 data-card={c.id}
@@ -543,6 +607,7 @@ export function Preparation(p: Props) {
           </div>
           {!cards.length && <p>没有匹配的卡牌</p>}
         </div>
+        {p.legacy}
         {p.notice}
         <footer className="prep-footer">
           {room && (
@@ -553,6 +618,13 @@ export function Preparation(p: Props) {
                   ? "AI 对战"
                   : (other?.name ?? "等待好友加入")}
               </span>
+              <button
+                disabled={p.busy || filled.length !== 8}
+                onClick={p.apply}
+              >
+                应用到本局
+              </button>
+              <button onClick={() => setPanel("recording")}>录制设置</button>
               {room.kind === "friend" && (
                 <>
                   <span>
@@ -573,16 +645,36 @@ export function Preparation(p: Props) {
           )}
           <button
             className="prep-start prep-tool"
-            disabled={filled.length !== 8 || p.readyDisabled || p.busy}
+            disabled={
+              (!!room && filled.length !== 8) || p.readyDisabled || p.busy
+            }
             onClick={p.submit}
           >
-            {filled.length === 8
+            {!room || filled.length === 8
               ? p.caption
               : `还需选择 ${8 - filled.length} 张卡`}
           </button>
           {p.footerMessage && <small role="status">{p.footerMessage}</small>}
         </footer>
       </div>
+      {drag && draggedCard && (
+        <div
+          ref={ghost}
+          aria-hidden="true"
+          className="prep-card prep-drag-ghost"
+          style={{ ...style(draggedCard), ...ghostStyle }}
+        >
+          <Face
+            card={draggedCard}
+            rune={drag.source.slot !== null && drag.source.slot < 2}
+          />
+        </div>
+      )}
+      {panel === "recording" && (
+        <Modal title="录制设置" onClose={() => setPanel(null)}>
+          <RecordingSettings />
+        </Modal>
+      )}
       {context && (
         <CardMenu
           context={context}
@@ -594,8 +686,8 @@ export function Preparation(p: Props) {
           }}
           act={() =>
             context.slot === null
-              ? assign(context.card, empty)
-              : remove(context.card, context.slot)
+              ? setSlot(empty, context.card)
+              : setSlot(context.slot)
           }
         />
       )}
@@ -610,11 +702,6 @@ export function Preparation(p: Props) {
               p.change({ ...deck, skills: { ...deck.skills, [detail.id]: s } });
           }}
         />
-      )}
-      {panel === "presets" && (
-        <Modal title="个人预设" onClose={() => setPanel(null)}>
-          {p.presets}
-        </Modal>
       )}
       {panel === "room" && (
         <Modal

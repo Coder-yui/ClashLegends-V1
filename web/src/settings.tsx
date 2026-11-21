@@ -1,3 +1,4 @@
+import { RecordingSettings } from "./recording-options";
 import { useState } from "react";
 import {
   actions,
@@ -6,19 +7,45 @@ import {
   defaultBindings,
   keyLabel,
   usePreferences,
+  usePreferenceStatus,
+  flushPreferences,
+  reloadAccountPreferences,
   updatePreferences,
 } from "./preferences";
 import type { Action } from "./preferences";
 import { Modal } from "./controls";
 import { playCue } from "./audio";
 
-export function Settings({ close }: { close: () => void }) {
+export function Settings({
+  close,
+  account,
+}: {
+  close: () => void;
+  account: boolean;
+}) {
+  const status = usePreferenceStatus();
   const p = usePreferences(),
     [capture, setCapture] = useState<Action | null>(null),
     [hint, setHint] = useState("");
   return (
     <Modal title="游戏设置" onClose={close}>
-      <p className="settings-note">设置自动保存在此浏览器。</p>
+      <p className="settings-note">
+        {account
+          ? status || "设置自动保存到当前账号。"
+          : "设置自动保存在此浏览器。"}
+      </p>
+      {account &&
+        status &&
+        status !== "账号设置已保存" &&
+        status !== "正在保存账号设置…" && (
+          <button
+            onClick={() =>
+              void reloadAccountPreferences().catch((e) => setHint(e.message))
+            }
+          >
+            重新载入账号设置
+          </button>
+        )}
       <fieldset className="volume-controls">
         <legend>声音</legend>
         {(
@@ -52,6 +79,7 @@ export function Settings({ close }: { close: () => void }) {
           试听音效
         </button>
       </fieldset>
+      <RecordingSettings />
       <fieldset className="key-controls">
         <legend>对局按键</legend>
         <p>手牌可用鼠标或按键选中。再按同一手牌键取消，选中后点击战场出牌。</p>
@@ -123,7 +151,14 @@ export function Settings({ close }: { close: () => void }) {
         </button>
       </fieldset>
       <div className="footer-actions">
-        <button className="gold" onClick={close}>
+        <button
+          className="gold"
+          onClick={() =>
+            void flushPreferences()
+              .then(close)
+              .catch(() => {})
+          }
+        >
           完成
         </button>
       </div>

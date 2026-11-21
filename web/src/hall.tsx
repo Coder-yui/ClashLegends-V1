@@ -1,4 +1,5 @@
-import { href, defaultDeck } from "./api";
+import { activeSlot, slotFor } from "./player-data";
+import { href } from "./api";
 import type { Catalog, Room, Session } from "./api";
 import { DeckStrip } from "./deck-strip";
 export function Hall({
@@ -12,9 +13,7 @@ export function Hall({
   session: Session;
   setup: (kind: string) => void;
 }) {
-  const preset = session.presets[0]?.battleDeck
-    ? session.presets[0]
-    : undefined;
+  const preset = slotFor(session, catalog, activeSlot(session));
   return (
     <>
       <div className="hero">
@@ -96,11 +95,11 @@ export function Hall({
         </a>
       </div>
       <div className="panel">
-        <h3>{preset?.name ?? "经典初始卡组"}</h3>
-        <DeckStrip
-          catalog={catalog}
-          deck={preset?.battleDeck ?? defaultDeck(catalog)}
-        />
+        <h3>{preset.name}</h3>
+        {session.presets.length > 0 && (
+          <a href={href("decks/collection")}>管理旧版预设</a>
+        )}
+        <DeckStrip catalog={catalog} deck={preset.deck} />
       </div>
     </>
   );

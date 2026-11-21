@@ -220,8 +220,8 @@ body:has(.prep-screen) main > .notice {
   min-height: calc(40 * var(--u));
 }
 .prep-library-heading input {
-  margin-left: auto;
-  width: calc(100 * var(--u));
+  flex: 1;
+  width: 0;
   min-width: 45px;
   padding: 3px 6px;
   font-size: max(11px, calc(15 * var(--u)));
@@ -423,4 +423,88 @@ body:has(.prep-screen) main > .notice {
     flex: none;
     height: 55dvh;
   }
+}
+
+.prep-deck-heading {
+  gap: clamp(3px, calc(10 * var(--u)), 10px);
+  white-space: nowrap;
+}
+.prep-deck-heading .deck-name {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  max-width: 8.5em;
+  color: var(--ink);
+  font-size: max(13px, calc(22 * var(--u)));
+  font-weight: 700;
+  padding: 2px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom-color: #778584;
+  border-radius: 0;
+  text-overflow: ellipsis;
+}
+.prep-deck-heading .deck-name:focus {
+  background: #101e25;
+  border-color: var(--gold);
+}
+.prep-switch {
+  display: flex;
+  gap: max(2px, calc(5 * var(--u)));
+}
+.prep-switch .prep-tool {
+  padding: 0;
+  width: max(24px, calc(38 * var(--u)));
+  min-height: max(26px, calc(34 * var(--u)));
+}
+.prep-switch .prep-tool[aria-pressed="true"] {
+  color: #ffdf94;
+  outline: 1px solid #c6a35f;
+  outline-offset: -2px;
+}
+.prep-shuffle {
+  position: relative;
+}
+.prep-shuffle [role="tooltip"] {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 2;
+  padding: 4px 8px;
+  background: #101d25;
+  border: 1px solid #897858;
+  pointer-events: none;
+  visibility: hidden;
+}
+.prep-shuffle:hover [role="tooltip"],
+.prep-shuffle:focus-visible [role="tooltip"] {
+  visibility: visible;
+}
+
+.prep-board button.prep-card {
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.prep-board button.prep-card:not(.empty) { cursor: grab; }
+.prep-board button.prep-card > * { pointer-events: none; }
+.prep-slots button.prep-card { touch-action: none; }
+.prep-pool button.prep-card { touch-action: pan-y; }
+.prep-card[data-drag-source] { opacity: 0.45; }
+.prep-cradle[data-drop-target] .prep-card,
+.prep-pool[data-drop-target] {
+  outline: 2px solid var(--gold);
+  outline-offset: -2px;
+}
+.prep-drag-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0.92;
+  box-shadow: 0 5px 14px #0009;
+}
+.prep-touch-hint { display: none; }
+@media (any-pointer: coarse) {
+  .prep-touch-hint { display: block; font-size: 10px; }
 }

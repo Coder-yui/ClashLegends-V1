@@ -1,7 +1,11 @@
 import { Choice, Modal } from "./controls";
 import { Settings } from "./settings";
+import { FullscreenButton } from "./fullscreen";
 import { installLobbySounds } from "./audio";
 import { useLocation, installNavigation } from "./navigation";
+import { PlayerProfile, avatarImage } from "./profile";
+import { configurePreferences } from "./preferences";
+import { fieldsFor, guestKey, roomLoadout } from "./player-data";
 import { Hall } from "./hall";
 import { RoomPage } from "./room-page";
 import { Recordings, ReplayPage } from "./recordings";
@@ -30,6 +34,7 @@ function App({ url }: { url: string }) {
     .replace(/^\/play\/?/, "")
     .split("/");
   const invite = currentUrl.searchParams.get("invite");
+  const [profileOpen, showProfile] = useState(false);
   const [settingsOpen, showSettings] = useState(false);
   const [session, setSession] = useState<Session>(),
     [catalog, setCatalog] = useState<Catalog>(),
@@ -85,6 +90,8 @@ function App({ url }: { url: string }) {
       go("rooms/" + r!.id);
       return;
     }
+    s.fields = fieldsFor(s);
+    configurePreferences(s);
     setSession(s);
     setRoom(r);
     setMatch(m);
@@ -142,6 +149,21 @@ function App({ url }: { url: string }) {
       ws?.close();
     };
   }, [boot, refresh]);
+  function readGuestFields() {
+    setSession((s) => (s && !s.role ? { ...s, fields: fieldsFor(s) } : s));
+  }
+  async function reloadFields() {
+    if (session?.role) await refresh();
+    else readGuestFields();
+  }
+  useEffect(() => {
+    const sync = (e: StorageEvent) => {
+      if (e.key === "clashlegends.identity") location.reload();
+      if (e.key === guestKey || e.key === null) readGuestFields();
+    };
+    window.addEventListener("storage", sync);
+    return () => window.removeEventListener("storage", sync);
+  }, [refresh]);
   async function run(fn: () => Promise<void>) {
     if (lock.current) return;
     lock.current = true;
@@ -169,10 +191,11 @@ function App({ url }: { url: string }) {
       setError("请输入 8 位房间邀请码");
       return;
     }
+    const deck = session && catalog ? roomLoadout(session, catalog) : undefined;
     const r =
       dialog === "join"
-        ? await api<Room>("join", { code })
-        : await api<Room>("rooms", { kind: dialog, mode, map });
+        ? await api<Room>("join", { code, deck })
+        : await api<Room>("rooms", { kind: dialog, mode, map, deck });
     if (mounted.current && url === location.href)
       go(r.matchId ? "matches/" + r.matchId : "rooms/" + r.id);
   }
@@ -209,6 +232,10 @@ function App({ url }: { url: string }) {
     </div>
   );
   const hall = !page;
+  const workbench =
+    catalog?.workbench &&
+    session &&
+    (!session.accountsEnabled || session.role === "admin");
   if (page === "matches" && (!catalog || !session || (!match && !boot))) {
     return <MatchLoading error={err} />;
   }
@@ -237,7 +264,7 @@ function App({ url }: { url: string }) {
             >
               我的卡组
             </a>
-            {catalog?.workbench && (
+            {workbench && (
               <a
                 href={href("workbench")}
                 className={page === "workbench" ? "active" : ""}
@@ -246,17 +273,30 @@ function App({ url }: { url: string }) {
               </a>
             )}
           </nav>
+          <div className="header-actions">
+            <FullscreenButton className="fullscreen-trigger" showText />
+            <button
+              className="settings-trigger"
+              disabled={!session}
+              onClick={() => showSettings(true)}
+              aria-label="游戏设置"
+            >
+              <span aria-hidden="true">⚙</span> 设置
+            </button>
+          </div>
           <button
-            className="settings-trigger"
-            onClick={() => showSettings(true)}
-            aria-label="游戏设置"
+            className="profile"
+            aria-label="玩家资料"
+            disabled={!session}
+            onClick={() => showProfile(true)}
           >
-            <span aria-hidden="true">⚙</span> 设置
-          </button>
-          <div className="profile">
+            <img
+              src={avatarImage(session?.fields?.profile?.avatar, catalog)}
+              alt=""
+            />
             <i className={online ? "online" : ""} />
             {session?.name ?? "连接中"}
-          </div>
+          </button>
         </div>
       </header>
       <main>
@@ -277,7 +317,7 @@ function App({ url }: { url: string }) {
           </div>
         ) : hall ? (
           <Hall catalog={catalog} room={room} session={session} setup={setup} />
-        ) : page === "workbench" && catalog.workbench ? (
+        ) : page === "workbench" && workbench ? (
           <Suspense fallback={<p>正在打开工作台…</p>}>
             <Workbench catalog={catalog} />
           </Suspense>
@@ -287,14 +327,17 @@ function App({ url }: { url: string }) {
           <Recordings catalog={catalog} account={!!session.role} />
         ) : page === "decks" ? (
           <Editor
+            key={session.name}
             catalog={catalog}
             session={session}
             collection={key === "collection"}
+            reloadFields={reloadFields}
             reload={refresh}
           />
         ) : page === "rooms" && room ? (
           room.status === "open" ? (
             <Editor
+              key={session.name}
               catalog={catalog}
               session={session}
               room={room}
@@ -312,6 +355,7 @@ function App({ url }: { url: string }) {
                   notify={setToast}
                 />
               }
+              reloadFields={reloadFields}
               reload={refresh}
             />
           ) : (
@@ -340,7 +384,18 @@ function App({ url }: { url: string }) {
           </div>
         )}
       </main>
-      {settingsOpen && <Settings close={() => showSettings(false)} />}
+      {profileOpen && session && catalog && (
+        <PlayerProfile
+          key={session.name}
+          session={session}
+          catalog={catalog}
+          reload={reloadFields}
+          close={() => showProfile(false)}
+        />
+      )}
+      {settingsOpen && (
+        <Settings account={!!session?.role} close={() => showSettings(false)} />
+      )}
       {dialog && catalog && (
         <Modal
           title={
