@@ -509,14 +509,36 @@ export default function PhotoStudio({
                 onChange={(v) => update({ [key]: v })}
               />
             ))}
-            <label>
-              背景色
-              <input
-                type="color"
-                value={shot.background}
-                onChange={(e) => update({ background: e.target.value })}
-              />
-            </label>
+            <details className="photo-color">
+              <summary>
+                背景色 <span style={{ backgroundColor: shot.background }} />{" "}
+                {shot.background}
+              </summary>
+              {["红", "绿", "蓝"].map((name, i) => {
+                const start = 1 + i * 2;
+                return (
+                  <Slider
+                    key={name}
+                    name={name}
+                    min={0}
+                    max={255}
+                    step={1}
+                    value={parseInt(
+                      shot.background.slice(start, start + 2),
+                      16,
+                    )}
+                    onChange={(v) =>
+                      update({
+                        background:
+                          shot.background.slice(0, start) +
+                          v.toString(16).padStart(2, "0") +
+                          shot.background.slice(start + 2),
+                      })
+                    }
+                  />
+                );
+              })}
+            </details>
             <label>
               <input
                 type="checkbox"

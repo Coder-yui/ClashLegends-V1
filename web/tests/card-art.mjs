@@ -81,6 +81,12 @@ try {
         await page.getByLabel("定格时间（秒）").fill("0.25");
       }
       await button("机位与光线").click();
+      await page.locator(".photo-color summary").click();
+      await page.getByRole("slider", { name: "红", exact: true }).fill("204");
+      assert.match(
+        await page.locator(".photo-color summary").innerText(),
+        /#cc[0-9a-f]{4}/i,
+      );
       await page.getByLabel("透明背景").check();
       await page.getByLabel("水平环绕").fill("24");
       await button("成片与方案").click();

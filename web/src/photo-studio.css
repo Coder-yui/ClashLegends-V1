@@ -24,6 +24,14 @@
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
+.photo-color summary span {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1.5em;
+  height: 1em;
+  border: 1px solid var(--muted);
+  border-radius: 2px;
+}
 .photo-tools .choice {
   min-width: 0;
 }

@@ -97,7 +97,7 @@ export function Choice({
 }: {
   label: string;
   value: string;
-  items: Item[];
+  items: (Item & { disabled?: boolean })[];
   onChange: (id: string) => void;
   compact?: boolean;
 }) {
@@ -107,12 +107,14 @@ export function Choice({
     trigger = useRef<HTMLButtonElement>(null),
     id = useId();
   const selected = items.findIndex((x) => x.id === value);
+  const enabled = items.flatMap((item, i) => (item.disabled ? [] : [i]));
+  const initial = enabled.includes(selected) ? selected : enabled[0];
   function toggle() {
-    setActive(Math.max(0, selected));
+    setActive(initial);
     setOpen(!open);
   }
   function choose(i: number) {
-    if (!items[i]) return;
+    if (!items[i] || items[i].disabled) return;
     setOpen(false);
     trigger.current?.focus();
     onChange(items[i].id);
@@ -147,6 +149,7 @@ export function Choice({
         aria-expanded={open}
         aria-controls={open ? id : undefined}
         aria-activedescendant={open ? id + "-" + active : undefined}
+        disabled={!enabled.length}
         ref={trigger}
         onClick={toggle}
         onKeyDown={(e) => {
@@ -168,20 +171,14 @@ export function Choice({
           if (["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) {
             e.preventDefault();
             setOpen(true);
-            const base = open ? active : Math.max(0, selected);
-            setActive(
+            const index = enabled.indexOf(open ? active : initial);
+            const next =
               e.key === "Home"
                 ? 0
                 : e.key === "End"
-                  ? items.length - 1
-                  : Math.max(
-                      0,
-                      Math.min(
-                        items.length - 1,
-                        base + (e.key === "ArrowDown" ? 1 : -1),
-                      ),
-                    ),
-            );
+                  ? enabled.length - 1
+                  : index + (e.key === "ArrowDown" ? 1 : -1);
+            setActive(enabled[Math.max(0, Math.min(enabled.length - 1, next))]);
           }
         }}
       >
@@ -192,6 +189,7 @@ export function Choice({
           {items.map((item, i) => (
             <button
               type="button"
+              disabled={item.disabled}
               tabIndex={-1}
               key={item.id}
               id={id + "-" + i}
