@@ -1,14 +1,35 @@
-import { useEffect, useRef, useState } from "react";
-import type { Match } from "./api";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { Catalog, Deck, Match } from "./api";
+import { cardArt } from "./card-art";
 import type { ModelResources } from "./battle-models";
 
+function openingImages(catalog: Catalog, map: string, deck: Deck) {
+  const images = new Set<string>();
+  const terrain = catalog.maps.find((m) => m.id === map)?.terrain;
+  if (terrain) images.add(terrain);
+  for (const [slot, id] of deck.cards.entries()) {
+    const card = catalog.cards.find((c) => c.id === id);
+    if (!card) continue;
+    images.add(cardArt(card, true));
+    const skill = card.skills.find((s) => s.id === deck.skills[id]);
+    if (slot < 2 && skill?.image) images.add(skill.image);
+  }
+  return [...images];
+}
+
 // The match owns its bodies through the result screen. Retrying reuses successful downloads.
-export function useMatchAssets(match: Match, live: boolean) {
+export function useMatchAssets(match: Match, catalog: Catalog, live: boolean) {
   const owner = useRef<ModelResources | undefined>(undefined);
   const [resources, setResources] = useState<ModelResources>();
   const [failed, setFailed] = useState(false);
+  const [completed, setCompleted] = useState(0);
   const [attempt, setAttempt] = useState(0);
   const manifest = match.modelResources?.join(",") ?? "";
+  const images = useMemo(
+    () => openingImages(catalog, match.map, match.deck),
+    [catalog, match.map, match.deck],
+  );
+  const imageList = images.join("\n");
   useEffect(() => {
     setResources(undefined);
     return () => {
@@ -20,11 +41,32 @@ export function useMatchAssets(match: Match, live: boolean) {
     if (!live) return;
     let active = true;
     setFailed(false);
+    setCompleted(0);
     async function prepare() {
       const { ModelResources } = await import("./battle-models");
       if (!active) return;
       const assets = (owner.current ??= new ModelResources(match.assetVersion));
-      await assets.prepare(manifest ? manifest.split(",") : []);
+      let models = 0,
+        pictures = 0;
+      function progress() {
+        if (active) setCompleted(models + pictures);
+      }
+      await Promise.all([
+        assets.prepare(manifest ? manifest.split(",") : [], (count) => {
+          models = count;
+          progress();
+        }),
+        ...imageList
+          .split("\n")
+          .filter(Boolean)
+          .map(async (url) => {
+            const image = new Image();
+            image.src = url;
+            await image.decode();
+            pictures++;
+            progress();
+          }),
+      ]);
       if (active) setResources(assets);
     }
     void prepare().catch(() => {
@@ -33,6 +75,12 @@ export function useMatchAssets(match: Match, live: boolean) {
     return () => {
       active = false;
     };
-  }, [match.id, match.assetVersion, manifest, live, attempt]);
-  return { resources, failed, retry: () => setAttempt((n) => n + 1) };
+  }, [match.id, match.assetVersion, manifest, imageList, live, attempt]);
+  return {
+    resources,
+    failed,
+    completed,
+    total: images.length + (match.modelResources?.length ?? 0),
+    retry: () => setAttempt((n) => n + 1),
+  };
 }

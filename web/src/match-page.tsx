@@ -1,11 +1,18 @@
+import { bookmarkReplay } from "./player-data";
 import { cardArt } from "./card-art";
+import { FullscreenButton } from "./fullscreen";
 import { useMatchAssets } from "./use-match-assets";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { MatchLoading } from "./match-loading";
 import type { CSSProperties } from "react";
-import { href } from "./api";
+import { api, href, go } from "./api";
+import { Modal } from "./controls";
+import { RecordingSettings } from "./recording-options";
+import { useVideo, videoSupported } from "./video-recording";
 import type { Card, Catalog, Match, Result, Session } from "./api";
 import { ActiveSkillButton } from "./active-skill-button";
 import { BATTLE_PROTOCOL, BattleEvents } from "./presentation";
+import { useDeploymentInput } from "./use-deployment-input";
 import { Battlefield, type Frame } from "./battle-field";
 import { actions, boundAction, keyLabel, usePreferences } from "./preferences";
 import metadata from "./preparation-data.json";
@@ -70,7 +77,23 @@ export function MatchPage({
   const [pendingSlot, setPendingSlot] = useState<number | null>(null);
   const socket = useRef<WebSocket | null>(null);
   const inflight = useRef<"receipt" | "frame" | null>(null);
-  const { bindings } = usePreferences();
+  const { bindings, recording: recordOptions } = usePreferences();
+  const video = useVideo(match, catalog);
+  const [recordMenu, showRecordMenu] = useState(false);
+  const [saved, setSaved] = useState(false),
+    [recordError, setRecordError] = useState("");
+  const startedRecording = useRef(false);
+  async function saveReplay(open = false) {
+    try {
+      if (session.role) await api("recordings/" + match.id, {});
+      else bookmarkReplay(match.id);
+      setSaved(true);
+      setRecordError("");
+      if (open) go("recordings/" + match.id);
+    } catch (e) {
+      setRecordError((e as Error).message);
+    }
+  }
   const result = match.result ?? ended;
   const joinedStream = useRef<string | undefined>(undefined);
   const live = match.playable && match.status !== "withdrawn" && !result;
@@ -82,19 +105,27 @@ export function MatchPage({
   const {
     resources,
     failed,
+    completed,
+    total,
     retry: retryAssets,
-  } = useMatchAssets(match, receive);
+  } = useMatchAssets(match, catalog, receive);
   const [online, setOnline] = useState(false);
-  const [protocolError, setProtocolError] = useState(false);
-  const [greeted, setGreeted] = useState<WebSocket>();
+  const [protocolError, setProtocolError] = useState("");
+  const [greeted, setGreeted] = useState<{
+    socket: WebSocket;
+    preview: boolean;
+  }>();
+  const [prepared, setPrepared] = useState(false);
+  const scenePrepared = useCallback(() => setPrepared(true), []);
   const baselineId = useRef(0);
+  const readyForSocket = !!resources && (!greeted?.preview || prepared);
   useEffect(() => {
-    if (resources && greeted?.readyState === WebSocket.OPEN) {
-      greeted.send(
+    if (readyForSocket && greeted?.socket.readyState === WebSocket.OPEN) {
+      greeted.socket.send(
         JSON.stringify({ type: "ready", protocol: BATTLE_PROTOCOL }),
       );
     }
-  }, [resources, greeted]);
+  }, [readyForSocket, greeted]);
   useEffect(() => {
     if (!receive) return;
     joinedStream.current = match.id;
@@ -113,14 +144,16 @@ export function MatchPage({
         if (message.type === "connected" || message.type === "frame") {
           if (message.protocol !== BATTLE_PROTOCOL) {
             done = true;
-            setProtocolError(true);
+            setProtocolError(
+              `网页使用对局协议 ${BATTLE_PROTOCOL}，服务端使用 ${message.protocol ?? "未知版本"}。请确认大厅服务与网页已更新到同一版本。`,
+            );
             ws.close();
             return;
           }
         }
         if (message.type === "connected") {
           setOnline(true);
-          setGreeted(ws);
+          setGreeted({ socket: ws, preview: message.preview === true });
           return;
         }
         if (message.type === "receipt") {
@@ -181,7 +214,21 @@ export function MatchPage({
   const card = (id: string) => catalog.cards.find((c) => c.id === id);
   const selected =
     selection?.version === frame?.version ? selection?.slot : undefined;
-  const ready = resources && connected && frame?.started && !result;
+  const entered = resources && prepared && frame?.started && !protocolError;
+  const ready = entered && connected && !result;
+  useEffect(() => {
+    if (!entered || startedRecording.current || result) return;
+    startedRecording.current = true;
+    if (recordOptions.mode === "both" || recordOptions.mode === "replay")
+      void saveReplay();
+    if (recordOptions.mode === "both" || recordOptions.mode === "video")
+      video.start();
+  }, [entered, result, recordOptions.mode]);
+  useEffect(() => {
+    if (!result || !video.recording) return;
+    const timer = window.setTimeout(video.stop, 8000);
+    return () => clearTimeout(timer);
+  }, [!!result, video.recording]);
   function send(command: object) {
     if (
       !ready ||
@@ -199,11 +246,32 @@ export function MatchPage({
       }),
     );
   }
-  function pick(slot: number) {
-    if (!ready || !frame || inflight.current) return;
-    select(selected === slot ? null : { slot, version: frame.version });
+  function selectSlot(slot?: number) {
+    if (!frame) return;
+    select(slot === undefined ? null : { slot, version: frame.version });
     setHint("");
   }
+  function pick(slot: number) {
+    if (ready && !inflight.current)
+      selectSlot(selected === slot ? undefined : slot);
+  }
+  const input = useDeploymentInput({
+    frame,
+    me: match.me,
+    selected: ready ? selected : undefined,
+    select: selectSlot,
+    blocked: setHint,
+    canPlay: () => !!ready && !inflight.current,
+    skillFor(slot) {
+      const id = frame?.hand[slot];
+      if (!id || !match.deck.cards.slice(0, 2).includes(id)) return;
+      const source = id === "mirror" ? frame?.lastCard : id;
+      return source ? match.deck.skills[source] : undefined;
+    },
+    play(slot, { x, y }) {
+      if (frame) send({ action: "play", slot, version: frame.version, x, y });
+    },
+  });
   function cast(slot: number) {
     if (!ready || !frame || inflight.current) return;
     const c = card(frame.activeCards?.[slot] ?? match.deck.cards[slot])!;
@@ -260,6 +328,11 @@ export function MatchPage({
           ))
       )
         return;
+      if (e.key === "Escape" && selected !== undefined) {
+        e.preventDefault();
+        pick(selected);
+        return;
+      }
       const action = boundAction(e.code);
       if (!action) return;
       e.preventDefault();
@@ -306,6 +379,8 @@ export function MatchPage({
               resources={resources}
               frame={frame}
               me={match.me}
+              onPaint={video.paint}
+              onPrepared={scenePrepared}
               play={() => {}}
             />
           )}
@@ -329,11 +404,21 @@ export function MatchPage({
             </p>
           )}
           <p>对手 · {match.opponent}</p>
+          {(recordError || video.message) && (
+            <p role="status">{recordError || video.message}</p>
+          )}
           <div className="footer-actions">
             <a className="outline" href={href()}>
               返回大厅
             </a>
             {roomLink}
+            {match.playable && result && (
+              <button onClick={() => void saveReplay(true)}>观看回放</button>
+            )}
+            <a className="outline" href={href("recordings")}>
+              我的录制
+            </a>
+            <FullscreenButton className="outline" showText />
           </div>
         </div>
       </section>
@@ -346,11 +431,59 @@ export function MatchPage({
   const placement = selectedCard?.id === "mirror" ? mirrorSource : selectedCard;
   return (
     <section className="battle-layout" style={stageStyle}>
-      <div className="battle-top">
+      {!entered && (
+        <MatchLoading
+          back={roomLink}
+          error={protocolError || (failed ? "本局资源加载失败" : "")}
+          status={
+            !resources
+              ? "正在准备模型、动作和战场图片"
+              : !online
+                ? "正在连接战场…"
+                : !frame
+                  ? "正在同步战场…"
+                  : !prepared
+                    ? "正在准备战场画面、音效和特效…"
+                    : "等待另一位玩家进入战场"
+          }
+          progress={!resources && total ? { completed, total } : undefined}
+        >
+          {failed && !protocolError && (
+            <button onClick={retryAssets}>重新加载资源</button>
+          )}
+          {protocolError && (
+            <button onClick={() => location.reload()}>刷新页面</button>
+          )}
+        </MatchLoading>
+      )}
+      {recordMenu && (
+        <Modal title="对局录制" onClose={() => showRecordMenu(false)}>
+          <div className="footer-actions">
+            <button disabled={saved} onClick={() => void saveReplay()}>
+              {saved ? "回放已保存" : "保存对局回放"}
+            </button>
+            <button
+              disabled={!videoSupported()}
+              onClick={video.recording ? video.stop : video.start}
+            >
+              {video.recording ? "停止录制" : "录制视频"}
+            </button>
+          </div>
+          {(video.message || recordError) && (
+            <p role="status">{recordError || video.message}</p>
+          )}
+          <RecordingSettings />
+        </Modal>
+      )}
+      <div className="battle-top" inert={!entered}>
         <div className="battle-tools">
           {roomLink}
           <button aria-label="游戏设置" onClick={settings}>
             ⚙
+          </button>
+          <FullscreenButton />
+          <button aria-label="对局录制" onClick={() => showRecordMenu(true)}>
+            {video.recording ? "● 录像中" : "录制"}
           </button>
         </div>
         <div className="battle-title">
@@ -366,46 +499,21 @@ export function MatchPage({
           {duration(frame?.remaining ?? 3700)}
         </strong>
       </div>
-      <div key="battlefield" className="battle-stage">
-        {frame && resources ? (
+      <div key="battlefield" className="battle-stage" inert={!entered}>
+        {frame && resources && (
           <Battlefield
             resources={resources}
             frame={frame}
             me={match.me}
-            connected={connected}
+            connected={connected && frame.started}
             deck={match.deck.cards}
-            selection={selected}
-            play={(x, y) => {
-              if (selected !== undefined)
-                send({
-                  action: "play",
-                  slot: selected,
-                  version: selection!.version,
-                  x,
-                  y,
-                });
-            }}
+            onPaint={video.paint}
+            onPrepared={scenePrepared}
+            deployment={input.board}
           />
-        ) : (
-          <div className="battle-loading">
-            {protocolError ? (
-              "对局协议已更新，请刷新页面"
-            ) : failed ? (
-              <>
-                <span role="alert">本局模型加载失败</span>{" "}
-                <button onClick={retryAssets}>重新加载模型</button> {roomLink}
-              </>
-            ) : !online ? (
-              "正在连接战场…"
-            ) : !resources ? (
-              "已连接，正在准备本局模型与动作…"
-            ) : (
-              "正在同步战场…"
-            )}
-          </div>
         )}
       </div>
-      <aside className="battle-controls">
+      <aside className="battle-controls" inert={!entered}>
         {frame && (
           <>
             <div className="battle-next">
@@ -434,7 +542,7 @@ export function MatchPage({
                     className={
                       "battle-card" + (frame.gold < cost ? " unaffordable" : "")
                     }
-                    onClick={() => pick(i)}
+                    {...input.hand(i)}
                   >
                     <BattleCardFace
                       card={c}
@@ -490,18 +598,12 @@ export function MatchPage({
           </>
         )}
         <p className="battle-hint" role="status">
-          {!connected
-            ? failed || protocolError
-              ? ""
-              : hint || (online ? "正在准备战场" : "正在连接战场…")
-            : !ready
-              ? "等待另一位玩家进入战场"
+          {!entered
+            ? ""
+            : !connected
+              ? "正在重新连接战场…"
               : hint ||
-                (placement
-                  ? placement.type === "spell"
-                    ? "点击战场选择法术落点"
-                    : "点击战场部署"
-                  : "")}
+                (placement ? "点击战场，或拖牌到落点松手" : "")}
         </p>
       </aside>
     </section>

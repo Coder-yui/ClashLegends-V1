@@ -28,6 +28,7 @@ try {
           });
         }
         send(data) {
+          if (JSON.parse(data).type === "ready") window.sentReady = true;
           if (JSON.parse(data).type === "ready" && window.holdReady) {
             window.deferredReady = data;
             return;
@@ -101,6 +102,12 @@ try {
     wanted,
     release;
   const held = new Promise((r) => (release = r));
+  let finishAudio;
+  const slowAudio = new Promise((resolve) => (finishAudio = resolve));
+  await red.route("**/media/audio/*.flac", async (route) => {
+    await slowAudio;
+    await route.continue();
+  });
   await blue.route("**/media/models/*.glb*", async (route) => {
     const name = new URL(route.request().url()).pathname
       .split("/")
@@ -118,9 +125,15 @@ try {
   );
   await blue
     .getByRole("alert")
-    .filter({ hasText: "本局模型加载失败" })
+    .filter({ hasText: "本局资源加载失败" })
     .waitFor();
+  await red.getByText("正在准备战场画面、音效和特效…").waitFor();
+  assert.equal(await red.evaluate(() => !!window.sentReady), false);
+  finishAudio();
   await red.getByText("等待另一位玩家进入战场").waitFor();
+  assert.equal(await red.locator(".battle-controls").isVisible(), false);
+  assert.equal(await red.evaluate(() => window.frame.tick), 0);
+  assert.equal(await blue.locator(".match-loading").isVisible(), true);
   assert.equal((await api(blue, path)).status, "pending");
   await blue.evaluate(() =>
     window.battleSocket.send(
@@ -138,7 +151,7 @@ try {
     window.battleSocket.close();
   });
   await red.waitForFunction(() => !!window.deferredReady);
-  await blue.getByRole("button", { name: "重新加载模型" }).click();
+  await blue.getByRole("button", { name: "重新加载资源" }).click();
   await blue.getByText("等待另一位玩家进入战场").waitFor();
   assert.equal((await api(blue, path)).status, "pending");
   await red.evaluate(() => {

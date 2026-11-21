@@ -4,7 +4,9 @@ import { installLobbySounds } from "./audio";
 import { useLocation, installNavigation } from "./navigation";
 import { Hall } from "./hall";
 import { RoomPage } from "./room-page";
+import { Recordings, ReplayPage } from "./recordings";
 import { MatchPage } from "./match-page";
+import { MatchLoading } from "./match-loading";
 import {
   lazy,
   Suspense,
@@ -58,7 +60,9 @@ function App({ url }: { url: string }) {
     const rid = page === "rooms" && key !== s.roomId ? undefined : s.roomId;
     const r = rid ? await api<Room>("rooms/" + rid) : undefined;
     const m =
-      page === "matches" ? await api<Match>("matches/" + key) : undefined;
+      page === "matches" || (page === "recordings" && key)
+        ? await api<Match>("matches/" + key)
+        : undefined;
     if (!mounted.current || url !== location.href || n !== sequence.current)
       return;
     const old = previous.current;
@@ -73,6 +77,7 @@ function App({ url }: { url: string }) {
       return;
     }
     if (
+      page === "matches" &&
       m?.status === "withdrawn" &&
       matchIsCurrentRoom(r, m) &&
       !new URLSearchParams(location.search).has("history")
@@ -204,6 +209,9 @@ function App({ url }: { url: string }) {
     </div>
   );
   const hall = !page;
+  if (page === "matches" && (!catalog || !session || (!match && !boot))) {
+    return <MatchLoading error={err} />;
+  }
   return (
     <>
       <header>
@@ -273,6 +281,10 @@ function App({ url }: { url: string }) {
           <Suspense fallback={<p>正在打开工作台…</p>}>
             <Workbench catalog={catalog} />
           </Suspense>
+        ) : page === "recordings" && key && match ? (
+          <ReplayPage match={match} catalog={catalog} />
+        ) : page === "recordings" && !key ? (
+          <Recordings catalog={catalog} account={!!session.role} />
         ) : page === "decks" ? (
           <Editor
             catalog={catalog}

@@ -34,6 +34,11 @@ export function Hall({
           </p>
         </div>
       </div>
+      <div className="recordings-link">
+        <a href={href("recordings")} className="outline">
+          我的录制
+        </a>
+      </div>
       {room && session.roomId && (
         <div className="resume">
           <strong>

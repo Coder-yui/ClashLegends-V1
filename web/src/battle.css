@@ -6,6 +6,65 @@ body:has(.battle-layout) {
 body:has(.battle-layout) #root > header {
   display: none;
 }
+.match-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: #fff6e5;
+  background:
+    linear-gradient(#08161b80, #08161bb5),
+    url("/match-loading.webp") center / cover,
+    #243e43;
+}
+.loading-tools {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  display: flex;
+  gap: 6px;
+}
+.loading-status {
+  text-align: center;
+  text-shadow: 0 2px 8px #071318;
+  max-width: 32rem;
+}
+.loading-status h1 {
+  font-size: clamp(25px, 4vw, 36px);
+  margin-bottom: 12px;
+}
+.loading-progress {
+  overflow: hidden;
+  border-radius: 4px;
+  background: #42555b;
+  width: min(220px, 68vw);
+  height: 6px;
+  margin: 12px auto 0;
+}
+.loading-progress > span {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+}
+.loading-progress:not([aria-valuenow]) > span {
+  width: 38%;
+  animation: preload-sweep 1.4s ease-in-out infinite alternate;
+}
+@keyframes preload-sweep {
+  to { transform: translateX(163%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loading-progress > span { animation: none !important; }
+}
+.loading-status .footer-actions {
+  justify-content: center;
+}
+.battle-layout:has(> .match-loading) > .battle-top,
+.battle-layout:has(> .match-loading) > .battle-controls {
+  visibility: hidden;
+}
 .battle-layout {
   --u: min(calc(100vw / 720), calc(100dvh / 1280));
   --tray-width: calc(720 * var(--u));
@@ -516,4 +575,132 @@ body:has(.battle-layout) #root > header {
 }
 .battle-result .footer-actions {
   justify-content: center;
+}
+.recordings-link {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+.recording-options {
+  border: 1px solid var(--line);
+  padding: 12px;
+  margin: 16px 0;
+}
+.recording-options label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  min-height: 32px;
+}
+.replay-buttons .choice-list {
+  top: auto;
+  bottom: 100%;
+  max-height: min(220px, 50dvh);
+}
+.recordings h2 {
+  margin: 24px 0 8px;
+}
+.clip-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.clip-row > div {
+  flex: 1;
+  min-width: 12rem;
+}
+.clip-row small {
+  display: block;
+}
+.game-dialog:has(.clip-player) {
+  width: min(90vw, max(480px, 140dvh));
+}
+.clip-actions input[type="range"] { width: 5rem; }
+.clip-actions .choice { margin: 0; }
+.clip-actions .choice-list {
+  position: absolute;
+  bottom: 100%;
+  top: auto;
+}
+.clip-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.clip-player video {
+  width: 100%;
+  display: block;
+  max-height: max(30dvh, calc(100dvh - 215px));
+  margin-bottom: 8px;
+  background: #10191c;
+}
+.replay-layout {
+  --tray-height: 0px;
+}
+.replay-header,
+.replay-bar,
+.replay-status {
+  position: absolute;
+  z-index: 2;
+  background: #10232be8;
+  border: 1px solid #53665e;
+  color: #f5efde;
+  border-radius: 4px;
+}
+.replay-header {
+  top: max(8px, env(safe-area-inset-top));
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 8px;
+}
+.replay-bar {
+  bottom: max(8px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px;
+  width: min(96%, 480px);
+}
+.replay-status {
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+}
+.replay-buttons,
+.replay-time {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+}
+.replay-time {
+  font: 13px monospace;
+  margin-bottom: 6px;
+}
+.replay-time input {
+  flex: 1;
+  min-width: 0;
+}
+.replay-buttons {
+  flex-wrap: wrap;
+}
+.replay-buttons button,
+.replay-header button {
+  padding: 4px 8px;
+}
+.replay-bar small {
+  display: block;
+  text-align: center;
+  margin-top: 4px;
+}
+.replay-layout:has(.cinema) .battle-stage {
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
 }
