@@ -4,8 +4,13 @@ import { chromium } from "playwright-core";
 const base = process.env.LOBBY_URL ?? "http://127.0.0.1:4317";
 const browser = await chromium.launch({ channel: "chrome" });
 try {
+  const reviewRequests = [];
   async function seat() {
     const p = await browser.newPage({ baseURL: base });
+    p.on("request", (request) => {
+      if (/\/review-animations\/|\/model-review-|\/ashe-review\.glb/.test(request.url()))
+        reviewRequests.push(request.url());
+    });
     await p.addInitScript(() => {
       const Native = WebSocket;
       window.WebSocket = class extends Native {
@@ -185,6 +190,7 @@ try {
     [],
   );
   assert.equal((await api(blue, path)).status, "claimed");
+  assert.deepEqual(reviewRequests, []);
   console.log(
     "Slow and failed assets, readiness after disconnect, opponent reveal with placeholder, running reconnect passed:",
     unit,

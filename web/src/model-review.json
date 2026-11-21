@@ -1,0 +1,1076 @@
+{
+  "aatrox": {
+    "packs": [
+      "aatrox-world-ender"
+    ],
+    "review": [
+      "4f421173a09b25f2db225af0",
+      "557eb4fe21d4fde910aca8c8"
+    ],
+    "aliases": {
+      "Q2_INTO_Idle": "Aatrox_ground_Q2_To_Idle_anm",
+      "Taunt_Into": "Aatrox_Taunt_anm",
+      "Ult_Taunt_Into": "Aatrox_ULT_Taunt_anm"
+    }
+  },
+  "aatrox-alt": {
+    "packs": [
+      "aatrox-alt-world-ender"
+    ],
+    "review": [
+      "6bd83f351978146566ec9ec2",
+      "557eb4fe21d4fde910aca8c8"
+    ],
+    "aliases": {
+      "Q2_INTO_Idle": "Aatrox_ground_Q2_To_Idle_anm",
+      "Taunt_Into": "Aatrox_Taunt_anm",
+      "Ult_Taunt_Into": "Aatrox_ULT_Taunt_anm"
+    }
+  },
+  "anivia": {
+    "packs": [
+      "anivia-glacial-storm"
+    ],
+    "review": [
+      "9d429b376e4d74985cdeba24"
+    ],
+    "aliases": {}
+  },
+  "anivia_egg": {
+    "packs": [],
+    "review": [],
+    "aliases": {}
+  },
+  "apex_turret": {
+    "packs": [
+      "apex_turret-hextech-piercing-laser"
+    ],
+    "review": [],
+    "aliases": {}
+  },
+  "ashe": {
+    "packs": [
+      "ashe-review",
+      "ashe-volley"
+    ],
+    "review": [],
+    "aliases": {}
+  },
+  "aurelionsol": {
+    "packs": [
+      "aurelionsol-falling-star-the-skies-descend"
+    ],
+    "review": [
+      "6616698b182a8c4fae2ad344",
+      "95787ac1ca736dc3889be077"
+    ],
+    "aliases": {
+      "Attack1_BASE": "AurelionSol_Attack1_anm",
+      "Attack2_BASE": "AurelionSol_Attack2_anm"
+    }
+  },
+  "azir": {
+    "packs": [
+      "azir-arise"
+    ],
+    "review": [
+      "5a4abb43ca3a74d973f4e2b8",
+      "6a76d3c1f4b14714d339e236"
+    ],
+    "aliases": {
+      "Attack_Command_LoB": "Azir_Attack_Command_anm",
+      "Idle3_BASE": "Azir_Idle3_anm",
+      "Laugh_BASE": "Azir_Laugh_anm",
+      "Spell2_UpB": "Azir_Spell2_anm"
+    }
+  },
+  "belveth": {
+    "packs": [
+      "belveth-void-surge"
+    ],
+    "review": [
+      "7a98e2cb312da133e41f564f"
+    ],
+    "aliases": {
+      "Channel_Loop": "Channel_loop_anm",
+      "Dance_Loop": "Dance_loop_anm"
+    }
+  },
+  "blitzcrank": {
+    "packs": [
+      "blitzcrank-power-fist"
+    ],
+    "review": [
+      "0bfd6d201111e99ea593fbd0"
+    ],
+    "aliases": {}
+  },
+  "corki": {
+    "packs": [
+      "corki-missile-barrage"
+    ],
+    "review": [
+      "3ebce72c48f2e79486eaa4d8",
+      "aacfe724470180f0dcfc8b93"
+    ],
+    "aliases": {}
+  },
+  "daisy": {
+    "packs": [],
+    "review": [
+      "130c7020717fdf08e688767d",
+      "d667ab41918a641e3fd59a3d"
+    ],
+    "aliases": {}
+  },
+  "darius": {
+    "packs": [
+      "darius-noxian-guillotine"
+    ],
+    "review": [
+      "b44f26dff6eff4b6f6c07a68"
+    ],
+    "aliases": {
+      "Spell1Windup_Base": "Darius_Spell1_IN_anm"
+    }
+  },
+  "demacian_standard": {
+    "packs": [],
+    "review": [],
+    "aliases": {
+      "Death": "summonerbeacon_death",
+      "Idle1": "summonerbeacon_idle",
+      "Run": "summonerbeacon_idle",
+      "Attack1": "summonerbeacon_idle"
+    }
+  },
+  "ekko": {
+    "packs": [
+      "ekko-chronobreak"
+    ],
+    "review": [
+      "da8b3998c7766f714b5ce0d9",
+      "c17353ad381dc5b98ead911d"
+    ],
+    "aliases": {}
+  },
+  "enraged_reksai": {
+    "packs": [],
+    "review": [
+      "7c7703f37b9dae04ac72b4e9",
+      "0de4167c98be77f85a9e7111"
+    ],
+    "aliases": {
+      "Recall_Loop": "Idle1_Base",
+      "Recall_Windup": "Idle1_Base",
+      "Recall_Winddown": "Respawn"
+    }
+  },
+  "evolution_turret": {
+    "packs": [],
+    "review": [
+      "2ee4778356c79b041674e55f"
+    ],
+    "aliases": {}
+  },
+  "garen": {
+    "packs": [
+      "garen-decisive-strike",
+      "garen-judgment"
+    ],
+    "review": [
+      "28319c40956beaf91942c407",
+      "b698c975efe87e1aee361020"
+    ],
+    "aliases": {
+      "Idle3_BASE": "Garen_2013_Idle3",
+      "Idle_Enter_BASE": "Garen_2013_Idle_LeadIn",
+      "Laugh_BASE": "Garen_2013_laugh"
+    }
+  },
+  "gnar": {
+    "packs": [],
+    "review": [
+      "e61be33988cf79d7e60ce934",
+      "0b52f7bfbf740aa61e210573"
+    ],
+    "aliases": {
+      "Attack1_BASE": "Gnar_Attack1_anm",
+      "Attack1_UPPER": "Gnar_Attack1_anm",
+      "Attack2_BASE": "Gnar_Attack2_anm",
+      "Dance_Loop_BASE": "Gnar_Dance_LOOP_anm",
+      "Spell1_Base": "Gnar_Idle1_anm",
+      "Run2_BASE": "Gnar_Run2_anm"
+    }
+  },
+  "gnar-alt": {
+    "packs": [
+      "gnar-alt-rage-burst"
+    ],
+    "review": [
+      "93eb026523faad84ccfb1d57",
+      "bf5de7937a9937ff47849bac"
+    ],
+    "aliases": {
+      "Attack1_BASE": "GnarBig_Attack1_anm",
+      "Attack1_UPPER": "GnarBig_Attack1_anm",
+      "Attack2_BASE": "GnarBig_Attack2_anm",
+      "Spell1_Base": "GnarBig_Spell1_anm",
+      "Spell2_BASE": "GnarBig_Spell2_anm",
+      "Spell3_TRAN_BASE": "GnarBig_Spell3_Trans_anm"
+    }
+  },
+  "gold_ward": {
+    "packs": [],
+    "review": [],
+    "aliases": {
+      "Attack1": "sightward_base_idle",
+      "Idle1": "sightward_base_idle",
+      "Hit": "sightward_base_idle",
+      "Death": "sightward_base_idle_death",
+      "Spawn": "sightward_base_idlein"
+    }
+  },
+  "graves": {
+    "packs": [
+      "graves-quickdraw"
+    ],
+    "review": [
+      "14662829fb0f7f36de74a9e7"
+    ],
+    "aliases": {
+      "Attack1_UPPER": "graves_attack1_anm"
+    }
+  },
+  "gwen": {
+    "packs": [
+      "gwen-hallowed-mist",
+      "gwen-snip-snip"
+    ],
+    "review": [
+      "70dfcc1ad6c60185fc8f4325",
+      "583a9ef24b7a2b8a6d6c82ab"
+    ],
+    "aliases": {
+      "Recall1": "recall_anm",
+      "Recall2": "recall2_anm",
+      "Recall3": "recall3_anm",
+      "Spell1_B_to_Idle": "Spell1_B_to_Idle_anm",
+      "Spell1_C_To_Idle": "Spell1_C_to_Idle_anm",
+      "Spell3_INTO_Run": "Spell3_to_Run_anm"
+    }
+  },
+  "hecarim": {
+    "packs": [
+      "hecarim-spirit-of-dread"
+    ],
+    "review": [
+      "7cbc08e748988897be5893ff"
+    ],
+    "aliases": {}
+  },
+  "imp": {
+    "packs": [],
+    "review": [
+      "682a86618e9e2ebf2089591d"
+    ],
+    "aliases": {}
+  },
+  "inhibitor-blue": {
+    "packs": [],
+    "review": [
+      "3453927dd11a46e8e61e0079"
+    ],
+    "aliases": {}
+  },
+  "inhibitor-red": {
+    "packs": [],
+    "review": [
+      "3453927dd11a46e8e61e0079"
+    ],
+    "aliases": {}
+  },
+  "ivern": {
+    "packs": [
+      "ivern-daisy"
+    ],
+    "review": [
+      "aad17a1978429f4153c12eb2",
+      "2a2c3d44bd63a1832f58df75"
+    ],
+    "aliases": {}
+  },
+  "jack_in_the_box": {
+    "packs": [],
+    "review": [
+      "5e1b0df4e55d7b6321d16f27"
+    ],
+    "aliases": {}
+  },
+  "jax": {
+    "packs": [
+      "jax-counter-strike"
+    ],
+    "review": [
+      "4b33170e9dbfffb37d6acc1c",
+      "369548bc47b13ae67ab7d306"
+    ],
+    "aliases": {
+      "Dance_Loop": "Dance",
+      "Spell3_Intro": "Spell3_Run_Intro_anm"
+    }
+  },
+  "jayce": {
+    "packs": [
+      "jayce-hyper-charge-lightning-field"
+    ],
+    "review": [
+      "192b93303b3947d1786d27dd"
+    ],
+    "aliases": {}
+  },
+  "jayce-alt": {
+    "packs": [],
+    "review": [
+      "dbabb52b4b153e3309d21365"
+    ],
+    "aliases": {}
+  },
+  "jinx": {
+    "packs": [
+      "jinx-switcheroo"
+    ],
+    "review": [
+      "0e2441aa5db11f712b933a22",
+      "2d372d3b48c61f064f851bae"
+    ],
+    "aliases": {
+      "Idle3_BASE": "Jinx_minigun_idle3_anm",
+      "Runin_BASE": "Jinx_minigun_run_in_anm",
+      "Recall_Base": "Jinx_Rlauncher_recall_anm"
+    }
+  },
+  "jinx-alt": {
+    "packs": [
+      "jinx-alt-switcheroo"
+    ],
+    "review": [
+      "1f034e224d108992ae0f04f2",
+      "2d372d3b48c61f064f851bae"
+    ],
+    "aliases": {
+      "Idle3_BASE": "Jinx_minigun_idle3_anm",
+      "Runin_BASE": "Jinx_minigun_run_in_anm",
+      "Recall_Base": "Jinx_Rlauncher_recall_anm"
+    }
+  },
+  "kassadin": {
+    "packs": [
+      "kassadin-riftwalk"
+    ],
+    "review": [
+      "87b1848bf202c9d48ebdd6b0",
+      "0023812c0e15f6999f9ee348"
+    ],
+    "aliases": {}
+  },
+  "kayle": {
+    "packs": [
+      "kayle-celestial-blessing"
+    ],
+    "review": [
+      "a97bb8e05910b9f6ab68062c",
+      "ce6c0a124f7d1193d9106226"
+    ],
+    "aliases": {
+      "AttackRanged2fast": "Kayle_AttackRangedfast1_anm",
+      "AttackRanged1fast": "Kayle_AttackRangedfast2_anm"
+    }
+  },
+  "kayle_ranged": {
+    "packs": [
+      "kayle_ranged-celestial-blessing"
+    ],
+    "review": [
+      "16380f65d097fb34fcc6b817",
+      "ce6c0a124f7d1193d9106226"
+    ],
+    "aliases": {
+      "AttackRanged2fast": "Kayle_AttackRangedfast1_anm",
+      "AttackRanged1fast": "Kayle_AttackRangedfast2_anm"
+    }
+  },
+  "kayn": {
+    "packs": [
+      "kayn-reaping-slash"
+    ],
+    "review": [
+      "2345979a406ba82f2f8cb836",
+      "86b311ddd605747854789632"
+    ],
+    "aliases": {
+      "Spell3": "Attack2",
+      "Spell4_Air_Assassin": "Spell4_Air",
+      "Spell4_Air_Slayer": "Spell4_Air"
+    }
+  },
+  "kayn_assassin": {
+    "packs": [
+      "kayn_assassin-reaping-slash"
+    ],
+    "review": [
+      "73120ec7c1d214454e598555",
+      "86b311ddd605747854789632"
+    ],
+    "aliases": {
+      "Spell3": "Attack2",
+      "Spell4_Air_Assassin": "Spell4_Air",
+      "Spell4_Air_Slayer": "Spell4_Air"
+    }
+  },
+  "kayn_slayer": {
+    "packs": [
+      "kayn_slayer-reaping-slash"
+    ],
+    "review": [
+      "13dcf8b07a3019e3a872bbb7",
+      "86b311ddd605747854789632"
+    ],
+    "aliases": {
+      "Spell3": "Attack2",
+      "Spell4_Air_Assassin": "Spell4_Air",
+      "Spell4_Air_Slayer": "Spell4_Air"
+    }
+  },
+  "lulu": {
+    "packs": [
+      "lulu-wild-growth"
+    ],
+    "review": [
+      "4dce887308351a8e3fad531b"
+    ],
+    "aliases": {}
+  },
+  "malphite": {
+    "packs": [
+      "malphite-ground-slam"
+    ],
+    "review": [
+      "5e1990c860ec8a1302810f9b"
+    ],
+    "aliases": {}
+  },
+  "malzahar": {
+    "packs": [
+      "malzahar-nether-grasp",
+      "malzahar-void-swarm"
+    ],
+    "review": [
+      "3a85e4112a0e20885f15c343"
+    ],
+    "aliases": {}
+  },
+  "masteryi": {
+    "packs": [
+      "masteryi-highlander"
+    ],
+    "review": [
+      "f0fe7fde9e5917879e7af0f7",
+      "aa6cdb8d7bb6dbaca2a87097"
+    ],
+    "aliases": {}
+  },
+  "melee-chaos": {
+    "packs": [],
+    "review": [
+      "e811e79cf5abd7e3bbdab52e"
+    ],
+    "aliases": {
+      "Death_Caster": "Death",
+      "Win1": "Idle1",
+      "Win2": "Idle1",
+      "Win3": "Idle1",
+      "Win4": "Idle1",
+      "Idle2": "Idle1",
+      "Lose1": "Idle1",
+      "Lose2": "Idle1",
+      "Stunned": "Idle1",
+      "Run2": "Run"
+    }
+  },
+  "melee-order": {
+    "packs": [],
+    "review": [
+      "236dba6b3661c27dbcff485e"
+    ],
+    "aliases": {
+      "Win1": "Idle1",
+      "Win2": "Idle1",
+      "Win3": "Idle1",
+      "Win4": "Idle1",
+      "Idle2": "Idle1",
+      "Lose1": "Idle1",
+      "Lose2": "Idle1",
+      "Lose3": "Idle1",
+      "Run2": "Run"
+    }
+  },
+  "missfortune": {
+    "packs": [
+      "missfortune-strut"
+    ],
+    "review": [
+      "c3d9a027875e6795884a1b97",
+      "3fb4c152f272d80a2d3d5b39"
+    ],
+    "aliases": {
+      "Idle3_BASE": "missfortune_idle3_anm"
+    }
+  },
+  "nest_reksai": {
+    "packs": [],
+    "review": [
+      "0de4167c98be77f85a9e7111"
+    ],
+    "aliases": {
+      "Recall_Loop": "Idle1_Base",
+      "Recall_Windup": "Idle1_Base",
+      "Recall_Winddown": "Respawn"
+    }
+  },
+  "nexus-blue": {
+    "packs": [],
+    "review": [
+      "ed2e50862c7920d3ce6f7492"
+    ],
+    "aliases": {}
+  },
+  "nexus-red": {
+    "packs": [],
+    "review": [
+      "ed2e50862c7920d3ce6f7492"
+    ],
+    "aliases": {}
+  },
+  "nocturne": {
+    "packs": [
+      "nocturne-shroud-of-darkness",
+      "nocturne-umbra-blades"
+    ],
+    "review": [
+      "eb5edae65a754350cd16ad23"
+    ],
+    "aliases": {}
+  },
+  "olaf": {
+    "packs": [
+      "olaf-ragnarok"
+    ],
+    "review": [
+      "b7af05d3400f2f3ea72d29f1"
+    ],
+    "aliases": {}
+  },
+  "ornn": {
+    "packs": [
+      "ornn-searing-charge"
+    ],
+    "review": [
+      "ba21e317850e4da2ca4ba79d"
+    ],
+    "aliases": {
+      "Idle1_Look_BASE": "Ornn_Idle1_look_anm"
+    }
+  },
+  "pantheon": {
+    "packs": [
+      "pantheon-comet-spear"
+    ],
+    "review": [
+      "e518a932a998c732c557291a",
+      "d4626dd0af3c313502a6ad99"
+    ],
+    "aliases": {}
+  },
+  "pillar_of_ice": {
+    "packs": [],
+    "review": [],
+    "aliases": {}
+  },
+  "pix": {
+    "packs": [],
+    "review": [
+      "159575747c4b4e9304a70e91"
+    ],
+    "aliases": {}
+  },
+  "powder_keg": {
+    "packs": [],
+    "review": [],
+    "aliases": {}
+  },
+  "princess_tower-blue": {
+    "packs": [],
+    "review": [
+      "4081e1df08a80d4199d9a0c3",
+      "9cc5b18b856e5c9a83a2d2b3"
+    ],
+    "aliases": {}
+  },
+  "princess_tower-red": {
+    "packs": [],
+    "review": [
+      "4081e1df08a80d4199d9a0c3",
+      "9cc5b18b856e5c9a83a2d2b3"
+    ],
+    "aliases": {}
+  },
+  "queen_nest": {
+    "packs": [],
+    "review": [
+      "a7a48a206f249a365f5ce0dd"
+    ],
+    "aliases": {
+      "Close": "reksaitunnel_close",
+      "Death_Closed": "reksaitunnel_death_closed",
+      "Death_Open": "reksaitunnel_death_open",
+      "Idle1": "reksaitunnel_idle1",
+      "Open": "reksaitunnel_open",
+      "Spawn": "reksaitunnel_spawn",
+      "Spell4_Loop": "reksaitunnel_spell4_loop",
+      "Spell4_Winddown": "reksaitunnel_spell4_winddown",
+      "Spell4_Windup": "reksaitunnel_spell4_windup"
+    }
+  },
+  "ranged-chaos": {
+    "packs": [],
+    "review": [
+      "7b9dfbc74c026540b007bc4c"
+    ],
+    "aliases": {
+      "Win1": "Idle1",
+      "Lose1": "Idle1",
+      "Stunned": "Idle1"
+    }
+  },
+  "ranged-order": {
+    "packs": [],
+    "review": [
+      "f4eca8a894f4c4866c014c88"
+    ],
+    "aliases": {
+      "Win1": "Idle1",
+      "Lose1": "Idle1"
+    }
+  },
+  "reksai": {
+    "packs": [
+      "reksai-queen-s-wrath"
+    ],
+    "review": [
+      "5b7d9587bf58c25bf5558ad1",
+      "87202001d94b4c21f81e45f2"
+    ],
+    "aliases": {
+      "Recall_Loop": "Idle1_Base",
+      "Recall_Windup": "Idle1_Base",
+      "Respawn": "Recall_Winddown"
+    }
+  },
+  "rift_herald": {
+    "packs": [
+      "rift_herald-sweeping-strike"
+    ],
+    "review": [
+      "02c1abd4d8f661635fff3957"
+    ],
+    "aliases": {}
+  },
+  "samira": {
+    "packs": [
+      "samira-inferno-trigger"
+    ],
+    "review": [
+      "ce9acbd0ccb5628a17aad63d",
+      "092ee58e95e6683cea84b8f3"
+    ],
+    "aliases": {
+      "Attack1_Gun_Hit": "Attack1_Gun_Hit_anm",
+      "Attack1_Gun_Start": "Attack1_Gun_Start_anm",
+      "Attack2_Gun_Hit": "Attack2_Gun_Hit_anm",
+      "Attack2_Gun_Start": "Attack2_Gun_Start_anm",
+      "Crit_Gun_Hit": "Crit_Gun_Hit_anm",
+      "Crit_Gun_Start": "Crit_Gun_Start_anm",
+      "Spell3_INTO_Run": "Spell3_INTO_Run_anm",
+      "Spell4_Loop": "Spell4",
+      "Spell4_INTO_Run": "Spell4_INTO_Run_anm",
+      "Walkover_Left": "Walkover_Left_anm",
+      "Walkover_Right": "Walkover_Right_anm"
+    }
+  },
+  "sand_soldier": {
+    "packs": [],
+    "review": [
+      "20ac0960aaac5339f9df0a18",
+      "5664d54bff705ebb3048256c"
+    ],
+    "aliases": {
+      "Idle3_BASE": "AzirSoldier_Idle3_anm"
+    }
+  },
+  "scarecrow": {
+    "packs": [],
+    "review": [
+      "837b6f167a0f479d1fd0abff"
+    ],
+    "aliases": {
+      "Death_Effigies": "fiddlesticks_death_effigies",
+      "IdleA": "fiddlesticks_idle1",
+      "IdleIn": "fiddlesticks_idlein1",
+      "Respawn": "fiddlesticks_respawn",
+      "Recall_Winddown": "fiddlesticks_respawn",
+      "Run_Base": "fiddlesticks_run",
+      "Spell2": "fiddlesticks_spell2",
+      "Spell2_Channel": "fiddlesticks_spell2_channel",
+      "Spell2_Channel_Toidle": "fiddlesticks_spell2_channel_toidle",
+      "Spell2_ToRun": "fiddlesticks_spell2_to_run"
+    }
+  },
+  "scuttle_crab": {
+    "packs": [],
+    "review": [
+      "b48e2061146521f87471e0c0",
+      "cf784ac31e392eae9e104032"
+    ],
+    "aliases": {}
+  },
+  "scuttle_crab-death": {
+    "packs": [],
+    "review": [
+      "d475dc642ec48def5563e220"
+    ],
+    "aliases": {}
+  },
+  "sett": {
+    "packs": [
+      "sett-haymaker"
+    ],
+    "review": [
+      "fb6a80430b84bc44ccd6bed6"
+    ],
+    "aliases": {
+      "Attack1_Passive_Hit": "Sett_Attack1_Passive_anm",
+      "Spell2_BASE": "Sett_spell2_anm"
+    }
+  },
+  "siege-chaos": {
+    "packs": [],
+    "review": [
+      "c6109e5c0e79a265b0c6309f"
+    ],
+    "aliases": {
+      "Death2": "Death",
+      "Lose1": "Death",
+      "Stunned": "Run",
+      "Win2": "Win1"
+    }
+  },
+  "siege-order": {
+    "packs": [],
+    "review": [
+      "05bff61ba97c1a18018cd82d"
+    ],
+    "aliases": {
+      "Win2": "Win1",
+      "Death2": "Death",
+      "Lose1": "Run",
+      "Stunned": "Run"
+    }
+  },
+  "sion": {
+    "packs": [
+      "sion-soul-furnace"
+    ],
+    "review": [
+      "4737d3d089005175c6d9049f",
+      "6633d3de608c80ecf5b57148"
+    ],
+    "aliases": {
+      "Passive_Dance_LOOP": "Dance_Loop"
+    }
+  },
+  "sion-alt": {
+    "packs": [],
+    "review": [
+      "ee058df0bdb344b2999fc636",
+      "6633d3de608c80ecf5b57148"
+    ],
+    "aliases": {
+      "Passive_Dance_LOOP": "Dance_Loop"
+    }
+  },
+  "sivir": {
+    "packs": [],
+    "review": [
+      "4c028c28f2188cd9611ed18a"
+    ],
+    "aliases": {
+      "Idle3_BASE": "Sivir_Base_Idle_anm",
+      "Idle_Enter_BASE": "Sivir_Base_IdleIn_Run2_anm",
+      "Laugh_BASE": "Sivir_Base_Laugh_anm",
+      "Respawn_Base": "Sivir_Base_Respawn_anm"
+    }
+  },
+  "sona": {
+    "packs": [
+      "sona-crescendo"
+    ],
+    "review": [
+      "122484c0357879dcaa0113f3"
+    ],
+    "aliases": {}
+  },
+  "soul_tentacle": {
+    "packs": [],
+    "review": [
+      "6b06bafdaf111d57a055ba9b"
+    ],
+    "aliases": {
+      "Attack1_BASE": "illaoiminion_attack1",
+      "Attack1_UPPER": "illaoiminion_attack1",
+      "Death": "illaoiminion_death",
+      "Idle1": "illaoiminion_idleangry",
+      "Up": "illaoiminion_spawn",
+      "Spawn": "illaoiminion_spawn"
+    }
+  },
+  "sun_disc-blue": {
+    "packs": [],
+    "review": [],
+    "aliases": {}
+  },
+  "sun_disc-red": {
+    "packs": [],
+    "review": [],
+    "aliases": {}
+  },
+  "super-chaos": {
+    "packs": [],
+    "review": [
+      "2b2f4c7b568d20bf8478d0c6"
+    ],
+    "aliases": {
+      "Win1": "Idle1",
+      "Win2": "Idle1",
+      "Lose1": "Idle1",
+      "Lose2": "Idle1",
+      "Stunned": "Idle1"
+    }
+  },
+  "super-order": {
+    "packs": [],
+    "review": [
+      "6c97c2a6e3003cab33b98756"
+    ],
+    "aliases": {
+      "Win1": "Idle1",
+      "Win2": "Idle1",
+      "Lose1": "Idle1",
+      "Lose2": "Idle1",
+      "Stunned": "Idle1"
+    }
+  },
+  "target_dummy-blue": {
+    "packs": [],
+    "review": [
+      "aab2335f0d949c376925bc44"
+    ],
+    "aliases": {
+      "Idle3_BASE": "TargetDummy_Idle120.anm"
+    }
+  },
+  "target_dummy-red": {
+    "packs": [],
+    "review": [
+      "aab2335f0d949c376925bc44"
+    ],
+    "aliases": {
+      "Idle3_BASE": "TargetDummy_Idle120.anm"
+    }
+  },
+  "teemo": {
+    "packs": [
+      "teemo-blinding-dart"
+    ],
+    "review": [
+      "13a589fac399a3b48c35803c",
+      "01063080eb391152b9a3254c"
+    ],
+    "aliases": {}
+  },
+  "thorn_spitter": {
+    "packs": [],
+    "review": [],
+    "aliases": {}
+  },
+  "tibbers": {
+    "packs": [],
+    "review": [
+      "0d0d13866afbd2250b670902"
+    ],
+    "aliases": {
+      "Attack1": "annietibbers_attack1",
+      "Attack2": "annietibbers_attack2",
+      "Death": "annietibbers_death",
+      "RAW_Idle1": "annietibbers_idle1",
+      "RAW_Idle_Enter": "annietibbers_idle_enter",
+      "Run": "annietibbers_run"
+    }
+  },
+  "tombstone": {
+    "packs": [],
+    "review": [
+      "44c198eff1691268d9321d4b"
+    ],
+    "aliases": {}
+  },
+  "tristana": {
+    "packs": [],
+    "review": [
+      "1cceb94a5a54c33c6e0b2cba"
+    ],
+    "aliases": {
+      "Dance_IN_RAW": "Tristana_Dance_IN_anm",
+      "Dance_LOOP_Raw": "Tristana_Dance_LOOP_anm"
+    }
+  },
+  "tryndamere": {
+    "packs": [],
+    "review": [
+      "1cb861438d6120329b324789"
+    ],
+    "aliases": {}
+  },
+  "twisted_fate": {
+    "packs": [
+      "twisted_fate-wild-cards"
+    ],
+    "review": [
+      "d3397dc099522836099b1d1e",
+      "7ed1e5d8872fd9634933e58c"
+    ],
+    "aliases": {
+      "RAW_Idle1": "twistedfate_2012_idle1_anm",
+      "RAW_Idle2": "twistedfate_2012_idle2_anm"
+    }
+  },
+  "twitch": {
+    "packs": [
+      "twitch-spray-and-pray"
+    ],
+    "review": [
+      "3b061f49108fcf4634474e52",
+      "73dd8536ceca9c6ddb9597e1"
+    ],
+    "aliases": {
+      "Idle3_BASE": "Twitch_Base_Idle3_anm",
+      "Laugh_BASE": "Twitch_Base_Laugh_anm"
+    }
+  },
+  "vine_lasher": {
+    "packs": [],
+    "review": [],
+    "aliases": {}
+  },
+  "void_gate": {
+    "packs": [],
+    "review": [],
+    "aliases": {}
+  },
+  "void_scuttle_crab": {
+    "packs": [],
+    "review": [
+      "1efadff3eb7dec4020dcf09a",
+      "cf784ac31e392eae9e104032"
+    ],
+    "aliases": {}
+  },
+  "void_scuttle_crab-death": {
+    "packs": [],
+    "review": [
+      "d475dc642ec48def5563e220"
+    ],
+    "aliases": {}
+  },
+  "void_spawn": {
+    "packs": [],
+    "review": [
+      "98acda9f09a3782386da8e21",
+      "12510ed1d00ac1833a96fc7d"
+    ],
+    "aliases": {}
+  },
+  "voidfish": {
+    "packs": [],
+    "review": [
+      "81ab11e6d9b51843ac9989da"
+    ],
+    "aliases": {}
+  },
+  "voidfish_ranged": {
+    "packs": [],
+    "review": [
+      "4bf1b7bcd56306169e62bccf"
+    ],
+    "aliases": {
+      "Idle1": "idle",
+      "Death": "melee_death",
+      "Ranged_Attack1": "ranged_attack",
+      "Ranged_Run": "ranged_run",
+      "Run": "run"
+    }
+  },
+  "voidling": {
+    "packs": [],
+    "review": [
+      "f40e0fa176374a7f2f3a67f3",
+      "acfd62df4b976ef2e9cd52cb"
+    ],
+    "aliases": {}
+  },
+  "voidmite": {
+    "packs": [],
+    "review": [
+      "e5670e4d21ccf8a24363dc3a"
+    ],
+    "aliases": {}
+  },
+  "xin": {
+    "packs": [
+      "xin-audacious-charge"
+    ],
+    "review": [
+      "64d56918c71666c4ee95ac9f",
+      "d72fdb7ff056819d5a22fc03"
+    ],
+    "aliases": {}
+  },
+  "yorick": {
+    "packs": [
+      "yorick-last-rites"
+    ],
+    "review": [
+      "e477bc5d0a4c9f4724a5d92c"
+    ],
+    "aliases": {}
+  },
+  "ziggs": {
+    "packs": [
+      "ziggs-bouncing-bomb"
+    ],
+    "review": [
+      "56898f1e1aa8d82ba7e67142"
+    ],
+    "aliases": {}
+  }
+}

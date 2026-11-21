@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   AnimationMixer,
   HemisphereLight,
+  LoopOnce,
   PerspectiveCamera,
   Scene,
   Vector3,
@@ -97,7 +98,7 @@ export default function ModelPreview({
         mixer = new AnimationMixer(asset.scene);
         setClips(
           asset.animations
-            .filter((c) => profile.asset === "ashe" || usage.has(c.name))
+            .slice()
             .sort(
               (a, b) =>
                 Number(usage.has(b.name)) - Number(usage.has(a.name)) ||
@@ -105,10 +106,7 @@ export default function ModelPreview({
             )
             .map((c) => ({
               name: c.name,
-              duration:
-                c.name === profile.death.clip
-                  ? Math.min(c.duration, profile.death.clipEnd ?? Infinity)
-                  : c.duration,
+              duration: c.duration,
             })),
         );
         function render(now: number) {
@@ -118,14 +116,12 @@ export default function ModelPreview({
             const action = mixer!.clipAction(clip);
             if (active !== s.clip) {
               mixer!.stopAllAction();
-              action.reset().play();
+              action.reset().setLoop(LoopOnce, 1).play();
+              action.clampWhenFinished = true;
               action.paused = true;
               active = s.clip;
             }
-            const end =
-              clip.name === profile.death.clip
-                ? Math.min(clip.duration, profile.death.clipEnd ?? Infinity)
-                : clip.duration;
+            const end = clip.duration;
             if (s.playing && end > 0)
               s.time = (s.time + Math.min((now - last) / 1000, 0.1)) % end;
             if (

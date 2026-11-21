@@ -6,6 +6,7 @@ import {
   profileFor,
   modelProfiles,
   castPack,
+  skillPacks,
 } from "../web/src/battle-motion.ts";
 const profiles = modelProfiles.map((p) => [
   p.asset,
@@ -19,7 +20,15 @@ const profiles = modelProfiles.map((p) => [
     ),
   },
 ]);
-if (process.argv.includes("--clips")) {
+if (process.argv.includes("--review-packs")) {
+  const packs = {};
+  for (const profile of modelProfiles) {
+    const files = skillPacks(profile).map((skill) => castPack(profile, skill));
+    packs[profile.asset] = [...new Set([...(packs[profile.asset] ?? []), ...files])].sort();
+    if (profile.followup) packs[profile.followup.asset] ??= [];
+  }
+  console.log(JSON.stringify(packs));
+} else if (process.argv.includes("--clips")) {
   console.log(JSON.stringify(Object.fromEntries(profiles)));
 } else {
   const rules = JSON.parse(

@@ -1,6 +1,7 @@
 import {
   AdditiveAnimationBlendMode,
   AnimationAction,
+  AnimationClip,
   AnimationMixer,
   Box3,
   CircleGeometry,
@@ -487,18 +488,23 @@ export function releaseAsset(asset: GLTF) {
   });
 }
 
-async function glb(name: string, version?: string) {
-  const path = "/play/media/models/";
+async function glb(file: string, version?: string, path = "/play/media/models/") {
   const url =
-    path + name + ".glb" + (version ? "?v=" + encodeURIComponent(version) : "");
+    path + file + (version ? "?v=" + encodeURIComponent(version) : "");
   const abort = new AbortController();
   const timeout = window.setTimeout(() => abort.abort(), 60_000);
   let bytes: ArrayBuffer;
   try {
     const response = await fetch(url, { signal: abort.signal });
     if (!response.ok)
-      throw new Error("模型 " + name + " HTTP " + response.status);
+      throw new Error("模型 " + file + " HTTP " + response.status);
     bytes = await response.arrayBuffer();
+    if (file.endsWith(".gz") && new DataView(bytes).getUint16(0) === 0x1f8b) {
+      const stream = new Blob([bytes])
+        .stream()
+        .pipeThrough(new DecompressionStream("gzip"));
+      bytes = await new Response(stream).arrayBuffer();
+    }
   } finally {
     window.clearTimeout(timeout);
   }
@@ -507,7 +513,7 @@ async function glb(name: string, version?: string) {
     .parseAsync(bytes, path);
 }
 async function animationPack(name: string, version?: string) {
-  const data = await glb(name, version);
+  const data = await glb(name + ".glb", version);
   return data.animations;
 }
 // A parked Gnar prop can sit far below the floor in otherwise visible poses.
@@ -521,21 +527,36 @@ export async function loadModel(
   mode: "body" | "review" = "body",
   version?: string,
 ) {
-  const asset = await glb(profile.asset, version);
+  const asset = await glb(profile.asset + ".glb", version);
   const castNames = profile.packs
     ? Object.values(profile.packs).flat()
     : Object.values(profile.casts ?? {}).map((a) => a.clip);
   if (mode === "review") {
-    const extras = skillPacks(profile).map((skill) =>
-      castPack(profile, skill)!,
-    );
-    if (profile.asset === "ashe") extras.push("ashe-review");
     try {
-      asset.animations.push(
-        ...(
-          await Promise.all(extras.map((name) => animationPack(name, version)))
-        ).flat(),
-      );
+      const { default: index } = await import("./model-review.json");
+      const library = index[profile.asset as keyof typeof index];
+      if (!library) throw Error("缺少模型动作目录 " + profile.asset);
+      const packs = await Promise.all([
+        ...library.packs.map((name) => animationPack(name, version)),
+        ...library.review.map(async (name) => {
+          const pack = await glb(name + ".glb.gz", undefined, "/play/review-animations/");
+          return pack.animations;
+        }),
+      ]);
+      const clips = new Map(asset.animations.map((c) => [c.name, c]));
+      for (const pack of packs)
+        for (const clip of pack) {
+          if (!clips.has(clip.name)) clips.set(clip.name, clip);
+        }
+      for (const [name, source] of Object.entries(library.aliases)) {
+        const clip = clips.get(source);
+        if (!clip) throw Error("缺少原生动作 " + source);
+        clips.set(
+          name,
+          new AnimationClip(name, clip.duration, clip.tracks, clip.blendMode),
+        );
+      }
+      asset.animations = [...clips.values()];
     } catch (error) {
       releaseAsset(asset);
       throw error;
