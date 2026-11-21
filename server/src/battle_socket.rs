@@ -38,7 +38,9 @@ pub(super) async fn stream(
     ready: watch::Sender<()>,
     queue: mpsc::Sender<Request>,
 ) {
-    let hello = json!({"type":"connected","protocol":PROTOCOL});
+    // Let the client draw and warm its opening scene without acquiring a ready lease.
+    let preview = frames.borrow().pending();
+    let hello = json!({"type":"connected","protocol":PROTOCOL,"preview":preview});
     if socket
         .send(Message::Text(hello.to_string().into()))
         .await
@@ -48,6 +50,9 @@ pub(super) async fn stream(
     }
     let mut readiness = None;
     let mut cursor = None;
+    if preview && !send_frame(&mut socket, &mut frames, &mut cursor).await {
+        return;
+    }
     loop {
         tokio::select! {
             changed = frames.changed() => {
@@ -59,6 +64,7 @@ pub(super) async fn stream(
                     if let Ok(Signal::Ready { protocol }) = serde_json::from_str(&raw) {
                         if protocol != PROTOCOL { return; }
                         if readiness.is_none() {
+                            cursor = None;
                             readiness = Some(ready.subscribe());
                             if !send_frame(&mut socket, &mut frames, &mut cursor).await { return; }
                         }

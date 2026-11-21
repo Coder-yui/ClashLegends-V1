@@ -7,6 +7,9 @@ pub(super) struct SeatFrame {
     pub history: presentation::History,
 }
 impl SeatFrame {
+    pub fn pending(&self) -> bool {
+        self.world["started"] == false
+    }
     pub fn new(sim: &Simulation, team: Team, started: bool) -> Self {
         let seat = team.index();
         Self {

@@ -21,6 +21,8 @@ use battle_frame::{field_frame, SeatFrame, PROTOCOL};
 mod battle_socket;
 #[path = "battle_metrics.rs"]
 mod metrics;
+#[path = "battle_replay.rs"]
+pub mod replay;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, time::Duration};
 use tokio::sync::{mpsc, oneshot, watch, Mutex, OnceCell};

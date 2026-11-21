@@ -33,6 +33,13 @@ ALTER TABLE matches ADD COLUMN IF NOT EXISTS battle_tick integer NOT NULL DEFAUL
 ALTER TABLE matches ADD COLUMN IF NOT EXISTS inputs jsonb NOT NULL DEFAULT '[]';
 ALTER TABLE matches ADD COLUMN IF NOT EXISTS result jsonb;
 
+CREATE TABLE IF NOT EXISTS recordings (
+    player text NOT NULL REFERENCES guests(id),
+    match_id text NOT NULL REFERENCES matches(id),
+    saved_at timestamptz NOT NULL DEFAULT now(),
+    PRIMARY KEY (player, match_id)
+);
+
 CREATE TABLE IF NOT EXISTS account_data (
     player text PRIMARY KEY REFERENCES guests(id),
     fields jsonb NOT NULL DEFAULT '{}'

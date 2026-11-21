@@ -173,6 +173,10 @@ async fn main() {
         .route("/api/join", post(room::join))
         .route("/api/rooms/{id}", get(room::read).post(room::act))
         .route("/api/matches/{id}", get(match_view))
+        .route("/api/recordings", get(battle::replay::list))
+        .route("/api/recordings/lookup", post(battle::replay::lookup))
+        .route("/api/recordings/{id}", post(battle::replay::save))
+        .route("/api/recordings/{id}/play", get(battle::replay::open))
         .route("/api/live", get(session::live))
         .route("/", get(|| async { Redirect::temporary("/play/") }))
         .nest_service(
