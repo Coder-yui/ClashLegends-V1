@@ -8,6 +8,18 @@
 
 ## 本地运行
 
+在这台 Mac 上，双击桌面的 **ClashLegends** 图标即可进入本地管理员大厅。应用复用开发数据库，按需构建项目，并从本机账号文件登录 `admin`。关闭游戏窗口后，大厅服务继续运行。同一 Wi-Fi 下的手机可在浏览器打开 `http://<Mac 的局域网 IP>:4317/play/`，首次访问以游客身份进入。
+
+首次安装桌面图标或移动项目后，在项目根目录运行 `python3 tools/macos/install.py`。安装需要 Xcode 命令行工具。启动日志位于 `.local/desktop/`。
+
+### 在自己的 iPhone 上用管理员图标
+
+1. 在 Mac 游戏的 **ClashLegends → 配对我的 iPhone…** 菜单生成安装文件。Finder 会选中 `ClashLegends.mobileconfig`。通过隔空投送把它发给自己的 iPhone。也可以在项目根目录执行 `python3 tools/macos/phone.py` 生成同一文件。
+2. 在 iPhone 的「设置 → 已下载描述文件」中安装。文件会添加游戏的主屏幕图标和这台 Mac 的开发证书。到「设置 → 通用 → 关于本机 → 证书信任设置」启用 **ClashLegends Local Game**。
+3. 在同一 Wi-Fi 下，24 小时内首次点图标，游戏会自动配对并进入管理员大厅。之后从图标打开会沿用这部手机的会话。会话约 30 天后到期，或手动退出账号后，可以重新生成并安装文件。普通局域网链接继续作为游客入口。
+
+手机图标通过 Mac 的 Bonjour 主机名访问 4319 端口，支持 HTTPS 和对局 WebSocket。桌面应用启动时会恢复已配置的手机入口。私有安装文件和服务日志在 `.local/phone/`。安装文件含有一次性管理员邀请，只发给自己的手机。
+
 使用 Rust、Node.js（本项目验证环境为 Node 26）、npm 和 PostgreSQL 16。从本目录执行。首次可通过 Docker 建立专用开发数据库：
 
 ```sh
