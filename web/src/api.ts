@@ -24,7 +24,7 @@ export interface Catalog {
   version: string;
   defaultDeck: string[];
   modes: { id: string; name: string; mapIds: string[] }[];
-  maps: { id: string; name: string; image: string }[];
+  maps: { id: string; name: string; image: string; terrain?: string | null }[];
 }
 export interface Deck {
   cards: string[];
@@ -37,7 +37,24 @@ export interface Preset {
   revision: number;
   deck: Deck;
 }
+export interface Slot {
+  name: string;
+  deck: Deck;
+}
+export interface Profile {
+  avatar: string;
+  bio: string;
+}
+export type SlotKey = "slot0" | "slot1" | "slot2" | "slot3";
+export type PlayerFields = Partial<Record<SlotKey, Slot>> & {
+  active?: number;
+  profile?: Profile;
+  preferences?: import("./preferences").Preferences;
+};
 export interface Session {
+  accountsEnabled: boolean;
+  role: "admin" | "beta" | null;
+  fields: PlayerFields | null;
   name: string;
   roomId: string | null;
   presets: Preset[];

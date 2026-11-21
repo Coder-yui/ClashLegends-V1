@@ -2,16 +2,21 @@ use super::*;
 use axum::extract::ws::{Message, WebSocket, WebSocketUpgrade};
 use axum::http::header::SET_COOKIE;
 use model::Deck;
-use serde::Deserialize;
 use std::time::Duration;
 
 pub async fn bootstrap(State(app): State<App>, h: HeaderMap) -> Result<Response> {
+    let identity = accounts::identity(&app, &h).await?;
     let db = app.db.get().await?;
-    let old = token(&h).unwrap_or("");
+    let old = cookie(&h, "clash_session=").unwrap_or("");
     let existing = db
-        .query_opt("SELECT id,name FROM guests WHERE token=$1", &[&old])
+        .query_opt(
+            "SELECT id,name FROM guests WHERE token=$1 AND id NOT LIKE 'account/%'",
+            &[&old],
+        )
         .await?;
-    let (p, name, new_token) = if let Some(row) = existing {
+    let (p, name, new_token) = if let Some((p, _)) = &identity {
+        (p.clone(), p.trim_start_matches("account/").to_owned(), None)
+    } else if let Some(row) = existing {
         (row.get(0), row.get(1), None)
     } else {
         let p = id();
@@ -29,7 +34,17 @@ pub async fn bootstrap(State(app): State<App>, h: HeaderMap) -> Result<Response>
         .await?
         .map(|r| r.get::<_, String>(0));
     let presets:Vec<Value>=db.query("SELECT id,name,deck,revision FROM presets WHERE owner_id=$1 ORDER BY (id IS NOT DISTINCT FROM (SELECT last_preset FROM guests WHERE id=$1)) DESC,name,id",&[&p]).await?.iter().map(|r|json!({"id":r.get::<_,String>(0),"name":r.get::<_,String>(1),"deck":r.get::<_,Value>(2),"battleDeck":decode::<Deck>(r.get(2)).ok().and_then(|d|app.catalog.room_deck(d)),"revision":r.get::<_,i64>(3)})).collect();
-    let mut resp = Json(json!({"name":name,"roomId":room,"presets":presets})).into_response();
+    let fields = if identity.is_some() {
+        db.query_one("SELECT fields FROM account_data WHERE player=$1", &[&p])
+            .await?
+            .get::<_, Value>(0)
+    } else {
+        Value::Null
+    };
+    let mut resp = Json(json!({"name":name,"roomId":room,"presets":presets,
+        "accountsEnabled":!app.accounts.is_empty(),"role":identity.map(|(_,role)|role),
+        "fields":fields}))
+    .into_response();
     resp.headers_mut()
         .insert("cache-control", "no-store".parse().unwrap());
     if let Some(key) = new_token {
@@ -41,65 +56,6 @@ pub async fn bootstrap(State(app): State<App>, h: HeaderMap) -> Result<Response>
         );
     }
     Ok(resp)
-}
-#[derive(Deserialize)]
-pub struct Preset {
-    id: Option<String>,
-    name: String,
-    deck: Deck,
-    revision: Option<i64>,
-}
-pub async fn save_preset(
-    State(app): State<App>,
-    h: HeaderMap,
-    Json(input): Json<Preset>,
-) -> Result<Json<Value>> {
-    let p = player(&app, &h).await?;
-    if app.catalog.check(&input.deck).is_err() {
-        app.collection.check(&input.deck)?;
-    }
-    let name = input.name.trim();
-    if name.is_empty() || name.chars().count() > 32 {
-        return Err(fail("卡组名需为 1–32 个字"));
-    }
-    let mut db = app.db.get().await?;
-    let tx = db.transaction().await?;
-    let deck = json!(input.deck);
-    let key = if let Some(key) = input.id {
-        let n=tx.execute("UPDATE presets SET name=$1,deck=$2,revision=revision+1 WHERE id=$3 AND owner_id=$4 AND revision=$5",&[&name,&deck,&key,&p,&input.revision]).await?;
-        if n == 0 {
-            return Err(fail("预设已更改，请重新载入"));
-        }
-        key
-    } else {
-        let key = id();
-        tx.execute(
-            "INSERT INTO presets(id,owner_id,name,deck) VALUES($1,$2,$3,$4)",
-            &[&key, &p, &name, &deck],
-        )
-        .await?;
-        key
-    };
-    tx.execute("UPDATE guests SET last_preset=$1 WHERE id=$2", &[&key, &p])
-        .await?;
-    tx.commit().await?;
-    Ok(Json(json!({"id":key})))
-}
-pub async fn remove_preset(
-    State(app): State<App>,
-    h: HeaderMap,
-    Path(key): Path<String>,
-) -> Result<Json<Value>> {
-    let p = player(&app, &h).await?;
-    app.db
-        .get()
-        .await?
-        .execute(
-            "DELETE FROM presets WHERE id=$1 AND owner_id=$2",
-            &[&key, &p],
-        )
-        .await?;
-    Ok(Json(json!({})))
 }
 pub async fn live(State(app): State<App>, h: HeaderMap, ws: WebSocketUpgrade) -> Result<Response> {
     let p = player(&app, &h).await?;

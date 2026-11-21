@@ -202,6 +202,16 @@ impl Lab {
 pub async fn live(State(app): State<App>, h: HeaderMap, ws: WebSocketUpgrade) -> Result<Response> {
     session::check_origin(&h)?;
     player(&app, &h).await?;
+    if !app.accounts.is_empty()
+        && !crate::accounts::identity(&app, &h)
+            .await?
+            .is_some_and(|(_, role)| role == "admin")
+    {
+        return Err(crate::Error(
+            axum::http::StatusCode::FORBIDDEN,
+            "仅管理员可进入开发工作台".into(),
+        ));
+    }
     Ok(ws.max_message_size(2048).on_upgrade(run))
 }
 async fn run(mut socket: WebSocket) {

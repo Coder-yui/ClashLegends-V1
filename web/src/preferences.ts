@@ -1,3 +1,4 @@
+import { api, type Session } from "./api";
 import { useSyncExternalStore } from "react";
 
 export const actions = [
@@ -10,7 +11,16 @@ export const actions = [
 ] as const;
 export type Action = (typeof actions)[number][0];
 type Bindings = Record<Action, string>;
+export interface RecordingOptions {
+  mode: "off" | "replay" | "video" | "both";
+  aspect: "9:16" | "16:9" | "1:1";
+  resolution: 540 | 720 | 1080;
+  fps: 24 | 30 | 60;
+  audio: boolean;
+  hud: boolean;
+}
 export interface Preferences {
+  recording: RecordingOptions;
   master: number;
   effects: number;
   background: number;
@@ -31,6 +41,14 @@ const legacyBindings: Bindings = {
 };
 const bindingVersion = 2;
 const defaults: Preferences = {
+  recording: {
+    mode: "replay",
+    aspect: "9:16",
+    resolution: 720,
+    fps: 30,
+    audio: true,
+    hud: true,
+  },
   master: 75,
   effects: 75,
   background: 50,
@@ -54,9 +72,8 @@ export function keyLabel(code: string) {
     )[code] ?? code.replace(/^Key|^Digit/, "").replace("Numpad", "小键盘 ")
   );
 }
-function read(): Preferences {
+function normalize(v: any): Preferences {
   try {
-    const v = JSON.parse(localStorage.getItem(key) ?? "null");
     if (!v) return defaults;
     const volume = (x: unknown, f: number) =>
       typeof x === "number" && Number.isFinite(x)
@@ -72,6 +89,22 @@ function read(): Preferences {
       v.bindingVersion === undefined &&
       actions.every(([id]) => v.bindings?.[id] === legacyBindings[id]);
     return {
+      recording: {
+        mode: ["off", "replay", "video", "both"].includes(v.recording?.mode)
+          ? v.recording.mode
+          : defaults.recording.mode,
+        aspect: ["9:16", "16:9", "1:1"].includes(v.recording?.aspect)
+          ? v.recording.aspect
+          : defaults.recording.aspect,
+        resolution: [540, 720, 1080].includes(v.recording?.resolution)
+          ? v.recording.resolution
+          : defaults.recording.resolution,
+        fps: [24, 30, 60].includes(v.recording?.fps)
+          ? v.recording.fps
+          : defaults.recording.fps,
+        audio: v.recording?.audio !== false,
+        hud: v.recording?.hud !== false,
+      },
       master: volume(v.master, defaults.master),
       effects: volume(v.effects, defaults.effects),
       background: volume(v.background, defaults.background),
@@ -81,7 +114,75 @@ function read(): Preferences {
     return defaults;
   }
 }
+function read(): Preferences {
+  try {
+    return normalize(JSON.parse(localStorage.getItem(key) ?? "null"));
+  } catch {
+    return defaults;
+  }
+}
 let current = read();
+let owner = "";
+export function currentAccount() {
+  return owner;
+}
+let previous: Preferences | null = null;
+let pending = false;
+let saving: Promise<void> | undefined;
+let syncMessage = "";
+export function preferenceStatus() {
+  return syncMessage;
+}
+export function configurePreferences(s: Session) {
+  const next = s.role ? s.name : "";
+  if (next === owner && (!next || pending || saving)) return;
+  owner = next;
+  pending = false;
+  syncMessage = "";
+  previous = s.fields?.preferences ?? null;
+  current = owner
+    ? normalize(previous && { ...previous, bindingVersion })
+    : read();
+  listeners.forEach((fn) => fn());
+}
+export async function reloadAccountPreferences() {
+  const session = await api<Session>("session");
+  if (!saving && session.role && session.name === owner) {
+    pending = false;
+    configurePreferences(session);
+  }
+}
+export function flushPreferences(): Promise<void> {
+  if (saving) return saving;
+  if (!pending || !owner) return Promise.resolve();
+  saving = (async () => {
+    const user = owner;
+    try {
+      while (pending && user === owner) {
+        pending = false;
+        const value = current;
+        await api("account/data", {
+          owner: user,
+          field: "preferences",
+          before: previous,
+          value,
+        });
+        if (user === owner) previous = value;
+      }
+      syncMessage = "账号设置已保存";
+    } catch (error) {
+      if (user === owner) {
+        pending = true;
+        syncMessage = (error as Error).message;
+      }
+      throw error;
+    } finally {
+      saving = undefined;
+      listeners.forEach((fn) => fn());
+    }
+  })();
+  return saving;
+}
 const listeners = new Set<() => void>();
 export function preferences() {
   return current;
@@ -97,19 +198,28 @@ export function usePreferences() {
 }
 export function updatePreferences(patch: Partial<Preferences>) {
   current = { ...current, ...patch };
-  try {
-    localStorage.setItem(key, JSON.stringify({ ...current, bindingVersion }));
-  } catch {
-    /* Remains available for this visit. */
-  }
+  if (owner) {
+    pending = true;
+    syncMessage = "正在保存账号设置…";
+    void flushPreferences().catch(() => {});
+  } else
+    try {
+      localStorage.setItem(key, JSON.stringify({ ...current, bindingVersion }));
+    } catch {
+      /* Remains available for this visit. */
+    }
   listeners.forEach((fn) => fn());
 }
 window.addEventListener("storage", (e) => {
-  if (e.key === key || e.key === null) {
+  if (!owner && (e.key === key || e.key === null)) {
     current = read();
     listeners.forEach((fn) => fn());
   }
 });
 export function boundAction(code: string) {
   return actions.find(([id]) => current.bindings[id] === code)?.[0];
+}
+
+export function usePreferenceStatus() {
+  return useSyncExternalStore(subscribePreferences, preferenceStatus);
 }

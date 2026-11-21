@@ -32,3 +32,13 @@ $$;
 ALTER TABLE matches ADD COLUMN IF NOT EXISTS battle_tick integer NOT NULL DEFAULT 0;
 ALTER TABLE matches ADD COLUMN IF NOT EXISTS inputs jsonb NOT NULL DEFAULT '[]';
 ALTER TABLE matches ADD COLUMN IF NOT EXISTS result jsonb;
+
+CREATE TABLE IF NOT EXISTS account_data (
+    player text PRIMARY KEY REFERENCES guests(id),
+    fields jsonb NOT NULL DEFAULT '{}'
+);
+CREATE TABLE IF NOT EXISTS account_sessions (
+    token text PRIMARY KEY,
+    player text NOT NULL REFERENCES account_data(player),
+    expires_at timestamptz NOT NULL
+);

@@ -1,3 +1,4 @@
+mod accounts;
 mod battle;
 mod model;
 mod room;
@@ -21,6 +22,7 @@ use model::Catalog;
 
 #[derive(Clone)]
 struct App {
+    accounts: Arc<accounts::Registry>,
     db: Pool,
     catalog: Arc<Catalog>,
     collection: Arc<Catalog>,
@@ -60,19 +62,25 @@ impl From<deadpool_postgres::PoolError> for Error {
 fn decode<T: serde::de::DeserializeOwned>(v: Value) -> Result<T> {
     serde_json::from_value(v).map_err(|_| fail("数据格式无效"))
 }
-fn token(h: &HeaderMap) -> Option<&str> {
+fn cookie<'a>(h: &'a HeaderMap, prefix: &str) -> Option<&'a str> {
     h.get("cookie")?
         .to_str()
         .ok()?
         .split(';')
-        .find_map(|s| s.trim().strip_prefix("clash_session="))
+        .find_map(|s| s.trim().strip_prefix(prefix))
 }
 async fn player(app: &App, h: &HeaderMap) -> Result<String> {
-    let key = token(h).unwrap_or("");
+    if let Some((p, _)) = accounts::identity(app, h).await? {
+        return Ok(p);
+    }
+    let key = cookie(h, "clash_session=").unwrap_or("");
     app.db
         .get()
         .await?
-        .query_opt("SELECT id FROM guests WHERE token=$1", &[&key])
+        .query_opt(
+            "SELECT id FROM guests WHERE token=$1 AND id NOT LIKE 'account/%'",
+            &[&key],
+        )
         .await?
         .map(|r| r.get(0))
         .ok_or_else(|| Error(StatusCode::UNAUTHORIZED, "请重新进入大厅".into()))
@@ -141,6 +149,7 @@ async fn main() {
         .unwrap_or(120i64)
         .max(30);
     let app = App {
+        accounts: Arc::new(accounts::registry()),
         db,
         catalog: Arc::new(catalog),
         collection: Arc::new(collection),
@@ -160,11 +169,6 @@ async fn main() {
         )
         .route("/api/battle/catalog", get(move || async { Json(public) }))
         .route("/api/matches/{id}/live", get(battle::live))
-        .route("/api/presets", post(session::save_preset))
-        .route(
-            "/api/presets/{id}",
-            axum::routing::delete(session::remove_preset),
-        )
         .route("/api/rooms", post(room::create))
         .route("/api/join", post(room::join))
         .route("/api/rooms/{id}", get(room::read).post(room::act))
@@ -175,6 +179,14 @@ async fn main() {
             "/play",
             ServeDir::new("web/dist").fallback(ServeFile::new("web/dist/index.html")),
         );
+    let router = if app.accounts.is_empty() {
+        router
+    } else {
+        router
+            .route("/api/account/login", post(accounts::login))
+            .route("/api/account/logout", post(accounts::logout))
+            .route("/api/account/data", post(accounts::save))
+    };
     let router = if workbench_enabled {
         router.route("/api/workbench/live", get(battle::workbench::live))
     } else {

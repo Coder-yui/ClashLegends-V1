@@ -32,13 +32,12 @@ async fn member(tx: &Transaction<'_>, p: &str) -> Result<Option<String>> {
         .await?
         .map(|row| row.get(0)))
 }
-async fn seat(tx: &Transaction<'_>, app: &App, p: &str) -> Result<Seat> {
-    let row=tx.query_one("SELECT g.name,p.deck FROM guests g LEFT JOIN presets p ON p.id=g.last_preset AND p.owner_id=g.id WHERE g.id=$1",&[&p]).await?;
-    let deck = row
-        .get::<_, Option<Value>>(1)
-        .and_then(|v| decode::<Deck>(v).ok())
-        .and_then(|d| app.catalog.room_deck(d))
-        .unwrap_or_else(|| app.catalog.default_loadout());
+async fn seat(tx: &Transaction<'_>, app: &App, p: &str, requested: Option<Deck>) -> Result<Seat> {
+    let row = tx
+        .query_one("SELECT name FROM guests WHERE id=$1", &[&p])
+        .await?;
+    let deck = requested.unwrap_or_else(|| app.catalog.default_loadout());
+    app.catalog.check(&deck)?;
     tx.execute("UPDATE guests SET last_seen=now() WHERE id=$1", &[&p])
         .await?;
     Ok(Seat {
@@ -53,6 +52,7 @@ async fn seat(tx: &Transaction<'_>, app: &App, p: &str) -> Result<Seat> {
 }
 #[derive(Deserialize)]
 pub struct Setup {
+    deck: Option<Deck>,
     kind: String,
     mode: String,
     map: String,
@@ -72,7 +72,7 @@ pub async fn create(
     if member(&tx, &p).await?.is_some() {
         return Err(fail("请先返回或离开当前房间"));
     }
-    let mut seats = vec![seat(&tx, &app, &p).await?];
+    let mut seats = vec![seat(&tx, &app, &p, s.deck).await?];
     if s.kind == "ai" {
         seats.push(Seat {
             player: "ai".into(),
@@ -113,6 +113,7 @@ pub async fn create(
 }
 #[derive(Deserialize)]
 pub struct Invite {
+    deck: Option<Deck>,
     code: String,
 }
 pub async fn join(
@@ -145,7 +146,7 @@ pub async fn join(
     if r.kind != "friend" || r.seats.len() != 1 {
         return Err(fail("房间已满"));
     }
-    r.seats.push(seat(&tx, &app, &p).await?);
+    r.seats.push(seat(&tx, &app, &p, i.deck).await?);
     r.settings_version += 1;
     r.reset_ready();
     tx.execute(
@@ -180,7 +181,6 @@ pub struct Action {
     settings_version: i64,
     deck_version: i64,
     deck: Option<Deck>,
-    preset_id: Option<String>,
     ready: Option<bool>,
     mode: Option<String>,
     map: Option<String>,
@@ -251,9 +251,6 @@ pub async fn act(
             "deck" => {
                 let d = a.deck.ok_or_else(|| fail("缺少卡组"))?;
                 app.catalog.check(&d)?;
-                if let Some(preset) = &a.preset_id {
-                    tx.execute("UPDATE guests SET last_preset=$1 WHERE id=$2 AND EXISTS (SELECT 1 FROM presets WHERE id=$1 AND owner_id=$2)", &[preset,&p]).await?;
-                }
                 if r.seats[i].deck != d {
                     r.seats[i].deck = d;
                     r.seats[i].version += 1;

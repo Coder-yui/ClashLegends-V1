@@ -154,6 +154,12 @@ impl Catalog {
         Ok(result)
     }
     pub fn check(&self, deck: &Deck) -> Result<()> {
+        self.check_slots(deck, false)
+    }
+    pub fn check_preset(&self, deck: &Deck) -> Result<()> {
+        self.check_slots(deck, true)
+    }
+    fn check_slots(&self, deck: &Deck, allow_empty: bool) -> Result<()> {
         let deck_size = clash_battle_core::classic::modes()
             .iter()
             .find(|m| m.id == "classic")
@@ -164,6 +170,9 @@ impl Catalog {
         }
         let mut seen = HashSet::new();
         for (pos, key) in deck.cards.iter().enumerate() {
+            if allow_empty && key.is_empty() {
+                continue;
+            }
             let reason = || fail(format!("请检查第 {} 个卡位的卡牌或技能", pos + 1));
             let card = self
                 .cards
