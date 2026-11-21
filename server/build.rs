@@ -60,6 +60,8 @@ fn main() {
         "../web/src/model-members.json",
         "../web/src/battle-audio-banks.json",
         "../web/src/battle-effect-assets.json",
+        "../web/src/pantheon-arrival-assets.json",
+        "../web/src/reksai-rock-assets.json",
         "../content/model_resources.json",
     ] {
         println!("cargo:rerun-if-changed={path}");

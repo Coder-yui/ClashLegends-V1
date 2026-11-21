@@ -41,6 +41,8 @@ const lines = [
   "",
   `目录包含 ${cards.length} 张卡牌和 ${cards.reduce((n, c) => n + c.skills.length, 0)} 个可选技能。资源列由正式客户端的弹体、施法、状态、事件及法术选择器生成。一次部署可能只播放其中一部分。缺少直接绑定的条目可以在工作台查看权威状态、变化后的形态或衍生单位。`,
   "",
+  "[逐卡实测与未接入阶段](特效实测.md)记录各系统的战斗出图结果、坐标、比例与时间。",
+  "",
   "| 卡牌 | 技能选项 | 直接关联的原生系统 | 复核重点 |",
   "| --- | --- | --- | --- |",
 ];
@@ -53,7 +55,7 @@ for (const c of cards) {
   for (const id of names)
     if (!systems[id]) throw Error(c.id + " references missing " + id);
   lines.push(
-    `| ${c.name} | ${c.skills.map((s) => s.name).join("、") || "—"} | ${names.map((n) => "`" + n + "`").join("、") || "无直接绑定"} | ${note[c.id] ?? "待逐卡对照"} |`,
+    `| ${c.name} | ${c.skills.map((s) => s.name).join("、") || "—"} | ${names.map((n) => "`" + n + "`").join("、") || "无直接绑定"} | ${note[c.id] ?? "见逐卡实测"} |`,
   );
 }
 const destination = join(root, "docs/battle/特效覆盖.md"),

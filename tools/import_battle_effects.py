@@ -235,7 +235,7 @@ def build(options, tmp):
         folder = tmp / Path(wad).stem
         folder.mkdir(exist_ok=True)
         requests = folder / "requests.json"
-        requests.write_bytes(compact([entry_hash(r["entry"]) for r in group.values()]))
+        requests.write_bytes(compact([r["entry"] for r in group.values()]))
         identity = dict(version=version, reader=reader_digest, wad=stamp(final / wad))
         tag = folder / "input.json"
         changed = not tag.exists() or json.loads(tag.read_bytes()) != identity

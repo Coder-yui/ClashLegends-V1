@@ -1,0 +1,47 @@
+{
+  "wad": "Champions/Pantheon.wad.client",
+  "sourceVersion": "16.19.8217343+branch.releases-16-19.content.release",
+  "inputs": {
+    "spear": {
+      "path": "assets/characters/pantheon/skins/base/particles/pantheon_base_q_hold_spear.scb",
+      "chunk": "7411b14b9e45721e",
+      "sha256": "4a785d88c753d4c9918e4258fce93e928700a37e4cb91b279e98f8837ab29f50"
+    },
+    "color": {
+      "path": "assets/characters/pantheon/skins/base/pantheon_base_tx_cm.tex",
+      "chunk": "7354c689e491d672",
+      "sha256": "b27944fbf2f394a3919ce68c292e9bce61abbd8732b98773b10c4e6eee984a5c"
+    },
+    "stars": {
+      "path": "assets/characters/pantheon/skins/base/particles/kassadin_skin05_i_starrybackdrop.tex",
+      "chunk": "4b08f52fd15e2c38",
+      "sha256": "ef60da7e0ed9779aa8717a2849fe2728e0b41cea6de6a598e52995f4f0f53762"
+    },
+    "proxy": {
+      "path": "assets/characters/pantheon/skins/base/particles/pantheon_base_spell4_slide.skn",
+      "chunk": "0b9c60fe84edb41b",
+      "sha256": "08950f6aedd94d4a55481313dcafa21e625ca996539a55d849c7665c0983469d"
+    },
+    "rig": {
+      "path": "assets/characters/pantheon/skins/base/particles/pantheon_base_spell4_slide.skl",
+      "chunk": "df1afda9fad40fb6",
+      "sha256": "0735ec420ad50b91a6905bee25391f5f5833613e2abb2c66560cde5ca1ee2a32"
+    },
+    "fly": {
+      "path": "assets/characters/pantheon/skins/base/particles/pantheon_spell4_fly.anm",
+      "chunk": "e20689b7eab3c03e",
+      "sha256": "652bfee0b44cba980bcf117ae151d1597e56b873ff2a3fda5bdce1f88370d9c0"
+    },
+    "slide": {
+      "path": "assets/characters/pantheon/skins/base/particles/pantheon_spell4_slide.anm",
+      "chunk": "46c98cf39a85cbc1",
+      "sha256": "003542e3cd8245067cd5331c0139e9c60a94f8dbe4ed695c849858cf68e28528"
+    }
+  },
+  "files": {
+    "spear": "f73b5cf42427d82f4c85946e.glb",
+    "proxy": "c173913d6f2d11ad7b02e593.glb",
+    "color": "bd84525f0a298f4dbc395f90.png",
+    "stars": "659d70a176e49b4dfb5bd51d.png"
+  }
+}

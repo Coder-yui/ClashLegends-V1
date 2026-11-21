@@ -19,7 +19,10 @@ import {
   facesTheCamera,
   isRay,
   isUnitQuad,
+  drawPhases,
 } from "@vfx/rendering/utils/drawKind";
+import { footprintInto, modulateInto } from "@vfx/rendering/utils/projection";
+import { fadeOf } from "@vfx/rendering/utils/softParticle";
 import { drawnEmitters } from "@vfx/rendering/utils/definitions";
 import {
   uvDraw,
@@ -37,7 +40,8 @@ const options = JSON.parse(config),
   }),
   model = readVfxSystem(raw);
 const defs = drawnEmitters(model, true).filter(
-  ({ emitter: e }) =>
+  ({ emitter: e, path }) =>
+    (!options.rootOnly || !path) &&
     !e.disabled &&
     !e.culled &&
     (!options.only || options.only.includes(e.name)),
@@ -63,6 +67,13 @@ const layers = defs.map(({ emitter: e, rank }) => ({
   name: e.name,
   quadType: e.quadType,
   rank,
+  pass: e.pass,
+  groundLayer: e.groundLayer,
+  phases: drawPhases(e),
+  depthBias: e.depthBias,
+  depthPushPull: e.depthPushPull,
+  soft: fadeOf(e),
+  projection: e.projection,
   blendMode: e.blendMode,
   miscRenderFlags: e.miscRenderFlags,
   billboard: facesTheCamera(e),
@@ -136,6 +147,14 @@ for (let f = 0; f < total; f++) {
         }
         const stretch = stretchOf(pool, i, e),
           camera = facesTheCamera(e);
+        let rotation = (-spinOf(pool, i, e) * Math.PI) / 180;
+        if (e.projection) {
+          const footprint = { halfWidth: 0, halfHeight: 0, turn: 0 };
+          footprintInto(e, pool, i, app.scale, basis, footprint);
+          app.scale.set([footprint.halfWidth, 1, footprint.halfHeight]);
+          modulateInto(e, app.color, app.color);
+          rotation = footprint.turn;
+        }
         frame.push(
           pool.serial[i],
           ...xyz,
@@ -143,7 +162,7 @@ for (let f = 0; f < total; f++) {
           app.scale[1] * (camera ? stretch : 1),
           app.scale[2],
           ...app.color,
-          (-spinOf(pool, i, e) * Math.PI) / 180,
+          rotation,
           ...mirror,
         );
         for (const [j, layer] of [e.uv, e.multUv].entries()) {

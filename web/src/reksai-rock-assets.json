@@ -1,0 +1,34 @@
+{
+  "wad": "Champions/RekSai.wad.client",
+  "entry": "Characters/RekSai/Skins/Skin0/Particles/RekSai_Base_Burrowed_W_cas_knockup",
+  "layer": "rockShard_Spike",
+  "treeSHA256": "8c8c32da12372f3c56e4b77f46e0640a6c376a14aef7e878eaf6ba5be1af7ba0",
+  "fps": 60,
+  "inputs": {
+    "mesh": {
+      "path": "assets/characters/reksai/skins/base/particles/reksai_base_w_rockshard.skn",
+      "chunk": "a9feabf2be7c0745",
+      "sha256": "00e4560dada41c43337d9ec614daf15e277264fc9b6b7e6215f69847fea4a3c8"
+    },
+    "rig": {
+      "path": "assets/characters/reksai/skins/base/particles/reksai_base_w_rockshard.skl",
+      "chunk": "2400107152bd60d3",
+      "sha256": "b188df21905a8115d1a76fcf1c4c682d821f6cf8a4a2388ec84dddf90f45de78"
+    },
+    "clip": {
+      "path": "assets/characters/reksai/skins/base/particles/reksai_base_w_rockshard.anm",
+      "chunk": "7564a553ce0db495",
+      "sha256": "3083510da66645689e87f082e756ce5cd6c50a2585a89e36310f63e538e25518"
+    },
+    "texture": {
+      "path": "assets/characters/reksai/skins/base/particles/reksai_base_w_stoneshard.tex",
+      "chunk": "153556790fcd84a5",
+      "sha256": "3fc37967c3a23885e90886055d0ae29a2a62205d5f53f2b98d3403cd7cdae789"
+    }
+  },
+  "files": {
+    "mesh": "6844d7b0bd12f57af2c23065.glb",
+    "texture": "4175e4b51f5f765b1d8a0747.png",
+    "poses": "bd1640b671f8445b2da76120.json.gz"
+  }
+}
