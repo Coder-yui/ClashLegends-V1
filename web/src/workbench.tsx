@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
 import type { Card, Catalog } from "./api";
@@ -160,12 +161,14 @@ function useLaboratory(connection: number) {
   return { frame, extras, events, error, ended, send };
 }
 function Stage({
+  children,
   frame,
   point,
   zoom,
   setZoom,
   reset,
 }: {
+  children: ReactNode;
   frame: TestFrame;
   point: (x: number, y: number) => void;
   zoom: number;
@@ -285,26 +288,29 @@ function Stage({
           play={point}
         />
       </div>
-      <div className="wb-fx-options">
-        <Choice
-          label="特效画质"
-          compact
-          value={quality}
-          items={[
-            { id: "high", name: "画质 · 高" },
-            { id: "low", name: "画质 · 低" },
-            { id: "off", name: "画质 · 关" },
-          ]}
-          onChange={(v) => setQuality(v as typeof quality)}
-        />
-        <label>
-          <input
-            type="checkbox"
-            checked={geometry}
-            onChange={(e) => showGeometry(e.target.checked)}
+      <div className="wb-arena-toolbar">
+        <div className="wb-arena-actions">{children}</div>
+        <div className="wb-fx-options">
+          <Choice
+            label="特效画质"
+            compact
+            value={quality}
+            items={[
+              { id: "high", name: "画质 · 高" },
+              { id: "low", name: "画质 · 低" },
+              { id: "off", name: "画质 · 关" },
+            ]}
+            onChange={(v) => setQuality(v as typeof quality)}
           />
-          范围叠图
-        </label>
+          <label title="在特效上显示法术和持续区域的判定边界，以及飞行中的弹体位置">
+            <input
+              type="checkbox"
+              checked={geometry}
+              onChange={(e) => showGeometry(e.target.checked)}
+            />
+            判定范围
+          </label>
+        </div>
       </div>
       <output className="wb-stats">
         Tick {frame.tick}　{frame.lab.paused ? "暂停" : "运行"}　{metrics}
@@ -667,17 +673,8 @@ export default function Workbench({ catalog }: { catalog: Catalog }) {
                 >
                   重建场景
                 </button>
-                <button
-                  disabled={!ready}
-                  onClick={() => send({ action: "clear" })}
-                >
-                  清场
-                </button>
               </div>
               <div className="wb-row">
-                <button disabled={!ready} onClick={() => setPaused(!paused)}>
-                  {paused ? "继续战斗" : "暂停战斗"}
-                </button>
                 <button
                   disabled={!ready || !frame?.lab.paused}
                   onClick={() => send({ action: "step" })}
@@ -793,7 +790,14 @@ export default function Workbench({ catalog }: { catalog: Catalog }) {
                 zoom={zoom}
                 setZoom={setZoom}
                 reset={reset}
-              />
+              >
+                <button disabled={!ready} onClick={() => setPaused((v) => !v)}>
+                  {paused ? "继续战斗" : "暂停战斗"}
+                </button>
+                <button disabled={!ready} onClick={() => send({ action: "clear" })}>
+                  清场
+                </button>
+              </Stage>
             ) : (
               <p>正在连接实验场…</p>
             )}

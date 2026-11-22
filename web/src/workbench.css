@@ -551,22 +551,46 @@ main:has(.wb) {
   top: 2rem;
   left: 1rem;
 }
-.wb-fx-options {
+.wb-arena-toolbar {
   position: absolute;
-  right: 0.5rem;
-  top: 0.5rem;
+  inset: 0.5rem 0.5rem auto;
   z-index: 2;
   display: flex;
-  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.25rem;
+  pointer-events: none;
+}
+.wb-arena-actions,
+.wb-fx-options {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  pointer-events: auto;
   padding: 0.25rem 0.45rem;
   background: #18222ae6;
   color: #fff;
   font-size: 0.75rem;
 }
+@media (pointer: coarse) {
+  .wb-arena-toolbar button,
+  .wb-fx-options label {
+    min-height: 2.75rem;
+  }
+}
 .wb-fx-options label {
   display: flex;
   align-items: center;
   gap: 0.25rem;
+}
+@container (max-width: 350px) {
+  .wb-fx-options {
+    order: -1;
+  }
+  .wb-fx-options .choice-list {
+    max-height: min(220px, calc(100cqh - 4rem));
+  }
 }
 
 .wb-fx-path {

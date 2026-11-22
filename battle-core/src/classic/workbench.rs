@@ -207,8 +207,7 @@ impl Workbench {
             .ok_or(MatchError::NoAbility)?;
         let team = actor.team;
         let free = actor.card_state.free_execute;
-        let cooldown = actor.next_skill;
-        let members = self.batch(id).unwrap_or(&[]).to_vec();
+        let members = self.batch(id).unwrap_or(std::slice::from_ref(&id)).to_vec();
         let mut changes = vec![];
         roster::cast_group(
             &mut self.game.battle,
@@ -218,10 +217,21 @@ impl Workbench {
             &members,
             &mut changes,
         )?;
+        // cast_group sets the cooldown on the whole formation. Lab casts can
+        // be repeated once the ordinary action and control locks have ended.
+        for member in &members {
+            if let Some(actor) = self.game.battle.actors.get_mut(member) {
+                actor.next_skill = 0;
+            }
+        }
         if free {
-            let actor = self.game.battle.actors.get_mut(&id).unwrap();
-            actor.next_skill = cooldown;
-            actor.card_state.free_execute = false;
+            self.game
+                .battle
+                .actors
+                .get_mut(&id)
+                .unwrap()
+                .card_state
+                .free_execute = false;
         }
         self.game.battle.commit(changes);
         self.game.spell_deaths();
@@ -289,6 +299,8 @@ mod tests {
         for _ in 0..21 {
             w.step();
         }
+        w.cast(squad[1]).unwrap();
+        w.cast(a).unwrap();
         w.cast(squad[1]).unwrap();
         w.control(squad[1], Control::Freeze).unwrap();
         assert!(w.game.battle.actors[&squad[1]].has(Control::Freeze));
