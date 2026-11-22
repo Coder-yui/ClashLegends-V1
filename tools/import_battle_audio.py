@@ -55,8 +55,13 @@ def verify_banks(manifest, paths):
         raise ValueError("Bank references disagree with the manifest")
     for bank, entries in groups.items():
         file = OUT / manifest["files"][bank]
-        if not file.stem.endswith(hashlib.sha256(file.read_bytes()).hexdigest()[:12]):
+        data = file.read_bytes()
+        if not file.stem.endswith(hashlib.sha256(data).hexdigest()[:12]):
             raise ValueError(f"Bank hash mismatch: {file}")
+        # The lower 36 bits of this FLAC STREAMINFO field give the frame count.
+        frames = int.from_bytes(data[21:26], "big") & ((1 << 36) - 1)
+        if frames < max(offset + length for _, offset, length in entries):
+            raise ValueError(f"Incomplete FLAC sample count: {file}")
         pcm = subprocess.check_output(["ffmpeg", "-v", "error", "-i", str(file), "-f", "s16le", "-"])
         for source, offset, length in entries:
             channels, expected = read_pcm(source)
@@ -137,10 +142,15 @@ def main():
             buf.extend(pcm)
             buf.extend(bytes(441 * stride))
         for channels, (pcm, offsets) in buffers.items():
-            encoded = subprocess.run([
-                "ffmpeg", "-loglevel", "error", "-f", "s16le", "-ar", str(RATE),
-                "-ac", str(channels), "-i", "pipe:0", "-f", "flac", "pipe:1"
-            ], input=pcm, capture_output=True, check=True).stdout
+            # A seekable output lets FFmpeg finalize STREAMINFO. WebKit needs
+            # the total sample count when decoding a bank with decodeAudioData.
+            with tempfile.TemporaryDirectory() as tmp:
+                bank = Path(tmp) / "bank.flac"
+                subprocess.run([
+                    "ffmpeg", "-loglevel", "error", "-f", "s16le", "-ar", str(RATE),
+                    "-ac", str(channels), "-i", "pipe:0", str(bank)
+                ], input=pcm, check=True)
+                encoded = bank.read_bytes()
             digest = hashlib.sha256(encoded).hexdigest()[:12]
             label = "-".join(folder.relative_to(SOURCE / "assets/audio").parts[-2:])
             name = f"{label}-{digest}.flac"
