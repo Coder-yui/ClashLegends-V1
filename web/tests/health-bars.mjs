@@ -54,7 +54,7 @@ try {
         Array.from(ctx.getImageData(x + ctx.getTransform().e, y + ctx.getTransform().f, 1, 1).data).join(",");
       const y = Math.floor(u.y + offset / map.projection);
       const x = u.x - w / 2;
-      const color = u.team === 0 ? "71,224,71,255" : "242,71,66,255";
+      const color = u.team === 0 ? "57,148,239,255" : "242,71,66,255";
       return [
         at(x + 2, y) === color,
         at(x + w - 2, y) === color,
@@ -102,7 +102,7 @@ try {
         for (let x = 0; x < width; x++) {
           const i = (y * width + x) * 4;
           if (pixels[i + 3] !== 255) continue;
-          if (pixels[i] === 51 && pixels[i + 1] === 230 && pixels[i + 2] === 51)
+          if (pixels[i] === 57 && pixels[i + 1] === 148 && pixels[i + 2] === 239)
             life++;
           if (
             pixels[i] === 255 &&
@@ -174,76 +174,78 @@ try {
   assert.equal(expired.life, 0);
   assert.equal(expired.shield, 0);
   // Faerie Siphon grants true excess HP. A subsequent shield must follow it.
-  await edit({
-    action: "scene",
-    scene: "dummy",
-    card: "pix",
-    skill: "pix.faerie-siphon",
-    team: 0,
-  });
-  await clock(false);
-  await page.waitForFunction(() =>
-    window.frame.units.some(
-      (u) => u.kind.startsWith("pix") && window.frame.tick > u.readyTick,
-    ),
-  );
-  await edit({ action: "cast" });
-  await page.waitForFunction(() =>
-    window.frame.units.some(
-      (u) => u.kind.startsWith("pix") && u.hp >= 1.45 * u.maxHp,
-    ),
-  );
-  await clock(true);
-  await page.waitForFunction(() => window.frame.lab.paused);
-  const location = await page.evaluate(() => {
-    const { x, y } = window.frame.units.find(
-      (u) => u.kind.startsWith("pix") && u.hp >= 1.45 * u.maxHp,
+  for (const team of [0, 1]) {
+    await edit({
+      action: "scene",
+      scene: "dummy",
+      card: "pix",
+      skill: "pix.faerie-siphon",
+      team,
+    });
+    await clock(false);
+    await page.waitForFunction((team) =>
+      window.frame.units.some(
+        (u) => u.team === team && u.kind.startsWith("pix") && window.frame.tick > u.readyTick,
+      ), team,
     );
-    return { x, y };
-  });
-  await edit({
-    action: "deploy",
-    card: "heal",
-    skill: "heal.overheal",
-    team: 0,
-    ...location,
-  });
-  await clock(false);
-  await page.waitForFunction(() =>
-    window.frame.units.some(
-      (u) => u.kind.startsWith("pix") && u.hp >= 1.45 * u.maxHp && u.shield > 0,
-    ),
-  );
-  await clock(true);
-  await page.waitForFunction(() => window.frame.lab.paused);
-  await page.waitForFunction(() => {
-    const canvas = document.querySelector('.battle-overlay');
-    const ctx = canvas.getContext("2d");
-    for (const u of window.frame.units.filter(
-      (u) => u.kind.startsWith("pix") && u.hp >= 1.45 * u.maxHp && u.shield > 0,
-    )) {
-      // Pix now flies at the native 2.3-world-unit elevation. Search its head
-      // silhouette above that plane, keeping the old ground placeholder out.
-      const projection = window.frame.map.projection;
-      const lift = 2.3 * 40 * Math.sqrt(1 - projection ** 2) / projection;
-      const height = 90;
-      const { data } = ctx.getImageData(u.x + ctx.getTransform().e - 25, u.y + ctx.getTransform().f - lift - height, 65, height);
-      for (let y = 0; y < height; y++) {
-        let stage = 0;
-        for (let x = 0; x < 65; x++) {
-          const i = (y * 65 + x) * 4;
-          if (data[i + 3] !== 255) continue;
-          const r = data[i],
-            g = data[i + 1],
-            b = data[i + 2];
-          if (r === 51 && g === 230 && b === 51) stage = 1;
-          if (stage === 1 && r === 209 && g === 89 && b === 255) stage = 2;
-          if (stage === 2 && r === 255 && g === 255 && b === 255) return true;
+    await edit({ action: "cast" });
+    await page.waitForFunction(() =>
+      window.frame.units.some(
+        (u) => u.kind.startsWith("pix") && u.hp >= 1.45 * u.maxHp,
+      ),
+    );
+    await clock(true);
+    await page.waitForFunction(() => window.frame.lab.paused);
+    const location = await page.evaluate(() => {
+      const { x, y } = window.frame.units.find(
+        (u) => u.kind.startsWith("pix") && u.hp >= 1.45 * u.maxHp,
+      );
+      return { x, y };
+    });
+    await edit({
+      action: "deploy",
+      card: "heal",
+      skill: "heal.overheal",
+      team,
+      ...location,
+    });
+    await clock(false);
+    await page.waitForFunction(() =>
+      window.frame.units.some(
+        (u) => u.kind.startsWith("pix") && u.hp >= 1.45 * u.maxHp && u.shield > 0,
+      ),
+    );
+    await clock(true);
+    await page.waitForFunction(() => window.frame.lab.paused);
+    await page.waitForFunction((team) => {
+      const normal = team === 0 ? 0x3994ef : 0xf24742;
+      const overflow = team === 0 ? 0x59e3ec : 0xffab54;
+      const canvas = document.querySelector(".battle-overlay");
+      const ctx = canvas.getContext("2d");
+      for (const u of window.frame.units.filter(
+        (u) => u.kind.startsWith("pix") && u.hp >= 1.45 * u.maxHp && u.shield > 0,
+      )) {
+        // Pix now flies at the native 2.3-world-unit elevation. Search its head
+        // silhouette above that plane, keeping the old ground placeholder out.
+        const projection = window.frame.map.projection;
+        const lift = 2.3 * 40 * Math.sqrt(1 - projection ** 2) / projection;
+        const height = 90;
+        const { data } = ctx.getImageData(u.x + ctx.getTransform().e - 25, u.y + ctx.getTransform().f - lift - height, 65, height);
+        for (let y = 0; y < height; y++) {
+          let stage = 0;
+          for (let x = 0; x < 65; x++) {
+            const i = (y * 65 + x) * 4;
+            if (data[i + 3] !== 255) continue;
+            const rgb = (data[i] << 16) | (data[i + 1] << 8) | data[i + 2];
+            if (rgb === normal) stage = 1;
+            if (stage === 1 && rgb === overflow) stage = 2;
+            if (stage === 2 && rgb === 0xffffff) return true;
+          }
         }
       }
-    }
-    return false;
-  });
+      return false;
+    }, team);
+  }
   assert.deepEqual(errors, []);
   console.log(
     "Six objective anchors, full-health hiding, shield compression and expiry, and excess HP with shield passed.",

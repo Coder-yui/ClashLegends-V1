@@ -32,6 +32,11 @@ export function barLayout(width: number, health: number, shield: number) {
   };
 }
 
+const healthColors = [
+  { normal: "#3994ef", ghost: "#8fc3f5", overflow: "#59e3ec" },
+  { normal: "#f24742", ghost: "#e79a98", overflow: "#ffab54" },
+];
+
 function objective(ctx: CanvasRenderingContext2D, u: Unit, friendly: boolean) {
   const nexus = u.kind === "nexus";
   const w = nexus ? 160 : 120;
@@ -39,12 +44,17 @@ function objective(ctx: CanvasRenderingContext2D, u: Unit, friendly: boolean) {
   const x = -w / 2,
     y = center - 9;
   const shield = u.shield ?? 0;
-  const perHp =
-    w / (u.maxHp + (shield > 0 ? (u.bar?.shieldCapacity ?? shield) : 0));
+  const shieldCapacity = shield > 0 ? (u.bar?.shieldCapacity ?? shield) : 0;
+  const perHp = w / (Math.max(u.hp, u.maxHp) + shieldCapacity);
   ctx.fillStyle = "#1a1a1a";
   ctx.fillRect(x, y, w, 18);
-  ctx.fillStyle = friendly ? "#47e047" : "#f24742";
-  ctx.fillRect(x, y, u.hp * perHp, 18);
+  const colors = healthColors[u.team];
+  ctx.fillStyle = colors.normal;
+  ctx.fillRect(x, y, Math.min(u.hp, u.maxHp) * perHp, 18);
+  if (u.hp > u.maxHp) {
+    ctx.fillStyle = colors.overflow;
+    ctx.fillRect(x + u.maxHp * perHp, y, (u.hp - u.maxHp) * perHp, 18);
+  }
   ctx.fillStyle = "white";
   if (shield > 0) ctx.fillRect(x + u.hp * perHp, y, shield * perHp, 18);
   const text = String(u.hp);
@@ -180,16 +190,11 @@ export function drawHealthBar(
   if (ghost) ctx.globalAlpha *= 0.45 + 0.15 * Math.cos((tick * Math.PI) / 24);
   ctx.fillStyle = "#262626";
   ctx.fillRect(left, 0, layout.background, 6);
-  ctx.fillStyle = friendly
-    ? ghost
-      ? "#6ae67b"
-      : "#33e633"
-    : ghost
-      ? "#d98b8f"
-      : "#f24040";
+  const colors = healthColors[u.team];
+  ctx.fillStyle = ghost ? colors.ghost : colors.normal;
   ctx.fillRect(left, 0, layout.normal, 6);
   if (layout.overflow > 0) {
-    ctx.fillStyle = "#d159ff";
+    ctx.fillStyle = colors.overflow;
     ctx.fillRect(left + layout.marker, 0, layout.overflow, 6);
   }
   if (layout.shield > 0) {
