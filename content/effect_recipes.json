@@ -97,6 +97,10 @@
     "entry": "Characters/Ashe/Skins/Skin0/Particles/Ashe_Base_W_mis",
     "wad": "Champions/Ashe.wad.client"
   },
+  "ashe/volley_hit": {
+    "entry": "Characters/Ashe/Skins/Skin0/Particles/Ashe_Base_W_tar",
+    "wad": "Champions/Ashe.wad.client"
+  },
   "aurelionsol_q": {
     "entry": "Characters/AurelionSol/Skins/Skin0/Particles/AurelionSol_Base_Q_Beam",
     "seconds": 4,

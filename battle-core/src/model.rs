@@ -525,6 +525,8 @@ pub enum Fact {
     ProjectileHit {
         #[serde(skip_serializing_if = "std::ops::Not::not")]
         first: bool,
+        #[serde(skip_serializing_if = "std::ops::Not::not")]
+        volley: bool,
         position: Point,
         source_kind: &'static str,
         projectile: Id,

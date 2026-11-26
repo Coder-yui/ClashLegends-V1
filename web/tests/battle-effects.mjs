@@ -123,6 +123,9 @@ try {
     });
   await seen("ashe/arrow");
   await seen("ashe/hit");
+  await edit({ action: "cast" });
+  await seen("ashe/volley");
+  await seen("ashe/volley_hit");
   for (const team of [0, 1]) {
     await edit({ action: "clock", paused: true, speed: 4 });
     const epoch = await page.evaluate(() => window.frame.lab.epoch);

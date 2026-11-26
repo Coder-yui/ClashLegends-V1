@@ -22,7 +22,7 @@ const { cards } = json("content/catalog.json"),
   { systems } = json("web/src/battle-effect-assets.json");
 const note = {
   sona: "治疗周期、武器挂点与 R 飞行尾迹",
-  ashe: "普攻、八箭齐射与按目标去重的命中",
+  ashe: "普攻从右手出箭，命中胸部。八箭从弓发射，命中目标中心，每个目标触发一次",
   final_spark: "起点、阵营方向和光束长度",
   scarecrow: "切换为费德提克后按公开目标连接汲取",
   anivia: "风暴由独立区域驱动",

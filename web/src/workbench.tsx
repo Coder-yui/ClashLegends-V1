@@ -797,6 +797,13 @@ export default function Workbench({ catalog }: { catalog: Catalog }) {
                 <button disabled={!ready} onClick={() => send({ action: "clear" })}>
                   清场
                 </button>
+                <button
+                  disabled={!ready || !current}
+                  title="让选中的单位死亡"
+                  onClick={() => current && send({ action: "kill", id: current.id })}
+                >
+                  死亡
+                </button>
               </Stage>
             ) : (
               <p>正在连接实验场…</p>

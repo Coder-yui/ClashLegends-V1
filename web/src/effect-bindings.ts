@@ -353,6 +353,7 @@ export const impacts: Record<string, string> = {
 
   sand_soldier: "azir/hit",
 };
+export const volleyImpacts: Record<string, string> = { ashe: "ashe/volley_hit" };
 export const controlEffects: Record<string, string> = {
   Root: "morgana/rooted",
   Stun: "annie/stunned",
@@ -551,6 +552,7 @@ export function associatedSystems(
           const flight = missile({ sourceKind: id, volley, form, empowered });
           if (flight) result.add(flight.system);
         }
+    if (volleyImpacts[id]) result.add(volleyImpacts[id]);
     for (const team of [0, 1])
       for (const enhanced of [false, true]) {
         for (const layer of spellLayers(

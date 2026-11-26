@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
+  type AnimationAction,
   AnimationMixer,
   HemisphereLight,
   LoopOnce,
@@ -114,33 +115,57 @@ export default function ModelPreview({
               duration: c.duration,
             })),
         );
+        const layers = new Map<AnimationAction, { from: number; to: number }>();
+        let blendAge = 0;
         function render(now: number) {
           const s = state.current;
           const clip = asset!.animations.find((c) => c.name === s.clip);
           if (clip) {
+            const delta = Math.min((now - last) / 1000, 0.1);
             const action = mixer!.clipAction(clip);
             if (active !== s.clip) {
-              mixer!.stopAllAction();
-              action.reset().setLoop(LoopOnce, 1).play();
-              action.clampWhenFinished = true;
-              action.paused = true;
+              blendAge = active ? 0 : 0.3;
+              for (const [layer, weights] of layers) {
+                weights.from = layer.getEffectiveWeight();
+                weights.to = 0;
+              }
+              const enter = (layer: AnimationAction) => {
+                const from = layers.get(layer)?.from ?? 0;
+                layer.reset().setLoop(LoopOnce, 1).play();
+                layer.paused = true;
+                layers.set(layer, { from, to: 1 });
+              };
+              if (
+                clip.name === profile.additive ||
+                clip.name === profile.setupPose
+              ) {
+                const idle = asset!.animations.find(
+                  (c) => c.name === profile.idle,
+                );
+                if (idle) enter(mixer!.clipAction(idle));
+              }
+              enter(action);
               active = s.clip;
             }
-            const end = clip.duration;
-            if (s.playing && end > 0)
-              s.time = (s.time + Math.min((now - last) / 1000, 0.1)) % end;
-            if (
-              clip.name === profile.additive ||
-              clip.name === profile.setupPose
-            ) {
-              const idle = asset!.animations.find(
-                (c) => c.name === profile.idle,
-              )!;
-              const base = mixer!.clipAction(idle).play();
-              base.paused = true;
-              base.time = idle.duration ? s.time % idle.duration : 0;
+            if (s.playing && clip.duration > 0)
+              s.time = (s.time + delta) % clip.duration;
+            // Seeking shows the exact selected pose, even during a transition.
+            blendAge = s.playing ? Math.min(0.3, blendAge + delta) : 0.3;
+            for (const [layer, { from, to }] of layers) {
+              if (!to && blendAge === 0.3) {
+                layer.stop();
+                layers.delete(layer);
+                continue;
+              }
+              const end = layer.getClip().duration;
+              layer.time =
+                layer === action
+                  ? s.time
+                  : end
+                    ? (to ? s.time : layer.time + delta) % end
+                    : 0;
+              layer.setEffectiveWeight(from + ((to - from) * blendAge) / 0.3);
             }
-            action.time = s.time;
             mixer!.update(0);
             surfaces?.(clip.name, s.time);
             if (now - lastUI > 80 && s.playing) {

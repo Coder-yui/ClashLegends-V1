@@ -42,6 +42,7 @@ export interface ModelProfile {
   yaw?: number;
   fixedFacing?: boolean;
   deploy?: string;
+  deployTail?: boolean;
   channel?: string;
   channelEnter?: string;
   dormant?: string;
@@ -65,12 +66,15 @@ export interface ModelProfile {
     holdEnd?: boolean;
   };
   hand?: string;
-  casts?: Record<string, { clip: string; marker: number; action?: string }>;
+  casts?: Record<string, { clip: string; marker: number; blend?: number; action?: string }>;
 }
 
 // GLB axes are Y-up / +Z forward. Scales are in battlefield units.
 const ashe: ModelProfile = {
   asset: "ashe",
+  deploy: "Idle1",
+  deployTail: true,
+  blends: { attack: 1.2, idle: 2 },
   scale: 0.48,
   groundOffset: 0,
   idle: "Idle1",
@@ -81,7 +85,7 @@ const ashe: ModelProfile = {
   ],
   death: { clip: "Death", ticks: 16, blend: 2 },
   hand: "R_hand",
-  casts: { "ashe.volley": { clip: "Spell2", marker: 9 / 30 } },
+  casts: { "ashe.volley": { clip: "Spell2", marker: 9 / 30, blend: 1 } },
 };
 const order: ModelProfile = {
   asset: "melee-order",
@@ -459,6 +463,7 @@ export function followupProfile(
 
 export interface Motion {
   segment?: number;
+  tail?: boolean;
   empowered?: boolean;
   clipRatio?: number;
   clip: string;
@@ -508,7 +513,8 @@ export function motionFor(
       clip: profile.deploy,
       key: "deploy",
       start: u.since,
-      end: profile.deploy === profile.idle ? undefined : u.readyTick,
+      end: profile.deploy === profile.idle && !profile.deployTail ? undefined : u.readyTick,
+      tail: profile.deployTail,
     };
   if (profile.dormant && u.dormant)
     return { clip: profile.dormant, key: "dormant", start: u.since };
@@ -521,6 +527,7 @@ export function motionFor(
       end: u.castEnd,
       release: u.impactTick,
       marker: cast.marker,
+      blend: cast.blend,
     };
   }
   const attack = u.attack;
@@ -787,7 +794,9 @@ export function clipTime(motion: Motion, tick: number, duration: number) {
     );
     return marker + tail * (duration - marker);
   }
-  const from = Math.min(motion.clipStart ?? 0, duration);
+  const from = motion.tail
+    ? Math.max(0, duration - (motion.end - motion.start) / 20)
+    : Math.min(motion.clipStart ?? 0, duration);
   return (
     from +
     (duration - from) *

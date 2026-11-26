@@ -26,6 +26,9 @@ enum Edit {
         id: Option<Id>,
     },
     Cast,
+    Kill {
+        id: Id,
+    },
     Transform,
     Control {
         kind: String,
@@ -149,6 +152,7 @@ impl Lab {
             Edit::Transform => self
                 .world
                 .transform(self.selected.ok_or(MatchError::NoAbility)?)?,
+            Edit::Kill { id } if self.selected == Some(id) => self.world.kill(id)?,
             Edit::Cast => self
                 .world
                 .cast(self.selected.ok_or(MatchError::NoAbility)?)?,

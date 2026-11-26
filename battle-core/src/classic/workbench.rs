@@ -76,6 +76,24 @@ impl Workbench {
 
     pub fn step(&mut self) {
         self.game.step(&[]);
+        self.prune_groups();
+    }
+
+    pub fn kill(&mut self, id: Id) -> Result<(), MatchError> {
+        let actor = self
+            .game
+            .battle
+            .actors
+            .get_mut(&id)
+            .ok_or(MatchError::NoAbility)?;
+        actor.hp = 0;
+        self.game.battle.remove_dead();
+        self.game.spell_deaths();
+        self.prune_groups();
+        Ok(())
+    }
+
+    fn prune_groups(&mut self) {
         self.groups.retain_mut(|members| {
             members.retain(|id| self.game.battle.actors.contains_key(id));
             !members.is_empty()
@@ -305,6 +323,29 @@ mod tests {
         w.control(squad[1], Control::Freeze).unwrap();
         assert!(w.game.battle.actors[&squad[1]].has(Control::Freeze));
         assert!(!w.game.battle.actors[&a].has(Control::Freeze));
+    }
+
+    #[test]
+    fn killing_one_member_while_paused_emits_its_death_and_preserves_the_group() {
+        let mut world = Workbench::new();
+        let id = world
+            .deploy(
+                "melee_minion_squad",
+                None,
+                Team::Blue,
+                Point::new(340., 820.),
+            )
+            .unwrap()
+            .unwrap();
+        let members = world.batch(id).unwrap().to_vec();
+        world.kill(id).unwrap();
+        assert_eq!(world.game().tick(), 0);
+        assert!(world
+            .facts()
+            .iter()
+            .any(|event| matches!(event.fact, crate::Fact::Died(dead) if dead == id)));
+        assert_eq!(world.batch(members[1]).unwrap(), &members[1..]);
+        assert!(world.kill(id).is_err());
     }
 
     #[test]

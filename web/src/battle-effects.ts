@@ -27,6 +27,7 @@ import {
   phaseEffects,
   controlEffects,
   impacts,
+  volleyImpacts,
   buffEffects,
   castEffects,
   deathEffects,
@@ -63,6 +64,7 @@ const unitEffectSockets: Record<string, string> = {
 // These Godot projectile adapters interpolate from the firing socket to the
 // target's torso. Free-flight and bouncing shots follow the published path.
 const torsoShots = new Set([
+  "ashe",
   "ivern",
   "jack_in_the_box",
   "thorn_spitter",
@@ -130,6 +132,7 @@ interface Instance {
   position: Vector3;
   rotation: Quaternion;
   muzzle?: Vector3;
+  hitSocket?: { id: number; name: string };
   actor?: ParticleActor;
   owner?: number;
   beamLength?: number;
@@ -358,17 +361,23 @@ export class BattleEffects {
       const d = data as {
         source_kind: string;
         first?: boolean;
+        volley?: boolean;
         projectile: number;
         target: number;
         position: Point;
       };
+      const ashe = d.source_kind === "ashe";
+      // Older replays recorded the shot type only on the presentation sound cue.
+      const volley = d.volley ?? event.sounds?.some((s) => s.phase === "volleyHit");
       const sys =
-          d.source_kind === "jayce" && d.first
+          volley && volleyImpacts[d.source_kind]
+            ? volleyImpacts[d.source_kind]
+            : d.source_kind === "jayce" && d.first
             ? "jayce/first_hit_r"
             : impacts[d.source_kind],
         target = actor(d.target);
-      if (sys && d.position)
-        this.place(
+      if (sys && d.position) {
+        const hit = this.place(
           "hit/" + event.seq,
           sys,
           event.tick,
@@ -376,8 +385,23 @@ export class BattleEffects {
           d.position,
           this.facing(target?.team ?? 0),
           frame,
-          Math.max(10, target?.radius ?? 16),
+          (ashe && target?.air ? 92 : 0) + Math.max(10, target?.radius ?? 16),
         );
+        if (ashe && hit && socket) {
+          const names = volley
+            ? ["C_Buffbone_Glb_Center_Loc", ...chestSockets]
+            : chestSockets;
+          for (const name of names) {
+            const bone = socket(d.target, name);
+            if (bone) {
+              hit.hitSocket = { id: d.target, name };
+              hit.moving = true;
+              bone.getWorldPosition(hit.position);
+              break;
+            }
+          }
+        }
+      }
     } else if (kind === "sound") {
       const d = data as {
         source: { kind: string; team: string; action: string; owner: number };
@@ -944,6 +968,7 @@ export class BattleEffects {
       if (card === "pantheon") this.arrivals.prepare();
       this.warm(missiles[card]?.system);
       if (card === "ashe") this.warm("ashe/volley");
+      this.warm(volleyImpacts[card]);
       if (card === "sona") this.warm("sona/wave");
       const spell = {
         id: 0,
@@ -1143,6 +1168,7 @@ export class BattleEffects {
         this.warm(missiles[u.kind]?.system);
         this.warm(impacts[u.kind]);
         if (u.kind === "ashe") this.warm("ashe/volley");
+        this.warm(volleyImpacts[u.kind]);
         if (u.kind === "sona") {
           this.warm("sona/wave");
           this.warm("sona/heal_self");
@@ -1624,7 +1650,7 @@ export class BattleEffects {
       if (launch && !item.muzzle) item.muzzle = launch.world.clone();
       const sign = this.seat ? -1 : 1;
       const torso = !!target && !s.direction && torsoShots.has(s.sourceKind);
-      if (item.muzzle && !torso) {
+      if (item.muzzle && !torso && s.sourceKind !== "ashe") {
         const remain =
           s.sourceKind === "sona" && s.volley
             ? 1
@@ -1705,6 +1731,9 @@ export class BattleEffects {
             item.rotation.multiply(missileOrientation);
         }
       }
+      // A newly published shot has already advanced one simulation step.
+      if (s.sourceKind === "ashe" && item.muzzle)
+        item.position.lerp(item.muzzle, Math.max(0, 1 - (tick - s.born) / 2));
       if (this.tracks.has(b.system)) this.shots.add(s.id);
     }
     for (const w of frame.waves ?? []) {
@@ -1897,6 +1926,10 @@ export class BattleEffects {
         item.position.copy(item.thrust.launch).lerp(end, f);
       }
       const a = item.actor;
+      if (item.hitSocket) {
+        const { id, name } = item.hitSocket;
+        socket?.(id, name)?.getWorldPosition(item.position);
+      }
       if (item.owner !== undefined) {
         const gate = item.name.startsWith("void_gate/");
         const shield =

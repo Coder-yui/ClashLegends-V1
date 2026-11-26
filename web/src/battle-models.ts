@@ -1104,8 +1104,12 @@ export class BattleModels {
       const u = units.get(owner) ?? actor?.lastUnit;
       const wildCard = fired && u?.kind === "twisted_fate" &&
         frame.shots.some((shot) => shot.id === data[2] && shot.volley);
-      const hand = wildCard ? actor?.socket("R_Hand") :
-        actor?.hands[((u?.attack?.cycle ?? 1) - 1) % actor.hands.length];
+      const volley = fired && u?.kind === "ashe" && data[1] === 0;
+      const hand = volley
+        ? actor?.socket("Bow_01")
+        : wildCard
+          ? actor?.socket("R_Hand")
+          : actor?.hands[((u?.attack?.cycle ?? 1) - 1) % actor.hands.length];
       if (!actor || !u || (fired && !hand) || (strike && hand)) continue;
       const motion = motionFor(u, actor.profile, event.tick);
       if (

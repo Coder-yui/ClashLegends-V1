@@ -197,7 +197,7 @@ export function EffectInspector({
           mixer?.setTime(time.current);
           const wave = name === "sona/wave";
           if (wave) actor.previewMotion(time.current);
-          if (name.startsWith("ashe/") && name !== "ashe/hit")
+          if (name === "ashe/arrow" || name === "ashe/volley")
             actor.root.quaternion.copy(missileOrientation);
           actor.sample(
             time.current,
