@@ -1,4 +1,5 @@
 //! Server-owned fixed-step 2D simulation. No clocks, renderer or transport.
+mod attack_nodes;
 mod audio_layers;
 mod battle_audio;
 pub use audio_layers::AudioState;
@@ -50,6 +51,7 @@ pub enum Error {
 }
 
 pub struct Battle {
+    classic_attack_nodes: bool,
     map: Arena,
     actors: BTreeMap<Id, Actor>,
     shots: Vec<Projectile>,
@@ -87,6 +89,7 @@ impl Battle {
             return Err(Error::InvalidDefinition);
         }
         Ok(Self {
+            classic_attack_nodes: false,
             map,
             actors: BTreeMap::new(),
             shots: vec![],
@@ -503,7 +506,13 @@ impl Battle {
             {
                 a.activity = Activity::Recover;
             } else {
-                combat::decide(a, &view, self.map.width / 2., &mut out)
+                combat::decide(
+                    a,
+                    &view,
+                    self.map.width / 2.,
+                    self.classic_attack_nodes,
+                    &mut out,
+                )
             }
             let cycle = out.facts[start..]
                 .iter()

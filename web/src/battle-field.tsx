@@ -62,6 +62,9 @@ export interface Unit {
     end: number;
     cycle: number;
     segment?: number;
+    role?: string;
+    phaseTick?: number;
+    progress?: number;
     released: boolean;
     empowered?: boolean;
     close?: boolean;

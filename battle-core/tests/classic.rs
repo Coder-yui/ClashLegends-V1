@@ -202,9 +202,9 @@ fn full_match_records_rejections_and_replays_both_private_seats() {
         checkpoints,
         [
             (100, 14, 18033, 5, 1),
-            (1000, 14, 16625, 44, 1),
-            (2000, 20, 17750, 87, 0),
-            (3700, 38, 16548, 161, 3),
+            (1000, 14, 16734, 44, 1),
+            (2000, 17, 17000, 87, 1),
+            (3700, 21, 15364, 161, 3),
         ]
     );
     assert!(record.commands.len() > 30);

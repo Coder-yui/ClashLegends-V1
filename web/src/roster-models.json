@@ -8,20 +8,16 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.25
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.25
+          "clip": "Attack2"
         },
         {
-          "clip": "Attack3",
-          "marker": 0.25
+          "clip": "Attack3"
         },
         {
-          "clip": "Passive_Attack",
-          "marker": 0.25
+          "clip": "Passive_Attack"
         }
       ],
       "death": {
@@ -168,16 +164,13 @@
       "run": "Run_Ult",
       "attacks": [
         {
-          "clip": "Passive_Attack_Ult",
-          "marker": 0.25
+          "clip": "Passive_Attack_Ult"
         },
         {
-          "clip": "Attack1_Ult",
-          "marker": 0.25
+          "clip": "Attack1_Ult"
         },
         {
-          "clip": "Attack2_Ult",
-          "marker": 0.25
+          "clip": "Attack2_Ult"
         }
       ],
       "death": {
@@ -308,12 +301,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.68
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.68
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -554,12 +545,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Azir_Attack1_anm",
-          "marker": 0.25
+          "clip": "Azir_Attack1_anm"
         },
         {
-          "clip": "Azir_Attack2_anm",
-          "marker": 0.25
+          "clip": "Azir_Attack2_anm"
         }
       ],
       "death": {
@@ -657,12 +646,10 @@
       "run": "Run_Ult_anm",
       "attacks": [
         {
-          "clip": "AttackSwipe1_in_anm",
-          "marker": 0.15
+          "clip": "AttackSwipe1_in_anm"
         },
         {
-          "clip": "AttackSwipe2_in_anm",
-          "marker": 0.15
+          "clip": "AttackSwipe2_in_anm"
         }
       ],
       "death": {
@@ -767,12 +754,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.77
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.77
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -830,12 +815,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.14
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.14
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -911,16 +894,13 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.4
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.4
+          "clip": "Attack2"
         },
         {
-          "clip": "Attack3",
-          "marker": 0.4
+          "clip": "Attack3"
         }
       ],
       "death": {
@@ -964,12 +944,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.3
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.3
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -1021,16 +999,13 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "Attack_P_1",
-          "marker": 0.2
+          "clip": "Attack_P_1"
         },
         {
-          "clip": "Attack_P_2",
-          "marker": 0.2
+          "clip": "Attack_P_2"
         },
         {
-          "clip": "Attack_P_3",
-          "marker": 0.2
+          "clip": "Attack_P_3"
         }
       ],
       "death": {
@@ -1157,12 +1132,10 @@
       "run": "Run1",
       "attacks": [
         {
-          "clip": "Spell1",
-          "marker": 0.18
+          "clip": "Spell1"
         },
         {
-          "clip": "Spell1B",
-          "marker": 0.18
+          "clip": "Spell1B"
         }
       ],
       "death": {
@@ -1210,12 +1183,10 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.38
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.38
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -1303,12 +1274,10 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "Gnar_Attack1_anm",
-          "marker": 0.3
+          "clip": "Gnar_Attack1_anm"
         },
         {
-          "clip": "Gnar_Attack2_anm",
-          "marker": 0.3
+          "clip": "Gnar_Attack2_anm"
         }
       ],
       "death": {
@@ -1373,12 +1342,10 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "GnarBig_Attack1_anm",
-          "marker": 0.4
+          "clip": "GnarBig_Attack1_anm"
         },
         {
-          "clip": "GnarBig_Attack2_anm",
-          "marker": 0.4
+          "clip": "GnarBig_Attack2_anm"
         }
       ],
       "death": {
@@ -1482,8 +1449,7 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "graves_attack1_anm",
-          "marker": 0.14
+          "clip": "graves_attack1_anm"
         }
       ],
       "death": {
@@ -1551,16 +1517,13 @@
       "run": "Run_anm",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.28
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.28
+          "clip": "Attack2"
         },
         {
-          "clip": "Attack3",
-          "marker": 0.28
+          "clip": "Attack3"
         }
       ],
       "death": {
@@ -1802,8 +1765,7 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Hecarim_Spell1_anm",
-          "marker": 0.15
+          "clip": "Hecarim_Spell1_anm"
         }
       ],
       "death": {
@@ -1906,16 +1868,13 @@
       "run": "Run1",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.25
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.25
+          "clip": "Attack2"
         },
         {
-          "clip": "Attack3",
-          "marker": 0.25
+          "clip": "Attack3"
         }
       ],
       "death": {
@@ -1978,12 +1937,10 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "Ivern_ranged_attack01_anm",
-          "marker": 0.11
+          "clip": "Ivern_ranged_attack01_anm"
         },
         {
-          "clip": "Ivern_ranged_attack02_anm",
-          "marker": 0.11
+          "clip": "Ivern_ranged_attack02_anm"
         }
       ],
       "death": {
@@ -2047,12 +2004,10 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "Attack_1_anm",
-          "marker": 0.23
+          "clip": "Attack_1_anm"
         },
         {
-          "clip": "Attack_2_anm",
-          "marker": 0.23
+          "clip": "Attack_2_anm"
         }
       ],
       "death": {
@@ -2167,12 +2122,10 @@
       "run": "Ranged_Run",
       "attacks": [
         {
-          "clip": "Ranged_Attack1",
-          "marker": 0.1
+          "clip": "Ranged_Attack1"
         },
         {
-          "clip": "Ranged_Attack2",
-          "marker": 0.1
+          "clip": "Ranged_Attack2"
         }
       ],
       "death": {
@@ -2235,12 +2188,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.24
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.24
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -2294,12 +2245,10 @@
       "run": "Jinx_Rlauncher_run_anm",
       "attacks": [
         {
-          "clip": "Jinx_Rlauncher_attack1_anm",
-          "marker": 0.22
+          "clip": "Jinx_Rlauncher_attack1_anm"
         },
         {
-          "clip": "Jinx_Rlauncher_attack2_anm",
-          "marker": 0.22
+          "clip": "Jinx_Rlauncher_attack2_anm"
         }
       ],
       "death": {
@@ -2368,12 +2317,10 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.18
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.18
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -2444,12 +2391,10 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.21
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.21
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -2522,12 +2467,10 @@
       "run": "Run1",
       "attacks": [
         {
-          "clip": "kayle_attack1_anm",
-          "marker": 0.22
+          "clip": "kayle_attack1_anm"
         },
         {
-          "clip": "kayle_attack2_anm",
-          "marker": 0.22
+          "clip": "kayle_attack2_anm"
         }
       ],
       "death": {
@@ -2615,12 +2558,10 @@
       "run": "Kayle_RunPassive_anm",
       "attacks": [
         {
-          "clip": "Kayle_Attack3_anm",
-          "marker": 0.18
+          "clip": "Kayle_Attack3_anm"
         },
         {
-          "clip": "Kayle_Attack4_anm",
-          "marker": 0.18
+          "clip": "Kayle_Attack4_anm"
         }
       ],
       "death": {
@@ -2715,16 +2656,13 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.16
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.16
+          "clip": "Attack2"
         },
         {
-          "clip": "Attack3",
-          "marker": 0.16
+          "clip": "Attack3"
         }
       ],
       "death": {
@@ -2808,16 +2746,13 @@
       "run": "Run_Assassin",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.12
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.12
+          "clip": "Attack2"
         },
         {
-          "clip": "Attack3",
-          "marker": 0.12
+          "clip": "Attack3"
         }
       ],
       "death": {
@@ -2901,16 +2836,13 @@
       "run": "Run_Slayer",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.16
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.16
+          "clip": "Attack2"
         },
         {
-          "clip": "Attack3",
-          "marker": 0.16
+          "clip": "Attack3"
         }
       ],
       "death": {
@@ -2995,12 +2927,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.29
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.29
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -3065,12 +2995,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.82
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.82
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -3127,12 +3055,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.35
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.35
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -3236,16 +3162,13 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "masteryi_2013_attack1_anm",
-          "marker": 0.2
+          "clip": "masteryi_2013_attack1_anm"
         },
         {
-          "clip": "masteryi_2013_attack2_anm",
-          "marker": 0.2
+          "clip": "masteryi_2013_attack2_anm"
         },
         {
-          "clip": "masteryi_2013_passive_anm",
-          "marker": 0.2
+          "clip": "masteryi_2013_passive_anm"
         }
       ],
       "death": {
@@ -3303,12 +3226,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.12
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.12
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -3372,12 +3293,10 @@
       "run": "Run1",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.2
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.2
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -3425,12 +3344,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.6
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.6
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -3501,12 +3418,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.3
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.3
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -3559,12 +3474,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.3
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.3
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -3617,16 +3530,13 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.26
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.26
+          "clip": "Attack2"
         },
         {
-          "clip": "Attack3",
-          "marker": 0.26
+          "clip": "Attack3"
         }
       ],
       "death": {
@@ -3746,20 +3656,16 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.28
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.28
+          "clip": "Attack2"
         },
         {
-          "clip": "Attack3",
-          "marker": 0.28
+          "clip": "Attack3"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.28
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -3880,12 +3786,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.4
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.4
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -3929,12 +3833,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.4
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.4
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -3978,12 +3880,10 @@
       "run": "Run1",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.2
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.2
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -4038,12 +3938,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.5
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.5
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -4153,20 +4051,16 @@
       "run": "Run_OOC_anm",
       "attacks": [
         {
-          "clip": "Attack1_Gun_Start_anm",
-          "marker": 0.25
+          "clip": "Attack1_Gun_Start_anm"
         },
         {
-          "clip": "Attack2_Gun_Start_anm",
-          "marker": 0.25
+          "clip": "Attack2_Gun_Start_anm"
         },
         {
-          "clip": "Attack1_Sword_anm",
-          "marker": 0.25
+          "clip": "Attack1_Sword_anm"
         },
         {
-          "clip": "Attack2_Sword_anm",
-          "marker": 0.25
+          "clip": "Attack2_Sword_anm"
         }
       ],
       "death": {
@@ -4302,16 +4196,13 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1_BASE",
-          "marker": 0.4
+          "clip": "Attack1_BASE"
         },
         {
-          "clip": "Attack2_BASE",
-          "marker": 0.4
+          "clip": "Attack2_BASE"
         },
         {
-          "clip": "AzirSoldier_Attack3_anm",
-          "marker": 0.4
+          "clip": "AzirSoldier_Attack3_anm"
         }
       ],
       "death": {
@@ -4402,20 +4293,16 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "Attack1_Start",
-          "marker": 0.3
+          "clip": "Attack1_Start"
         },
         {
-          "clip": "Attack1_Passive_Start",
-          "marker": 0.3
+          "clip": "Attack1_Passive_Start"
         },
         {
-          "clip": "Attack2_Start",
-          "marker": 0.3
+          "clip": "Attack2_Start"
         },
         {
-          "clip": "Attack2_Passive_Start",
-          "marker": 0.3
+          "clip": "Attack2_Passive_Start"
         }
       ],
       "death": {
@@ -4581,16 +4468,13 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1_BASE",
-          "marker": 0.4
+          "clip": "Attack1_BASE"
         },
         {
-          "clip": "Attack2_BASE",
-          "marker": 0.4
+          "clip": "Attack2_BASE"
         },
         {
-          "clip": "AzirSoldier_Attack3_anm",
-          "marker": 0.4
+          "clip": "AzirSoldier_Attack3_anm"
         }
       ],
       "death": {
@@ -4640,12 +4524,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack_Tower2",
-          "marker": 0.36
+          "clip": "Attack_Tower2"
         },
         {
-          "clip": "Attack_Tower",
-          "marker": 0.36
+          "clip": "Attack_Tower"
         }
       ],
       "death": {
@@ -4719,12 +4601,10 @@
       "run": "Sion_Passive_Run_anm",
       "attacks": [
         {
-          "clip": "Passive_Attack1",
-          "marker": 0.12
+          "clip": "Passive_Attack1"
         },
         {
-          "clip": "Passive_Attack2",
-          "marker": 0.12
+          "clip": "Passive_Attack2"
         }
       ],
       "death": {
@@ -4770,8 +4650,7 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Spell1",
-          "marker": 0.25
+          "clip": "Spell1"
         }
       ],
       "death": {
@@ -4827,16 +4706,13 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.52
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.52
+          "clip": "Attack2"
         },
         {
-          "clip": "Attack3",
-          "marker": 0.52
+          "clip": "Attack3"
         }
       ],
       "death": {
@@ -4910,8 +4786,7 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "Attack1_ASU_Teemo_anm",
-          "marker": 0.25
+          "clip": "Attack1_ASU_Teemo_anm"
         }
       ],
       "death": {
@@ -5016,12 +4891,10 @@
       "run": "annietibbers_run",
       "attacks": [
         {
-          "clip": "annietibbers_attack1",
-          "marker": 0.3
+          "clip": "annietibbers_attack1"
         },
         {
-          "clip": "annietibbers_attack2",
-          "marker": 0.3
+          "clip": "annietibbers_attack2"
         }
       ],
       "death": {
@@ -5060,12 +4933,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.12
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.12
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -5111,16 +4982,13 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "HeldAttack1",
-          "marker": 0.8
+          "clip": "HeldAttack1"
         },
         {
-          "clip": "HeldAttack2",
-          "marker": 0.8
+          "clip": "HeldAttack2"
         },
         {
-          "clip": "HeldCrit",
-          "marker": 0.8
+          "clip": "HeldCrit"
         }
       ],
       "death": {
@@ -5164,24 +5032,19 @@
       "run": "Run1",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.25
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.25
+          "clip": "Attack2"
         },
         {
-          "clip": "Attack3",
-          "marker": 0.25
+          "clip": "Attack3"
         },
         {
-          "clip": "Attack4",
-          "marker": 0.25
+          "clip": "Attack4"
         },
         {
-          "clip": "Crit",
-          "marker": 0.25
+          "clip": "Crit"
         }
       ],
       "death": {
@@ -5257,12 +5120,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.24
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.24
+          "clip": "Attack2"
         }
       ],
       "death": {
@@ -5383,8 +5244,7 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "VoidSpawn_TurretAttack1_anm",
-          "marker": 0.8
+          "clip": "VoidSpawn_TurretAttack1_anm"
         }
       ],
       "death": {
@@ -5426,8 +5286,7 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "VoidSpawn_TurretAttack1_anm",
-          "marker": 0.8
+          "clip": "VoidSpawn_TurretAttack1_anm"
         }
       ],
       "death": {
@@ -5469,8 +5328,7 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "attack_1_anm",
-          "marker": 0.41
+          "clip": "attack_1_anm"
         }
       ],
       "death": {
@@ -5520,8 +5378,7 @@
       "run": "ranged_run",
       "attacks": [
         {
-          "clip": "ranged_attack",
-          "marker": 0.46
+          "clip": "ranged_attack"
         }
       ],
       "death": {
@@ -5572,8 +5429,7 @@
       "run": "ranged_run",
       "attacks": [
         {
-          "clip": "ranged_attack",
-          "marker": 0.46
+          "clip": "ranged_attack"
         }
       ],
       "death": {
@@ -5624,8 +5480,7 @@
       "run": "ranged_run",
       "attacks": [
         {
-          "clip": "ranged_attack",
-          "marker": 0.46
+          "clip": "ranged_attack"
         }
       ],
       "death": {
@@ -5676,16 +5531,13 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.33
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.33
+          "clip": "Attack2"
         },
         {
-          "clip": "Attack3",
-          "marker": 0.33
+          "clip": "Attack3"
         }
       ],
       "death": {
@@ -5729,8 +5581,7 @@
       "run": "Ranged_Run",
       "attacks": [
         {
-          "clip": "Ranged_Attack1",
-          "marker": 0.32
+          "clip": "Ranged_Attack1"
         }
       ],
       "death": {
@@ -5846,16 +5697,13 @@
       "run": "RunBase",
       "attacks": [
         {
-          "clip": "Attack1_Hit",
-          "marker": 0.3
+          "clip": "Attack1_Hit"
         },
         {
-          "clip": "Attack3_Hit",
-          "marker": 0.3
+          "clip": "Attack3_Hit"
         },
         {
-          "clip": "Passive_AA_01_XinZhaoRework_anm",
-          "marker": 0.3
+          "clip": "Passive_AA_01_XinZhaoRework_anm"
         }
       ],
       "death": {
@@ -5977,16 +5825,13 @@
       "run": "Run_Base",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.27
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.27
+          "clip": "Attack2"
         },
         {
-          "clip": "Attack3",
-          "marker": 0.27
+          "clip": "Attack3"
         }
       ],
       "death": {
@@ -6047,12 +5892,10 @@
       "run": "Run",
       "attacks": [
         {
-          "clip": "Attack1",
-          "marker": 0.5
+          "clip": "Attack1"
         },
         {
-          "clip": "Attack2",
-          "marker": 0.5
+          "clip": "Attack2"
         }
       ],
       "death": {

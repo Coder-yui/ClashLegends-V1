@@ -14,7 +14,7 @@ import { ChoiceList } from "./controls";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import type { GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { loadModel, releaseAsset, modelSurfaces } from "./battle-models";
-import { clipRoles, type ModelProfile } from "./battle-motion";
+import { attackClipMarker, clipRoles, type ModelProfile } from "./battle-motion";
 
 export default function ModelPreview({
   profile,
@@ -31,10 +31,8 @@ export default function ModelPreview({
   const [error, setError] = useState("");
   const selected = clips.find((c) => c.name === display.clip);
   const usage = clipRoles(profile);
-  const marker = [
-    ...profile.attacks,
-    ...Object.values(profile.casts ?? {}),
-  ].find((action) => action.clip === display.clip)?.marker;
+  const marker = attackClipMarker(profile, display.clip) ??
+    Object.values(profile.casts ?? {}).find((action) => action.clip === display.clip)?.marker;
   function edit(value: Partial<typeof display>) {
     Object.assign(state.current, value);
     setDisplay({ ...state.current });

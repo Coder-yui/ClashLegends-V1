@@ -1,3 +1,4 @@
+import attackNodes from "../../content/attack_nodes.json" with { type: "json" };
 import rosterData from "./roster-models.json" with { type: "json" };
 import type { Unit } from "./battle-field";
 
@@ -57,7 +58,7 @@ export interface ModelProfile {
   surfaceMode?: "tower" | "crystal" | "effigy";
   idle: string;
   run: string;
-  attacks: { clip: string; marker?: number }[];
+  attacks: { clip: string }[];
   death: {
     clip: string;
     ticks: number;
@@ -79,10 +80,7 @@ const ashe: ModelProfile = {
   groundOffset: 0,
   idle: "Idle1",
   run: "Run",
-  attacks: [
-    { clip: "Attack1", marker: 9 / 30 },
-    { clip: "Attack2", marker: 9 / 30 },
-  ],
+  attacks: attacks(["Attack1", "Attack2"]),
   death: { clip: "Death", ticks: 16, blend: 2 },
   hand: "R_hand",
   casts: { "ashe.volley": { clip: "Spell2", marker: 9 / 30, blend: 1 } },
@@ -94,10 +92,7 @@ const order: ModelProfile = {
   groundOffset: -0.56,
   idle: "Idle1",
   run: "Run",
-  attacks: [
-    { clip: "Attack1", marker: 11.8 / 30 },
-    { clip: "Attack2", marker: 11.8 / 30 },
-  ],
+  attacks: attacks(["Attack1", "Attack2"]),
   death: { clip: "Death", ticks: 10, blend: 0 },
 };
 const chaos: ModelProfile = {
@@ -124,11 +119,8 @@ function building(
     ...options,
   };
 }
-function attacks(names: string[], frames?: number) {
-  return names.map((clip) => ({
-    clip,
-    marker: frames === undefined ? undefined : frames / 30,
-  }));
+function attacks(names: string[]) {
+  return names.map((clip) => ({ clip }));
 }
 function teams(base: ModelProfile): [ModelProfile, ModelProfile] {
   return ["blue", "red"].map((team) => ({
@@ -141,7 +133,6 @@ function minions(
   scale: [number, number],
   offset: [number, number],
   clips: string[],
-  marker: [number, number],
   death: string,
   hand?: string,
 ): [ModelProfile, ModelProfile] {
@@ -150,7 +141,7 @@ function minions(
     asset: role + "-" + side,
     scale: scale[i],
     groundOffset: offset[i],
-    attacks: attacks(clips, marker[i]),
+    attacks: attacks(clips),
     death: { clip: death, ticks: 10, blend: 0 },
     hand,
   })) as [ModelProfile, ModelProfile];
@@ -229,7 +220,6 @@ const models: Record<string, ModelProfile | [ModelProfile, ModelProfile]> = {
     [0.32, 0.3],
     [-0.88, -1.16],
     standardAttacks,
-    [14.1, 14],
     "Death",
     "Buffbone_Glb_Weapon_1",
   ),
@@ -238,7 +228,6 @@ const models: Record<string, ModelProfile | [ModelProfile, ModelProfile]> = {
     [0.484, 0.484],
     [0.04, 0.54],
     cannonAttacks,
-    [9, 9],
     "Death",
     "Cannon",
   ),
@@ -247,7 +236,6 @@ const models: Record<string, ModelProfile | [ModelProfile, ModelProfile]> = {
     [0.548, 0.548],
     [0.36, -2],
     standardAttacks,
-    [15, 15],
     "Death_Base",
   ),
   princess_tower: teams(
@@ -417,6 +405,22 @@ export const modelProfiles = [
     ...Object.values(roster).flat(),
   ]),
 ];
+interface AttackNode {
+  clip: string;
+  markerUs: number;
+}
+const nativeAttacks: Record<string, Record<string, AttackNode[]>> = attackNodes.profiles;
+
+export function attackClipMarker(profile: ModelProfile, clip: string) {
+  const roles = nativeAttacks[profile.asset];
+  if (!roles) return undefined;
+  for (const nodes of Object.values(roles)) {
+    const node = nodes.find((entry) => entry.clip === clip);
+    if (node) return node.markerUs / 1e6;
+  }
+  return undefined;
+}
+
 export function skillPacks(profile: ModelProfile) {
   return Object.keys(profile.packs ?? profile.casts ?? {});
 }
@@ -465,6 +469,8 @@ export interface Motion {
   segment?: number;
   tail?: boolean;
   empowered?: boolean;
+  phaseTick?: number;
+  progress?: number;
   clipRatio?: number;
   clip: string;
   key: string;
@@ -540,6 +546,9 @@ export function motionFor(
     const clip = profile.attacks[(attack.cycle - 1) % profile.attacks.length];
     return {
       ...clip,
+      marker: attackClipMarker(profile, clip.clip),
+      phaseTick: attack.phaseTick,
+      progress: attack.progress,
       blend: profile.blends?.attack,
       key: "swing:" + attack.start,
       start: attack.start,
@@ -672,6 +681,7 @@ function rosterMotion(
       attackRole = "attack_structure";
     else if (atk.cycle === 1 && roles.first_strike_attack)
       attackRole = "first_strike_attack";
+    attackRole = atk.role ?? attackRole;
     const starts = roles[attackRole];
     if (starts?.length) {
       let i = (atk.segment ?? atk.cycle - 1) % starts.length;
@@ -684,6 +694,10 @@ function rosterMotion(
       const hit = roles[prefix + "_hit"]?.[i];
       const key = "swing:" + atk.start + ":" + attackRole;
       const segment = { segment: i, empowered: atk.empowered };
+      const node = nativeAttacks[profile.asset]?.[attackRole]?.[i];
+      const marker = node ? node.markerUs / 1e6 : undefined;
+      const range = profile.timing?.attack_clip_ranges?.[i];
+      const phase = { phaseTick: atk.phaseTick, progress: atk.progress };
       if (!hit)
         return {
           ...segment,
@@ -692,9 +706,11 @@ function rosterMotion(
           start: atk.start,
           end: atk.end,
           release: atk.release,
-          marker: profile.attacks[i]?.marker,
+          marker,
+          clipStart: range?.[0],
+          clipEnd: range?.[1],
+          ...phase,
         };
-      const range = profile.timing?.attack_clip_ranges?.[i];
       if (tick < atk.release)
         return {
           ...segment,
@@ -704,6 +720,8 @@ function rosterMotion(
           end: atk.release,
           clipStart: range?.[0],
           clipEnd: range?.[1],
+          marker,
+          ...phase,
           release: atk.release,
         };
       const tail = roles.attack_recover?.[i];
@@ -783,10 +801,10 @@ export function clipTime(motion: Motion, tick: number, duration: number) {
     const marker = Math.min(motion.marker, duration);
     if (tick < motion.release) {
       const from = Math.min(motion.clipStart ?? 0, marker);
-      return (
-        from +
-        ((marker - from) * age) / Math.max(1, motion.release - motion.start)
-      );
+      const anchor = motion.phaseTick ?? motion.start;
+      const reached = (motion.progress ?? 0) / 1000;
+      const fraction = Math.max(0, tick - anchor) / Math.max(1, motion.release - anchor);
+      return from + (marker - from) * (reached + (1 - reached) * fraction);
     }
     const tail = Math.min(
       1,

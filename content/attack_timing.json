@@ -1,0 +1,722 @@
+{
+  "aatrox": {
+    "base": {
+      "attack": [
+        159420,
+        130435,
+        107143,
+        400000
+      ]
+    },
+    "alternate": {
+      "attack": [
+        400000,
+        166667,
+        160000
+      ]
+    }
+  },
+  "anivia": {
+    "base": {
+      "attack": [
+        411765,
+        411765
+      ]
+    }
+  },
+  "azir": {
+    "base": {
+      "attack": [
+        156250,
+        156250
+      ]
+    }
+  },
+  "belveth": {
+    "base": {
+      "attack": [
+        90909,
+        90909
+      ]
+    }
+  },
+  "blitzcrank": {
+    "base": {
+      "attack": [
+        482382,
+        482382
+      ],
+      "empowered_attack": [
+        482382
+      ]
+    }
+  },
+  "corki": {
+    "base": {
+      "attack": [
+        183333,
+        183333
+      ]
+    }
+  },
+  "daisy": {
+    "base": {
+      "attack": [
+        295082,
+        295082,
+        276923
+      ]
+    }
+  },
+  "darius": {
+    "base": {
+      "attack": [
+        275000,
+        191489
+      ],
+      "empowered_attack": [
+        275000
+      ]
+    }
+  },
+  "ekko": {
+    "base": {
+      "attack": [
+        166667,
+        166667,
+        166667
+      ]
+    }
+  },
+  "enraged_reksai": {
+    "base": {
+      "attack": [
+        150000,
+        150000
+      ],
+      "empowered_attack": [
+        150000,
+        150000,
+        150000
+      ]
+    }
+  },
+  "garen": {
+    "base": {
+      "attack": [
+        166667,
+        166667
+      ],
+      "empowered_attack": [
+        333333
+      ]
+    }
+  },
+  "gnar": {
+    "base": {
+      "attack": [
+        133333,
+        133333
+      ]
+    },
+    "alternate": {
+      "attack": [
+        184615,
+        184615
+      ],
+      "attack_structure": [
+        161765
+      ]
+    }
+  },
+  "graves": {
+    "base": {
+      "attack": [
+        155556
+      ]
+    }
+  },
+  "gwen": {
+    "base": {
+      "attack": [
+        142857,
+        142857,
+        142857
+      ]
+    }
+  },
+  "hecarim": {
+    "base": {
+      "attack": [
+        104828
+      ]
+    }
+  },
+  "imp": {
+    "base": {
+      "attack": [
+        227273,
+        227273,
+        227273
+      ]
+    }
+  },
+  "ivern": {
+    "base": {
+      "attack": [
+        72430,
+        72430
+      ]
+    }
+  },
+  "jax": {
+    "base": {
+      "attack": [
+        161538,
+        161538
+      ],
+      "active_buff_attack": [
+        150000,
+        150000,
+        150000
+      ]
+    }
+  },
+  "jayce": {
+    "base": {
+      "attack": [
+        80000,
+        80000
+      ],
+      "active_buff_attack": [
+        101333,
+        101333
+      ],
+      "first_strike_attack": [
+        80000
+      ]
+    },
+    "alternate": {
+      "attack": [
+        200000,
+        200000
+      ],
+      "first_strike_attack": [
+        200000
+      ]
+    }
+  },
+  "jinx": {
+    "base": {
+      "attack": [
+        145833,
+        140000
+      ]
+    },
+    "alternate": {
+      "attack": [
+        180851,
+        180851
+      ]
+    }
+  },
+  "kassadin": {
+    "base": {
+      "attack": [
+        134000,
+        130000
+      ]
+    }
+  },
+  "kayle": {
+    "base": {
+      "attack": [
+        146154,
+        146154
+      ]
+    }
+  },
+  "kayle_ranged": {
+    "base": {
+      "attack": [
+        123077,
+        123077
+      ]
+    }
+  },
+  "kayn": {
+    "base": {
+      "attack": [
+        145570,
+        145570,
+        145570
+      ]
+    }
+  },
+  "kayn_assassin": {
+    "base": {
+      "attack": [
+        145570,
+        145570,
+        145570
+      ]
+    }
+  },
+  "kayn_slayer": {
+    "base": {
+      "attack": [
+        145570,
+        145570,
+        145570
+      ]
+    }
+  },
+  "lulu": {
+    "base": {
+      "attack": [
+        220588,
+        258621
+      ]
+    }
+  },
+  "malphite": {
+    "base": {
+      "attack": [
+        451731,
+        462800
+      ]
+    }
+  },
+  "malzahar": {
+    "base": {
+      "attack": [
+        300000,
+        266667
+      ]
+    }
+  },
+  "masteryi": {
+    "base": {
+      "attack": [
+        145455,
+        145455,
+        127273
+      ]
+    }
+  },
+  "missfortune": {
+    "base": {
+      "attack": [
+        112500,
+        112500
+      ]
+    }
+  },
+  "nest_reksai": {
+    "base": {
+      "attack": [
+        163934,
+        166667
+      ],
+      "empowered_attack": [
+        150000,
+        150000,
+        150000
+      ]
+    }
+  },
+  "nocturne": {
+    "base": {
+      "attack": [
+        310345,
+        310345
+      ],
+      "empowered_attack": [
+        310345
+      ]
+    }
+  },
+  "olaf": {
+    "base": {
+      "attack": [
+        310345,
+        310345
+      ],
+      "control_immune_attack": [
+        310345,
+        310345
+      ]
+    }
+  },
+  "olaf_single": {
+    "base": {
+      "attack": [
+        310345,
+        310345
+      ],
+      "control_immune_attack": [
+        310345,
+        310345
+      ]
+    }
+  },
+  "ornn": {
+    "base": {
+      "attack": [
+        132812,
+        128788,
+        132812
+      ]
+    }
+  },
+  "pantheon": {
+    "base": {
+      "attack": [
+        332222,
+        288889,
+        288889,
+        288889
+      ]
+    }
+  },
+  "pix": {
+    "base": {
+      "attack": [
+        400000,
+        400000
+      ]
+    }
+  },
+  "pix_single": {
+    "base": {
+      "attack": [
+        400000,
+        400000
+      ]
+    }
+  },
+  "reksai": {
+    "base": {
+      "attack": [
+        163934,
+        166667
+      ],
+      "empowered_attack": [
+        150000,
+        150000,
+        150000
+      ]
+    }
+  },
+  "rift_herald": {
+    "base": {
+      "attack": [
+        250000,
+        250000
+      ]
+    }
+  },
+  "samira": {
+    "base": {
+      "attack": [
+        178571,
+        178571,
+        178571,
+        178571
+      ]
+    }
+  },
+  "sand_soldier": {
+    "base": {
+      "attack": [
+        333333,
+        166667,
+        166667
+      ]
+    }
+  },
+  "sett": {
+    "base": {
+      "attack": [
+        500000,
+        214286,
+        500000,
+        214286
+      ]
+    }
+  },
+  "shurima_guard": {
+    "base": {
+      "attack": [
+        333333,
+        166667,
+        166667
+      ]
+    }
+  },
+  "sion": {
+    "base": {
+      "attack": [
+        200000,
+        200000
+      ]
+    },
+    "alternate": {
+      "attack": [
+        203704,
+        200000
+      ]
+    }
+  },
+  "sivir": {
+    "base": {
+      "attack": [
+        250000
+      ]
+    }
+  },
+  "sona": {
+    "base": {
+      "attack": [
+        366667,
+        366667,
+        366667
+      ]
+    }
+  },
+  "teemo": {
+    "base": {
+      "attack": [
+        250000
+      ],
+      "empowered_attack": [
+        250000
+      ]
+    }
+  },
+  "tibbers": {
+    "base": {
+      "attack": [
+        244444,
+        244444
+      ]
+    }
+  },
+  "tristana": {
+    "base": {
+      "attack": [
+        117500,
+        117500
+      ]
+    }
+  },
+  "tryndamere": {
+    "base": {
+      "attack": [
+        461489,
+        461489,
+        490993
+      ]
+    }
+  },
+  "twisted_fate": {
+    "base": {
+      "attack": [
+        143550,
+        143550,
+        143550,
+        146421,
+        232400
+      ]
+    }
+  },
+  "twitch": {
+    "base": {
+      "attack": [
+        231636,
+        239273
+      ],
+      "active_buff_attack": [
+        136364
+      ]
+    }
+  },
+  "voidfish": {
+    "base": {
+      "attack": [
+        327907
+      ]
+    }
+  },
+  "voidfish_ranged": {
+    "base": {
+      "attack": [
+        371053
+      ]
+    }
+  },
+  "voidfish_ranged_army": {
+    "base": {
+      "attack": [
+        371053
+      ]
+    }
+  },
+  "voidfish_ranged_single": {
+    "base": {
+      "attack": [
+        371053
+      ]
+    }
+  },
+  "voidling": {
+    "base": {
+      "attack": [
+        366667,
+        366667,
+        366667
+      ]
+    }
+  },
+  "voidmite": {
+    "base": {
+      "attack": [
+        352500
+      ]
+    }
+  },
+  "xin": {
+    "base": {
+      "attack": [
+        333333,
+        333333,
+        333333
+      ]
+    }
+  },
+  "yorick": {
+    "base": {
+      "attack": [
+        181818,
+        181818,
+        181818
+      ],
+      "empowered_attack": [
+        181818
+      ]
+    }
+  },
+  "ziggs": {
+    "base": {
+      "attack": [
+        333333,
+        333333
+      ],
+      "empowered_attack": [
+        250000
+      ]
+    }
+  },
+  "ashe": {
+    "base": {
+      "attack": [
+        142857,
+        142857
+      ]
+    }
+  },
+  "apex_turret": {
+    "base": {
+      "attack": [
+        259000
+      ]
+    }
+  },
+  "evolution_turret": {
+    "base": {
+      "attack": [
+        255500,
+        255500
+      ]
+    }
+  },
+  "jack_in_the_box": {
+    "base": {
+      "attack": [
+        333333
+      ]
+    }
+  },
+  "soul_tentacle": {
+    "base": {
+      "attack": [
+        278481
+      ]
+    }
+  },
+  "thorn_spitter": {
+    "base": {
+      "attack": [
+        66741
+      ]
+    }
+  },
+  "vine_lasher": {
+    "base": {
+      "attack": [
+        250000,
+        241935
+      ]
+    }
+  },
+  "sun_disc": {
+    "base": {
+      "attack": [
+        126923,
+        126923
+      ]
+    }
+  },
+  "melee_minion": {
+    "base": {
+      "attack": [
+        437037,
+        437037
+      ]
+    }
+  },
+  "ranged_minion": {
+    "base": {
+      "attack": [
+        285714,
+        285714
+      ]
+    }
+  },
+  "siege_minion": {
+    "base": {
+      "attack": [
+        191489,
+        191489
+      ]
+    }
+  },
+  "super_minion": {
+    "base": {
+      "attack": [
+        319149,
+        319149
+      ]
+    }
+  },
+  "princess_tower": {
+    "base": {
+      "attack": [
+        206250,
+        206250,
+        206250,
+        206250
+      ]
+    }
+  }
+}

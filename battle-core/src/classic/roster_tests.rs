@@ -609,7 +609,7 @@ fn walking_preserves_attack_intervals_except_on_configured_swings() {
     // Ticks from one release to the next, including the time spent chasing.
     for (key, swing, chase_ticks, expected) in [
         ("darius", 1, 1, 24),
-        ("darius", 1, 25, 31), // The interval elapsed while walking. Only windup remains.
+        ("darius", 1, 25, 30), // The interval elapsed while walking. Only windup remains.
         ("ashe", 1, 1, 20),
         ("sett", 1, 1, 12),
         ("sett", 2, 0, 28),
@@ -661,7 +661,7 @@ fn forced_movement_counts_toward_the_existing_attack_interval() {
     field
         .spawn(Team::Red, p + Point::new(50., 0.), target_dummy(5000))
         .unwrap();
-    for _ in 0..6 {
+    for _ in 0..7 {
         field.step(&[]);
     }
     assert_eq!(field.actors[&source].card_state.swing, 1);
@@ -975,3 +975,130 @@ fn queued_skill_cancels_on_control_and_refunds_only_a_living_owner() {
 }
 
 mod production;
+
+#[test]
+fn minion_attack_events_are_identical_for_both_teams() {
+    for def in [
+        UnitDef::melee(),
+        UnitDef::ranged(),
+        UnitDef::siege(),
+        UnitDef::super_minion(),
+    ] {
+        let trace = |team: Team| {
+            let mut field = practice_field();
+            field.classic_attack_nodes = true;
+            let p = Point::new(300., 300.);
+            let attacker = field.spawn(team, p, def.clone()).unwrap();
+            field
+                .spawn(team.enemy(), p + Point::new(45., 0.), target_dummy(5000))
+                .unwrap();
+            let mut events = Vec::new();
+            let mut windups = Vec::new();
+            for tick in 1..=120 {
+                if tick == 3 || tick == 40 {
+                    field.actors.get_mut(&attacker).unwrap().empowerment =
+                        Some(crate::status::Empowerment {
+                            movement: 1000,
+                            attack: if tick == 3 { 500 } else { 1800 },
+                            damage: 1000,
+                            until: 90,
+                        });
+                }
+                field.step(&[]);
+                for event in field.drain_events() {
+                    let label = match event.fact {
+                        Fact::AttackStarted(..) => "start",
+                        Fact::AttackReleased { .. } => "release",
+                        Fact::Fired(..) => "projectile",
+                        Fact::Damage { .. } => "damage",
+                        _ => continue,
+                    };
+                    events.push((tick, label));
+                }
+                if let Some(attack) = field.actors[&attacker].attack {
+                    if attack.start == tick {
+                        // Check the full precision clock as well as rounded tick events.
+                        windups.push((attack.segment, attack.windup_units));
+                    }
+                }
+            }
+            (events, windups)
+        };
+        let blue = trace(Team::Blue);
+        assert!(
+            blue.0.iter().filter(|(_, e)| *e == "damage").count() >= 3,
+            "{}",
+            def.key
+        );
+        assert!(blue.1.len() >= 3, "{}", def.key);
+        assert_eq!(
+            blue.0.iter().any(|(_, e)| *e == "projectile"),
+            matches!(def.action, crate::Action::Shot { .. })
+        );
+        assert_eq!(blue, trace(Team::Red), "{}", def.key);
+    }
+}
+
+#[test]
+fn sword_release_tracks_the_selected_clip_and_speed_changes_during_windup() {
+    let mut field = practice_field();
+    let p = Point::new(300., 300.);
+    let sword = field.spawn(Team::Blue, p, units::unit("aatrox")).unwrap();
+    field
+        .spawn(Team::Red, p + Point::new(30., 0.), target_dummy(5000))
+        .unwrap();
+    let mut releases = Vec::new();
+    while releases.len() < 4 {
+        field.step(&[]);
+        for event in field.drain_events().collect::<Vec<_>>() {
+            if matches!(event.fact, crate::Fact::AttackReleased { source, .. } if source == sword) {
+                let t = field.actors[&sword].attack.unwrap();
+                releases.push((event.tick, t.segment, t.windup_units));
+            }
+        }
+        assert!(field.tick < 90);
+    }
+    assert_eq!(
+        releases.iter().map(|r| r.1).collect::<Vec<_>>(),
+        [0, 1, 2, 3]
+    );
+    assert!(releases[0].2 > releases[1].2 && releases[1].2 > releases[2].2);
+    assert!(releases[3].2 > releases[0].2);
+    for pair in releases.windows(2) {
+        assert_eq!(pair[1].0 - pair[0].0, 22);
+    }
+
+    for (rate, expected_delta) in [(500, 12), (2000, 3)] {
+        let mut field = practice_field();
+        let sword = field.spawn(Team::Blue, p, units::unit("aatrox")).unwrap();
+        field.actors.get_mut(&sword).unwrap().card_state.swing = 3;
+        field
+            .spawn(Team::Red, p + Point::new(30., 0.), target_dummy(5000))
+            .unwrap();
+        for _ in 0..3 {
+            field.step(&[]);
+        }
+        let before = field.actors[&sword].attack.unwrap();
+        field.actors.get_mut(&sword).unwrap().empowerment = Some(crate::status::Empowerment {
+            movement: 1000,
+            attack: rate,
+            damage: 1000,
+            until: 100,
+        });
+        let mut progress = before.progress;
+        let from = field.tick;
+        loop {
+            field.step(&[]);
+            let t = field.actors[&sword].attack.unwrap();
+            assert_eq!((t.start, t.segment), (before.start, 3));
+            assert!(t.progress >= progress);
+            progress = t.progress;
+            if t.released {
+                break;
+            }
+            assert!(field.tick - from <= expected_delta);
+        }
+        assert_eq!(field.tick - from, expected_delta);
+        assert_eq!(progress, 1000);
+    }
+}

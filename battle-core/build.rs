@@ -202,7 +202,7 @@ fn main() {
             "invalid classic mode"
         );
     }
-    for path in ["catalog", "battle_rules", "maps", "modes"] {
+    for path in ["catalog", "battle_rules", "attack_timing", "maps", "modes"] {
         println!("cargo:rerun-if-changed=../content/{path}.json");
     }
     for path in [
@@ -214,7 +214,8 @@ fn main() {
         println!("cargo:rerun-if-changed={path}");
     }
     let gameplay = build_content::gameplay(&public, rules, maps, modes);
-    let digest = Sha256::digest(serde_json::to_vec(&gameplay).unwrap());
+    let attacks = read("../content/attack_timing.json");
+    let digest = Sha256::digest(serde_json::to_vec(&(gameplay, attacks)).unwrap());
     println!(
         "cargo:rustc-env=BATTLE_CONTENT=roster-{}",
         digest

@@ -134,6 +134,15 @@ pub(crate) struct Flight {
 /// Tick timeline of one swing, stable across Windup -> Recover and reconnect.
 #[derive(Clone, Copy, Debug, PartialEq, serde::Serialize)]
 pub struct AttackTiming {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<&'static str>,
+    #[serde(rename = "phaseTick")]
+    pub phase_tick: u64,
+    pub progress: u16,
+    #[serde(skip)]
+    pub(crate) windup_units: u64,
+    #[serde(skip)]
+    pub(crate) after_first_step: u64,
     pub segment: u32,
     #[serde(skip_serializing_if = "std::ops::Not::not")]
     pub first: bool,

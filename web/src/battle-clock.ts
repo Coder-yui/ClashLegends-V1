@@ -60,8 +60,26 @@ export class BattleClock {
       const angle = Math.atan2(v.facing.x, v.facing.y) - yaw;
       const turn =
         yaw + Math.atan2(Math.sin(angle), Math.cos(angle)) * fraction;
+      // Interpolate two confirmed samples of the same windup. A rate change
+      // between snapshots must not rewind the sword to an earlier pose.
+      const current = u.attack;
+      const next = v.attack;
+      let attack = current;
+      if (
+        current && next && !current.released && !next.released &&
+        current.start === next.start &&
+        current.progress !== undefined && next.progress !== undefined
+      ) {
+        attack = {
+          ...current,
+          phaseTick: tick,
+          progress: lerp(current.progress, next.progress),
+          release: next.release,
+        };
+      }
       return {
         ...u,
+        attack,
         x: lerp(u.x, v.x),
         y: lerp(u.y, v.y),
         facing: { x: Math.sin(turn), y: Math.cos(turn) },

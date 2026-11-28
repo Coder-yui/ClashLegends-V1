@@ -18,7 +18,7 @@ interface CardInfo {
   portrait?: string;
   activeDescription?: string;
   sections: Section[];
-  passives: { name: string; description: string }[];
+  passives: { name: string; description: string; attackTiming?: string }[];
   skills: {
     id: string;
     cost: number;
@@ -28,6 +28,7 @@ interface CardInfo {
     uses: number;
     unlimited: boolean;
     description: string;
+    attackTiming?: string;
   }[];
 }
 const info: Record<string, CardInfo> = metadata;
@@ -231,7 +232,12 @@ export function CardInformation({
           <h4>{s.title}</h4>
           <dl>
             {s.attributes.map((a, j) => (
-              <div key={j}>
+              <div
+                key={j}
+                className={
+                  a.name === "前摇 / 后摇" ? "prep-attack-timing" : undefined
+                }
+              >
                 <dt>{a.name}</dt>
                 <dd>{a.value}</dd>
               </div>
@@ -239,12 +245,23 @@ export function CardInformation({
           </dl>
         </section>
       ))}
+      {sections.some((s) =>
+        s.attributes.some((a) => a.name === "前摇 / 后摇"),
+      ) && (
+        <p className="prep-timing-note">
+          前摇从起手算到近战命中或远程发弹，后摇从出手算到下一击起手。表中为基础攻速下连续攻击的估算值，实战按
+          0.05 秒一步结算。
+        </p>
+      )}
       {!!data?.passives.length && (
         <section>
           <h4>被动</h4>
           {data.passives.map((p, i) => (
             <p key={i}>
               <b>{p.name}</b>　{p.description}
+              {p.attackTiming && (
+                <span className="prep-skill-timing">{p.attackTiming}</span>
+              )}
             </p>
           ))}
         </section>
@@ -277,6 +294,9 @@ export function CardInformation({
               </small>
             )}
             <p>{rule?.description || skill.description}</p>
+            {rule?.attackTiming && (
+              <p className="prep-skill-timing">{rule.attackTiming}</p>
+            )}
           </>
         ) : (
           <p>{data?.activeDescription ?? "无主动技能"}</p>

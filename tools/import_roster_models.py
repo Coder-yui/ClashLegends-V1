@@ -152,7 +152,7 @@ def profile(key, form, options):
         "idle": idle,
         "run": roles.get("move", [idle])[0],
         "attacks": [
-            {"clip": c, "marker": form.get("first_hit", 0)}
+            {"clip": c}
             for c in roles.get("attack", [])
         ],
         "death": {

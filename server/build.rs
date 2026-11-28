@@ -63,6 +63,7 @@ fn main() {
         "../web/src/pantheon-arrival-assets.json",
         "../web/src/reksai-rock-assets.json",
         "../content/model_resources.json",
+        "../content/attack_nodes.json",
     ] {
         println!("cargo:rerun-if-changed={path}");
         fingerprint(Path::new(path), &mut digest);

@@ -1,0 +1,950 @@
+{
+  "units": {
+    "aatrox": {
+      "base": "aatrox",
+      "alternate": "aatrox-alt"
+    },
+    "anivia": {
+      "base": "anivia"
+    },
+    "azir": {
+      "base": "azir"
+    },
+    "belveth": {
+      "base": "belveth"
+    },
+    "blitzcrank": {
+      "base": "blitzcrank"
+    },
+    "corki": {
+      "base": "corki"
+    },
+    "daisy": {
+      "base": "daisy"
+    },
+    "darius": {
+      "base": "darius"
+    },
+    "ekko": {
+      "base": "ekko"
+    },
+    "enraged_reksai": {
+      "base": "enraged_reksai"
+    },
+    "garen": {
+      "base": "garen"
+    },
+    "gnar": {
+      "base": "gnar",
+      "alternate": "gnar-alt"
+    },
+    "graves": {
+      "base": "graves"
+    },
+    "gwen": {
+      "base": "gwen"
+    },
+    "hecarim": {
+      "base": "hecarim"
+    },
+    "imp": {
+      "base": "imp"
+    },
+    "ivern": {
+      "base": "ivern"
+    },
+    "jax": {
+      "base": "jax"
+    },
+    "jayce": {
+      "base": "jayce",
+      "alternate": "jayce-alt"
+    },
+    "jinx": {
+      "base": "jinx",
+      "alternate": "jinx-alt"
+    },
+    "kassadin": {
+      "base": "kassadin"
+    },
+    "kayle": {
+      "base": "kayle"
+    },
+    "kayle_ranged": {
+      "base": "kayle_ranged"
+    },
+    "kayn": {
+      "base": "kayn"
+    },
+    "kayn_assassin": {
+      "base": "kayn_assassin"
+    },
+    "kayn_slayer": {
+      "base": "kayn_slayer"
+    },
+    "lulu": {
+      "base": "lulu"
+    },
+    "malphite": {
+      "base": "malphite"
+    },
+    "malzahar": {
+      "base": "malzahar"
+    },
+    "masteryi": {
+      "base": "masteryi"
+    },
+    "missfortune": {
+      "base": "missfortune"
+    },
+    "nest_reksai": {
+      "base": "nest_reksai"
+    },
+    "nocturne": {
+      "base": "nocturne"
+    },
+    "olaf": {
+      "base": "olaf"
+    },
+    "olaf_single": {
+      "base": "olaf"
+    },
+    "ornn": {
+      "base": "ornn"
+    },
+    "pantheon": {
+      "base": "pantheon"
+    },
+    "pix": {
+      "base": "pix"
+    },
+    "pix_single": {
+      "base": "pix"
+    },
+    "reksai": {
+      "base": "reksai"
+    },
+    "rift_herald": {
+      "base": "rift_herald"
+    },
+    "samira": {
+      "base": "samira"
+    },
+    "sand_soldier": {
+      "base": "sand_soldier"
+    },
+    "sett": {
+      "base": "sett"
+    },
+    "shurima_guard": {
+      "base": "sand_soldier"
+    },
+    "sion": {
+      "base": "sion",
+      "alternate": "sion-alt"
+    },
+    "sivir": {
+      "base": "sivir"
+    },
+    "sona": {
+      "base": "sona"
+    },
+    "teemo": {
+      "base": "teemo"
+    },
+    "tibbers": {
+      "base": "tibbers"
+    },
+    "tristana": {
+      "base": "tristana"
+    },
+    "tryndamere": {
+      "base": "tryndamere"
+    },
+    "twisted_fate": {
+      "base": "twisted_fate"
+    },
+    "twitch": {
+      "base": "twitch"
+    },
+    "voidfish": {
+      "base": "voidfish"
+    },
+    "voidfish_ranged": {
+      "base": "voidfish_ranged"
+    },
+    "voidfish_ranged_army": {
+      "base": "voidfish_ranged"
+    },
+    "voidfish_ranged_single": {
+      "base": "voidfish_ranged"
+    },
+    "voidling": {
+      "base": "voidling"
+    },
+    "voidmite": {
+      "base": "voidmite"
+    },
+    "xin": {
+      "base": "xin"
+    },
+    "yorick": {
+      "base": "yorick"
+    },
+    "ziggs": {
+      "base": "ziggs"
+    },
+    "ashe": {
+      "base": "ashe"
+    },
+    "apex_turret": {
+      "base": "apex_turret"
+    },
+    "evolution_turret": {
+      "base": "evolution_turret"
+    },
+    "jack_in_the_box": {
+      "base": "jack_in_the_box"
+    },
+    "soul_tentacle": {
+      "base": "soul_tentacle"
+    },
+    "thorn_spitter": {
+      "base": "thorn_spitter"
+    },
+    "vine_lasher": {
+      "base": "vine_lasher"
+    },
+    "sun_disc": {
+      "base": "sun_disc-blue",
+      "red": "sun_disc-red"
+    },
+    "melee_minion": {
+      "base": "melee-order",
+      "red": "melee-chaos"
+    },
+    "ranged_minion": {
+      "base": "ranged-order",
+      "red": "ranged-chaos"
+    },
+    "siege_minion": {
+      "base": "siege-order",
+      "red": "siege-chaos"
+    },
+    "super_minion": {
+      "base": "super-order",
+      "red": "super-chaos"
+    },
+    "princess_tower": {
+      "base": "princess_tower"
+    }
+  },
+  "profiles": {
+    "aatrox": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 366667, "source": "AatroxBasicAttack 11/30"},
+        {"clip": "Attack2", "markerUs": 300000, "source": "AatroxBasicAttack2 9/30"},
+        {"clip": "Attack3", "markerUs": 250000, "source": "AatroxBasicAttack3 7.5/30"},
+        {"clip": "Passive_Attack", "markerUs": 400000, "source": "AatroxPassiveAttack 12/30"}
+      ]
+    },
+    "aatrox-alt": {
+      "attack": [
+        {"clip": "Passive_Attack_Ult", "markerUs": 400000, "source": "AatroxPassiveAttack 12/30 / shared reference"},
+        {"clip": "Attack1_Ult", "markerUs": 400000, "source": "AatroxRAttack1 12/30"},
+        {"clip": "Attack2_Ult", "markerUs": 400000, "source": "AatroxRAttack2 12/30"}
+      ]
+    },
+    "anivia": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 466667, "source": "AniviaBasicAttack 14/30"},
+        {"clip": "Attack2", "markerUs": 466667, "source": "AniviaBasicAttack2 14/30"}
+      ]
+    },
+    "azir": {
+      "attack": [
+        {"clip": "Azir_Attack1_anm", "markerUs": 250000, "source": "AzirBasicAttack 7.5/30"},
+        {"clip": "Azir_Attack2_anm", "markerUs": 250000, "source": "AzirBasicAttack2 7.5/30"}
+      ]
+    },
+    "belveth": {
+      "attack": [
+        {"clip": "AttackSwipe1_in_anm", "markerUs": 300000, "source": "BelvethBasicAttack 9/30"},
+        {"clip": "AttackSwipe2_in_anm", "markerUs": 300000, "source": "BelvethBasicAttack2 9/30"}
+      ]
+    },
+    "blitzcrank": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 418065, "source": "BlitzcrankBasicAttack 12.96/31"},
+        {"clip": "Attack2", "markerUs": 418065, "source": "BlitzcrankBasicAttack2 12.96/31"}
+      ],
+      "empowered_attack": [
+        {"clip": "Spell3", "markerUs": 418065, "source": "PowerFistAttack 12.96/31"}
+      ]
+    },
+    "corki": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 183333, "source": "CorkiBasicAttack 5.5/30"},
+        {"clip": "Attack2", "markerUs": 183333, "source": "CorkiBasicAttack2 5.5/30"}
+      ]
+    },
+    "daisy": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 600000, "source": "IvernMinionBasicAttack 18/30"},
+        {"clip": "Attack2", "markerUs": 600000, "source": "IvernMinionBasicAttack2 18/30"},
+        {"clip": "Attack3", "markerUs": 600000, "source": "IvernMinionBasicAttack3 18/30"}
+      ]
+    },
+    "darius": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 366667, "source": "DariusBasicAttack 11/30"},
+        {"clip": "Attack2", "markerUs": 300000, "source": "DariusBasicAttack2 9/30"}
+      ],
+      "empowered_attack": [
+        {"clip": "Spell4", "markerUs": 366667, "source": "DariusExecute 11/30"}
+      ]
+    },
+    "ekko": {
+      "attack": [
+        {"clip": "Attack_P_1", "markerUs": 266667, "source": "EkkoBasicAttackP1 8/30"},
+        {"clip": "Attack_P_2", "markerUs": 266667, "source": "EkkoBasicAttackP2 8/30"},
+        {"clip": "Attack_P_3", "markerUs": 266667, "source": "EkkoBasicAttackP3 8/30"}
+      ]
+    },
+    "enraged_reksai": {
+      "attack": [
+        {"clip": "Spell1", "markerUs": 300000, "source": "RekSaiQAttack 9/30"},
+        {"clip": "Spell1B", "markerUs": 300000, "source": "RekSaiQAttack2 9/30"}
+      ],
+      "empowered_attack": [
+        {"clip": "Spell1", "markerUs": 300000, "source": "RekSaiQAttack 9/30"},
+        {"clip": "Spell1B", "markerUs": 300000, "source": "RekSaiQAttack2 9/30"},
+        {"clip": "Spell1", "markerUs": 300000, "source": "RekSaiQAttack3 9/30"}
+      ]
+    },
+    "garen": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 333333, "source": "GarenBasicAttack 10/30"},
+        {"clip": "Attack2", "markerUs": 333333, "source": "GarenBasicAttack2 10/30"}
+      ],
+      "empowered_attack": [
+        {"clip": "Spell1", "markerUs": 333333, "source": "GarenQAttack 10/30"}
+      ]
+    },
+    "gnar": {
+      "attack": [
+        {"clip": "Gnar_Attack1_anm", "markerUs": 266667, "source": "GnarBasicAttack 8/30"},
+        {"clip": "Gnar_Attack2_anm", "markerUs": 266667, "source": "GnarBasicAttack2 8/30"}
+      ]
+    },
+    "gnar-alt": {
+      "attack": [
+        {"clip": "GnarBig_Attack1_anm", "markerUs": 400000, "source": "GnarBigBasicAttack 12/30"},
+        {"clip": "GnarBig_Attack2_anm", "markerUs": 400000, "source": "GnarBigBasicAttack2 12/30"}
+      ],
+      "attack_structure": [
+        {"clip": "GnarBig_Turret_Attack01_anm", "markerUs": 366667, "source": "GnarBigAttackTower 11/30"}
+      ]
+    },
+    "graves": {
+      "attack": [
+        {"clip": "graves_attack1_anm", "markerUs": 233333, "source": "GravesBasicAttack 7/30"}
+      ]
+    },
+    "gwen": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 333333, "source": "GwenBasicAttack 10/30"},
+        {"clip": "Attack2", "markerUs": 333333, "source": "GwenBasicAttack2 10/30"},
+        {"clip": "Attack3", "markerUs": 333333, "source": "GwenBasicAttack3 10/30"}
+      ]
+    },
+    "hecarim": {
+      "attack": [
+        {"clip": "Hecarim_Spell1_anm", "markerUs": 101333, "source": "HecarimRapidSlash 3.04/30"}
+      ]
+    },
+    "imp": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 500000, "source": "YorickGhoulMeleeBasicAttack 15/30"},
+        {"clip": "Attack2", "markerUs": 500000, "source": "YorickGhoulMeleeBasicAttack2 15/30"},
+        {"clip": "Attack3", "markerUs": 500000, "source": "YorickGhoulMeleeBasicAttack3 15/30"}
+      ]
+    },
+    "ivern": {
+      "attack": [
+        {"clip": "Ivern_ranged_attack01_anm", "markerUs": 258333, "source": "IvernBasicAttackRanged 7.75/30"},
+        {"clip": "Ivern_ranged_attack02_anm", "markerUs": 258333, "source": "IvernBasicAttackRanged2 7.75/30"}
+      ]
+    },
+    "jax": {
+      "attack": [
+        {"clip": "Attack_1_anm", "markerUs": 350000, "source": "JaxBasicAttack 10.5/30"},
+        {"clip": "Attack_2_anm", "markerUs": 350000, "source": "JaxBasicAttack2 10.5/30"}
+      ],
+      "active_buff_attack": [
+        {"clip": "Spell3_Attack1", "markerUs": 350000, "source": "JaxBasicAttack 10.5/30 / shared reference"},
+        {"clip": "Spell3_Attack2", "markerUs": 350000, "source": "JaxBasicAttack2 10.5/30 / shared reference"},
+        {"clip": "Spell3_Attack3", "markerUs": 350000, "source": "JaxBasicAttack 10.5/30 / shared reference"}
+      ]
+    },
+    "jayce": {
+      "attack": [
+        {"clip": "Ranged_Attack1", "markerUs": 120000, "source": "JayceRangedAttack 3.6/30"},
+        {"clip": "Ranged_Attack2", "markerUs": 120000, "source": "JayceRangedAttack2 3.6/30"}
+      ],
+      "active_buff_attack": [
+        {"clip": "Ranged_Spell2_Attack1", "markerUs": 152000, "source": "JayceHyperChargeRangedAttack 4.56/30 / shared reference"},
+        {"clip": "Ranged_Spell2_Attack2", "markerUs": 152000, "source": "JayceHyperChargeRangedAttack 4.56/30 / shared reference"}
+      ],
+      "first_strike_attack": [
+        {"clip": "Ranged_Attack2", "markerUs": 120000, "source": "JaycePassiveRangedAttack 3.6/30"}
+      ]
+    },
+    "jayce-alt": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 300000, "source": "JayceBasicAttack 9/30"},
+        {"clip": "Attack2", "markerUs": 300000, "source": "JayceBasicAttack2 9/30"}
+      ],
+      "first_strike_attack": [
+        {"clip": "Crit", "markerUs": 300000, "source": "JaycePassiveMeleeAttack 9/30"}
+      ]
+    },
+    "jinx": {
+      "attack": [
+        {"clip": "Jinx_Rlauncher_attack1_anm", "markerUs": 233333, "source": "JinxQAttack 7/30"},
+        {"clip": "Jinx_Rlauncher_attack2_anm", "markerUs": 233333, "source": "JinxQAttack2 7/30"}
+      ]
+    },
+    "jinx-alt": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 283333, "source": "JinxBasicAttack 8.5/30"},
+        {"clip": "Attack2", "markerUs": 283333, "source": "JinxBasicAttack2 8.5/30"}
+      ]
+    },
+    "kassadin": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 268000, "source": "KassadinBasicAttack 8.04/30"},
+        {"clip": "Attack2", "markerUs": 260000, "source": "KassadinBasicAttack2 7.8/30"}
+      ]
+    },
+    "kayle": {
+      "attack": [
+        {"clip": "kayle_attack1_anm", "markerUs": 316667, "source": "KayleBasicAttack 9.5/30"},
+        {"clip": "kayle_attack2_anm", "markerUs": 316667, "source": "KayleBasicAttack2 9.5/30"}
+      ]
+    },
+    "kayle_ranged": {
+      "attack": [
+        {"clip": "Kayle_Attack3_anm", "markerUs": 266667, "source": "KayleBasicAttack3 8/30"},
+        {"clip": "Kayle_Attack4_anm", "markerUs": 266667, "source": "KayleBasicAttack4 8/30"}
+      ]
+    },
+    "kayn": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 383333, "source": "KaynBasicAttack 11.5/30"},
+        {"clip": "Attack2", "markerUs": 383333, "source": "KaynBasicAttack2 11.5/30"},
+        {"clip": "Attack3", "markerUs": 383333, "source": "KaynBasicAttack3 11.5/30"}
+      ]
+    },
+    "kayn_assassin": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 383333, "source": "KaynBasicAttack 11.5/30"},
+        {"clip": "Attack2", "markerUs": 383333, "source": "KaynBasicAttack2 11.5/30"},
+        {"clip": "Attack3", "markerUs": 383333, "source": "KaynBasicAttack3 11.5/30"}
+      ]
+    },
+    "kayn_slayer": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 383333, "source": "KaynBasicAttack 11.5/30"},
+        {"clip": "Attack2", "markerUs": 383333, "source": "KaynBasicAttack2 11.5/30"},
+        {"clip": "Attack3", "markerUs": 383333, "source": "KaynBasicAttack3 11.5/30"}
+      ]
+    },
+    "lulu": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 250000, "source": "LuluBasicAttack 7.5/30"},
+        {"clip": "Attack2", "markerUs": 250000, "source": "LuluBasicAttack2 7.5/30"}
+      ]
+    },
+    "malphite": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 391500, "source": "MalphiteBasicAttack 11.745/30"},
+        {"clip": "Attack2", "markerUs": 385667, "source": "MalphiteBasicAttack2 11.57/30"}
+      ]
+    },
+    "malzahar": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 295082, "source": "MalzaharBasicAttack 18/61"},
+        {"clip": "Attack2", "markerUs": 262295, "source": "MalzaharBasicAttack2 16/61"}
+      ]
+    },
+    "masteryi": {
+      "attack": [
+        {"clip": "masteryi_2013_attack1_anm", "markerUs": 266667, "source": "MasterYiBasicAttack 8/30"},
+        {"clip": "masteryi_2013_attack2_anm", "markerUs": 266667, "source": "MasterYiBasicAttack2 8/30"},
+        {"clip": "masteryi_2013_passive_anm", "markerUs": 233333, "source": "MasterYiDoubleStrike 7/30"}
+      ]
+    },
+    "missfortune": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 300000, "source": "MissFortuneBasicAttack 9/30"},
+        {"clip": "Attack2", "markerUs": 300000, "source": "MissFortuneBasicAttack2 9/30"}
+      ]
+    },
+    "nest_reksai": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 333333, "source": "RekSaiBasicAttack 10/30"},
+        {"clip": "Attack2", "markerUs": 333333, "source": "RekSaiBasicAttack2 10/30"}
+      ],
+      "empowered_attack": [
+        {"clip": "Spell1", "markerUs": 300000, "source": "RekSaiQAttack 9/30"},
+        {"clip": "Spell1B", "markerUs": 300000, "source": "RekSaiQAttack2 9/30"},
+        {"clip": "Spell1", "markerUs": 300000, "source": "RekSaiQAttack3 9/30"}
+      ]
+    },
+    "nocturne": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 300000, "source": "NocturneBasicAttack 9/30"},
+        {"clip": "Attack2", "markerUs": 300000, "source": "NocturneBasicAttack2 9/30"}
+      ],
+      "empowered_attack": [
+        {"clip": "Attack3", "markerUs": 300000, "source": "NocturneUmbraBladesAttack 9/30"}
+      ]
+    },
+    "olaf": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 300000, "source": "OlafBasicAttack 9/30"},
+        {"clip": "Attack2", "markerUs": 300000, "source": "OlafBasicAttack2 9/30"}
+      ],
+      "control_immune_attack": [
+        {"clip": "Attack3", "markerUs": 300000, "source": "OlafBasicAttack3 9/30"},
+        {"clip": "Attack3", "markerUs": 300000, "source": "OlafBasicAttack3 9/30"}
+      ]
+    },
+    "ornn": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 283333, "source": "OrnnBasicAttack 8.5/30"},
+        {"clip": "Attack2", "markerUs": 283333, "source": "OrnnBasicAttack2 8.5/30"},
+        {"clip": "Attack3", "markerUs": 283333, "source": "OrnnBasicAttack3 8.5/30"}
+      ]
+    },
+    "pantheon": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 299000, "source": "PantheonBasicAttack 8.97/30"},
+        {"clip": "Attack2", "markerUs": 260000, "source": "PantheonBasicAttack2 7.8/30"},
+        {"clip": "Attack3", "markerUs": 260000, "source": "PantheonBasicAttack3 7.8/30"},
+        {"clip": "Attack2", "markerUs": 260000, "source": "PantheonBasicAttack2 7.8/30"}
+      ]
+    },
+    "pix": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 506667, "source": "LuluFaerie AttackSlotData / project windup"},
+        {"clip": "Attack2", "markerUs": 506667, "source": "LuluFaerie AttackSlotData / project windup"}
+      ]
+    },
+    "reksai": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 333333, "source": "RekSaiBasicAttack 10/30"},
+        {"clip": "Attack2", "markerUs": 333333, "source": "RekSaiBasicAttack2 10/30"}
+      ],
+      "empowered_attack": [
+        {"clip": "Spell1", "markerUs": 300000, "source": "RekSaiQAttack 9/30"},
+        {"clip": "Spell1B", "markerUs": 300000, "source": "RekSaiQAttack2 9/30"},
+        {"clip": "Spell1", "markerUs": 300000, "source": "RekSaiQAttack3 9/30"}
+      ]
+    },
+    "rift_herald": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 400000, "source": "SRU_RiftHeraldBasicAttack 12/30 + AttackSlot 0.5/2"},
+        {"clip": "Attack2", "markerUs": 400000, "source": "SRU_RiftHeraldBasicAttack2 12/30 + AttackSlot 0.5/2"}
+      ]
+    },
+    "samira": {
+      "attack": [
+        {"clip": "Attack1_Gun_Start_anm", "markerUs": 266667, "source": "SamiraBasicAttack 8/30"},
+        {"clip": "Attack2_Gun_Start_anm", "markerUs": 266667, "source": "SamiraBasicAttack2 8/30"},
+        {"clip": "Attack1_Sword_anm", "markerUs": 266667, "source": "SamiraBasicAttackMelee 8/30"},
+        {"clip": "Attack2_Sword_anm", "markerUs": 266667, "source": "SamiraBasicAttackMelee2 8/30"}
+      ]
+    },
+    "sand_soldier": {
+      "attack": [
+        {"clip": "Attack1_BASE", "markerUs": 666667, "source": "AzirSoldierBasicAttack 20/30"},
+        {"clip": "Attack2_BASE", "markerUs": 666667, "source": "AzirSoldierBasicAttack 20/30 / shared reference"},
+        {"clip": "AzirSoldier_Attack3_anm", "markerUs": 666667, "source": "AzirSoldierBasicAttack 20/30 / shared reference"}
+      ]
+    },
+    "sett": {
+      "attack": [
+        {"clip": "Attack1_Start", "markerUs": 300000, "source": "SettBasicAttack 8.97/30 / project split"},
+        {"clip": "Attack1_Passive_Start", "markerUs": 300000, "source": "SettBasicAttack2 8.97/30 / project split"},
+        {"clip": "Attack2_Start", "markerUs": 333333, "source": "SettBasicAttack3 8.97/30 / project split"},
+        {"clip": "Attack2_Passive_Start", "markerUs": 300000, "source": "SettBasicAttack4 8.97/30 / project split"}
+      ]
+    },
+    "sion": {
+      "attack": [
+        {"clip": "Attack_Tower2", "markerUs": 366667, "source": "SionBasicAttackTower2 11/30"},
+        {"clip": "Attack_Tower", "markerUs": 366667, "source": "SionBasicAttackTower 11/30"}
+      ]
+    },
+    "sion-alt": {
+      "attack": [
+        {"clip": "Passive_Attack1", "markerUs": 366667, "source": "SionBasicAttackPassive 11/30"},
+        {"clip": "Passive_Attack2", "markerUs": 366667, "source": "SionBasicAttackPassive2 11/30"}
+      ]
+    },
+    "sivir": {
+      "attack": [
+        {"clip": "Spell1", "markerUs": 250000, "source": "SivirQMissile 7.5/30"}
+      ]
+    },
+    "sona": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 366667, "source": "SonaBasicAttack 11/30"},
+        {"clip": "Attack2", "markerUs": 366667, "source": "SonaBasicAttack2 11/30"},
+        {"clip": "Attack3", "markerUs": 366667, "source": "SonaBasicAttack 11/30 / shared reference"}
+      ]
+    },
+    "teemo": {
+      "attack": [
+        {"clip": "Attack1_ASU_Teemo_anm", "markerUs": 333333, "source": "TeemoBasicAttack 10/30"}
+      ],
+      "empowered_attack": [
+        {"clip": "Spell1", "markerUs": 300000, "source": "TeemoQ 14.79/30 / project split"}
+      ]
+    },
+    "tibbers": {
+      "attack": [
+        {"clip": "annietibbers_attack1", "markerUs": 366667, "source": "AnnieTibbersBasicAttack 11/30"},
+        {"clip": "annietibbers_attack2", "markerUs": 366667, "source": "AnnieTibbersBasicAttack2 11/30"}
+      ]
+    },
+    "tristana": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 215417, "source": "TristanaBasicAttack 6.4625/30"},
+        {"clip": "Attack2", "markerUs": 215417, "source": "TristanaBasicAttack2 6.4625/30"}
+      ]
+    },
+    "tryndamere": {
+      "attack": [
+        {"clip": "HeldAttack1", "markerUs": 784531, "source": "TryndamereBasicAttack 11.5/30"},
+        {"clip": "HeldAttack2", "markerUs": 784531, "source": "TryndamereBasicAttack2 11.5/30"},
+        {"clip": "HeldCrit", "markerUs": 834688, "source": "TryndamereCritAttack 13/30"}
+      ]
+    },
+    "twisted_fate": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 244036, "source": "TwistedFateBasicAttack 7.321069/30"},
+        {"clip": "Attack2", "markerUs": 244036, "source": "TwistedFateBasicAttack2 7.321069/30"},
+        {"clip": "Attack3", "markerUs": 244036, "source": "TwistedFateBasicAttack3 7.321069/30"},
+        {"clip": "Attack4", "markerUs": 244036, "source": "TwistedFateBasicAttack4 7.321069/30"},
+        {"clip": "Crit", "markerUs": 387333, "source": "TwistedFateCritAttack 11.62/30"}
+      ]
+    },
+    "twitch": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 424667, "source": "TwitchBasicAttack 12.74/30"},
+        {"clip": "Attack2", "markerUs": 438667, "source": "TwitchBasicAttack2 13.16/30"}
+      ],
+      "active_buff_attack": [
+        {"clip": "Spell4", "markerUs": 250000, "source": "TwitchSprayAndPrayAttack 7.5/30"}
+      ]
+    },
+    "voidfish": {
+      "attack": [
+        {"clip": "attack_1_anm", "markerUs": 470000, "source": "BelvethVoidlingMeleeAttack 14.1/30"}
+      ]
+    },
+    "voidfish_ranged": {
+      "attack": [
+        {"clip": "ranged_attack", "markerUs": 470000, "source": "BelvethVoidlingRangedAttack 14.1/30"}
+      ]
+    },
+    "voidling": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 366667, "source": "MalzaharVoidlingBasicAttack 22/60"},
+        {"clip": "Attack2", "markerUs": 366667, "source": "MalzaharVoidlingBasicAttack2 22/60"},
+        {"clip": "Attack3", "markerUs": 366667, "source": "MalzaharVoidlingBasicAttack3 22/60"}
+      ]
+    },
+    "voidmite": {
+      "attack": [
+        {"clip": "Ranged_Attack1", "markerUs": 470000, "source": "SRU_Horde_MiniBasicAttack 14.1/30 / shared reference"}
+      ]
+    },
+    "xin": {
+      "attack": [
+        {"clip": "Attack1_Hit", "markerUs": 233333, "source": "XinZhaoBasicAttack 8.1/30 / project split"},
+        {"clip": "Attack3_Hit", "markerUs": 233333, "source": "XinZhaoBasicAttack2 7.8/30 / project split"},
+        {"clip": "Passive_AA_01_XinZhaoRework_anm", "markerUs": 300000, "source": "XinZhaoPassiveCritAttack 9/30"}
+      ]
+    },
+    "yorick": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 333333, "source": "YorickBasicAttack 10/30"},
+        {"clip": "Attack2", "markerUs": 333333, "source": "YorickBasicAttack2 10/30"},
+        {"clip": "Attack3", "markerUs": 333333, "source": "YorickBasicAttack 10/30 / shared reference"}
+      ],
+      "empowered_attack": [
+        {"clip": "Spell1", "markerUs": 333333, "source": "YorickQAttack 10/30"}
+      ]
+    },
+    "ziggs": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 333333, "source": "ZiggsBasicAttack 10/30"},
+        {"clip": "Attack2", "markerUs": 333333, "source": "ZiggsBasicAttack2 10/30"}
+      ],
+      "empowered_attack": [
+        {"clip": "Spell1", "markerUs": 250000, "source": "ZiggsQ 7.5/30"}
+      ]
+    },
+    "ashe": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 300000, "source": "AsheBasicAttack 9/30"},
+        {"clip": "Attack2", "markerUs": 300000, "source": "AsheBasicAttack2 9/30"}
+      ]
+    },
+    "apex_turret": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 431667, "source": "HeimerTBlueBasicAttack 12.95/30"}
+      ]
+    },
+    "evolution_turret": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 425833, "source": "HeimerTYellowBasicAttack 12.775/30"},
+        {"clip": "Attack2", "markerUs": 425833, "source": "HeimerTYellowBasicAttack2 12.775/30"}
+      ]
+    },
+    "jack_in_the_box": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 333333, "source": "ShacoBoxSpell 10/30"}
+      ]
+    },
+    "soul_tentacle": {
+      "attack": [
+        {"clip": "illaoiminion_attack1", "markerUs": 733333, "source": "IllaoiMinion Attack1_BASE ground impact 22/30"}
+      ]
+    },
+    "thorn_spitter": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 64516, "source": "ZyraQPlantMissile 2/31"}
+      ]
+    },
+    "vine_lasher": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 250000, "source": "ZyraEPlantAttack spellCastTime"},
+        {"clip": "Attack2", "markerUs": 241935, "source": "ZyraEPlantAttack2 7.5/31"}
+      ]
+    },
+    "sun_disc-blue": {
+      "attack": [
+        {"clip": "Attack1_BASE", "markerUs": 165000, "source": "AzirSunDiscBasicAttack 4.95/30"},
+        {"clip": "Attack2_BASE", "markerUs": 165000, "source": "AzirSunDiscBasicAttack 4.95/30 / shared reference"}
+      ]
+    },
+    "sun_disc-red": {
+      "attack": [
+        {"clip": "Attack1_BASE", "markerUs": 165000, "source": "AzirSunDiscBasicAttack 4.95/30"},
+        {"clip": "Attack2_BASE", "markerUs": 165000, "source": "AzirSunDiscBasicAttack 4.95/30 / shared reference"}
+      ]
+    },
+    "melee-order": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 393333, "source": "SRU_OrderMinionMeleeBasicAttack 11.8/30"},
+        {"clip": "Attack2", "markerUs": 393333, "source": "SRU_OrderMinionMeleeBasicAttack2 11.8/30"}
+      ]
+    },
+    "ranged-order": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 466667, "source": "SRU_OrderMinionRangedBasicAttack 14.1/30 / shared release 14/30"},
+        {"clip": "Attack2", "markerUs": 466667, "source": "SRU_OrderMinionRangedBasicAttack2 14.1/30 / shared release 14/30"}
+      ]
+    },
+    "siege-order": {
+      "attack": [
+        {"clip": "Attack1_BASE", "markerUs": 300000, "source": "SRU_OrderMinionSiegeBasicAttack 9/30"},
+        {"clip": "Attack2_BASE", "markerUs": 300000, "source": "SRU_OrderMinionSiegeBasicAttack 9/30 / shared reference"}
+      ]
+    },
+    "super-order": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 500000, "source": "SRU_OrderMinionSuperBasicAttack 15/30"},
+        {"clip": "Attack2", "markerUs": 500000, "source": "SRU_OrderMinionSuperBasicAttack2 15/30"}
+      ]
+    },
+    "melee-chaos": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 393333, "source": "SRU_ChaosMinionMeleeBasicAttack 11.8/30"},
+        {"clip": "Attack2", "markerUs": 393333, "source": "SRU_ChaosMinionMeleeBasicAttack2 11.8/30"}
+      ]
+    },
+    "ranged-chaos": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 466667, "source": "SRU_ChaosMinionRangedBasicAttack 14/30 / shared release 14/30"},
+        {"clip": "Attack2", "markerUs": 466667, "source": "SRU_ChaosMinionRangedBasicAttack2 14/30 / shared release 14/30"}
+      ]
+    },
+    "siege-chaos": {
+      "attack": [
+        {"clip": "Attack1_BASE", "markerUs": 300000, "source": "SRU_ChaosMinionSiegeBasicAttack 9/30"},
+        {"clip": "Attack2_BASE", "markerUs": 300000, "source": "SRU_ChaosMinionSiegeBasicAttack 9/30 / shared reference"}
+      ]
+    },
+    "super-chaos": {
+      "attack": [
+        {"clip": "Attack1", "markerUs": 500000, "source": "SRU_ChaosMinionSuperBasicAttack 15/30"},
+        {"clip": "Attack2", "markerUs": 500000, "source": "SRU_ChaosMinionSuperBasicAttack2 15/30"}
+      ]
+    },
+    "princess_tower": {
+      "attack": [
+        {"clip": "", "markerUs": 165000, "source": "TurretBasicAttack 4.95/30"},
+        {"clip": "", "markerUs": 165000, "source": "TurretBasicAttack2 4.95/30"},
+        {"clip": "", "markerUs": 165000, "source": "TurretBasicAttack3 4.95/30"},
+        {"clip": "", "markerUs": 165000, "source": "TurretBasicAttack4 4.95/30"}
+      ]
+    }
+  },
+  "sourceFiles": {
+    "Champions/Aatrox.wad.client / data/characters/aatrox/aatrox.bin": "c1ea29e1fe14e4b5e44e32172ea2c57c18c7d34e8e52e98db6080db03fae67b7",
+    "Champions/Aatrox.wad.client / data/characters/aatrox/animations/skin0.bin": "831e06c28de0b37033bc7465b7905a0b285c4f3b04ef7e8f0a897d8ecc42d59c",
+    "Champions/Anivia.wad.client / data/characters/anivia/animations/skin0.bin": "5e8a79577d4ea959408275f9db31855845082035564de4078dd3b067372823f5",
+    "Champions/Anivia.wad.client / data/characters/anivia/anivia.bin": "4815fb9cd950695f9078edaaa969eb7329997acd621019cbafc2e2151e1ce135",
+    "Champions/Annie.wad.client / data/characters/annietibbers/animations/skin0.bin": "98a1f2a8e632d4fce9bf7f9144707de18596e2cb56f95585dfefa0d246ae21c7",
+    "Champions/Annie.wad.client / data/characters/annietibbers/annietibbers.bin": "63af5d1e02d7299577c65f76b85a6203cfc586658f6d4992a316652c971640d2",
+    "Champions/Ashe.wad.client / data/characters/ashe/animations/skin0.bin": "94325c3f55c23fa8d8a8eda99da0c29f9d1fc9cb51c4b11fc92285799446d01b",
+    "Champions/Ashe.wad.client / data/characters/ashe/ashe.bin": "95f150718868e205a479dac1f5fa68c72a28204ce15ea9456699b16d8bd2a29d",
+    "Champions/Azir.wad.client / data/characters/azir/animations/skin0.bin": "027bdf9eeda0d8b30cf4b3c6a22f6bee40f9848cf1a906b0c5eeafa74980cbbb",
+    "Champions/Azir.wad.client / data/characters/azir/azir.bin": "db907ab8863832bfe2fc8ec0d5846073a9abd2c0654059dd4f22a0b144ef8e85",
+    "Champions/Azir.wad.client / data/characters/azirsoldier/animations/skin0.bin": "0e50351c9f0b694531a790200cc61e2fc696637b3459af33763c8828ef1d85c4",
+    "Champions/Azir.wad.client / data/characters/azirsoldier/azirsoldier.bin": "b62c7110bca700b4ba4afcb4688c0ec2a123e36f54a47c751d3cbcbfb296852c",
+    "Champions/Azir.wad.client / data/characters/azirsundisc/animations/skin0.bin": "2ece80e3f91db0b1a4bcfb78debc43505c68a97991b17bbc45f6293d4d2bd0e4",
+    "Champions/Azir.wad.client / data/characters/azirsundisc/azirsundisc.bin": "7410163b26060b71737d087a3473934ff80c1e19069e71d90ee0d76f97e972eb",
+    "Champions/Belveth.wad.client / data/characters/belveth/animations/skin0.bin": "82f8c460c80a7a619e15679aeaa8b41b9860f2ee2af60ea71bb7971d45aae99e",
+    "Champions/Belveth.wad.client / data/characters/belveth/belveth.bin": "8953ee030c98102639192e4dc1824e3220cb8adc615a205e29287eb0bcf0ada1",
+    "Champions/Belveth.wad.client / data/characters/belvethvoidling/animations/skin0.bin": "d4c0c55f1421237589b5e678bc81ba64868952b3cc6965260330d6a5fbc9d642",
+    "Champions/Belveth.wad.client / data/characters/belvethvoidling/belvethvoidling.bin": "236025db85f11b2fc58b3b6c85a32da1452458f7148ce50373de49ed2babcdb3",
+    "Champions/Blitzcrank.wad.client / data/characters/blitzcrank/animations/skin0.bin": "7cd569d1e787f6bb19cda9f0b4fd697d80609fb35932469951d0079ab532f2e7",
+    "Champions/Blitzcrank.wad.client / data/characters/blitzcrank/blitzcrank.bin": "cbc83d91382d121abbdb8edb585e7f4247a3d33ed482152d51a7353a599b781f",
+    "Champions/Corki.wad.client / data/characters/corki/animations/skin0.bin": "77fffb4e7e326b896a3f034875e051cc81725989683b13e868303227ffad45df",
+    "Champions/Corki.wad.client / data/characters/corki/corki.bin": "70e32f174752a87c3214c38623f06f4a94d14fb765b4c0305eee5a02ddf5cc0b",
+    "Champions/Darius.wad.client / data/characters/darius/animations/skin0.bin": "53283641ab021ada5617dfe5dbd3f31ec99b3b28d367203e9034d9629e795825",
+    "Champions/Darius.wad.client / data/characters/darius/darius.bin": "3730f6f3164ce3a5a1a2c9efa231ae3e9ff987e16986232a9d79c728692c569c",
+    "Champions/Ekko.wad.client / data/characters/ekko/animations/skin0.bin": "3f5c6e997970d5fb153ea297e9da9b4d3fd441e30dce66b4e534de5e0c8db79f",
+    "Champions/Ekko.wad.client / data/characters/ekko/ekko.bin": "3cbee144ed2d5e0347c8729fecd2af36a8bede10c14f4ec27897de3fa10f5e61",
+    "Champions/Garen.wad.client / data/characters/garen/animations/skin0.bin": "77628eed86880d52952256153e4c6c68de267da36b9c228b1f6e5fffaac11570",
+    "Champions/Garen.wad.client / data/characters/garen/garen.bin": "8776aff6474a2c040803d2d9e8c3cd225fb18f0b80db60a61c9b4e87d0bbd850",
+    "Champions/Gnar.wad.client / data/characters/gnar/animations/skin0.bin": "8cd520bf76fd07c05d2404ec92562ef8c083ee8df2740520f3022c0f8695e9dd",
+    "Champions/Gnar.wad.client / data/characters/gnar/gnar.bin": "2a28f11e69d1be70250439341e6caae572e864f8f96260ecfceb6222c4a8477e",
+    "Champions/Gnar.wad.client / data/characters/gnarbig/animations/skin0.bin": "eaa9eaff6caf5a805989b079c6a8c4eddf4de6b8469b99b2299d5b0096538529",
+    "Champions/Gnar.wad.client / data/characters/gnarbig/gnarbig.bin": "07e2903d68e79d9fa3a9ac87ed028a96cace3abbe626dcdf97f152f88965c1da",
+    "Champions/Graves.wad.client / data/characters/graves/animations/skin0.bin": "cde7122af544ce380ec2ec685c5a462a3aa19d5d2b2026373481269997daa16e",
+    "Champions/Graves.wad.client / data/characters/graves/graves.bin": "40b35f7ab077b3f263a65321b8446fe8d48d1eef6bf4b72328d11728cf67680b",
+    "Champions/Gwen.wad.client / data/characters/gwen/animations/skin0.bin": "6c695133a091a1aaee0368fb4f51901a3c68b7db84be1b626ab7760d6deb5ea3",
+    "Champions/Gwen.wad.client / data/characters/gwen/gwen.bin": "4b41b4096f6e2e83c73c00b2de9cd14faa0f20b5b1e757d29fea7bb8ce4ce2b3",
+    "Champions/Hecarim.wad.client / data/characters/hecarim/animations/skin0.bin": "5fdae6fee3f269cd6cf25e19e65bffd26c4f9576f8ce008aafed50369d75df91",
+    "Champions/Hecarim.wad.client / data/characters/hecarim/hecarim.bin": "5412cfa5c8f002a57151d8ae489cfd4bdb971a737fb137baa6140a63ff2cc8c7",
+    "Champions/Heimerdinger.wad.client / data/characters/heimertblue/animations/skin0.bin": "b2d075e2588ca334fcac5b40481cf18c3afc6a8e4076584eb6035234f10428bf",
+    "Champions/Heimerdinger.wad.client / data/characters/heimertblue/heimertblue.bin": "e521e13ecee859557cad3ca1c84b62ed0cb53734c2bedc6d05524c4607e2066b",
+    "Champions/Heimerdinger.wad.client / data/characters/heimertyellow/animations/skin0.bin": "1d5c186b560910fc32624be8915472ee62c170538fd78941f3e8df41c7d93993",
+    "Champions/Heimerdinger.wad.client / data/characters/heimertyellow/heimertyellow.bin": "88d02dfd8f063e00fadfe6f76309dfbfd44d1cbee8269053f2a996c86cef910f",
+    "Champions/Illaoi.wad.client / data/characters/illaoiminion/animations/skin0.bin": "e981e741220e26a6a18eec33005326b2db803149bf93973826b08def40d51435",
+    "Champions/Ivern.wad.client / data/characters/ivern/animations/skin0.bin": "ede5d84c51eb4d29f3f094a6d2849c21d15b1b64524828c23b9671955ac05f68",
+    "Champions/Ivern.wad.client / data/characters/ivern/ivern.bin": "b3dbde921ef00dfbcd59e788228b42426b8840579c76dd5129320ed0480ea2af",
+    "Champions/Ivern.wad.client / data/characters/ivernminion/animations/skin0.bin": "a395bd2a6315bedeae90b6af725d9360776b2d8914f24899d87838ae473bcf93",
+    "Champions/Ivern.wad.client / data/characters/ivernminion/ivernminion.bin": "a3f97f533a617fc5f7cd215c46cd8d0db7ca077a0c1bb1854f692851578bfad7",
+    "Champions/Jax.wad.client / data/characters/jax/animations/skin0.bin": "b120d72c7142c2c814eb48ba8352c56804eed91df4693a930e86dc5ecc2c5d4b",
+    "Champions/Jax.wad.client / data/characters/jax/jax.bin": "61658a8edb56b223709d5d2c603a5fe144414d816e17f19a988b05ad342392d3",
+    "Champions/Jayce.wad.client / data/characters/jayce/animations/skin0.bin": "1eb7d8be19d35f23c47c209b5c3b71f3ff005d2f75262c1ddbc13a05626b71e7",
+    "Champions/Jayce.wad.client / data/characters/jayce/jayce.bin": "1cea0c3cc5a0c2f46d4047f97c3a357540140f93aa920ca471772c0b0722b8b9",
+    "Champions/Jinx.wad.client / data/characters/jinx/animations/skin0.bin": "175319bcf497fed13c36b5a95dd315d3ec5beb23be77a78b2c55446540beed2d",
+    "Champions/Jinx.wad.client / data/characters/jinx/jinx.bin": "a759a7d2231535f7b629a00ac046d363de85ae14244eb229561d6cee0539da8d",
+    "Champions/Kassadin.wad.client / data/characters/kassadin/animations/skin0.bin": "16aeb8c838a7696f37cfbeb541402c4c0b538e2bdb9af24314ef7ce7025fa0c7",
+    "Champions/Kassadin.wad.client / data/characters/kassadin/kassadin.bin": "e6fc5ca4bcb4fa1c707d0cf7e1904fdfc6c5d9e9fe94e007e204dc0649d92ae6",
+    "Champions/Kayle.wad.client / data/characters/kayle/animations/skin0.bin": "5e3f9a258e4b3adce8abb4e388096d3bff9597d1cd2a0480e1704083b88dbf40",
+    "Champions/Kayle.wad.client / data/characters/kayle/kayle.bin": "746ac726d9dfc1cdbd7e9286a5d862cdf998a15c8d942135d9976a05ea9c9a62",
+    "Champions/Kayn.wad.client / data/characters/kayn/animations/skin0.bin": "10ad2e288b2c169d7f121038dbe70f7c4b1fa2ee6dfa0b9b8a0f161ded50ba0a",
+    "Champions/Kayn.wad.client / data/characters/kayn/kayn.bin": "1552fbde52902b1da96b7d15be93f9b7281e291ba7c6321524c7b76ec35df7df",
+    "Champions/Lulu.wad.client / data/characters/lulu/animations/skin0.bin": "103496380cf24a129be1ddeb3c58a47e40f2db16aca0fd4a27353527cb808ef8",
+    "Champions/Lulu.wad.client / data/characters/lulu/lulu.bin": "88b8cb4266d8121c73297872d643b699b012865b17e87830772cccb0b672399d",
+    "Champions/Lulu.wad.client / data/characters/lulufaerie/animations/skin0.bin": "9d5ff95846fa2ee481656a54d2054445d1db5b64b84275e7ae1f1c694cbe19b8",
+    "Champions/Lulu.wad.client / data/characters/lulufaerie/lulufaerie.bin": "d4b590444d360c5afb758e0a72139640ffaacdc26ada7112c8d06a12d1ae04b2",
+    "Champions/Malphite.wad.client / data/characters/malphite/animations/skin0.bin": "ee8773721400d8e2ea12f2f39d7fcd3de38e2d05d90ea621a04193b5b98e8b13",
+    "Champions/Malphite.wad.client / data/characters/malphite/malphite.bin": "159bc92aa6377aff1cc955de9503b1e49142aaa1b1ec7bffa1967c297a03fb96",
+    "Champions/Malzahar.wad.client / data/characters/malzahar/animations/skin0.bin": "15174887d3b65ef903d5d442646c01fd31bae851e4dc0a3dc39e32da9821bc47",
+    "Champions/Malzahar.wad.client / data/characters/malzahar/malzahar.bin": "2877e3a6c98488f10344b1763f1943d2da9905669fd6ae8978428c0cfa604ff3",
+    "Champions/Malzahar.wad.client / data/characters/malzaharvoidling/animations/skin0.bin": "455174c1530f88545fc79851ee251e1707b976d285b44e0ca8c9e10f1c39ad02",
+    "Champions/Malzahar.wad.client / data/characters/malzaharvoidling/malzaharvoidling.bin": "c83bc29be30a19643ff8b4482bee34b47b4480d7a6c219c00ada27c1a0e1ae90",
+    "Champions/MasterYi.wad.client / data/characters/masteryi/animations/skin0.bin": "f5bc3c1f71853353fd8869578c90243b7e947c9be787a286803cdd7e8144f132",
+    "Champions/MasterYi.wad.client / data/characters/masteryi/masteryi.bin": "e197d7467819f255e8dfcc09c634279f04682a87ca995246eccf44fc54d6444c",
+    "Champions/MissFortune.wad.client / data/characters/missfortune/animations/skin0.bin": "320a11687f967b2b37b21e41bcc00940bd348a494fa11ab478c506b106c8ac57",
+    "Champions/MissFortune.wad.client / data/characters/missfortune/missfortune.bin": "5c0b438647d08b9a1309a5b83ef7f94491b8a7c97a1a48efef75514228dc96e8",
+    "Champions/Nocturne.wad.client / data/characters/nocturne/animations/skin0.bin": "63dbd8d8057285f8563707471dcd9352202ab463be0e21ba214a0f80d042cb68",
+    "Champions/Nocturne.wad.client / data/characters/nocturne/nocturne.bin": "58b0491d1499063daa2131ca6a545c6e24c5d52cb9d3e3be4971c756a3c97c56",
+    "Champions/Olaf.wad.client / data/characters/olaf/animations/skin0.bin": "87156eca41d849e3b8e18f926a858ccf2e03bd77ad0684f3f313b38fae7a45dc",
+    "Champions/Olaf.wad.client / data/characters/olaf/olaf.bin": "406b87cf6ff70fe2d7a1ad5adc7a285054ded0366c41b0d0ae23251390a469ab",
+    "Champions/Ornn.wad.client / data/characters/ornn/animations/skin0.bin": "752fe85211c49d0c43548dc86164c81b51ad2b0f875b117d3406aceef550911f",
+    "Champions/Ornn.wad.client / data/characters/ornn/ornn.bin": "0b19413e3a8be5570efa08624acd7dbba45f44e9a67fce98fe723f197c246638",
+    "Champions/Pantheon.wad.client / data/characters/pantheon/animations/skin0.bin": "2c27a12d78a27d43dc2b88d505125f66dff81fc9f12a7c36517f58affa20982e",
+    "Champions/Pantheon.wad.client / data/characters/pantheon/pantheon.bin": "4f7718db1590bcc11f000817229e1e8c88c7749a945371ea9b7aaedd9e0371a9",
+    "Champions/RekSai.wad.client / data/characters/reksai/animations/skin0.bin": "ff3c085d6d220dd312c83f30865505ccd4670667f950a6547b0e806069a4a2fb",
+    "Champions/RekSai.wad.client / data/characters/reksai/reksai.bin": "698bdf7080a2875342313830c318bac21e7debb96808dd44764cf40bd82d9a8d",
+    "Champions/Samira.wad.client / data/characters/samira/animations/skin0.bin": "806c8e6a436ac2e5ce05daf88a3b0d2aba46831f30f8e2ae935230469064ccd8",
+    "Champions/Samira.wad.client / data/characters/samira/samira.bin": "c68135e9e3b0bdc4a26fc53aa8e291bb346cda9d869e2debb09c6f6e7902e097",
+    "Champions/Sett.wad.client / data/characters/sett/animations/skin0.bin": "238403a03458c4f00c3e0a6e8a516705fc700e267743a3e814cc9d8c0b8e757f",
+    "Champions/Sett.wad.client / data/characters/sett/sett.bin": "4e04449516e29f7db30388b659a39c52cfce10acfb3ab149fdb00a061a0e8381",
+    "Champions/Shaco.wad.client / data/characters/shaco/shaco.bin": "10e09db5b997db3eb3dc41847785cca046f34d4b1c525176cae1f7a367a32844",
+    "Champions/Shaco.wad.client / data/characters/shacobox/animations/skin0.bin": "8fdeff9921b01a07d27b0fa1ecdbe265f32d08c9a8d58c1e8974ab426ef60397",
+    "Champions/Sion.wad.client / data/characters/sion/animations/skin0.bin": "0512a3b7894cf821bda298aa73058824510402b03c4b22c66f1fe31af00fd411",
+    "Champions/Sion.wad.client / data/characters/sion/sion.bin": "434bccc6995b211538d3942f92e914e79461ebabb573cddd3f0b5ccef443c0da",
+    "Champions/Sivir.wad.client / data/characters/sivir/animations/skin0.bin": "3f6bcae76735d77cacc0f081d0a494364a8a4f824573f6cdbbfe49a1e3f519bc",
+    "Champions/Sivir.wad.client / data/characters/sivir/sivir.bin": "ef75a830c5bf01a3ee18363fa6e187f69944557dc397f6be1278f6809367e3df",
+    "Champions/Sona.wad.client / data/characters/sona/animations/skin0.bin": "d67448a404ba24d7461bf2e7a014a7818770b71f442d41c2bfa3e4ffc187a452",
+    "Champions/Sona.wad.client / data/characters/sona/sona.bin": "1fd0b4172ed4c35a2b4721bbcba87c4acaaff8e109431b8ab2623c0ea8f57cce",
+    "Champions/Teemo.wad.client / data/characters/teemo/animations/skin0.bin": "8bafcc4d854fea6493922d073074cfce236ae3b1e3ec83d0354f17251464a66c",
+    "Champions/Teemo.wad.client / data/characters/teemo/teemo.bin": "9069f35eb20be51bf2ba6968ed8ae9eb7f16a32744367a5292257c0c91ebea2f",
+    "Champions/Tristana.wad.client / data/characters/tristana/animations/skin0.bin": "43b8cff90501b372b59b01c34a94ea20732bc084655d3f764e154e82eeb7761a",
+    "Champions/Tristana.wad.client / data/characters/tristana/tristana.bin": "23d3b0c008724e7036fc900403622b9d12c59a94c723e36b9fbf9731202b58b7",
+    "Champions/Tryndamere.wad.client / data/characters/tryndamere/animations/skin0.bin": "3606b6241d78ed8c93892594d00b447fcbe86a8ed84c6fefe7eb16ba9da338fa",
+    "Champions/Tryndamere.wad.client / data/characters/tryndamere/tryndamere.bin": "b44009793593dffb53cdd2a309fb9aa4e20669c66ec0f2482d0e44881bafb08e",
+    "Champions/TwistedFate.wad.client / data/characters/twistedfate/animations/skin0.bin": "0b010a8865ee023d0cb9203f19cbffde66d36b8168ebadaebcf58b838b47d59d",
+    "Champions/TwistedFate.wad.client / data/characters/twistedfate/twistedfate.bin": "7d0a53e24a9c7d6c45b83bfff35c76f3d90c299a2f4cae9a2893230ddb2024c8",
+    "Champions/Twitch.wad.client / data/characters/twitch/animations/skin0.bin": "4bf0af2a74bf96d34010c76e338fa33a0c9ffd0abda7ed006b250981a2fefd13",
+    "Champions/Twitch.wad.client / data/characters/twitch/twitch.bin": "86091058f59a57aaa57ffd3ea5e6ce412c90a0a15637a0c8b372779d0037cba7",
+    "Champions/XinZhao.wad.client / data/characters/xinzhao/animations/skin0.bin": "65791f0899346456766812e131c09fe6528cf843eff26b0d779f43db42c4b6af",
+    "Champions/XinZhao.wad.client / data/characters/xinzhao/xinzhao.bin": "714a6145e5b65697c58505a78677f06b8485bf980ff5a21e86b01984774941f6",
+    "Champions/Yorick.wad.client / data/characters/yorick/animations/skin0.bin": "ffba0a3b053e27876ab01992cc074e05ba1177e17e51736696b4705d838f9653",
+    "Champions/Yorick.wad.client / data/characters/yorick/yorick.bin": "48a0d9958ebe266700f67fa66baff7b3aa2af7dec70485eda496761de403a602",
+    "Champions/Yorick.wad.client / data/characters/yorickghoulmelee/animations/skin0.bin": "c3a5db2667f4de73bba1a09bcc459782db1a454fe2b127b4ff5184e51b51d104",
+    "Champions/Yorick.wad.client / data/characters/yorickghoulmelee/yorickghoulmelee.bin": "798a34d7376868e44badb026ebfc5db2fa18b055874a1adf17d4751fd7421123",
+    "Champions/Ziggs.wad.client / data/characters/ziggs/animations/skin0.bin": "48808c858da82987ac5dd0e6fd49aa8d9221f55064397def69c1d89212e35b58",
+    "Champions/Ziggs.wad.client / data/characters/ziggs/ziggs.bin": "cd09fb6ede481d853d1d3ba6c41bab1b16090c60286b0518ace51496ac6b5454",
+    "Champions/Zyra.wad.client / data/characters/zyra/zyra.bin": "b21c7e67139f698f4ff6558430c64c38d711daf3a2d9375cb8d590b7a6cae2fd",
+    "Champions/Zyra.wad.client / data/characters/zyragraspingplant/animations/skin0.bin": "aff4a27f5db3ae78b95dfb5eacbba5b1358ad3ca5e63542b9d7913e96a5bb364",
+    "Champions/Zyra.wad.client / data/characters/zyrathornplant/animations/skin0.bin": "645c20ed63d79f95bd289edf6e3725762732511f0c810aff169a2a88f917fff6",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_chaosminionmelee/animations/skin0.bin": "1a0cfda3f2fde241165f31534da57756c9d298396af76e9ac244c3b4a48a24e9",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_chaosminionmelee/sru_chaosminionmelee.bin": "e24400445fcb4c78bd1baeeb2ebd520d0ad8a1800f12e849900e5f93f907ed0d",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_chaosminionranged/animations/skin0.bin": "365a2637f98223df16fdb289d56b5ac970dc5fdf3e80dadafe0cefac31857f68",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_chaosminionranged/sru_chaosminionranged.bin": "249feb9aed45db85baf7e0e153592ba26845d3343028fdf8a7125bebe0848de0",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_chaosminionsiege/animations/skin0.bin": "7b8d7c61aede9a464e735e69fd245ffef370fc10513fcb4d1105a0de000955c8",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_chaosminionsiege/sru_chaosminionsiege.bin": "b2a1e4a477ab0d884822883118013f181d31816c3eed7cd97e1c90574e81e907",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_chaosminionsuper/animations/skin0.bin": "cdd8d2c012db173a151082fbbec82b4061e02c5cc76878a2b4f371e584c71840",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_chaosminionsuper/sru_chaosminionsuper.bin": "54667551c4e640e719e9a3b4a6474ee75a3e5b768c0bea830511f1f7eee1e5db",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_horde_mini/animations/skin0.bin": "2227d7980969cc435ac4ecd28fd42fa0cea4af10e8971e54bba0a3a347b5b06f",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_horde_mini/sru_horde_mini.bin": "a74d4be4cb03e967efeac1a3e2369e9f0f6b87764bd42e684b394d57ed148b54",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_orderminionmelee/animations/skin0.bin": "820703fcd4c0f18173c850ac51f298fdccbfb46c5257c5f2d1dccf66ab3134cd",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_orderminionmelee/sru_orderminionmelee.bin": "3434a29d7dc465e984717ab92d17e43d04e5e5d336f433375eefe17fcc641f8c",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_orderminionranged/animations/skin0.bin": "9083903223ac3376ae95d8cd79a926beb98001e0ddefabafb309ace1d72637f9",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_orderminionranged/sru_orderminionranged.bin": "4d6192298da8b9f07dc19ce2e879e8a27b6eeca710a31aff22f777bcd6d72640",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_orderminionsiege/animations/skin0.bin": "8f07f870b95727f07efc7dcff3c8207011c935ff44a57e06b17d692c3a5702dd",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_orderminionsiege/sru_orderminionsiege.bin": "0e3bf78d88a38f57aa6b023a53d7d4b0b9aac51cde427e7bfa99da0f00c0df6b",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_orderminionsuper/animations/skin0.bin": "9215908e479e7df098aba99afb4f134a51d29d1a91999113b8b8e47093f2463e",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_orderminionsuper/sru_orderminionsuper.bin": "638ed1ed69073af08e63c917b473978c661287e71c80281be9788e4476df855e",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_riftherald/animations/skin0.bin": "e15438e95926f2c4d39093ffd7708eae0af8771175b4320697b510b05b48835f",
+    "Maps/Shipping/Map11.wad.client / data/characters/sru_riftherald/sru_riftherald.bin": "67844ee0c88611862c56bf77105bf6f962cc9bcef281cae8035f391c1755a0d3",
+    "Maps/Shipping/Map11.wad.client / data/characters/turret/animations/skin0.bin": "54ee83d6b2e67933d67bffe751745b839e704ae208cf52281c84aa017eaebd7b",
+    "Maps/Shipping/Map11.wad.client / data/characters/turret/turret.bin": "4293d261021bbda00343d12b4896f90ad7097c6a4f75d6ee89ff316af9c96d06",
+    "Maps/Shipping/Map12.wad.client / data/characters/jade_voidspawn/animations/skin0.bin": "468bd33e324bd89e1030735dfacfdfde092c668aded04cfbe71b46848424195f"
+  }
+}

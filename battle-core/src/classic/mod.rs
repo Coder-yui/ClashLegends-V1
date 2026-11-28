@@ -349,6 +349,7 @@ impl ClassicMatch {
             Player::new(decks[1], seed ^ 0x76b15da90c378ff1)?,
         ];
         let mut battle = Battle::new(map.arena.clone())?;
+        battle.classic_attack_nodes = true;
         let mut towers = [[0; 2]; 2];
         let mut nexus = [0; 2];
         for team in [Team::Blue, Team::Red] {

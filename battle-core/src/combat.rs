@@ -28,7 +28,35 @@ impl Effects {
         }
     }
 }
-pub(crate) fn decide(a: &mut Actor, view: &Perception, mid: f64, out: &mut Effects) {
+pub(crate) fn attack_segment(a: &Actor, s: &serde_json::Value, cycle: u32, close: bool) -> u32 {
+    if let Some((left, count)) = a.card_state.empowered.and_then(|(spec, left)| {
+        spec["attack_count"]
+            .as_u64()
+            .map(|count| (left, count as u32))
+    }) {
+        count.saturating_sub(u32::from(left))
+    } else if s.get("close_attack_range").is_some() {
+        (cycle - 1) % 2 + if close { 2 } else { 0 }
+    } else if s.get("rage_crit_multiplier").is_some() {
+        if s["skill_resource_max"]
+            .as_f64()
+            .is_some_and(|max| a.card_state.resource >= max)
+        {
+            2
+        } else {
+            (cycle - 1) % 2
+        }
+    } else {
+        cycle - 1
+    }
+}
+pub(crate) fn decide(
+    a: &mut Actor,
+    view: &Perception,
+    mid: f64,
+    classic_nodes: bool,
+    out: &mut Effects,
+) {
     crate::projectiles::reload_tick(a);
     let (_, attack, damage_rate) = a.rates();
     let rate = u64::from(attack);
@@ -180,42 +208,40 @@ pub(crate) fn decide(a: &mut Actor, view: &Perception, mid: f64, out: &mut Effec
             }
             .map_or(windup, |t| (t * 20.).ceil() as u32);
             if a.release_at.is_none() {
-                let earliest = (start + u64::from(windup) * scale).max(a.attack_clock);
-                if a.next_attack > earliest {
+                let close = s["close_attack_range"]
+                    .as_f64()
+                    .is_some_and(|r| distance <= r);
+                let segment = attack_segment(a, s, cycle, close);
+                let node = if classic_nodes || a.def.rules.is_some() {
+                    crate::attack_nodes::select(
+                        a,
+                        out.tick,
+                        segment,
+                        b.role.structure(),
+                        cycle == 1,
+                    )
+                } else {
+                    None
+                };
+                let windup_units =
+                    node.map_or(u64::from(windup) * scale, |(_, n)| n.windup(interval));
+                let earliest = (start + windup_units).max(a.attack_clock);
+                let reachable = start + (earliest - start).div_ceil(rate.max(1)) * rate;
+                if a.next_attack > reachable {
                     if let Some(timing) = &mut a.attack {
-                        timing.end = out.tick + (a.next_attack - earliest).div_ceil(rate.max(1));
+                        timing.end = out.tick + (a.next_attack - reachable).div_ceil(rate.max(1));
                     }
                     a.activity = Activity::Recover;
                     return;
                 }
-                // The step that starts a swing also advances its first 50 ms.
                 let due = a.next_attack.max(earliest);
                 a.release_at = Some(due);
-                let close = s["close_attack_range"]
-                    .as_f64()
-                    .is_some_and(|r| distance <= r);
-                let segment = if let Some((_, left, count)) =
-                    a.card_state.empowered.and_then(|(spec, left)| {
-                        spec["attack_count"]
-                            .as_u64()
-                            .map(|count| (spec, left, count as u32))
-                    }) {
-                    count.saturating_sub(u32::from(left))
-                } else if s.get("close_attack_range").is_some() {
-                    (cycle - 1) % 2 + if close { 2 } else { 0 }
-                } else if s.get("rage_crit_multiplier").is_some() {
-                    if s["skill_resource_max"]
-                        .as_f64()
-                        .is_some_and(|max| a.card_state.resource >= max)
-                    {
-                        2
-                    } else {
-                        (cycle - 1) % 2
-                    }
-                } else {
-                    cycle - 1
-                };
                 a.attack = Some(crate::AttackTiming {
+                    role: node.map(|(role, _)| role),
+                    windup_units,
+                    after_first_step: due.saturating_sub(a.attack_clock),
+                    phase_tick: out.tick,
+                    progress: 0,
                     segment,
                     first: (s.get("first_strike_damage_multiplier").is_some()
                         && !a.card_state.first_targets.contains(&b.id))
@@ -235,16 +261,22 @@ pub(crate) fn decide(a: &mut Actor, view: &Perception, mid: f64, out: &mut Effec
             }
             let due = a.release_at.unwrap();
             let timing = a.attack.as_mut().expect("a pending swing has a timeline");
+            // Keep the visual phase continuous when a buff changes the predicted deadline.
+            let remaining = due.saturating_sub(a.attack_clock);
+            let span = timing.after_first_step.max(1);
+            timing.phase_tick = out.tick;
+            timing.progress = ((span.saturating_sub(remaining) * 1000) / span) as u16;
             timing.release = out.tick + due.saturating_sub(a.attack_clock).div_ceil(rate.max(1));
             timing.end = timing.release
                 + 1
                 + (u64::from(interval) * scale)
-                    .saturating_sub((u64::from(windup) * scale).max(rate))
+                    .saturating_sub(timing.windup_units.max(rate))
                     .div_ceil(rate.max(1));
             if a.attack_clock < due {
                 a.activity = Activity::Windup;
                 return;
             }
+            let close = timing.close;
             timing.released = true;
             out.facts.push(Fact::AttackReleased {
                 source: a.id,
@@ -261,9 +293,7 @@ pub(crate) fn decide(a: &mut Actor, view: &Perception, mid: f64, out: &mut Effec
                     s["skill_resource_attack_gain"].as_f64().unwrap_or(0.),
                     out.tick,
                 );
-                attack.close = s["close_attack_range"]
-                    .as_f64()
-                    .is_some_and(|r| distance <= r);
+                attack.close = close;
                 if attack.close {
                     a.next_attack = a.attack_clock
                         + (f64::from(interval) * scale as f64

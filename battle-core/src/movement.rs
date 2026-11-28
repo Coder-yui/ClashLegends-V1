@@ -115,7 +115,7 @@ fn walk(
                 return;
             }
             if p != a.pos {
-                cancel_recovery_on_walk(a);
+                cancel_recovery_on_walk(a, target, tick);
                 a.pos = p;
             }
             a.facing = dir;
@@ -125,7 +125,7 @@ fn walk(
         }
     }
 }
-fn cancel_recovery_on_walk(a: &mut Actor) {
+fn cancel_recovery_on_walk(a: &mut Actor, target: Body, tick: u64) {
     if a.next_attack <= a.attack_clock {
         return;
     }
@@ -141,13 +141,25 @@ fn cancel_recovery_on_walk(a: &mut Actor) {
         .as_f64()
         .filter(|w| *w > 0.)
     {
-        let windup = match a.def.action {
-            crate::Action::Strike { windup, .. } | crate::Action::Shot { windup, .. } => windup,
+        let (windup, interval) = match a.def.action {
+            crate::Action::Strike {
+                windup, interval, ..
+            }
+            | crate::Action::Shot {
+                windup, interval, ..
+            } => (windup, interval),
             _ => return,
         };
-        // The deadline is the next release. Recovery ends one windup earlier.
+        let cycle = a.card_state.swing + 1;
+        let close = rules["close_attack_range"]
+            .as_f64()
+            .is_some_and(|r| crate::targeting::gap(a, target) <= r);
+        let segment = crate::combat::attack_segment(a, rules, cycle, close);
         let scale = u64::from(crate::status::NORMAL);
-        let remaining = (a.next_attack - a.attack_clock).saturating_sub(u64::from(windup) * scale);
+        let node =
+            crate::attack_nodes::select(a, tick, segment, target.role.structure(), cycle == 1);
+        let windup = node.map_or(u64::from(windup) * scale, |(_, n)| n.windup(interval));
+        let remaining = (a.next_attack - a.attack_clock).saturating_sub(windup);
         if remaining > (window * TICKS_PER_SECOND as f64 * scale as f64).round() as u64 {
             return;
         }

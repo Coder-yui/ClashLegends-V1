@@ -381,6 +381,22 @@ body:has(.prep-screen) main > .notice {
 .prep-detail dt {
   color: #b5c1c6;
 }
+.prep-detail .prep-attack-timing {
+  grid-column: 1 / -1;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.prep-attack-timing dt {
+  flex-shrink: 0;
+}
+.prep-skill-timing {
+  display: block;
+  margin-top: 0.25em;
+}
+.prep-timing-note {
+  color: #b5c1c6;
+  font-size: 0.85em;
+}
 .prep-options {
   display: flex;
   align-items: center;
