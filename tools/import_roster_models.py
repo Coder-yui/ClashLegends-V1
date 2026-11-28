@@ -2,6 +2,7 @@
 
 import argparse
 from collections import defaultdict
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -223,6 +224,10 @@ def build(folder):
                 assets[followup["asset"]][None].add(followup["clip"])
     with tempfile.TemporaryDirectory() as directory:
         tmp = Path(directory)
+        packed = tmp / "casts"
+        packed.mkdir()
+        shared = {}
+        duplicates = []
         for asset, groups in sorted(assets.items()):
             model = Model(folder / (asset + ".glb"))
             native = {a["name"] for a in model.doc["animations"]}
@@ -247,6 +252,18 @@ def build(folder):
             for owner, names in groups.items():
                 if owner and names - groups[None]:
                     packages[package(owner)].update(names - groups[None])
+            files = {}
+            for name, names in sorted(packages.items()):
+                pack_tracks(model, names, name, tmp, PACK, packed)
+                path = packed / (name + ".glb")
+                data = path.read_bytes()
+                canonical = shared.setdefault(hashlib.sha256(data).digest(), name)
+                files[name] = canonical
+                published = DEST / path.name
+                if canonical == name:
+                    published.write_bytes(data)
+                elif published.is_file() and published.read_bytes() == data:
+                    duplicates.append(published)
             for kind, variants in profiles.items():
                 for entry in variants:
                     if entry["asset"] == asset:
@@ -262,10 +279,8 @@ def build(folder):
                             }
                         }
                         entry["packFiles"] = {
-                            owner: package(owner) for owner in entry["packs"]
+                            owner: files[package(owner)] for owner in entry["packs"]
                         }
-            for name, names in packages.items():
-                pack_tracks(model, names, name, tmp, PACK, DEST)
             model.doc["animations"] = [
                 a for a in model.doc["animations"] if a["name"] in groups[None]
             ]
@@ -292,6 +307,8 @@ def build(folder):
     (ROOT / "web/src/roster-models.json").write_text(
         json.dumps(profiles, ensure_ascii=False, indent=2) + "\n"
     )
+    for duplicate in duplicates:
+        duplicate.unlink()
 
 
 if __name__ == "__main__":

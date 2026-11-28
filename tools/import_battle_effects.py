@@ -3,6 +3,7 @@
 import argparse
 import fcntl
 from collections import defaultdict
+from contextlib import contextmanager
 import gzip
 import hashlib
 import json
@@ -25,6 +26,14 @@ def compact(data):
 
 def sha(data):
     return hashlib.sha256(data).hexdigest()
+
+
+@contextmanager
+def publishing_lock():
+    lock = Path(tempfile.gettempdir()) / ("clash-vfx-" + sha(str(ROOT).encode())[:16] + ".lock")
+    with lock.open("a") as handle:
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        yield
 
 
 def replace_file(path, data):
@@ -351,6 +360,8 @@ def build(options, tmp):
     published = {s["file"] for s in systems.values()} | {
         d["file"] for origin in provenance.values() for d in origin["dependencies"]
     }
+    arrival = json.loads((ROOT / "web/src/pantheon-arrival-assets.json").read_text())
+    published.update(Path(file).name for file in arrival["files"].values() if file.startswith("vfx/"))
     for file in OUTPUT.iterdir():
         digest = file.name.split(".")[0]
         if (
@@ -381,11 +392,7 @@ if __name__ == "__main__":
     parser.add_argument("--work", type=Path)
     options = parser.parse_args()
     OUTPUT.mkdir(exist_ok=True, parents=True)
-    lock = Path(tempfile.gettempdir()) / (
-        "clash-vfx-" + sha(str(ROOT).encode())[:16] + ".lock"
-    )
-    with lock.open("a") as handle:
-        fcntl.flock(handle, fcntl.LOCK_EX)
+    with publishing_lock():
         if options.work:
             options.work.mkdir(exist_ok=True, parents=True)
             build(options, options.work)

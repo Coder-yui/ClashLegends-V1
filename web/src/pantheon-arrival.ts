@@ -68,7 +68,7 @@ async function loadAssets() {
   const gltf = new GLTFLoader(),
     tex = new TextureLoader(),
     url = (k: keyof typeof assets.files) =>
-      "/play/media/arrival/" + assets.files[k];
+      "/play/media/" + assets.files[k];
   const [spear, proxy, color, stars] = await Promise.all([
     gltf.loadAsync(url("spear")),
     gltf.loadAsync(url("proxy")),

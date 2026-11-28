@@ -39,9 +39,9 @@
     }
   },
   "files": {
-    "spear": "f73b5cf42427d82f4c85946e.glb",
-    "proxy": "c173913d6f2d11ad7b02e593.glb",
-    "color": "bd84525f0a298f4dbc395f90.png",
-    "stars": "659d70a176e49b4dfb5bd51d.png"
+    "spear": "arrival/f73b5cf42427d82f4c85946e.glb",
+    "proxy": "arrival/c173913d6f2d11ad7b02e593.glb",
+    "color": "vfx/bd84525f0a298f4dbc395f90.png",
+    "stars": "arrival/659d70a176e49b4dfb5bd51d.png"
   }
 }

@@ -2643,7 +2643,7 @@
         ]
       },
       "packFiles": {
-        "kayle.celestial-blessing": "kayle_ranged-celestial-blessing"
+        "kayle.celestial-blessing": "kayle-celestial-blessing"
       }
     }
   ],
@@ -2823,7 +2823,7 @@
         ]
       },
       "packFiles": {
-        "kayn.reaping-slash": "kayn_assassin-reaping-slash"
+        "kayn.reaping-slash": "kayn-reaping-slash"
       }
     }
   ],

@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import tempfile
 
-from import_battle_effects import ROOT, NativeAssets, command
+from import_battle_effects import ROOT, NativeAssets, command, publishing_lock, replace_file
 
 
 def build(source, tools, scb, tmp):
@@ -31,19 +31,23 @@ def build(source, tools, scb, tmp):
             "-a", paths["fly"].parent, "-g", tmp / "silhouette.glb")
     for key in ["color", "stars"]:
         command(tools / "ltk-tex-utils", "decode", paths[key], "-o", tmp / (key+".png"))
-    dest = ROOT / "web/public/media/arrival"
-    dest.mkdir(parents=True, exist_ok=True)
+    media = ROOT / "web/public/media"
     outputs = {}
     for key, path in {"spear": paths["spear"].with_suffix(".glb"), "proxy":tmp/"silhouette.glb",
                       "color":tmp/"color.png", "stars":tmp/"stars.png"}.items():
         data = path.read_bytes()
         name = hashlib.sha256(data).hexdigest()[:24] + path.suffix
-        (dest/name).write_bytes(data)
-        outputs[key] = name
-    (ROOT/"web/src/pantheon-arrival-assets.json").write_text(json.dumps({
+        # The spear and the native particles use the same character colour texture.
+        folder = "vfx" if key == "color" else "arrival"
+        dest = media / folder
+        dest.mkdir(parents=True, exist_ok=True)
+        replace_file(dest / name, data)
+        outputs[key] = folder + "/" + name
+    manifest = json.dumps({
         "wad":wad,"sourceVersion":json.loads((source/"Game/content-metadata.json").read_text())["version"],
         "inputs":{k:{"path":name,"chunk":index[name],"sha256":hashlib.sha256(paths[k].read_bytes()).hexdigest()} for k,name in names.items()},
-        "files":outputs},indent=2)+"\n")
+        "files":outputs},indent=2)+"\n"
+    replace_file(ROOT/"web/src/pantheon-arrival-assets.json", manifest.encode())
 
 
 if __name__ == "__main__":
@@ -52,5 +56,5 @@ if __name__ == "__main__":
     parser.add_argument("--tools",type=Path,default=Path.home()/"Tools/lol-asset-tools/bin")
     parser.add_argument("--scb",type=Path,default=Path.home()/"Tools/lol-scb-export/bin/Debug/net10.0/lol-scb-export.dll")
     args=parser.parse_args()
-    with tempfile.TemporaryDirectory() as temp:
+    with tempfile.TemporaryDirectory() as temp, publishing_lock():
         build(args.source,args.tools,args.scb,Path(temp))

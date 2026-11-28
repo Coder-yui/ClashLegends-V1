@@ -574,8 +574,7 @@
         "kayle_ranged"
       ],
       "kayle.celestial-blessing": [
-        "kayle-celestial-blessing",
-        "kayle_ranged-celestial-blessing"
+        "kayle-celestial-blessing"
       ]
     },
     {
@@ -584,8 +583,7 @@
         "kayle_ranged"
       ],
       "kayle.celestial-blessing": [
-        "kayle-celestial-blessing",
-        "kayle_ranged-celestial-blessing"
+        "kayle-celestial-blessing"
       ]
     }
   ],
@@ -595,7 +593,7 @@
         "kayle_ranged"
       ],
       "kayle.celestial-blessing": [
-        "kayle_ranged-celestial-blessing"
+        "kayle-celestial-blessing"
       ]
     },
     {
@@ -603,7 +601,7 @@
         "kayle_ranged"
       ],
       "kayle.celestial-blessing": [
-        "kayle_ranged-celestial-blessing"
+        "kayle-celestial-blessing"
       ]
     }
   ],
@@ -616,7 +614,6 @@
       ],
       "kayn.reaping-slash": [
         "kayn-reaping-slash",
-        "kayn_assassin-reaping-slash",
         "kayn_slayer-reaping-slash"
       ]
     },
@@ -628,7 +625,6 @@
       ],
       "kayn.reaping-slash": [
         "kayn-reaping-slash",
-        "kayn_assassin-reaping-slash",
         "kayn_slayer-reaping-slash"
       ]
     }
@@ -639,7 +635,7 @@
         "kayn_assassin"
       ],
       "kayn.reaping-slash": [
-        "kayn_assassin-reaping-slash"
+        "kayn-reaping-slash"
       ]
     },
     {
@@ -647,7 +643,7 @@
         "kayn_assassin"
       ],
       "kayn.reaping-slash": [
-        "kayn_assassin-reaping-slash"
+        "kayn-reaping-slash"
       ]
     }
   ],

@@ -389,7 +389,7 @@
   },
   "kayle_ranged": {
     "packs": [
-      "kayle_ranged-celestial-blessing"
+      "kayle-celestial-blessing"
     ],
     "review": [
       "16380f65d097fb34fcc6b817",
@@ -416,7 +416,7 @@
   },
   "kayn_assassin": {
     "packs": [
-      "kayn_assassin-reaping-slash"
+      "kayn-reaping-slash"
     ],
     "review": [
       "73120ec7c1d214454e598555",
