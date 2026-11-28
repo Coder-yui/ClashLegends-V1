@@ -26,6 +26,8 @@ import { BattleEffects, type Launch } from "./battle-effects";
 import { states as placementStates, type Placement } from "./deployment-preview";
 import { fieldMargin } from "./battle-geometry";
 import { ReplayCamera } from "./replay-camera";
+import { LowtideTerrain } from "./lowtide-terrain";
+import { applyDockStructureMaterials } from "./lowtide-structures";
 import { BattleTerrain, openingRadius } from "./battle-terrain";
 import { GroundMarks } from "./unit-ground-marks";
 import { applyCrystalWell } from "./crystal-well";
@@ -146,6 +148,17 @@ export function modelSurfaces(root: Object3D, profile: ModelProfile) {
     }
   };
 }
+// Only the solid parts of each native objective should shade the dock floor.
+export function enableStructureShadows(root: Object3D) {
+  root.traverse((child) => {
+    if (child instanceof Mesh) {
+      child.castShadow = [child.material].flat().every(
+        (material) => !material.transparent && material.name !== "InnerFoundation",
+      );
+    }
+  });
+}
+
 type ModelAsset = GLTF & { bounds: Box3 };
 
 class ActorModel {
@@ -163,6 +176,7 @@ class ActorModel {
     flash: Mesh["material"];
   }[];
   private flashMaterials = new Map<Material, Material>();
+  private dockMaterials: Material[];
   hit(eventTick: number, displayTick: number) {
     if (eventTick - this.lastHit < 3.6 || displayTick - eventTick > 3) return;
     this.lastHit = eventTick;
@@ -229,6 +243,22 @@ class ActorModel {
   readonly actions = new Map<string, AnimationAction>();
   readonly sequence: MotionSequence;
   private towerStage?: number;
+  castsStructureShadow = false;
+  private shadowPose = "";
+  structureShadowChanged() {
+    if (!this.castsStructureShadow) return false;
+    const action = this.active;
+    const clip = action?.getClip().name ?? "";
+    const animated = clip === this.profile.intro?.clip ||
+      (clip === this.profile.death.clip && clip !== "Destroyed");
+    const phase = animated && action ? Math.floor(action.time * 8) : 0;
+    const debris = [...this.debris.values()].filter(layer => layer.start !== undefined)
+      .map(layer => Math.floor(layer.action.time * 8)).join(",");
+    const pose = [this.root.visible, clip, phase, this.towerStage, debris].join("/");
+    if (this.shadowPose === pose) return false;
+    this.shadowPose = pose;
+    return true;
+  }
   private debris = new Map<
     number,
     { mesh: Mesh; action: AnimationAction; start?: number }
@@ -253,8 +283,10 @@ class ActorModel {
   constructor(
     readonly profile: ModelProfile,
     asset: ModelAsset,
+    dock = false,
   ) {
     this.root = clone(asset.scene);
+    this.dockMaterials = dock ? applyDockStructureMaterials(this.root, profile) : [];
     this.root.traverse((o) => { if (o.type === "Bone") this.sockets.set(o.name.toLowerCase(), o); });
     if (profile.asset === "sivir") {
       const center = this.socket("C_Buffbone_Glb_Center_Loc");
@@ -477,6 +509,7 @@ class ActorModel {
 
   dispose() {
     for (const mat of this.flashMaterials.values()) mat.dispose();
+    for (const mat of this.dockMaterials) mat.dispose();
     this.root.removeFromParent();
     this.mixer.stopAllAction();
     this.mixer.uncacheRoot(this.root);
@@ -733,7 +766,7 @@ export class BattleModels {
   private renderer: WebGLRenderer;
   private scene = new Scene();
   private field = new Group();
-  private terrain = new BattleTerrain();
+  private terrain: BattleTerrain | LowtideTerrain;
   get preparingTerrain() {
     return this.terrain.preparing;
   }
@@ -769,6 +802,7 @@ export class BattleModels {
     private me: number,
     private collect = false,
     resources?: ModelResources,
+    mapId = "rift",
   ) {
     this.effects = new BattleEffects(me);
     const quality = new URLSearchParams(location.search).get("vfx");
@@ -783,6 +817,12 @@ export class BattleModels {
     });
     this.renderer.localClippingEnabled = true;
     this.renderer.setClearColor(0, 0);
+    if (mapId === "lowtide-dock") {
+      this.terrain = new LowtideTerrain(this.renderer);
+      this.terrain.root.rotation.y = me ? Math.PI : 0;
+    } else {
+      this.terrain = new BattleTerrain();
+    }
     this.scene.add(this.terrain.root, this.field, this.ground.mesh, this.effects.root);
   }
 
@@ -847,7 +887,7 @@ export class BattleModels {
         this.trimGhosts(index);
         const asset = profile && this.load(profile);
         if (!profile || !asset) break;
-        const model = new ActorModel(profile, asset);
+        const model = new ActorModel(profile, asset, this.terrain instanceof LowtideTerrain);
         const copies = new Map<Material, Material>();
         function translucent(source: Material) {
           let copy = copies.get(source);
@@ -909,7 +949,12 @@ export class BattleModels {
     let actor = this.actors.get(id);
     if (!actor || actor.profile !== profile) {
       actor?.dispose();
-      actor = new ActorModel(profile, asset);
+      actor = new ActorModel(profile, asset, this.terrain instanceof LowtideTerrain);
+      if (this.terrain instanceof LowtideTerrain &&
+          (profile.surfaceMode === "tower" || profile.asset.startsWith("nexus-") || profile.asset.startsWith("sun_disc-"))) {
+        enableStructureShadows(actor.root);
+        actor.castsStructureShadow = true;
+      }
       this.field.add(actor.root);
       this.actors.set(id, actor);
     }
@@ -954,6 +999,7 @@ export class BattleModels {
 
   reset(cursor = 0) {
     this.trimGhosts(0);
+    if (this.terrain instanceof LowtideTerrain) this.renderer.shadowMap.needsUpdate = true;
     for (const actor of this.actors.values()) actor.dispose();
     this.actors.clear();
     this.launches.clear();
@@ -1268,6 +1314,12 @@ export class BattleModels {
       } else {
         actor.dispose();
         this.actors.delete(id);
+        if (actor.castsStructureShadow) this.renderer.shadowMap.needsUpdate = true;
+      }
+    }
+    if (this.terrain instanceof LowtideTerrain) {
+      for (const actor of this.actors.values()) {
+        if (actor.structureShadowChanged()) this.renderer.shadowMap.needsUpdate = true;
       }
     }
     for (const [id, launch] of this.launches)
@@ -1287,6 +1339,10 @@ export class BattleModels {
       (id) => this.actors.get(id)?.root,
     );
     this.terrain.update(frame, this.me);
+    // Some effect passes hide the actors. Refresh the cached objective shadows
+    // in the final, fully visible scene rather than in a terrain-only pass.
+    const refreshShadows = this.renderer.shadowMap.enabled && this.renderer.shadowMap.needsUpdate;
+    if (refreshShadows) this.renderer.shadowMap.needsUpdate = false;
     this.effects.backdrop.capture(
       this.renderer,
       this.scene,
@@ -1295,6 +1351,7 @@ export class BattleModels {
       this.effects.needsBackdrop,
       [this.field, this.ground.mesh],
     );
+    if (refreshShadows) this.renderer.shadowMap.needsUpdate = true;
     this.renderer.render(this.scene, camera);
     this.metrics.actors = this.actors.size;
     this.metrics.calls = this.renderer.info.render.calls;
