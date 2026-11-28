@@ -46,7 +46,7 @@ async function json(p, path) {
   return res.json();
 }
 async function open(p, ai) {
-  await p.getByRole("button", { name: ai ? "对战 AI" : "创建房间" }).click();
+  await p.getByRole("button", { name: ai ? "对战电脑玩家" : "创建房间" }).click();
   const modal = p.getByRole("dialog");
   await modal.getByRole("combobox", { name: "对战模式" }).click();
   await modal.getByRole("option", { name: "经典模式" }).click();
@@ -445,7 +445,7 @@ try {
       p.getByRole("button", { name: "准备", exact: true }).click(),
     ),
   );
-  await h.getByText("等待另一位玩家进入战场").waitFor();
+  await h.getByText("等待其他玩家进入战场").waitFor();
   assert.notEqual(h.url().split("/").pop(), friendMatch);
   await h.getByRole("link", { name: "返回房间" }).click();
   await h.getByRole("button", { name: "结束本次备战，重新组局" }).click();

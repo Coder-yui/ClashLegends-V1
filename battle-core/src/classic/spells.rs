@@ -26,7 +26,7 @@ pub(super) struct SpellCast {
     skill: &'static Value,
     team: Team,
     pos: Point,
-    id: Id,
+    pub(super) id: Id,
     born: u64,
     origin: Point,
     impact: u64,
@@ -603,7 +603,11 @@ impl ClassicMatch {
         let mut casts = std::mem::take(&mut self.spells);
         let mut pool = BTreeSet::new();
         for cast in &mut casts {
+            let first = changes.len();
             cast.run(self, changes, &mut pool);
+            for change in &mut changes[first..] {
+                change.credit = self.battle.owners.get(&cast.id).copied();
+            }
         }
         casts.retain(|cast| cast.active_after(self));
         self.spells = casts;

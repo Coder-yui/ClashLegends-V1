@@ -70,7 +70,14 @@ export interface Room {
   settingsVersion: number;
   status: string;
   matchId: string | null;
-  seats: { name: string; ready: boolean; online: boolean; ai: boolean }[];
+  capacity: number;
+  seats: {
+    slot: number;
+    name: string;
+    ready: boolean;
+    online: boolean;
+    ai: boolean;
+  }[];
   me: number;
   deck: Deck;
   deckVersion: number;
@@ -90,7 +97,10 @@ export interface Match {
   mode: string;
   map: string;
   round: number;
+  /** Viewing team (blue 0, red 1), also used by recordings and camera. */
   me: number;
+  seat: number;
+  teammate?: string | null;
   opponent: string;
   deck: Deck;
   status: string;

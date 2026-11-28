@@ -161,6 +161,7 @@ pub struct AttackTiming {
 
 #[derive(Clone, Debug)]
 pub(crate) struct Actor {
+    pub killed_by: Option<usize>,
     pub id: Id,
     pub def: UnitDef,
     pub team: Team,
@@ -211,6 +212,7 @@ pub(crate) struct Actor {
 impl Actor {
     pub fn new(id: Id, team: Team, pos: Point, def: UnitDef) -> Self {
         Self {
+            killed_by: None,
             id,
             team,
             pos,

@@ -105,9 +105,11 @@ async fn match_view(
         .iter()
         .position(|s| s["player"] == p)
         .ok_or_else(|| fail("你没有这场比赛的席位"))?;
+    let team = clash_battle_core::classic::seat_team(me).index();
+    let teammate = seats.get(me ^ 2).map(|s| &s["name"]);
     let result: Option<Value> = row.get(2);
     Ok(Json(
-        json!({"assetVersion":env!("BATTLE_ASSETS"),"modelResources":model::match_model_resources(&seats[me]["deck"],me), "result":result,"playable":battle::compatible(&cfg,&app.catalog),"id":mid,"roomId":cfg["roomId"],"mode":cfg["mode"],"map":cfg["map"],"round":cfg["round"],"me":me,"opponent":seats[1-me]["name"],"deck":seats[me]["deck"],"status":if result.is_some() {"finished".into()} else {row.get::<_,String>(1)}}),
+        json!({"assetVersion":env!("BATTLE_ASSETS"),"modelResources":model::match_model_resources(&seats[me]["deck"],team), "result":result,"playable":battle::compatible(&cfg,&app.catalog),"id":mid,"roomId":cfg["roomId"],"mode":cfg["mode"],"map":cfg["map"],"round":cfg["round"],"me":team,"seat":me,"teammate":teammate,"opponent":model::opponent_names(seats,me),"deck":seats[me]["deck"],"status":if result.is_some() {"finished".into()} else {row.get::<_,String>(1)}}),
     ))
 }
 #[tokio::main]

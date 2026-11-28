@@ -32,9 +32,8 @@ pub fn maps() -> &'static [MapDefinition] {
     static DATA: OnceLock<Vec<MapDefinition>> = OnceLock::new();
     DATA.get_or_init(|| serde_json::from_str(include_str!("../../../content/maps.json")).unwrap())
 }
-#[derive(Deserialize)]
+#[derive(Clone, Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-#[derive(serde::Serialize)]
 pub struct ModeRules {
     pub id: String,
     pub name: String,
@@ -49,7 +48,15 @@ pub struct ModeRules {
 }
 pub fn modes() -> &'static [ModeRules] {
     static DATA: OnceLock<Vec<ModeRules>> = OnceLock::new();
-    DATA.get_or_init(|| serde_json::from_str(include_str!("../../../content/modes.json")).unwrap())
+    DATA.get_or_init(|| {
+        let mut modes: Vec<ModeRules> =
+            serde_json::from_str(include_str!("../../../content/modes.json")).unwrap();
+        let mut doubles = modes.iter().find(|m| m.id == "classic").unwrap().clone();
+        doubles.id = "2v2".into();
+        doubles.name = "经典 2v2".into();
+        modes.push(doubles);
+        modes
+    })
 }
 #[derive(Clone, Copy, Debug, PartialEq, serde::Serialize)]
 pub struct Tiles {
@@ -295,7 +302,11 @@ impl ClassicMatch {
     }
 
     pub fn deployment_regions(&self, team: Team) -> [Vec<Tiles>; 4] {
-        let player = &self.players[team.index()];
+        self.deployment_regions_for(team.index())
+    }
+    pub fn deployment_regions_for(&self, seat: usize) -> [Vec<Tiles>; 4] {
+        let team = super::seat_team(seat);
+        let player = &self.players[seat];
         let side = &self.map.sides[team.index()];
         let open = self.open_pockets(team);
         std::array::from_fn(|slot| {

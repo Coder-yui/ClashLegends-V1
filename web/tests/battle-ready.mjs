@@ -130,7 +130,7 @@ try {
   await red.getByText("正在准备战场画面、音效和特效…").waitFor();
   assert.equal(await red.evaluate(() => !!window.sentReady), false);
   finishAudio();
-  await red.getByText("等待另一位玩家进入战场").waitFor();
+  await red.getByText("等待其他玩家进入战场").waitFor();
   assert.equal(await red.locator(".battle-controls").isVisible(), false);
   assert.equal(await red.evaluate(() => window.frame.tick), 0);
   assert.equal(await blue.locator(".match-loading").isVisible(), true);
@@ -152,7 +152,7 @@ try {
   });
   await red.waitForFunction(() => !!window.deferredReady);
   await blue.getByRole("button", { name: "重新加载资源" }).click();
-  await blue.getByText("等待另一位玩家进入战场").waitFor();
+  await blue.getByText("等待其他玩家进入战场").waitFor();
   assert.equal((await api(blue, path)).status, "pending");
   await red.evaluate(() => {
     window.holdReady = false;

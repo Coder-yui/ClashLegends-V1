@@ -3,6 +3,7 @@
 use crate::{Battle, Control, Fact, Id};
 #[derive(Clone, Copy, Debug)]
 pub(crate) struct Change {
+    pub(crate) credit: Option<usize>,
     source: Id,
     target: Id,
     amount: i32,
@@ -18,6 +19,7 @@ pub(crate) struct Change {
 impl Change {
     pub fn new(source: Id, target: Id, amount: i32) -> Self {
         Self {
+            credit: None,
             source,
             target,
             amount,
@@ -81,6 +83,7 @@ impl Change {
     }
     pub fn drain(source: Id, target: Id, damage: i32, steal: u16) -> Self {
         Self {
+            credit: None,
             source,
             target,
             amount: -damage,
@@ -280,6 +283,7 @@ impl Battle {
         let mut groups = std::collections::BTreeMap::new();
         let mut extras = vec![];
         for Change {
+            credit,
             source,
             target,
             mut amount,
@@ -364,6 +368,7 @@ impl Battle {
                     && f64::from(a.hp) < f64::from(a.def.hp) * ratio
                 {
                     a.hp = 0;
+                    a.killed_by = credit.or_else(|| self.owners.get(&source).copied());
                     if let Some((origin, phase)) = sound {
                         self.sound(origin, phase, position, Some(target));
                     }
@@ -388,6 +393,9 @@ impl Battle {
             };
             if a.card_state.undying > self.tick {
                 a.hp = a.hp.max(1);
+            }
+            if a.hp == 0 {
+                a.killed_by = credit.or_else(|| self.owners.get(&source).copied());
             }
             let change = a.hp - before;
             if change < 0 {

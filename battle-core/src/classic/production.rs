@@ -2,7 +2,7 @@ use super::{
     roster::rules,
     units::{stat, ticks, unit},
 };
-use crate::{targeting::Body, vitals::Change, Actor, Battle, Control, Fact, Id, Point, Role, Team};
+use crate::{targeting::Body, vitals::Change, Actor, Battle, Control, Id, Point, Role, Team};
 mod config;
 pub(crate) use config::Production;
 use config::Side;
@@ -16,6 +16,8 @@ pub(crate) struct Birth {
 }
 #[derive(Clone, Copy)]
 pub(crate) struct Death {
+    pub owner_seat: usize,
+    pub killed_by: Option<usize>,
     pub sound: crate::SoundOrigin,
     pub key: &'static str,
     pub role: Role,
@@ -93,10 +95,7 @@ impl Battle {
                     self.tick + u64::from(b.delay.max(1)),
                 ));
             }
-            self.emit(Fact::Summoned {
-                source: owner,
-                child: id,
-            });
+            self.summoned(owner, id);
         }
     }
     pub(crate) fn advance_production(&mut self) {
@@ -198,12 +197,14 @@ impl Battle {
     pub(crate) fn card_death(
         &mut self,
         a: &Actor,
-        blasts: &mut Vec<(crate::SoundOrigin, Point, u8, Vec<Id>, Vec<Change>)>,
+        blasts: &mut Vec<(crate::SoundOrigin, usize, Point, u8, Vec<Id>, Vec<Change>)>,
     ) {
         if let Some((_, target)) = a.card_state.channel {
             let _ = self.remove_control(target, crate::Control::Stun, a.id);
         }
         self.deaths.push(Death {
+            owner_seat: self.owners.get(&a.id).copied().unwrap_or(a.team.index()),
+            killed_by: a.killed_by,
             sound: a.sound_origin(),
             key: a.def.key,
             role: a.def.role,
@@ -302,6 +303,7 @@ impl Battle {
             }
             blasts.push((
                 a.sound_origin(),
+                self.owners.get(&a.id).copied().unwrap_or(a.team.index()),
                 a.pos,
                 stat(s, "death_burst_reward", 0.) as u8,
                 ids,
@@ -332,7 +334,12 @@ impl super::ClassicMatch {
             }
             if let Some((period, amount)) = a.production.as_mut().and_then(|p| p.income.as_mut()) {
                 if period.take_due(now, a.ready_tick) {
-                    let p = &mut self.players[a.team.index()];
+                    let p = &mut self.players[self
+                        .battle
+                        .owners
+                        .get(&a.id)
+                        .copied()
+                        .unwrap_or(a.team.index())];
                     p.gold = p.gold.saturating_add(*amount).min(10);
                 }
             }

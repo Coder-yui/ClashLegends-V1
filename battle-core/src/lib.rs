@@ -62,7 +62,7 @@ pub struct Battle {
     events: Vec<Event>,
     card_queue: Vec<classic::casts::Pending>,
     volley_hits: BTreeMap<Id, std::collections::BTreeSet<Id>>,
-    kayn_forms: [classic::marks::Growth; 2],
+    kayn_forms: [classic::marks::Growth; 4],
     scheduled_audio: Vec<(u64, SoundOrigin, &'static str, Point)>,
     grants: Vec<classic::specialists::Grant>,
     attack_waves: Vec<classic::zones::Wave>,
@@ -71,7 +71,9 @@ pub struct Battle {
     pending_births: Vec<(Id, Team, Point, classic::production::Birth)>,
     zones: Vec<classic::zones::Zone>,
     deaths: Vec<classic::production::Death>,
-    gold_rewards: [u8; 2],
+    // Retain ownership after death for projectiles, delayed births and effects.
+    owners: BTreeMap<Id, usize>,
+    gold_rewards: [u8; 4],
 }
 impl Battle {
     pub fn new(map: Arena) -> Result<Self, Error> {
@@ -107,7 +109,8 @@ impl Battle {
             summon_flights: vec![],
             zones: vec![],
             deaths: vec![],
-            gold_rewards: [0; 2],
+            owners: BTreeMap::new(),
+            gold_rewards: [0; 4],
             card_queue: vec![],
             volley_hits: Default::default(),
         })
@@ -223,6 +226,15 @@ impl Battle {
         }
         self.emit(Fact::Controlled(id, kind));
         Ok(())
+    }
+    fn inherit_owner(&mut self, source: Id, child: Id) {
+        if let Some(&seat) = self.owners.get(&source) {
+            self.owners.insert(child, seat);
+        }
+    }
+    fn summoned(&mut self, source: Id, child: Id) {
+        self.inherit_owner(source, child);
+        self.emit(Fact::Summoned { source, child });
     }
     fn emit(&mut self, fact: Fact) {
         self.sequence += 1;

@@ -23,7 +23,7 @@ try {
     await page.waitForFunction(
       () => document.fullscreenElement === document.documentElement,
     );
-    await button(page, "对战 AI →").click();
+    await button(page, "对战电脑玩家 →").click();
     await button(page, "进入备战 →").click();
     await page.locator(".prep-header").waitFor();
     await button(page, "退出全屏").click();

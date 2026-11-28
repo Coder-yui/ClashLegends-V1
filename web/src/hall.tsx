@@ -25,7 +25,7 @@ export function Hall({
           </div>
           <h1>对战大厅</h1>
           <p>
-            {catalog.modes[0]?.name} <em>／</em> 1 对 1 <em>／</em>{" "}
+            {catalog.modes[0]?.name} <em>／</em> 1v1 · 2v2 <em>／</em>{" "}
             {
               catalog.maps.find((m) => m.id === catalog.modes[0]?.mapIds[0])
                 ?.name
@@ -53,7 +53,7 @@ export function Hall({
         </div>
       )}
       <div className="section-title">
-        <h2>选择对手</h2>
+        <h2>选择对战</h2>
         <button className="text-button" onClick={() => setup("join")}>
           输入邀请码 <span>↗</span>
         </button>
@@ -63,20 +63,20 @@ export function Hall({
           <div className="mode-art" />
           <div className="mode-copy">
             <small>单人训练</small>
-            <h2>AI 对战</h2>
+            <h2>电脑玩家</h2>
             <button
               className="gold"
               disabled={!!session.roomId}
               onClick={() => setup("ai")}
             >
-              对战 AI <span>→</span>
+              对战电脑玩家 <span>→</span>
             </button>
           </div>
         </article>
         <article className="mode friend">
           <div className="mode-art" />
           <div className="mode-copy">
-            <small>双人房间</small>
+            <small>邀请好友</small>
             <h2>好友对战</h2>
             <button
               className="outline"
@@ -84,6 +84,20 @@ export function Hall({
               onClick={() => setup("friend")}
             >
               创建房间 <span>→</span>
+            </button>
+          </div>
+        </article>
+        <article className="mode doubles">
+          <div className="mode-art" />
+          <div className="mode-copy">
+            <small>四人房间</small>
+            <h2>2v2 组队战</h2>
+            <button
+              className="outline"
+              disabled={!!session.roomId}
+              onClick={() => setup("2v2")}
+            >
+              创建组队房 <span>→</span>
             </button>
           </div>
         </article>

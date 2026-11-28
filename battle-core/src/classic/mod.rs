@@ -276,7 +276,6 @@ pub struct MatchView {
 #[derive(Clone, Copy)]
 enum Reserved {
     Deploy {
-        team: Team,
         index: usize,
         card: Card,
         form: &'static str,
@@ -292,7 +291,7 @@ enum Reserved {
 }
 struct Scheduled {
     due: u64,
-    team: Team,
+    seat: usize,
     sequence: u64,
     command: Reserved,
 }
@@ -300,17 +299,32 @@ pub const COMMAND_DELAY: u64 = 10;
 pub struct ClassicMatch {
     laboratory: bool,
     pending: Vec<Scheduled>,
-    completed: Vec<(Team, u64, Result<(), MatchError>)>,
+    completed: Vec<(usize, u64, Result<(), MatchError>)>,
     mode: &'static ModeRules,
     seed: u64,
     map: MatchMap,
     battle: Battle,
-    players: [Player; 2],
+    players: Vec<Player>,
     nexus: [Id; 2],
     towers: [[Id; 2]; 2],
     result: Option<Outcome>,
     overtime: bool,
     spells: Vec<spells::SpellCast>,
+}
+/// Frozen seats alternate blue and red. A second teammate occupies seat 2 or 3.
+pub fn seat_team(seat: usize) -> Team {
+    if seat % 2 == 0 {
+        Team::Blue
+    } else {
+        Team::Red
+    }
+}
+pub fn seat_count(mode: &str) -> usize {
+    if mode == "2v2" {
+        4
+    } else {
+        2
+    }
 }
 impl Team {
     pub fn index(self) -> usize {
@@ -341,13 +355,25 @@ impl ClassicMatch {
         map: MatchMap,
         mode: &'static ModeRules,
     ) -> Result<Self, MatchError> {
+        Self::with_seats(seed, &decks, map, mode)
+    }
+    pub fn with_seats(
+        seed: u64,
+        decks: &[[Card; 8]],
+        map: MatchMap,
+        mode: &'static ModeRules,
+    ) -> Result<Self, MatchError> {
+        if decks.len() != seat_count(&mode.id) {
+            return Err(MatchError::Loadout);
+        }
         if !map.tile_size.is_finite() || map.tile_size <= 0. || map.id.is_empty() {
             return Err(MatchError::Placement);
         }
-        let players = [
-            Player::new(decks[0], seed)?,
-            Player::new(decks[1], seed ^ 0x76b15da90c378ff1)?,
-        ];
+        let players = decks
+            .iter()
+            .enumerate()
+            .map(|(i, deck)| Player::new(*deck, seed ^ (i as u64).wrapping_mul(0x76b15da90c378ff1)))
+            .collect::<Result<Vec<_>, _>>()?;
         let mut battle = Battle::new(map.arena.clone())?;
         battle.classic_attack_nodes = true;
         let mut towers = [[0; 2]; 2];
@@ -383,26 +409,34 @@ impl ClassicMatch {
     pub fn result(&self) -> Option<Outcome> {
         self.result
     }
-    fn play_form(&self, player: &Player, card: Card, team: Team, mirror: bool) -> &'static str {
+    fn play_form(&self, player: &Player, card: Card, seat: usize, mirror: bool) -> &'static str {
         if mirror {
             player.last_form.unwrap_or(card.key)
         } else {
-            self.battle.deployment_form(card.key, team, player.gold)
+            self.battle
+                .seat_deployment_form(card.key, seat, player.gold)
         }
     }
 
     pub fn hand_forms(&self, team: Team) -> [Option<&'static str>; 4] {
-        let player = &self.players[team.index()];
+        self.hand_forms_for(team.index())
+    }
+    pub fn hand_forms_for(&self, seat: usize) -> [Option<&'static str>; 4] {
+        let player = &self.players[seat];
         std::array::from_fn(|slot| {
             let card = player.deck[player.lookup(slot as u8, player.version).ok()?];
             let mirror = matches!(card.play, Play::Mirror);
             let source = if mirror { player.last_card? } else { card };
-            Some(self.play_form(player, source, team, mirror))
+            Some(self.play_form(player, source, seat, mirror))
         })
     }
 
     pub fn view(&self, team: Team) -> MatchView {
-        let player = &self.players[team.index()];
+        self.view_for(team.index())
+    }
+    pub fn view_for(&self, seat: usize) -> MatchView {
+        let team = seat_team(seat);
+        let player = &self.players[seat];
         let sources = player
             .active
             .map(|active| active.and_then(|a| self.battle.actors.get(&a.caster)));
@@ -497,6 +531,17 @@ impl ClassicMatch {
         self.battle.drain_events()
     }
     pub fn schedule(&mut self, input_tick: u64, input: Input) -> Result<u64, MatchError> {
+        self.schedule_for(input.team.index(), input_tick, input)
+    }
+    fn schedule_for(
+        &mut self,
+        seat: usize,
+        input_tick: u64,
+        input: Input,
+    ) -> Result<u64, MatchError> {
+        if seat >= self.players.len() || seat_team(seat) != input.team {
+            return Err(MatchError::Slot);
+        }
         if self.result.is_some() {
             return Err(MatchError::Finished);
         }
@@ -506,19 +551,22 @@ impl ClassicMatch {
         if due <= self.tick() || input_tick > self.tick() + 2 {
             return Err(MatchError::Timing);
         }
-        let command = self.reserve(input)?;
+        let command = self.reserve(seat, input)?;
         self.pending.push(Scheduled {
             due,
-            team: input.team,
+            seat,
             sequence: input.sequence,
             command,
         });
         Ok(due)
     }
     pub fn pending(&self, team: Team) -> impl Iterator<Item = (u64, u64, Option<usize>)> + '_ {
+        self.pending_for(team.index())
+    }
+    pub fn pending_for(&self, seat: usize) -> impl Iterator<Item = (u64, u64, Option<usize>)> + '_ {
         self.pending
             .iter()
-            .filter(move |p| p.team == team)
+            .filter(move |p| p.seat == seat)
             .map(|p| {
                 (
                     p.sequence,
@@ -531,6 +579,12 @@ impl ClassicMatch {
             })
     }
     pub fn take_completions(&mut self) -> Vec<(Team, u64, Result<(), MatchError>)> {
+        self.take_seat_completions()
+            .into_iter()
+            .map(|(seat, seq, result)| (seat_team(seat), seq, result))
+            .collect()
+    }
+    pub fn take_seat_completions(&mut self) -> Vec<(usize, u64, Result<(), MatchError>)> {
         std::mem::take(&mut self.completed)
     }
     /// Admit commands against the current seat, then advance one authority tick.
@@ -543,9 +597,19 @@ impl ClassicMatch {
         &mut self,
         inputs: impl IntoIterator<Item = (u64, Input)>,
     ) -> Vec<Result<u64, MatchError>> {
+        self.step_seats(
+            inputs
+                .into_iter()
+                .map(|(tick, input)| (input.team.index(), tick, input)),
+        )
+    }
+    pub fn step_seats(
+        &mut self,
+        inputs: impl IntoIterator<Item = (usize, u64, Input)>,
+    ) -> Vec<Result<u64, MatchError>> {
         let receipts = inputs
             .into_iter()
-            .map(|(tick, input)| self.schedule(tick, input))
+            .map(|(seat, tick, input)| self.schedule_for(seat, tick, input))
             .collect();
         self.advance_tick(&[]);
         receipts
@@ -574,14 +638,14 @@ impl ClassicMatch {
         self.completed.clear();
         for entry in std::mem::take(&mut self.pending) {
             if entry.due <= self.tick() {
-                let result = self.execute(entry.command, &mut changes);
+                let result = self.execute(entry.seat, entry.command, &mut changes);
                 if result.is_err() {
-                    if let Reserved::Deploy { team, card, .. } = entry.command {
-                        let p = &mut self.players[team.index()];
+                    if let Reserved::Deploy { card, .. } = entry.command {
+                        let p = &mut self.players[entry.seat];
                         p.gold = (p.gold + card.cost).min(10);
                     }
                 }
-                self.completed.push((entry.team, entry.sequence, result));
+                self.completed.push((entry.seat, entry.sequence, result));
             } else {
                 self.pending.push(entry)
             }
@@ -599,6 +663,7 @@ impl ClassicMatch {
         self.spell_deaths();
         for (seat, extra) in std::mem::take(&mut self.battle.gold_rewards)
             .into_iter()
+            .take(self.players.len())
             .enumerate()
         {
             self.players[seat].gold = self.players[seat].gold.saturating_add(extra).min(10);
@@ -620,7 +685,7 @@ impl ClassicMatch {
             self.completed.extend(
                 self.pending
                     .drain(..)
-                    .map(|p| (p.team, p.sequence, Err(MatchError::Finished))),
+                    .map(|p| (p.seat, p.sequence, Err(MatchError::Finished))),
             )
         }
         receipts
@@ -630,13 +695,12 @@ impl ClassicMatch {
         i: Input,
         changes: &mut Vec<crate::vitals::Change>,
     ) -> Result<(), MatchError> {
-        let cmd = self.reserve(i)?;
-        self.execute(cmd, changes)
+        let cmd = self.reserve(i.team.index(), i)?;
+        self.execute(i.team.index(), cmd, changes)
     }
     /// Validate against the current private seat, settle the payment and bind the
     /// deployment form or caster once. The returned command owns that payment.
-    fn reserve(&mut self, i: Input) -> Result<Reserved, MatchError> {
-        let seat = i.team.index();
+    fn reserve(&mut self, seat: usize, i: Input) -> Result<Reserved, MatchError> {
         let p = &mut self.players[seat];
         if p.ack.checked_add(1) != Some(i.sequence) {
             return Err(MatchError::Sequence);
@@ -657,7 +721,7 @@ impl ClassicMatch {
                 };
                 let original = card;
                 let p = &self.players[seat];
-                let form = self.play_form(p, card, i.team, mirror);
+                let form = self.play_form(p, card, seat, mirror);
                 if !mirror {
                     card.cost = p.deploy_cost(card);
                 }
@@ -700,7 +764,6 @@ impl ClassicMatch {
                 }
                 player.rotate(slot, card.cost);
                 Ok(Reserved::Deploy {
-                    team: i.team,
                     index,
                     card,
                     form,
@@ -767,11 +830,12 @@ impl ClassicMatch {
         &mut self,
         card: Card,
         form: &'static str,
-        team: Team,
+        seat: usize,
         point: Point,
         equipped: bool,
         changes: &mut Vec<crate::vitals::Change>,
     ) -> Result<Vec<Id>, MatchError> {
+        let team = seat_team(seat);
         match card.play {
             Play::Mirror => unreachable!("mirror must resolve its source before deployment"),
             Play::Formation(_) | Play::RosterUnit(_) => {
@@ -809,6 +873,7 @@ impl ClassicMatch {
                     team,
                     pos,
                 );
+                self.battle.owners.insert(cast.id, seat);
                 self.spells.push(cast);
                 Ok(vec![])
             }
@@ -821,20 +886,23 @@ impl ClassicMatch {
     }
     fn execute(
         &mut self,
+        seat: usize,
         command: Reserved,
         changes: &mut Vec<crate::vitals::Change>,
     ) -> Result<(), MatchError> {
         match command {
             Reserved::Deploy {
-                team,
                 index,
                 card,
                 form,
                 point,
             } => {
-                let ids = self.release_card(card, form, team, point, index < 2, changes)?;
+                let ids = self.release_card(card, form, seat, point, index < 2, changes)?;
+                for id in &ids {
+                    self.battle.owners.insert(*id, seat);
+                }
                 if index < 2 {
-                    let player = &mut self.players[team.index()];
+                    let player = &mut self.players[seat];
                     player.active_cards[index] = Some(card);
                     player.active[index] =
                         ids.first()
@@ -858,7 +926,7 @@ impl ClassicMatch {
                 aim,
                 cost,
             } => {
-                let p = &mut self.players[team.index()];
+                let p = &mut self.players[seat];
                 let Some(source) = self.battle.actors.get(&caster) else {
                     return Err(MatchError::NoAbility);
                 };
@@ -1050,3 +1118,6 @@ mod end_rules {
 
 #[cfg(test)]
 mod roster_tests;
+
+#[cfg(test)]
+mod team_tests;

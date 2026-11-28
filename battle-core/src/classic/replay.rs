@@ -6,6 +6,7 @@ pub const CONTENT_VERSION: &str = env!("BATTLE_CONTENT");
 pub const RULESET: &str = concat!("classic-5/", env!("BATTLE_CONTENT"));
 #[derive(Clone, Copy, Debug)]
 pub struct RecordedInput {
+    pub seat: usize,
     pub received_at: u64,
     pub input_tick: u64,
     pub input: Input,
@@ -17,8 +18,8 @@ pub struct Record {
     pub seed: u64,
     pub map: String,
     pub mode: String,
-    pub skills: [[Option<String>; 8]; 2],
-    pub decks: [[String; 8]; 2],
+    pub skills: Vec<[Option<String>; 8]>,
+    pub decks: Vec<[String; 8]>,
     pub steps: u64,
     pub commands: Vec<RecordedInput>,
 }
@@ -27,15 +28,22 @@ impl Record {
         if game.tick() != 0 {
             return Err(MatchError::Finished);
         }
-        let decks = game.players.each_ref().map(|p| p.deck);
         Ok(Self {
             rules: RULESET,
             content: content.to_owned(),
             seed: game.seed,
             mode: game.mode.id.clone(),
             map: game.map.id.to_owned(),
-            skills: decks.map(|d| d.map(|card| card.skill_key.map(str::to_owned))),
-            decks: decks.map(|cards| cards.map(|c| c.key.to_owned())),
+            skills: game
+                .players
+                .iter()
+                .map(|p| p.deck.map(|card| card.skill_key.map(str::to_owned)))
+                .collect(),
+            decks: game
+                .players
+                .iter()
+                .map(|p| p.deck.map(|c| c.key.to_owned()))
+                .collect(),
             steps: 0,
             commands: vec![],
         })
@@ -54,12 +62,25 @@ impl Record {
         game: &mut ClassicMatch,
         inputs: impl IntoIterator<Item = (u64, Input)>,
     ) -> Result<Vec<Result<u64, MatchError>>, MatchError> {
+        self.step_seats(
+            game,
+            inputs
+                .into_iter()
+                .map(|(tick, input)| (input.team.index(), tick, input)),
+        )
+    }
+    pub fn step_seats(
+        &mut self,
+        game: &mut ClassicMatch,
+        inputs: impl IntoIterator<Item = (usize, u64, Input)>,
+    ) -> Result<Vec<Result<u64, MatchError>>, MatchError> {
         if game.tick() != self.steps || game.result().is_some() {
             return Err(MatchError::Finished);
         }
         let received_at = self.steps;
-        let r = game.step_stamped(inputs.into_iter().inspect(|&(input_tick, input)| {
+        let r = game.step_seats(inputs.into_iter().inspect(|&(seat, input_tick, input)| {
             self.commands.push(RecordedInput {
+                seat,
                 received_at,
                 input_tick,
                 input,
@@ -68,16 +89,22 @@ impl Record {
         self.steps = game.tick();
         Ok(r)
     }
-    pub fn replay(&self, decks: [[Card; 8]; 2], content: &str) -> Result<ClassicMatch, MatchError> {
+    pub fn replay<const N: usize>(
+        &self,
+        decks: [[Card; 8]; N],
+        content: &str,
+    ) -> Result<ClassicMatch, MatchError> {
         self.replay_on(decks, content, super::MatchMap::rift())
     }
-    pub fn replay_on(
+    pub fn replay_on<const N: usize>(
         &self,
-        decks: [[Card; 8]; 2],
+        decks: [[Card; 8]; N],
         content: &str,
         map: super::MatchMap,
     ) -> Result<ClassicMatch, MatchError> {
         if self.rules != RULESET
+            || self.decks.len() != N
+            || self.skills.len() != N
             || self.map != map.id
             || decks
                 .iter()
@@ -103,7 +130,7 @@ impl Record {
             .iter()
             .find(|m| m.id == self.mode)
             .ok_or(MatchError::Loadout)?;
-        let mut game = ClassicMatch::with_rules(self.seed, decks, map, mode)?;
+        let mut game = ClassicMatch::with_seats(self.seed, &decks, map, mode)?;
         let mut inputs = self.commands.iter().peekable();
         for tick in 0..self.steps {
             if game.result().is_some() {
@@ -111,9 +138,9 @@ impl Record {
             }
             let mut batch = vec![];
             while let Some(cmd) = inputs.next_if(|c| c.received_at == tick) {
-                batch.push((cmd.input_tick, cmd.input));
+                batch.push((cmd.seat, cmd.input_tick, cmd.input));
             }
-            game.step_stamped(batch);
+            game.step_seats(batch);
             game.drain_events().for_each(drop);
         }
         Ok(game)

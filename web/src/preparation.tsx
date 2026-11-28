@@ -452,7 +452,10 @@ export function Preparation(p: Props) {
     setPending(-1);
     setContext(context?.anchor === anchor ? null : { card: c, slot, anchor });
   }
-  const other = room?.seats[1 - room.me];
+  const doubles = room?.mode === "2v2";
+  const other = room?.seats.find(
+    (s) => s.slot % 2 !== room.seats[room.me].slot % 2,
+  );
   return (
     <section className="prep-screen" aria-label="备战">
       {room && (
@@ -634,9 +637,11 @@ export function Preparation(p: Props) {
             <div className="prep-room-line">
               <span>
                 {catalog.maps.find((m) => m.id === room.map)?.name} ·{" "}
-                {room.kind === "ai"
-                  ? "AI 对战"
-                  : (other?.name ?? "等待好友加入")}
+                {doubles
+                  ? `2v2 · ${room.seats.length}/4 人入座`
+                  : room.kind === "ai"
+                    ? "电脑玩家"
+                    : (other?.name ?? "等待好友加入")}
               </span>
               <button
                 disabled={p.busy || filled.length !== 8}
@@ -648,13 +653,15 @@ export function Preparation(p: Props) {
               {room.kind === "friend" && (
                 <>
                   <span>
-                    {other
-                      ? !other.online
-                        ? "重连中"
-                        : other.ready
-                          ? "对方已准备"
-                          : "对方备战中"
-                      : ""}
+                    {doubles
+                      ? `已准备 ${room.seats.filter((s) => s.ready).length}/4`
+                      : other
+                        ? !other.online
+                          ? "重连中"
+                          : other.ready
+                            ? "对方已准备"
+                            : "对方备战中"
+                        : ""}
                   </span>
                   <button onClick={() => setPanel("room")}>
                     邀请码 <b>{room.code}</b>
@@ -725,7 +732,13 @@ export function Preparation(p: Props) {
       )}
       {panel === "room" && (
         <Modal
-          title={room?.kind === "friend" ? "好友房间" : "AI 备战室"}
+          title={
+            doubles
+              ? "2v2 组队房"
+              : room?.kind === "friend"
+                ? "好友房间"
+                : "电脑玩家备战室"
+          }
           onClose={() => setPanel(null)}
         >
           {p.management}

@@ -8,8 +8,8 @@ use axum::extract::ws::{Message, WebSocket, WebSocketUpgrade};
 use clash_battle_core::classic::MatchView;
 use clash_battle_core::{
     classic::{
-        replay::RULESET, resolve_deck, roster_bot_input, Card, ClassicMatch, Input, Intent,
-        MatchError, Outcome,
+        replay::RULESET, resolve_deck, roster_bot_input, seat_team, Card, ClassicMatch, Input,
+        Intent, MatchError, Outcome,
     },
     Aim, Point, Team,
 };
@@ -32,8 +32,8 @@ type HostSlot = Arc<OnceCell<Result<Host>>>;
 pub type Hosts = Arc<Mutex<HashMap<String, HostSlot>>>;
 #[derive(Clone)]
 pub struct Host {
-    frames: [watch::Sender<Arc<SeatFrame>>; 2],
-    ready: [watch::Sender<()>; 2],
+    frames: Vec<watch::Sender<Arc<SeatFrame>>>,
+    ready: Vec<watch::Sender<()>>,
     queue: mpsc::Sender<Request>,
 }
 
@@ -120,9 +120,9 @@ pub fn compatible(cfg: &Value, catalog: &Catalog) -> bool {
 }
 struct Simulation {
     game: ClassicMatch,
-    views: [MatchView; 2],
-    ai: [bool; 2],
-    streams: [presentation::Stream; 2],
+    views: Vec<MatchView>,
+    ai: Vec<bool>,
+    streams: Vec<presentation::Stream>,
 }
 impl Simulation {
     fn load(cfg: &Value, catalog: &Catalog) -> Result<Self> {
@@ -131,12 +131,14 @@ impl Simulation {
         }
         let uuid: Uuid = decode(cfg["seed"].clone())?;
         let seed = uuid.as_u64_pair().0;
-        let seats = &cfg["seats"];
+        let seats = cfg["seats"]
+            .as_array()
+            .ok_or_else(|| fail("无效的对局席位"))?;
         let choices = clash_battle_core::classic::battle_cards();
-        let decks = [
-            cards(&decode(seats[0]["deck"].clone())?, choices)?,
-            cards(&decode(seats[1]["deck"].clone())?, choices)?,
-        ];
+        let decks = seats
+            .iter()
+            .map(|seat| cards(&decode(seat["deck"].clone())?, choices))
+            .collect::<Result<Vec<_>>>()?;
         let mode = clash_battle_core::classic::modes()
             .iter()
             .find(|m| cfg["mode"] == m.id && m.map_ids.iter().any(|id| cfg["map"] == *id))
@@ -144,23 +146,26 @@ impl Simulation {
         let map = clash_battle_core::classic::MatchMap::named(cfg["map"].as_str().unwrap_or(""))
             .ok_or_else(|| fail("无效地图"))?;
         let game =
-            ClassicMatch::with_rules(seed, decks, map, mode).map_err(|_| fail("无法建立战场"))?;
+            ClassicMatch::with_seats(seed, &decks, map, mode).map_err(|_| fail("无法建立战场"))?;
         Ok(Self {
-            views: TEAMS.map(|team| game.view(team)),
+            views: (0..seats.len()).map(|seat| game.view_for(seat)).collect(),
             game,
-            streams: std::array::from_fn(presentation::Stream::for_seat),
-            ai: [seats[0]["ai"] == true, seats[1]["ai"] == true],
+            streams: (0..seats.len())
+                .map(|seat| presentation::Stream::for_team(seat_team(seat).index()))
+                .collect(),
+            ai: seats.iter().map(|s| s["ai"] == true).collect(),
         })
     }
     fn decisions(&self) -> Vec<Logged> {
         let mut inputs = Vec::new();
-        for team in TEAMS {
-            if !self.ai[team.index()] {
+        for (seat, &ai) in self.ai.iter().enumerate() {
+            let team = seat_team(seat);
+            if !ai {
                 continue;
             }
             if let Some(Input {
                 sequence, intent, ..
-            }) = roster_bot_input(team, &self.views[team.index()])
+            }) = roster_bot_input(team, &self.views[seat])
             {
                 let command = match intent {
                     Intent::Play {
@@ -181,7 +186,7 @@ impl Simulation {
                     _ => unreachable!("classic bots use instant activations"),
                 };
                 inputs.push(Logged {
-                    seat: team.index(),
+                    seat,
                     input_tick: self.game.tick(),
                     command,
                 });
@@ -190,31 +195,36 @@ impl Simulation {
         inputs
     }
     fn step(&mut self, inputs: &[Logged]) -> Vec<std::result::Result<u64, MatchError>> {
-        let receipts = self.game.step_stamped(
+        let receipts = self.game.step_seats(
             inputs
                 .iter()
-                .map(|l| (l.input_tick, l.command.input(TEAMS[l.seat]))),
+                .map(|l| (l.seat, l.input_tick, l.command.input(seat_team(l.seat)))),
         );
-        self.views = TEAMS.map(|team| self.game.view(team));
+        for (seat, view) in self.views.iter_mut().enumerate() {
+            *view = self.game.view_for(seat);
+        }
         let facts: Vec<_> = self.game.drain_events().collect();
-        let done = self.game.take_completions();
-        for team in TEAMS {
-            if self.ai[team.index()] {
+        let done = self.game.take_seat_completions();
+        for (seat, &ai) in self.ai.iter().enumerate() {
+            if ai {
                 continue;
             }
             let completed: Vec<_> = done
                 .iter()
-                .filter(|(t, _, _)| *t == team)
+                .filter(|(t, _, _)| *t == seat)
                 .map(|(_, seq, r)| (*seq, r.err().map(explanation)))
                 .collect();
-            self.streams[team.index()].advance(&self.views[team.index()].field, &facts, &completed);
+            self.streams[seat].advance(&self.views[seat].field, &facts, &completed);
         }
         receipts
     }
     fn restore(&mut self, until: i32, log: Vec<Batch>) -> Result<()> {
         if until < 0
             || until as u64 > self.game.rules().end
-            || log.iter().flat_map(|b| &b.inputs).any(|i| i.seat >= 2)
+            || log
+                .iter()
+                .flat_map(|b| &b.inputs)
+                .any(|i| i.seat >= self.ai.len())
         {
             return Err(fail("无效的比赛检查点"));
         }
@@ -318,8 +328,10 @@ async fn load_host(app: &App, mid: &str) -> Result<Host> {
     })
     .await
     .map_err(|_| fail("战斗恢复任务中断"))??;
-    let frames = TEAMS.map(|team| watch::channel(Arc::new(SeatFrame::new(&sim, team, started))).0);
-    let ready = TEAMS.map(|_| watch::channel(()).0);
+    let frames: Vec<_> = (0..sim.ai.len())
+        .map(|seat| watch::channel(Arc::new(SeatFrame::new(&sim, seat, started))).0)
+        .collect();
+    let ready: Vec<_> = (0..sim.ai.len()).map(|_| watch::channel(()).0).collect();
     let (queue, rx) = mpsc::channel(64);
     let handle = Host {
         frames: frames.clone(),
@@ -387,8 +399,8 @@ async fn drive(
     rid: &str,
     mut sim: Simulation,
     mut started: bool,
-    frames: [watch::Sender<Arc<SeatFrame>>; 2],
-    ready: [watch::Sender<()>; 2],
+    frames: Vec<watch::Sender<Arc<SeatFrame>>>,
+    ready: Vec<watch::Sender<()>>,
     mut rx: mpsc::Receiver<Request>,
 ) -> Result<()> {
     let mut clock = tokio::time::interval(Duration::from_millis(50));
@@ -398,12 +410,14 @@ async fn drive(
     loop {
         clock.tick().await;
         if !started {
-            if !TEAMS
+            if !sim
+                .ai
                 .iter()
-                .all(|t| sim.ai[t.index()] || ready[t.index()].receiver_count() > 0)
+                .zip(&ready)
+                .all(|(&ai, r)| ai || r.receiver_count() > 0)
             {
                 while let Ok(request) = rx.try_recv() {
-                    let _ = request.reply.send(Err("正在等待双方进入战场"));
+                    let _ = request.reply.send(Err("正在等待所有玩家进入战场"));
                 }
                 idle += 1;
                 if idle % 20 == 0
@@ -457,9 +471,9 @@ async fn drive(
                 .await?;
         }
         let durable = std::time::Instant::now();
-        for team in TEAMS {
-            if !sim.ai[team.index()] {
-                frames[team.index()].send_replace(Arc::new(SeatFrame::new(&sim, team, true)));
+        for (seat, frame) in frames.iter().enumerate() {
+            if !sim.ai[seat] {
+                frame.send_replace(Arc::new(SeatFrame::new(&sim, seat, true)));
             }
         }
         for (request, receipt) in requests.into_iter().zip(receipts) {
@@ -595,8 +609,8 @@ mod tests {
                     restored.streams[team.index()].window()
                 );
                 assert_eq!(
-                    SeatFrame::new(&sim, team, true).encode(Some(0)),
-                    SeatFrame::new(&restored, team, true).encode(Some(0))
+                    SeatFrame::new(&sim, team.index(), true).encode(Some(0)),
+                    SeatFrame::new(&restored, team.index(), true).encode(Some(0))
                 );
                 assert_eq!(sim.game.view(team), restored.game.view(team));
             }
@@ -626,11 +640,11 @@ mod bandwidth {
         let mut delivered = Some(0);
         let (mut delta, mut overlapping) = (0, 0);
         while sim.game.result().is_none() {
-            sim.ai = [true, true];
+            sim.ai.fill(true);
             let inputs = sim.decisions();
-            sim.ai = [false, false];
+            sim.ai.fill(false);
             sim.step(&inputs);
-            let mut frame = SeatFrame::new(&sim, Team::Blue, true);
+            let mut frame = SeatFrame::new(&sim, 0, true);
             delta += frame.encode(delivered).len();
             delivered = Some(frame.history.cursor);
             overlapping += frame.full_window_bytes(sim.streams[0].window());
@@ -640,5 +654,82 @@ mod bandwidth {
             sim.game.tick()
         );
         assert!(delta < overlapping);
+    }
+}
+
+#[cfg(test)]
+mod team_tests {
+    use super::*;
+
+    #[test]
+    fn all_seat_combinations_keep_personal_inputs_and_recover_four_private_frames() {
+        let catalog: Catalog = serde_json::from_value(model::battle_catalog()).unwrap();
+        let deck = catalog.default_loadout();
+        for mask in 0u8..8 {
+            let seats: Vec<_> = (0..4)
+                .map(|i| json!({"ai": (mask << 1) & (1 << i) != 0, "deck":deck}))
+                .collect();
+            let cfg = json!({"rulesVersion":RULESET, "contentVersion":catalog.version,
+                "mode":"2v2", "map":"rift", "seed":"9655102d-42b4-41de-bc01-202611191117", "seats":seats});
+            let mut sim = Simulation::load(&cfg, &catalog).unwrap();
+            let mut log = Vec::new();
+            let mut played = [false; 4];
+            for tick in 1..=140 {
+                let mut inputs = sim.decisions();
+                assert!(inputs.iter().all(|i| sim.ai[i.seat]));
+                if tick == 1 {
+                    for (seat, view) in sim
+                        .views
+                        .iter()
+                        .enumerate()
+                        .filter(|(seat, _)| !sim.ai[*seat])
+                    {
+                        let slot = view
+                            .own
+                            .costs
+                            .iter()
+                            .position(|cost| *cost <= view.own.gold)
+                            .unwrap();
+                        inputs.push(Logged {
+                            seat,
+                            input_tick: 0,
+                            command: Command::Play {
+                                sequence: 1,
+                                version: 0,
+                                slot: slot as u8,
+                                x: if seat >= 2 { 460. } else { 220. },
+                                y: if seat % 2 == 0 { 860. } else { 420. },
+                            },
+                        });
+                    }
+                }
+                let receipts = sim.step(&inputs);
+                for (i, r) in inputs.iter().zip(&receipts) {
+                    played[i.seat] |= r.is_ok();
+                }
+                if !inputs.is_empty() {
+                    log.push(Batch { tick, inputs });
+                }
+            }
+            assert_eq!(played, [true; 4], "mask {mask}");
+            let mut restored = Simulation::load(&cfg, &catalog).unwrap();
+            restored.restore(140, log).unwrap();
+            for seat in 0..4 {
+                assert_eq!(sim.views[seat], restored.views[seat]);
+                assert_eq!(
+                    SeatFrame::new(&sim, seat, true).encode(None),
+                    SeatFrame::new(&restored, seat, true).encode(None)
+                );
+            }
+            if mask == 7 {
+                while sim.game.result().is_none() {
+                    let inputs = sim.decisions();
+                    sim.step(&inputs);
+                    restored.step(&inputs);
+                }
+                assert_eq!(sim.game.result(), restored.game.result());
+                assert!(sim.views.iter().all(|v| v.result == sim.game.result()));
+            }
+        }
     }
 }

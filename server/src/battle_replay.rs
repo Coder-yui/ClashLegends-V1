@@ -15,7 +15,7 @@ pub async fn save(
         .query_opt(
             "SELECT 1 FROM matches
          WHERE id=$1 AND status <> 'withdrawn'
-           AND (config->'seats'->0->>'player'=$2 OR config->'seats'->1->>'player'=$2)",
+           AND EXISTS (SELECT 1 FROM jsonb_array_elements(config->'seats') s WHERE s->>'player'=$2)",
             &[&mid, &p],
         )
         .await?;
@@ -51,7 +51,7 @@ pub async fn lookup(
         .query(
             "SELECT id,config,battle_tick,result IS NOT NULL,0::bigint FROM matches
          WHERE id=ANY($1) AND status <> 'withdrawn' AND
-         (config->'seats'->0->>'player'=$2 OR config->'seats'->1->>'player'=$2)",
+         EXISTS (SELECT 1 FROM jsonb_array_elements(config->'seats') s WHERE s->>'player'=$2)",
             &[&ids, &p],
         )
         .await?;
@@ -60,18 +60,19 @@ pub async fn lookup(
 fn entries(app: &App, p: &str, rows: Vec<tokio_postgres::Row>) -> Json<Value> {
     let entries = rows
         .into_iter()
-        .map(|row| {
+        .filter_map(|row| {
             let cfg: Value = row.get(1);
-            let me = usize::from(cfg["seats"][1]["player"] == p);
-            json!({
+            let seats = cfg["seats"].as_array()?;
+            let me = seats.iter().position(|s| s["player"] == p)?;
+            Some(json!({
                 "id": row.get::<_, String>(0),
                 "map": cfg["map"],
-                "opponent": cfg["seats"][1-me]["name"],
+                "opponent": model::opponent_names(seats,me),
                 "tick": row.get::<_, i32>(2),
                 "finished": row.get::<_, bool>(3),
                 "savedAt": row.get::<_, i64>(4),
                 "compatible": compatible(&cfg, &app.catalog)
-            })
+            }))
         })
         .collect();
     Json(Value::Array(entries))
@@ -99,7 +100,7 @@ pub async fn open(
         .query_opt(
             "SELECT m.config, m.battle_tick, m.inputs
          FROM matches m WHERE m.id=$2 AND m.status <> 'withdrawn'
-         AND (m.config->'seats'->0->>'player'=$1 OR m.config->'seats'->1->>'player'=$1)",
+         AND EXISTS (SELECT 1 FROM jsonb_array_elements(m.config->'seats') s WHERE s->>'player'=$1)",
             &[&p, &mid],
         )
         .await?
@@ -154,7 +155,7 @@ async fn playback(
         return;
     }
     loop {
-        let frame = SeatFrame::new(&sim, TEAMS[seat], true);
+        let frame = SeatFrame::new(&sim, seat, true);
         if socket
             .send(Message::Text(frame.encode(cursor).into()))
             .await
@@ -234,19 +235,16 @@ mod tests {
                 log.push(Batch { tick, inputs });
             }
             if tick == 300 {
-                sample = SeatFrame::new(&live, Team::Blue, true).encode(None);
+                sample = SeatFrame::new(&live, 0, true).encode(None);
             }
         }
         let mut replay = Simulation::load(&cfg, &catalog).unwrap();
         advance(&mut replay, 300, &log);
-        assert_eq!(
-            SeatFrame::new(&replay, Team::Blue, true).encode(None),
-            sample
-        );
+        assert_eq!(SeatFrame::new(&replay, 0, true).encode(None), sample);
         advance(&mut replay, live.game.tick(), &log);
         assert_eq!(
-            SeatFrame::new(&replay, Team::Blue, true).encode(None),
-            SeatFrame::new(&live, Team::Blue, true).encode(None)
+            SeatFrame::new(&replay, 0, true).encode(None),
+            SeatFrame::new(&live, 0, true).encode(None)
         );
         assert_eq!(replay.streams[0].window(), live.streams[0].window());
     }

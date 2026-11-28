@@ -130,7 +130,7 @@ try {
   await button(b, "卡组 4").click();
   await b.getByRole("link", { name: "返回大厅" }).click();
   await button(b, "放弃并离开").click();
-  await button(b, "对战 AI →").click();
+  await button(b, "对战电脑玩家 →").click();
   await button(b, "进入备战 →").click();
   await b.getByRole("heading", { name: "备战", exact: true }).waitFor();
   const room = await (

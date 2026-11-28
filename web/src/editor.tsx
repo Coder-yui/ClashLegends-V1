@@ -254,12 +254,13 @@ export function Editor({
           !!room &&
           (!online ||
             stale ||
-            room.seats.length !== 2 ||
+            room.seats.length !== room.capacity ||
             room.seats.some((s) => !s.online))
         }
         caption={
           room
-            ? room.kind === "ai"
+            ? room.seats.length === room.capacity &&
+              room.seats.filter((s) => !s.ai).length === 1
               ? "开始游戏"
               : room.seats[room.me].ready && !changed
                 ? "取消准备"

@@ -403,6 +403,7 @@ export function MatchPage({
               · 用时 {duration(result.tick)}
             </p>
           )}
+          {match.teammate && <p>队友 · {match.teammate}</p>}
           <p>对手 · {match.opponent}</p>
           {(recordError || video.message) && (
             <p role="status">{recordError || video.message}</p>
@@ -444,7 +445,7 @@ export function MatchPage({
                   ? "正在同步战场…"
                   : !prepared
                     ? "正在准备战场画面、音效和特效…"
-                    : "等待另一位玩家进入战场"
+                    : "等待其他玩家进入战场"
           }
           progress={!resources && total ? { completed, total } : undefined}
         >
@@ -491,7 +492,9 @@ export function MatchPage({
             {catalog.maps.find((m) => m.id === match.map)?.name ?? match.map}
           </h1>
           <small>
-            {match.me === 0 ? "蓝方" : "红方"} · 对手 {match.opponent}
+            {match.me === 0 ? "蓝方" : "红方"}
+            {match.teammate && ` · 队友 ${match.teammate}`} · 对手{" "}
+            {match.opponent}
           </small>
         </div>
         <strong className="battle-time">

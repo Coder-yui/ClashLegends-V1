@@ -35,7 +35,7 @@ try {
   await btn("游戏设置").click();
   await choose("开局自动录制", "both");
   await btn("完成").click();
-  for (const name of ["对战 AI →", "进入备战 →", "开始游戏"])
+  for (const name of ["对战电脑玩家 →", "进入备战 →", "开始游戏"])
     await btn(name).click();
   const field = page.locator(".battle-input");
   await page

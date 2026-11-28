@@ -405,10 +405,7 @@ impl Battle {
         );
         if let Ok(child) = self.spawn_near(ctx.team, ctx.origin + offset, def) {
             self.actors.get_mut(&child).unwrap().ready_tick = self.tick + u64::from(ticks(delay));
-            self.emit(Fact::Summoned {
-                source: ctx.caster,
-                child,
-            });
+            self.summoned(ctx.caster, child);
         }
     }
     pub(super) fn frontal(&mut self, ctx: Origin, s: &'static Value, changes: &mut Vec<Change>) {

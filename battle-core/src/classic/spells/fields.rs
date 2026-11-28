@@ -75,6 +75,7 @@ impl SpellCast {
             .filter(|p| (*p - self.pos).length() <= number(self.spec, "radius", 0.))
         {
             if let Ok(id) = game.battle.spawn(self.team, p, def) {
+                game.battle.inherit_owner(self.id, id);
                 let a = game.battle.actors.get_mut(&id).unwrap();
                 a.ready_tick = game.battle.tick + ticks(number(self.spec, "spawn_deploy_time", 0.));
                 a.activity = Activity::Deploying;
@@ -262,6 +263,7 @@ impl SpellCast {
             if let Ok(id) =
                 battle.spawn_near(self.team, self.pos, super::super::units::unit("tibbers"))
             {
+                battle.inherit_owner(self.id, id);
                 if !sk.is_null() {
                     self.bear = Some(id);
                     battle.actors.get_mut(&id).unwrap().card_state.burning_aura = true;
@@ -296,8 +298,21 @@ impl ClassicMatch {
                 }
                 if let Some(n) = s[field].as_f64() {
                     self.battle.sound(d.sound, "bounty:gain", d.pos, None);
-                    let p = &mut self.players[side.index()];
-                    p.gold = (p.gold + n as u8).min(10);
+                    let recipient = if side == team {
+                        Some(d.owner_seat)
+                    } else {
+                        d.killed_by
+                            .filter(|&seat| super::super::seat_team(seat) == side)
+                    };
+                    if let Some(seat) = recipient {
+                        let p = &mut self.players[seat];
+                        p.gold = (p.gold + n as u8).min(10);
+                    } else {
+                        let share = n as u8 / (self.players.len() / 2) as u8;
+                        for p in self.players.iter_mut().skip(side.index()).step_by(2) {
+                            p.gold = (p.gold + share).min(10);
+                        }
+                    }
                 }
             }
         }

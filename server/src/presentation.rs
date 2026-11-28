@@ -13,7 +13,7 @@ mod sound;
 #[derive(Default)]
 pub(super) struct Stream {
     layers: layers::Layers,
-    seat: usize,
+    team: usize,
     winding: BTreeMap<Id, u64>,
     previous: sound::Scene,
     previous_areas: BTreeSet<Id>,
@@ -22,9 +22,9 @@ pub(super) struct Stream {
     last_tick: Option<u64>,
 }
 impl Stream {
-    pub fn for_seat(seat: usize) -> Self {
+    pub fn for_team(team: usize) -> Self {
         Self {
-            seat,
+            team,
             ..Self::default()
         }
     }
@@ -69,8 +69,8 @@ impl Stream {
                 } => {
                     let audible = if source.kind == "medium_lightning" {
                         match *phase {
-                            "spell:warning" | "spell:cast" => self.seat == source.team.index(),
-                            "spell:warning_enemy" => self.seat != source.team.index(),
+                            "spell:warning" | "spell:cast" => self.team == source.team.index(),
+                            "spell:warning_enemy" => self.team != source.team.index(),
                             _ => true,
                         }
                     } else {
@@ -340,7 +340,7 @@ mod tests {
             })
             .collect();
         for team in [Team::Blue, Team::Red] {
-            let mut stream = Stream::for_seat(team.index());
+            let mut stream = Stream::for_team(team.index());
             stream.advance(&battle.snapshot_for(team), &facts, &[]);
             let received: Vec<_> = stream
                 .events

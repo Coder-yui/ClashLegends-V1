@@ -189,7 +189,7 @@ fn exercise_audio_roster() {
     for (key, skill) in &cases {
         for siege in [false, true] {
             let mut world = Workbench::new();
-            let mut stream = Stream::for_seat(usize::from(siege));
+            let mut stream = Stream::for_team(usize::from(siege));
             let tower = world.game().map().sides[Team::Blue.index()].towers[0];
             let pos = if siege {
                 tower - Point::new(0., 168.)

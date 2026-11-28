@@ -85,8 +85,16 @@ impl Battle {
         }
     }
     pub(super) fn deployment_form(&self, key: &'static str, team: Team, gold: u8) -> &'static str {
+        self.seat_deployment_form(key, team.index(), gold)
+    }
+    pub(super) fn seat_deployment_form(
+        &self,
+        key: &'static str,
+        seat: usize,
+        gold: u8,
+    ) -> &'static str {
         if key == "kayn" {
-            return self.kayn_forms[team.index()].unlocked.unwrap_or(key);
+            return self.kayn_forms[seat].unlocked.unwrap_or(key);
         }
         let s = &super::roster::rules()[key];
         s["deployment_upgrade_id"]

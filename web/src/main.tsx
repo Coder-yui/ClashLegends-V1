@@ -195,7 +195,12 @@ function App({ url }: { url: string }) {
     const r =
       dialog === "join"
         ? await api<Room>("join", { code, deck })
-        : await api<Room>("rooms", { kind: dialog, mode, map, deck });
+        : await api<Room>("rooms", {
+            kind: dialog === "2v2" ? "friend" : dialog,
+            mode,
+            map,
+            deck,
+          });
     if (mounted.current && url === location.href)
       go(r.matchId ? "matches/" + r.matchId : "rooms/" + r.id);
   }
@@ -217,7 +222,13 @@ function App({ url }: { url: string }) {
     setError("");
     setToast("");
     if (!catalog) return;
-    setMode(kind === "settings" && room ? room.mode : catalog.modes[0].id);
+    setMode(
+      kind === "settings" && room
+        ? room.mode
+        : kind === "2v2"
+          ? kind
+          : catalog.modes[0].id,
+    );
     setMapId(
       kind === "settings" && room ? room.map : catalog.modes[0].mapIds[0],
     );
@@ -402,10 +413,12 @@ function App({ url }: { url: string }) {
             dialog === "join"
               ? "加入好友房间"
               : dialog === "ai"
-                ? "AI 对战设置"
+                ? "电脑玩家对战设置"
                 : dialog === "settings"
                   ? "房间设置"
-                  : "创建好友房间"
+                  : dialog === "2v2"
+                    ? "创建 2v2 组队房"
+                    : "创建好友房间"
           }
           onClose={() => {
             if (!busy) setDialog("");
@@ -466,7 +479,7 @@ function App({ url }: { url: string }) {
             <button className="gold" disabled={busy}>
               {dialog === "join"
                 ? "加入房间"
-                : dialog === "friend"
+                : dialog === "friend" || dialog === "2v2"
                   ? "创建房间"
                   : dialog === "settings"
                     ? "保存设置"

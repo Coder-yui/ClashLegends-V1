@@ -41,6 +41,7 @@ async fn seat(tx: &Transaction<'_>, app: &App, p: &str, requested: Option<Deck>)
     tx.execute("UPDATE guests SET last_seen=now() WHERE id=$1", &[&p])
         .await?;
     Ok(Seat {
+        slot: None,
         player: p.to_owned(),
         name: row.get(0),
         deck,
@@ -74,20 +75,18 @@ pub async fn create(
     }
     let mut seats = vec![seat(&tx, &app, &p, s.deck).await?];
     if s.kind == "ai" {
-        seats.push(Seat {
-            player: "ai".into(),
-            name: "训练机器人".into(),
-            deck: app.catalog.ai_loadout()?,
-            ready: true,
-            version: 1,
-            ai: true,
-            online: true,
-        });
+        for slot in 1..clash_battle_core::classic::seat_count(&s.mode) {
+            seats.push(Seat::computer(&app.catalog, slot)?);
+        }
     }
     let r = Room {
         id: id(),
         code: id()[..8].to_uppercase(),
-        kind: s.kind,
+        kind: if s.mode == "2v2" {
+            "friend".into()
+        } else {
+            s.kind
+        },
         mode: s.mode,
         map: s.map,
         round: 1,
@@ -143,10 +142,12 @@ pub async fn join(
     if r.status != "open" {
         return Err(fail("房间已关闭或已锁定"));
     }
-    if r.kind != "friend" || r.seats.len() != 1 {
+    if r.kind != "friend" || r.seats.len() >= r.capacity() {
         return Err(fail("房间已满"));
     }
-    r.seats.push(seat(&tx, &app, &p, i.deck).await?);
+    let mut new_seat = seat(&tx, &app, &p, i.deck).await?;
+    new_seat.slot = (0..r.capacity()).find(|&slot| r.occupant(slot).is_none());
+    r.seats.push(new_seat);
     r.settings_version += 1;
     r.reset_ready();
     tx.execute(
@@ -177,6 +178,7 @@ pub async fn read(
 #[serde(rename_all = "camelCase")]
 pub struct Action {
     action: String,
+    slot: Option<usize>,
     round: i32,
     settings_version: i64,
     deck_version: i64,
@@ -248,6 +250,14 @@ pub async fn act(
                 let map = a.map.unwrap_or_default();
                 r.change_settings(&app.catalog, m, map)?;
             }
+            "addComputer" | "removeComputer" | "swap" | "move" => {
+                r.place(
+                    &a.action,
+                    i,
+                    a.slot.ok_or_else(|| fail("请选择席位"))?,
+                    &app.catalog,
+                )?;
+            }
             "deck" => {
                 let d = a.deck.ok_or_else(|| fail("缺少卡组"))?;
                 app.catalog.check(&d)?;
@@ -261,12 +271,12 @@ pub async fn act(
                 let value = a.ready.ok_or_else(|| fail("缺少准备状态"))?;
                 if value {
                     let recent:Vec<String>=tx.query("SELECT guest_id FROM members JOIN guests ON guests.id=guest_id WHERE room_id=$1 AND last_seen > now()-interval '20 seconds'",&[&rid]).await?.iter().map(|row|row.get(0)).collect();
-                    if r.seats.len() != 2
+                    if r.seats.len() != r.capacity()
                         || r.seats
                             .iter()
                             .any(|s| !s.ai && (!s.online || !recent.contains(&s.player)))
                     {
-                        return Err(fail("请等待双方在线并入座"));
+                        return Err(fail("请等待所有玩家在线并入座"));
                     }
                     app.catalog.check(&r.seats[i].deck)?;
                 }

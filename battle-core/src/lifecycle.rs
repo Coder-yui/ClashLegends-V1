@@ -50,10 +50,7 @@ impl Battle {
             let desired = g.pos + Point::new(side * (g.radius + def.radius + separation), -offset);
             if let Ok(child) = self.spawn_near(g.team, desired, def.clone()) {
                 self.actors.get_mut(&child).unwrap().ready_tick = self.tick + 1;
-                self.emit(Fact::Summoned {
-                    source: g.source,
-                    child,
-                });
+                self.summoned(g.source, child);
             }
         }
     }
@@ -139,10 +136,7 @@ impl Battle {
                     if let Ok(child) =
                         self.spawn_near(a.team, a.pos, crate::classic::units::unit(key))
                     {
-                        self.emit(Fact::Summoned {
-                            source: a.id,
-                            child,
-                        });
+                        self.summoned(a.id, child);
                     }
                 }
             }
@@ -186,15 +180,13 @@ impl Battle {
             }
             self.emit(Fact::Died(id));
         }
-        for (sound, position, reward, ids, changes) in blasts {
-            let team = sound.team;
+        for (sound, seat, position, reward, ids, changes) in blasts {
             self.commit(changes);
             if ids.iter().any(|id| !self.actors.contains_key(id)) {
                 if reward > 0 {
                     self.sound(sound, "bounty:gain", position, None);
                 }
-                self.gold_rewards[team.index()] =
-                    self.gold_rewards[team.index()].saturating_add(reward);
+                self.gold_rewards[seat] = self.gold_rewards[seat].saturating_add(reward);
             }
         }
         for g in batches {

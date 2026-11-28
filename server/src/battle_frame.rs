@@ -10,13 +10,12 @@ impl SeatFrame {
     pub fn pending(&self) -> bool {
         self.world["started"] == false
     }
-    pub fn new(sim: &Simulation, team: Team, started: bool) -> Self {
-        let seat = team.index();
+    pub fn new(sim: &Simulation, seat: usize, started: bool) -> Self {
         Self {
             world: field_frame(
                 &sim.game,
                 &sim.views[seat],
-                team,
+                seat,
                 started,
                 &sim.streams[seat],
             ),
@@ -46,7 +45,7 @@ impl SeatFrame {
 pub(super) fn field_frame(
     game: &ClassicMatch,
     view: &MatchView,
-    team: Team,
+    seat: usize,
     started: bool,
     stream: &presentation::Stream,
 ) -> Value {
@@ -65,15 +64,15 @@ pub(super) fn field_frame(
         .map(|(id, team, p)| json!({"id":id, "team":team.index(), "x":p.x, "y":p.y}));
     json!({
         "type": "frame", "protocol": PROTOCOL, "started": started, "tick": game.tick(),
-        "map": map, "ruinedTowers": ruins.collect::<Vec<_>>(), "deployment": game.deployment_regions(team),
+        "map": map, "ruinedTowers": ruins.collect::<Vec<_>>(), "deployment": game.deployment_regions_for(seat),
         "remaining": view.remaining_ticks, "overtime": view.overtime,
         "result": view.result.map(|o| outcome(o, game.tick())),
         "units": view.field.units.iter().map(unit).collect::<Vec<_>>(),
         "shots": view.field.projectiles.iter().map(shot).collect::<Vec<_>>(),
         "effectPaths": view.field.effect_paths, "areas": view.field.areas, "waves": view.field.waves, "summons": view.field.summons,
         "spells": game.spell_views().collect::<Vec<_>>(), "soundLayers": stream.layers(),
-        "pending": game.pending(team).collect::<Vec<_>>(), "ack": hand.acknowledged,
-        "hand": hand.hand, "handForms": game.hand_forms(team), "costs": hand.costs, "lastCard": hand.last, "activeCards": hand.active_keys,
+        "pending": game.pending_for(seat).collect::<Vec<_>>(), "ack": hand.acknowledged,
+        "hand": hand.hand, "handForms": game.hand_forms_for(seat), "costs": hand.costs, "lastCard": hand.last, "activeCards": hand.active_keys,
         "next": hand.next, "nextCost": hand.next_cost, "gold": hand.gold, "version": hand.version,
         "skillResource": view.skill_resource, "activeWait": view.active_wait, "activeCost": view.active_cost,
         "active": hand.active.map(|a| a.map(|v| json!({"caster":v.caster, "uses":v.uses}))),

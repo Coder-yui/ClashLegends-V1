@@ -189,7 +189,7 @@ impl Workbench {
         let ids = self.game.release_card(
             card,
             form,
-            team,
+            team.index(),
             point,
             card.skill_key.is_some(),
             &mut changes,

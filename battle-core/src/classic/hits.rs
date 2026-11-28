@@ -198,7 +198,12 @@ impl Battle {
         }
         if s.get("growth_melee_hits").is_some() && role == Role::Troop {
             let ranged = self.actors[&target].def.range > 80.;
-            self.kayn_forms[team.enemy().index()].record(ranged, s);
+            self.kayn_forms[self
+                .owners
+                .get(&source)
+                .copied()
+                .unwrap_or(team.enemy().index())]
+            .record(ranged, s);
         }
         if role.structure() && s.get("structure_execute_ratio").is_some() {
             let fraction = stat(

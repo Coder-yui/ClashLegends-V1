@@ -207,6 +207,8 @@ impl Catalog {
 }
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Seat {
+    #[serde(default)]
+    pub slot: Option<usize>,
     pub player: String,
     pub name: String,
     pub deck: Deck,
@@ -214,6 +216,42 @@ pub struct Seat {
     pub version: i64,
     pub ai: bool,
     pub online: bool,
+}
+impl Seat {
+    fn display_name(&self) -> &str {
+        if self.ai {
+            "电脑玩家"
+        } else {
+            &self.name
+        }
+    }
+    pub fn computer(catalog: &Catalog, slot: usize) -> Result<Self> {
+        Ok(Self {
+            slot: Some(slot),
+            player: format!("computer/{}", id()),
+            name: "电脑玩家".into(),
+            deck: catalog.ai_loadout()?,
+            ready: true,
+            version: 1,
+            ai: true,
+            online: true,
+        })
+    }
+}
+pub fn opponent_names(seats: &[Value], seat: usize) -> String {
+    seats
+        .iter()
+        .enumerate()
+        .filter(|(i, _)| i % 2 != seat % 2)
+        .filter_map(|(_, s)| {
+            if s["ai"] == true {
+                Some("电脑玩家")
+            } else {
+                s["name"].as_str()
+            }
+        })
+        .collect::<Vec<_>>()
+        .join("、")
 }
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -231,6 +269,46 @@ pub struct Room {
     pub seats: Vec<Seat>,
 }
 impl Room {
+    pub fn capacity(&self) -> usize {
+        clash_battle_core::classic::seat_count(&self.mode)
+    }
+    pub fn slot(&self, index: usize) -> usize {
+        self.seats[index].slot.unwrap_or(index)
+    }
+    pub fn occupant(&self, slot: usize) -> Option<usize> {
+        (0..self.seats.len()).find(|&i| self.slot(i) == slot)
+    }
+    pub fn roster_changed(&mut self) {
+        self.settings_version += 1;
+        self.reset_ready();
+    }
+    pub fn place(
+        &mut self,
+        action: &str,
+        actor: usize,
+        slot: usize,
+        catalog: &Catalog,
+    ) -> Result<()> {
+        if self.mode != "2v2" || slot >= self.capacity() {
+            return Err(fail("对战席位无效"));
+        }
+        let occupant = self.occupant(slot);
+        match (action, occupant) {
+            ("addComputer", None) if actor == 0 => self.seats.push(Seat::computer(catalog, slot)?),
+            ("removeComputer", Some(i)) if actor == 0 && self.seats[i].ai => {
+                self.seats.remove(i);
+            }
+            ("swap", Some(i)) if actor == 0 && i != actor => {
+                let previous = self.slot(actor);
+                self.seats[i].slot = Some(previous);
+                self.seats[actor].slot = Some(slot);
+            }
+            ("move", None) => self.seats[actor].slot = Some(slot),
+            _ => return Err(fail("无法更改该席位")),
+        }
+        self.roster_changed();
+        Ok(())
+    }
     pub fn index(&self, player: &str) -> Result<usize> {
         self.seats
             .iter()
@@ -242,13 +320,19 @@ impl Room {
         let seats: Vec<_> = self
             .seats
             .iter()
-            .map(|s| json!({"name":s.name,"ready":s.ready,"online":s.online,"ai":s.ai}))
+            .enumerate()
+            .map(|(i, s)| {
+                json!({
+                    "name": s.display_name(), "ready": s.ready, "online": s.online,
+                    "ai": s.ai, "slot": self.slot(i)
+                })
+            })
             .collect();
         Ok(json!({
             "id": self.id, "code": self.code, "kind": self.kind,
             "mode": self.mode, "map": self.map, "round": self.round,
             "revision": self.revision, "settingsVersion": self.settings_version,
-            "status": self.status, "matchId": self.match_id, "seats": seats,
+            "status": self.status, "matchId": self.match_id, "seats": seats, "capacity":self.capacity(),
             "me": i, "deck": self.seats[i].deck, "deckVersion": self.seats[i].version
         }))
     }
@@ -260,6 +344,20 @@ impl Room {
     pub fn change_settings(&mut self, catalog: &Catalog, mode: String, map: String) -> Result<()> {
         catalog.settings(&mode, &map)?;
         if self.mode != mode || self.map != map {
+            if mode != self.mode {
+                if mode != "2v2" {
+                    if self.seats.len() > 2
+                        || (self.seats.len() == 2 && self.slot(0) % 2 == self.slot(1) % 2)
+                    {
+                        return Err(fail("切回 1v1 前，请调整为每队最多一名玩家"));
+                    }
+                    for (i, seat) in self.seats.iter_mut().enumerate() {
+                        seat.slot = Some(i);
+                    }
+                } else {
+                    self.kind = "friend".into();
+                }
+            }
             self.mode = mode;
             self.map = map;
             self.settings_version += 1;
@@ -289,10 +387,15 @@ impl Room {
     pub fn freeze(&mut self, catalog: &Catalog) -> Result<Value> {
         catalog.settings(&self.mode, &self.map)?;
         let mut seats = Vec::new();
-        for (team, s) in self.seats.iter().enumerate() {
+        if self.seats.len() != self.capacity() {
+            return Err(fail("请等待所有席位入座"));
+        }
+        for slot in 0..self.capacity() {
+            let s = &self.seats[self.occupant(slot).ok_or_else(|| fail("席位配置无效"))?];
+            let team = clash_battle_core::classic::seat_team(slot).index();
             catalog.check(&s.deck)?;
             seats
-                .push(json!({"team":team,"player":s.player,"name":s.name,"ai":s.ai,"deck":s.deck}));
+                .push(json!({"team":team,"player":s.player,"name":s.display_name(),"ai":s.ai,"deck":s.deck}));
         }
         let match_id = id();
         self.status = "locked".into();
@@ -392,6 +495,7 @@ mod tests {
         let mut c = catalog();
         c.modes[0].map_ids.push("fixture-map".into());
         let seat = Seat {
+            slot: None,
             player: id(),
             name: "tester".into(),
             deck: c.default_loadout(),

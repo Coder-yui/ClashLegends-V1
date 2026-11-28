@@ -24,6 +24,9 @@ export function RoomPage({
   notify: (s: string) => void;
 }) {
   const { ask, confirmation } = useConfirmation();
+  const map = catalog.maps.find((item) => item.id === room.map);
+  const doubles = room.mode === "2v2";
+  const editable = doubles && room.status === "open";
   return (
     <>
       {confirmation}
@@ -31,9 +34,16 @@ export function RoomPage({
         <div className="page-title">
           <div>
             <span className="eyebrow">
-              第 {room.round} 轮 · {room.kind === "ai" ? "训练场" : "双人对战"}
+              第 {room.round} 轮 ·{" "}
+              {doubles ? "2v2" : room.kind === "ai" ? "训练场" : "双人对战"}
             </span>
-            <h1>{room.kind === "ai" ? "AI 备战室" : "好友房间"}</h1>
+            <h1>
+              {doubles
+                ? "2v2 组队房"
+                : room.kind === "ai"
+                  ? "电脑玩家备战室"
+                  : "好友房间"}
+            </h1>
           </div>
           <a className="outline" href={href()}>
             返回大厅
@@ -44,18 +54,44 @@ export function RoomPage({
         <article className="panel">
           <div className="section-title">
             <h2>对战席位</h2>
-            <small>{room.seats.length} / 2</small>
+            <small>
+              {room.seats.length} / {room.capacity}
+            </small>
           </div>
-          {[0, 1].map((i) => {
-            const seat = room.seats[i];
+          {(doubles ? [0, 2, 1, 3] : [0, 1]).map((slot) => {
+            const index = room.seats.findIndex((s) => s.slot === slot);
+            const seat = room.seats[index];
+            const team = slot % 2 === 0 ? "蓝方" : "红方";
+            const label = team + (slot < 2 ? "一号位" : "二号位");
+            const control = (command: string, text: string) => (
+              <button
+                disabled={busy || !online}
+                aria-label={label + " · " + text}
+                onClick={(event) => {
+                  event.currentTarget
+                    .closest<HTMLElement>(".seat")
+                    ?.focus({ preventScroll: true });
+                  run(() => action(command, { slot }));
+                }}
+              >
+                {text}
+              </button>
+            );
             return (
-              <div key={i} className="seat">
-                <div className={"sigil team" + i}>{i === 0 ? "Ⅰ" : "Ⅱ"}</div>
-                <div>
-                  <b>{seat?.name ?? "等待好友加入"}</b>
+              <div
+                key={slot}
+                className="seat"
+                role="group"
+                aria-label={label}
+                tabIndex={-1}
+              >
+                <div className={"sigil team" + (slot % 2)}>{team[0]}</div>
+                <div className="seat-info">
+                  <b>{seat?.name ?? "空席"}</b>
                   <small>
-                    {i === 0 ? "房主" : seat?.ai ? "AI 对手" : "挑战者"}
-                    {room.me === i ? " · 你" : ""}
+                    {label}
+                    {index === 0 ? " · 房主" : ""}
+                    {room.me === index ? " · 你" : ""}
                   </small>
                 </div>
                 <strong>
@@ -65,8 +101,23 @@ export function RoomPage({
                         ? "已准备"
                         : "备战中"
                       : "重连中"
-                    : "空席"}
+                    : "等待加入"}
                 </strong>
+                {editable && (
+                  <div className="seat-actions">
+                    {!seat &&
+                      room.me === 0 &&
+                      control("addComputer", "添加电脑玩家")}
+                    {!seat && control("move", "入座")}
+                    {seat?.ai &&
+                      room.me === 0 &&
+                      control("removeComputer", "移除电脑玩家")}
+                    {seat &&
+                      room.me === 0 &&
+                      index !== room.me &&
+                      control("swap", "与我换位")}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -99,12 +150,12 @@ export function RoomPage({
           style={{
             backgroundImage:
               "linear-gradient(0deg,#0c181df5,transparent),url(" +
-              catalog.maps.find((x) => x.id === room.map)?.image +
+              map?.image +
               ")",
           }}
         >
           <small>{catalog.modes.find((x) => x.id === room.mode)?.name}</small>
-          <h2>{catalog.maps.find((x) => x.id === room.map)?.name}</h2>
+          <h2>{map?.name}</h2>
           {room.me === 0 && room.status === "open" && (
             <button onClick={() => setup("settings")}>对战设置</button>
           )}
@@ -153,7 +204,7 @@ export function RoomPage({
                 disabled={
                   busy ||
                   !online ||
-                  room.seats.length !== 2 ||
+                  room.seats.length !== room.capacity ||
                   room.seats.some((x) => !x.online)
                 }
                 onClick={() =>

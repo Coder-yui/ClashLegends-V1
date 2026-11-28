@@ -2,8 +2,8 @@
 //! has a separate target set, so a slash and its following spin may both hit.
 use super::units::{stat, ticks, unit};
 use crate::{
-    targeting::Body, timeline::Origin, vitals::Change, Battle, Control, Fact, Id, Layer, Motion,
-    Point, Role,
+    targeting::Body, timeline::Origin, vitals::Change, Battle, Control, Id, Layer, Motion, Point,
+    Role,
 };
 use serde_json::Value;
 use std::collections::BTreeSet;
@@ -302,7 +302,7 @@ impl Battle {
                                 self.tick,
                                 minion.ready_tick.max(self.tick + 1),
                             ));
-                            self.emit(Fact::Summoned { source: id, child });
+                            self.summoned(id, child);
                         }
                     }
                 }
