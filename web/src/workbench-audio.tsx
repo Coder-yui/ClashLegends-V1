@@ -8,17 +8,26 @@ import {
   type CSSProperties,
   type RefObject,
 } from "react";
-import { getMixer } from "./audio";
+import { getMixer, playCue, type Cue } from "./audio";
+import sources from "./workbench-audio-sources.json";
 import {
   audioCatalog,
+  clipGainDb,
   clipSlice,
   profileForSound,
   profileSelections,
   type Selection,
+  type ClipEvent,
 } from "./reference-audio";
 
 type Bank = { bank: number; buffer: AudioBuffer };
 type Slice = ReturnType<typeof clipSlice>;
+const interfaceCues: Record<Cue, string> = {
+  click: "点击",
+  select: "选择",
+  confirm: "确认",
+  back: "返回",
+};
 
 const eventColors = [
   "#95d4da",
@@ -28,6 +37,38 @@ const eventColors = [
   "#afd6a3",
   "#d5b5e7",
 ];
+
+function sourceLabel(id: number, spec: ClipEvent) {
+  if (sources[id].external) return "外来音效";
+  if (sources[id].edit) return "LoL 已加工";
+  if (spec.fade_in || spec.fade_out) return "LoL 播放调校";
+  const db = clipGainDb(id, spec);
+  if (db) return `LoL ${db > 0 ? "+" : ""}${db} dB`;
+  return "LoL 原版直用";
+}
+
+function SourceDetails({ id, spec }: { id: number; spec: ClipEvent }) {
+  const { external, file, edit } = sources[id];
+  const db = clipGainDb(id, spec);
+  const playback = [`增益 ${db > 0 ? "+" : ""}${db} dB`];
+  if (spec.fade_in) playback.push(`进入时淡入 ${spec.fade_in} 秒`);
+  if (spec.fade_out && !spec.natural_tail) {
+    const curve = spec.fade_out_curve === "exp1" ? "Exp1 曲线" : "线性";
+    playback.push(`退出时${curve}淡出 ${spec.fade_out} 秒`);
+  }
+  return (
+    <dl className="wb-source-details" aria-label="当前变体的音频来源与处理">
+      <dt>素材来源</dt>
+      <dd>
+        {external ?? "英雄联盟"} <code>{file}</code>
+      </dd>
+      <dt>素材加工</dt>
+      <dd>{edit ?? "未加工，保留原声"}</dd>
+      <dt>对局播放</dt>
+      <dd>{playback.join(" · ")}</dd>
+    </dl>
+  );
+}
 
 const ClipCatalog = memo(function ClipCatalog({
   events,
@@ -58,11 +99,15 @@ const ClipCatalog = memo(function ClipCatalog({
                 key={i}
                 data-silent
                 aria-label={name + " 变体 " + (i + 1)}
+                aria-description={sourceLabel(id, spec)}
                 aria-pressed={event === e && variant === i}
                 onClick={() => choose(e, i)}
               >
                 <span aria-hidden="true">▸</span> {i + 1}{" "}
                 <small>{clipSlice(id, spec).duration.toFixed(2)}s</small>
+                <small className="wb-source-label">
+                  {sourceLabel(id, spec)}
+                </small>
               </button>
             ))}
           </div>
@@ -82,7 +127,8 @@ function ClipBrowser({
   const [event, setEvent] = useState(0),
     [variant, setVariant] = useState(0);
   const selected = events[event];
-  const slice = clipSlice(selected.spec.pool[variant], selected.spec);
+  const id = selected.spec.pool[variant];
+  const slice = clipSlice(id, selected.spec);
   const [position, setPosition] = useState(0);
   const [state, setState] = useState<
     "idle" | "loading" | "playing" | "paused" | "error" | "ended"
@@ -209,6 +255,7 @@ function ClipBrowser({
         choose={choose}
       />
       <div className="wb-player">
+        <SourceDetails id={id} spec={selected.spec} />
         <strong>
           {selected.name} · 变体 {variant + 1}
         </strong>
@@ -298,6 +345,21 @@ export default function AudioPreview({
     hasAlternate && form === "1",
   );
   const events = useMemo(() => profileSelections(profile), [profile]);
+  if (kind === "interface_audio") {
+    return (
+      <section className="wb-audio-panel">
+        <h2>{name}</h2>
+        <p>项目合成音。浏览器用正弦波生成这四种提示音。</p>
+        <div className="wb-row">
+          {(Object.keys(interfaceCues) as Cue[]).map((cue) => (
+            <button key={cue} data-silent onClick={() => void playCue(cue)}>
+              {interfaceCues[cue]}
+            </button>
+          ))}
+        </div>
+      </section>
+    );
+  }
   return (
     <section className="wb-audio-panel">
       <header className="wb-title">

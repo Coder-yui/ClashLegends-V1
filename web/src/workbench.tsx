@@ -58,6 +58,7 @@ const scenery = [
   { id: "princess_tower", name: "防御塔", type: "system", image: "" },
   { id: "nexus", name: "基地水晶", type: "system", image: "" },
   { id: "match", name: "对局播报", type: "system", image: "" },
+  { id: "interface_audio", name: "界面提示音", type: "system", image: "" },
 ];
 const portraits = import.meta.glob<string>("./workbench-portraits/*.webp", {
   eager: true,
@@ -613,8 +614,8 @@ export default function Workbench({ catalog }: { catalog: Catalog }) {
                 )}
               {object && !card && !dummy && (
                 <p>
-                  {id === "match"
-                    ? "对局播报可在音效页试听。"
+                  {id === "match" || id === "interface_audio"
+                    ? `${object.name}可在音效页试听。`
                     : "此建筑已在场上，使用「选择单位」查看。"}
                 </p>
               )}

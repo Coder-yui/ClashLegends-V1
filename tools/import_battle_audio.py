@@ -9,11 +9,13 @@ import subprocess
 import tempfile
 import wave
 from collections import defaultdict
+from audio_provenance import build_provenance
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT.parent / "ClashLegends"
 OUT = ROOT / "web/public/media/audio"
 MANIFEST = ROOT / "web/src/battle-audio-banks.json"
+PROVENANCE = ROOT / "web/src/workbench-audio-sources.json"
 RATE = 44100
 
 
@@ -113,6 +115,7 @@ def main():
             profiles.append(data)
         variants[name] = unique[signature]
     events = event_index(variants, profiles)
+    provenance = build_provenance(SOURCE, paths)
     actions_file = ROOT / "content/audio_actions.json"
     events_file = ROOT / "content/audio_events.json"
     if args.verify:
@@ -120,6 +123,8 @@ def main():
             raise ValueError("Web profiles differ from the reference configuration")
         if json.loads(actions_file.read_text()) != actions or json.loads(events_file.read_text()) != events:
             raise ValueError("Host indices differ from the reference configuration")
+        if json.loads(PROVENANCE.read_text()) != provenance:
+            raise ValueError("Workbench labels differ from the reference production records")
         verify_banks(old, paths)
         return
     actions_file.write_text(json.dumps(actions, ensure_ascii=False, indent=2) + "\n")
@@ -160,6 +165,7 @@ def main():
             files.append(name)
     manifest = dict(files=files, clips=clips, variants=variants, profiles=profiles)
     MANIFEST.write_text(json.dumps(manifest, separators=(",", ":"), ensure_ascii=False) + "\n")
+    PROVENANCE.write_text(json.dumps(provenance, ensure_ascii=False, indent=2) + "\n")
     for filename in old_files - set(files):
         previous = OUT / filename
         if previous.exists() and hashlib.sha256(previous.read_bytes()).hexdigest()[:12] in previous.name:

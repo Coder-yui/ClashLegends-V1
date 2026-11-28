@@ -76,6 +76,64 @@ try {
   );
   await playButton("停止").click();
   assert.equal(Number(await timeline.inputValue()), 0);
+  async function selectCard(target, kind) {
+    await target.getByRole("button", { name: "选择对象", exact: true }).click();
+    await target.getByLabel("搜索卡牌").fill(kind);
+    await target.getByRole("dialog").locator(`[data-value="${kind}"]`).click();
+  }
+  const details = page.getByLabel("当前变体的音频来源与处理");
+  await selectCard(page, "graves");
+  const voice = playButton("deploy:voice 变体 2");
+  await voice.focus();
+  await page.keyboard.press("Enter");
+  assert.equal(await voice.getAttribute("aria-pressed"), "true");
+  assert.match(await details.innerText(), /未加工，保留原声/);
+  assert.match(await details.innerText(), /增益 -18 dB/);
+  await playButton("deploy:voice 变体 1").click();
+  assert.match(await details.innerText(), /增益 0 dB/);
+  await selectCard(page, "jinx");
+  await playButton("deploy:start 变体 1").click();
+  assert.match(await details.innerText(), /加速约 2.567 倍/);
+  await selectCard(page, "interface_audio");
+  await page.getByText(/正弦波/).waitFor();
+  await playButton("确认").click();
+
+  const phone = await browser.newPage({
+    baseURL: page.url(),
+    viewport: { width: 375, height: 667 },
+    hasTouch: true,
+    isMobile: true,
+  });
+  await phone.goto("/play/workbench");
+  await phone.getByRole("button", { name: "音效试听", exact: true }).tap();
+  await selectCard(phone, "freeze");
+  const cast = phone.getByRole("button", { name: "spell:cast 变体 1" });
+  await cast.tap();
+  assert.match(await cast.innerText(), /外来音效/);
+  const external = phone.getByLabel("当前变体的音频来源与处理");
+  assert.match(await external.innerText(), /皇室战争/);
+  assert.match(await external.innerText(), /截取前 3 秒/);
+  assert.match(await external.innerText(), /增益 -12 dB/);
+  for (const viewport of [
+    { width: 375, height: 667 },
+    { width: 667, height: 375 },
+  ]) {
+    await phone.setViewportSize(viewport);
+    const rect = await external.boundingBox();
+    assert.ok(
+      rect &&
+        rect.x >= 0 &&
+        rect.y >= 0 &&
+        rect.x + rect.width <= viewport.width &&
+        rect.y + rect.height <= viewport.height,
+    );
+    assert.ok(
+      await phone
+        .locator(".wb-clip-catalog")
+        .evaluate((el) => el.clientHeight >= 44),
+    );
+  }
+  await phone.close();
   const checked = await page.evaluate(async ({ files, clips }) => {
     const offline = new OfflineAudioContext(2, 1, 44100);
     let total = 0;

@@ -1,0 +1,4794 @@
+[
+  {
+    "file": "units/aatrox/play_sfx_aatrox_aatroxbasicattack2_onhit_1.wav"
+  },
+  {
+    "file": "units/aatrox/play_sfx_aatrox_aatroxbasicattack2_onhit_2.wav"
+  },
+  {
+    "file": "units/aatrox/play_sfx_aatrox_aatroxbasicattack2_onhit_3.wav"
+  },
+  {
+    "file": "units/aatrox/play_sfx_aatrox_aatroxpassiveattack_onhit_1.wav"
+  },
+  {
+    "file": "units/aatrox/play_sfx_aatrox_aatroxbasicattack2_oncast_1.wav"
+  },
+  {
+    "file": "units/aatrox/play_sfx_aatrox_aatroxbasicattack2_oncast_2.wav"
+  },
+  {
+    "file": "units/aatrox/play_sfx_aatrox_aatroxbasicattack2_oncast_3.wav"
+  },
+  {
+    "file": "units/aatrox/play_sfx_aatrox_aatroxpassiveattack_oncast_1.wav"
+  },
+  {
+    "file": "units/aatrox/play_sfx_aatrox_death3d_cast_1.wav"
+  },
+  {
+    "file": "units/aatrox/play_vo_aatrox_death3d_1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/aatrox/play_vo_aatrox_death3d_2.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/aatrox/play_vo_aatrox_death3d_3.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/aatrox/play_vo_aatrox_deploy_1.wav"
+  },
+  {
+    "file": "units/aatrox/play_vo_aatrox_deploy_2.wav"
+  },
+  {
+    "file": "units/aatrox/play_vo_aatrox_deploy_3.wav"
+  },
+  {
+    "file": "units/aatrox/play_sfx_aatrox_aatroxr_buffdeactivate_1.wav"
+  },
+  {
+    "file": "units/aatrox/play_sfx_aatrox_aatroxr_onbuffactivate_all_1.wav",
+    "edit": "截取前 2 秒，从 1.5 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/airdrop_bear/play_sfx_annie_annier_oncast_r1.wav"
+  },
+  {
+    "file": "units/airdrop_bear/play_sfx_annie_annier_oncast_r2.wav"
+  },
+  {
+    "file": "units/airdrop_bear/play_sfx_annie_annier_oncast_r3.wav"
+  },
+  {
+    "file": "units/airdrop_bear/play_sfx_annie_annier_tibbers_enraged_buffactivate_r1.wav"
+  },
+  {
+    "file": "units/airdrop_bear/play_sfx_annie_annier_tibbers_enraged_buffactivate_r2.wav"
+  },
+  {
+    "file": "units/airdrop_bear/play_sfx_annie_annier_tibbers_enraged_buffactivate_r3.wav"
+  },
+  {
+    "file": "units/airdrop_bear/play_sfx_annie_annier_onhitlocation.wav"
+  },
+  {
+    "file": "units/anivia/play_sfx_anivia_aniviabasicattack_onhit_r1_d.wav"
+  },
+  {
+    "file": "units/anivia/play_sfx_anivia_aniviabasicattack_onhit_r2_d.wav"
+  },
+  {
+    "file": "units/anivia/play_sfx_anivia_aniviabasicattack_onhit_r3_d.wav"
+  },
+  {
+    "file": "units/anivia/play_sfx_anivia_aniviabasicattack_oncast_d.wav"
+  },
+  {
+    "file": "units/anivia/play_sfx_anivia_aniviabasicattack_onmissilelaunch_r1_d.wav"
+  },
+  {
+    "file": "units/anivia/play_sfx_anivia_aniviabasicattack_onmissilelaunch_r2_d.wav"
+  },
+  {
+    "file": "units/anivia/play_sfx_anivia_aniviabasicattack_onmissilelaunch_r3_d.wav"
+  },
+  {
+    "file": "units/anivia/play_vo_anivia_death3d_r1_zh_cn.wav"
+  },
+  {
+    "file": "units/anivia/play_vo_anivia_death3d_r2_zh_cn.wav"
+  },
+  {
+    "file": "units/anivia/play_vo_anivia_death3d_r3_zh_cn.wav"
+  },
+  {
+    "file": "units/anivia/play_vo_anivia_attack2dgeneral_r2_en_us.wav"
+  },
+  {
+    "file": "units/anivia/play_vo_anivia_laugh3dgeneral_r1_en_us.wav"
+  },
+  {
+    "file": "units/anivia/play_sfx_anivia_glacialstorm_buffactivate_m_onset.wav",
+    "edit": "截取前 0.72 秒，从 0.67 秒起线性淡出 0.05 秒"
+  },
+  {
+    "file": "units/anivia/play_sfx_anivia_glacialstorm_onbuffdeactivate.wav"
+  },
+  {
+    "file": "units/anivia/play_sfx_anivia_glacialstorm_zone_sustain.wav",
+    "edit": "截取 0.72–3.72 秒，开头淡入 0.025 秒，末尾淡出 0.08 秒"
+  },
+  {
+    "file": "units/anivia/anivia_rebirth_full_half.wav",
+    "edit": "加速 2 倍，保持音高"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertblue_heimertbluebasicattack_onhit_r1.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertblue_heimertbluebasicattack_onhit_r2.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertblue_heimertbluebasicattack_onhit_r3.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertblue_heimertbluebasicattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertblue_heimertbluebasicattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertblue_heimertbluebasicattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertblue_heimertbluebasicattack_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertblue_heimertbluebasicattack_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertblue_heimertbluebasicattack_onmissilelaunch_r3.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertyellow_heimerdingerqspawndestroyaudio_onbuffdeactivate_r1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertyellow_heimerdingerqspawndestroyaudio_onbuffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertyellow_heimerdingerqspawndestroyaudio_onbuffdeactivate_r3.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertyellow_heimerdingerqspawndestroyaudio_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertyellow_heimerdingerqspawndestroyaudio_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertyellow_heimerdingerqspawndestroyaudio_onbuffactivate_r3.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertblue_heimerdingerrqengineaudio_onbuffactivate.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertblue_heimerdingerturretbigenergyblast_onhit.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertblue_heimerdingerturretbigenergyblast_onmissilelaunch.wav"
+  },
+  {
+    "file": "units/apex_turret/play_sfx_heimertblue_heimerdingerturretbigenergyblast_oncast.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_ashebasicattack_onhit_r1_d.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_ashebasicattack_onhit_r2_d.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_ashebasicattack_onhit_r3_d.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_ashebasicattack_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_ashebasicattack_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_volleyattack_onhit_r1.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_volleyattack_onhit_r2.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_volleyattack_onhit_r3.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_volleyattackwithsound_onmissilelaunch.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_volley_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_volley_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_ashebasicattack_onmissilelaunch_r1_d.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_ashebasicattack_onmissilelaunch_r2_d.wav"
+  },
+  {
+    "file": "units/ashe/play_sfx_ashe_ashebasicattack_onmissilelaunch_r3_d.wav"
+  },
+  {
+    "file": "units/ashe/play_vo_ashe_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ashe/play_vo_ashe_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ashe/play_vo_ashe_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ashe/play_vo_ashe_attack2dgeneral_r10_en_us.wav"
+  },
+  {
+    "file": "units/ashe/play_vo_ashe_move2dstandard_r3_en_us.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolrmissile_hit_r1.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolrmissile_hit_r2.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolrmissile_hit_r3.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolrmissile_missilelaunch.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolr_oncast.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolr2missile_hit_super_s.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolr2missile_missilelaunch_super.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolr2_oncast.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolr_hit_shockwave_r1.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolr_hit_shockwave_r2.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolr_hit_shockwave_r3.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolq_buffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolq_buffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolq_buffdeactivate_r3.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolq_missilecast_r1.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolq_missilecast_r2.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolq_missilecast_r3.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolq_oncast.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_aurelionsolq_missilelaunch.wav"
+  },
+  {
+    "file": "units/aurelionsol/play_vo_aurelionsol_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/aurelionsol/play_vo_aurelionsol_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/aurelionsol/play_vo_aurelionsol_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/aurelionsol/play_sfx_aurelionsol_respawn3d_buffactivate.wav"
+  },
+  {
+    "file": "units/azir/play_sfx_azir_azirbasicattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/azir/play_sfx_azir_azirbasicattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/azir/play_sfx_azir_azirbasicattack2_oncast_r.wav"
+  },
+  {
+    "file": "units/azir/play_sfx_azir_base_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/azir/deploy.ogg"
+  },
+  {
+    "file": "units/belveth/hit_1.wav"
+  },
+  {
+    "file": "units/belveth/hit_2.wav"
+  },
+  {
+    "file": "units/belveth/hit_3.wav"
+  },
+  {
+    "file": "units/belveth/swing_1.wav"
+  },
+  {
+    "file": "units/belveth/swing_2.wav"
+  },
+  {
+    "file": "units/belveth/swing_3.wav"
+  },
+  {
+    "file": "units/belveth/cast_1.wav"
+  },
+  {
+    "file": "units/belveth/skill_hit_1.wav"
+  },
+  {
+    "file": "units/belveth/death_1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/belveth/deploy_1.wav"
+  },
+  {
+    "file": "units/blitzcrank/play_sfx_blitzcrank_blitzcrankbasicattack2_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/blitzcrank/play_sfx_blitzcrank_blitzcrankbasicattack2_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/blitzcrank/play_sfx_blitzcrank_blitzcrankbasicattack2_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/blitzcrank/play_sfx_blitzcrank_blitzcrankbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/blitzcrank/play_sfx_blitzcrank_blitzcrankbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/blitzcrank/play_sfx_blitzcrank_blitzcrankbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/blitzcrank/play_sfx_blitzcrank_powerfist_hit.wav"
+  },
+  {
+    "file": "units/blitzcrank/play_sfx_blitzcrank_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/blitzcrank/play_vo_blitzcrank_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/blitzcrank/play_vo_blitzcrank_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/blitzcrank/play_vo_blitzcrank_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/blitzcrank/champion_choose_53_zh_cn.ogg"
+  },
+  {
+    "file": "units/blitzcrank/play_sfx_blitzcrank_powerfist_onbuffactivate.wav"
+  },
+  {
+    "file": "units/blitzcrank/play_sfx_blitzcrank_powerfist_oncast.wav"
+  },
+  {
+    "file": "units/blitzcrank/play_sfx_blitzcrank_rocketgrabmissile_onhit.wav"
+  },
+  {
+    "file": "units/blitzcrank/play_sfx_blitzcrank_rocketgrab_oncast.wav"
+  },
+  {
+    "file": "units/convergent_pulse/play_sfx_orianadetonatecommand_oncast_r1.wav"
+  },
+  {
+    "file": "units/convergent_pulse/play_sfx_orianadetonatecommand_oncast_r2.wav"
+  },
+  {
+    "file": "units/convergent_pulse/play_sfx_orianadetonatecommand_oncast_r3.wav"
+  },
+  {
+    "file": "units/convergent_pulse/play_sfx_orianna_oriannadetonatecommand_buffactivate_r1.wav"
+  },
+  {
+    "file": "units/convergent_pulse/play_sfx_orianna_oriannadetonatecommand_buffactivate_r2.wav"
+  },
+  {
+    "file": "units/convergent_pulse/play_sfx_orianna_oriannadetonatecommand_hit_r1.wav"
+  },
+  {
+    "file": "units/convergent_pulse/play_sfx_orianna_oriannadetonatecommand_hit_r2.wav"
+  },
+  {
+    "file": "units/convergent_pulse/play_sfx_orianna_oriannadetonatecommand_hit_r3.wav"
+  },
+  {
+    "file": "units/corki/attack_hit0.wav"
+  },
+  {
+    "file": "units/corki/attack_swing0.wav"
+  },
+  {
+    "file": "units/corki/active_hit0.wav"
+  },
+  {
+    "file": "units/corki/active_hit1.wav"
+  },
+  {
+    "file": "units/corki/active_hit2.wav"
+  },
+  {
+    "file": "units/corki/active_release0.wav"
+  },
+  {
+    "file": "units/corki/active_big_start0.wav"
+  },
+  {
+    "file": "units/corki/active_big_start1.wav"
+  },
+  {
+    "file": "units/corki/active_big_start2.wav"
+  },
+  {
+    "file": "units/corki/active_big_hit0.wav"
+  },
+  {
+    "file": "units/corki/active_big_release0.wav"
+  },
+  {
+    "file": "units/corki/attack_launch0.wav"
+  },
+  {
+    "file": "units/corki/death0.wav"
+  },
+  {
+    "file": "units/corki/death1.wav"
+  },
+  {
+    "file": "units/corki/death2.wav"
+  },
+  {
+    "file": "units/corki/deploy_ace.wav"
+  },
+  {
+    "file": "units/corki/deploy_ready.wav"
+  },
+  {
+    "file": "units/corki/deploy_burning.wav"
+  },
+  {
+    "file": "spells/corrosion/morgana_w_cast.wav"
+  },
+  {
+    "file": "units/daisy/play_sfx_ivern_ivernr_daisy_hit_r1.wav"
+  },
+  {
+    "file": "units/daisy/play_sfx_ivern_ivernr_daisy_hit_r2.wav"
+  },
+  {
+    "file": "units/daisy/play_sfx_ivern_ivernr_daisy_hit_r3.wav"
+  },
+  {
+    "file": "units/daisy/play_sfx_ivern_ivernr_daisy_slam_hit_r.wav"
+  },
+  {
+    "file": "units/daisy/play_sfx_ivern_ivernr_daisy_attack_into_r1.wav"
+  },
+  {
+    "file": "units/daisy/play_sfx_ivern_ivernr_daisy_attack_into_r2.wav"
+  },
+  {
+    "file": "units/daisy/play_sfx_ivern_ivernr_daisy_attack_into_r3.wav"
+  },
+  {
+    "file": "units/daisy/play_sfx_ivern_ivernr_daisy_slam_into.wav"
+  },
+  {
+    "file": "units/daisy/death.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/daisy/play_sfx_ivern_ivernr_daisyspawn_cast_r.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusbasicattack2_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusbasicattack2_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusbasicattack2_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusexecute_onhit_r1.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusexecute_onhit_r2.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusexecute_onhit_r3.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariushemomax_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariushemomax_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariushemomax_loop.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_death3d_cast.wav"
+  },
+  {
+    "file": "units/darius/deploy_rise.wav"
+  },
+  {
+    "file": "units/darius/deploy_cowardice.wav"
+  },
+  {
+    "file": "units/darius/deploy_fight.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusexecute_oncast_r1.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusexecute_oncast_r2.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusexecute_oncast_r3.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusexecute_hit_kill_r1.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusexecute_hit_kill_r2.wav"
+  },
+  {
+    "file": "units/darius/play_sfx_darius_dariusexecute_hit_kill_r3.wav"
+  },
+  {
+    "file": "units/demacian_standard/play_sfx_jarvaniv_jarvanivdemacianstandard_hit_r1.wav"
+  },
+  {
+    "file": "units/demacian_standard/play_sfx_jarvaniv_jarvanivdemacianstandard_hit_r2.wav"
+  },
+  {
+    "file": "units/demacian_standard/play_sfx_jarvaniv_jarvanivdemacianstandard_hit_r3.wav"
+  },
+  {
+    "file": "units/demacian_standard/play_sfx_jarvaniv_jarvanivdemacianstandard_fall_r1.wav"
+  },
+  {
+    "file": "units/demacian_standard/play_sfx_jarvaniv_jarvanivdemacianstandard_fall_r2.wav"
+  },
+  {
+    "file": "units/demacian_standard/play_sfx_jarvaniv_jarvanivdemacianstandard_fall_r3.wav"
+  },
+  {
+    "file": "units/demacian_standard/play_sfx_jarvaniv_jarvanivgoldenaegis_oncast_r1.wav"
+  },
+  {
+    "file": "units/demacian_standard/play_sfx_jarvaniv_jarvanivgoldenaegis_oncast_r2.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkobasicattackp1_onhit_1559186049_1153642577_r1_d.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkobasicattackp1_onhit_1559186049_1153642577_r2_d.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkobasicattackp1_onhit_1559186049_1153642577_r3_d.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkobasicattackp1_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkobasicattackp1_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkobasicattackp1_oncast_r3_d.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkor_oncast_r1.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkor_oncast_r2.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkor_oncast_r3.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkor_buffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkor_buffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ekko/play_vo_ekko_attack2dgeneral_r5.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkopassive_hit_r1.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkopassive_hit_r2.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkopassive_hit_r3.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkor_buffactivate_r1.wav"
+  },
+  {
+    "file": "units/ekko/play_sfx_ekko_ekkor_buffactivate_r2.wav"
+  },
+  {
+    "file": "units/ekko/play_vo_ekko_ekkor_cast3d_r1.wav"
+  },
+  {
+    "file": "units/ekko/play_vo_ekko_ekkor_cast3d_r2.wav"
+  },
+  {
+    "file": "units/ekko/play_vo_ekko_ekkor_cast3d_r3.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaibasicattack_onhit_1559186049_1153642577_r1_d.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaibasicattack_onhit_1559186049_1153642577_r2_d.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaibasicattack_onhit_1559186049_1153642577_r3_d.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiqattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiqattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiqattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiqattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiqattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiqattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/reksai/play_vo_reksai_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/reksai/play_vo_reksai_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/event_horizon/play_sfx_veigar_veigareventhorizon_oncast_r1.wav"
+  },
+  {
+    "file": "units/event_horizon/play_sfx_veigar_veigareventhorizon_oncast_r2.wav"
+  },
+  {
+    "file": "units/event_horizon/play_sfx_veigar_veigareventhorizon_oncast_r3.wav"
+  },
+  {
+    "file": "units/event_horizon/play_sfx_veigar_veigareventhorizon_buffactivate.wav"
+  },
+  {
+    "file": "units/event_horizon/play_sfx_veigar_veigardarkmatter_hit.wav"
+  },
+  {
+    "file": "units/event_horizon/play_sfx_veigar_veigardarkmatter_oncast.wav"
+  },
+  {
+    "file": "units/event_horizon/play_sfx_veigar_veigareventhorizon_loop_r1.wav"
+  },
+  {
+    "file": "units/event_horizon/play_sfx_veigar_veigareventhorizon_loop_r2.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimertyellowbasicattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimertyellowbasicattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimertyellowbasicattack2_onhit_r3.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimertyellowbasicattack2_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimertyellowbasicattack2_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimertyellowbasicattack2_onmissilelaunch_r3.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimertyellowbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimertyellowbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimertyellowbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimerdingerqspawndestroyaudio_onbuffactivate_r1_d.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimerdingerqspawndestroyaudio_onbuffactivate_r2_d.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimerdingerqspawndestroyaudio_onbuffactivate_r3_d.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimerdingerqspawndestroyaudio_onbuffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimerdingerqspawndestroyaudio_onbuffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimerdingerqspawndestroyaudio_onbuffdeactivate_r3.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimerturretshutdown_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimerturretshutdown_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/evolution_turret/play_sfx_heimertyellow_heimerturretshutdown_onbuffactivate_r3.wav"
+  },
+  {
+    "file": "spells/explosive_cask/cast.wav"
+  },
+  {
+    "file": "spells/explosive_cask/boom_1.wav"
+  },
+  {
+    "file": "spells/explosive_cask/boom_2.wav"
+  },
+  {
+    "file": "spells/explosive_cask/boom_3.wav"
+  },
+  {
+    "file": "units/fiddlesticks/play_sfx_fiddlesticks_fiddlesticksw_oncast_r1.wav"
+  },
+  {
+    "file": "units/fiddlesticks/play_sfx_fiddlesticks_fiddlesticksw_oncast_r2.wav"
+  },
+  {
+    "file": "units/fiddlesticks/play_sfx_fiddlesticks_fiddlesticksw_oncast_r3.wav"
+  },
+  {
+    "file": "units/fiddlesticks/play_sfx_fiddlesticks_fiddlestickswdrain_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/fiddlesticks/play_sfx_fiddlesticks_fiddlestickswdrain_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/fiddlesticks/effigy_death_mobile_r1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/fiddlesticks/effigy_death_mobile_r2.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/final_spark/cast_1.wav"
+  },
+  {
+    "file": "units/final_spark/cast_2.wav"
+  },
+  {
+    "file": "units/final_spark/cast_3.wav"
+  },
+  {
+    "file": "units/final_spark/end_1.wav"
+  },
+  {
+    "file": "units/final_spark/end_2.wav"
+  },
+  {
+    "file": "units/final_spark/end_3.wav"
+  },
+  {
+    "file": "units/final_spark/middle_1.wav"
+  },
+  {
+    "file": "units/final_spark/middle_2.wav"
+  },
+  {
+    "file": "units/final_spark/middle_3.wav"
+  },
+  {
+    "file": "units/freeze/play_sfx_cr_freeze_spell_cast_first3s.wav",
+    "external": "《皇室战争》冰冻法术（用户提供）",
+    "edit": "从原长约 3.863 秒截取前 3 秒，ADPCM 转为 16 位 PCM"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenbasicattack_onhit_1559186049_1153642577_r1_d.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenbasicattack_onhit_1559186049_1153642577_r2_d.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenbasicattack_onhit_1559186049_1153642577_r3_d.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenbasicattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenbasicattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenbasicattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/garen/champion_choose_86_zh_cn.wav"
+  },
+  {
+    "file": "units/garen/play_vo_garen_move2dstandard_r16_zh_cn.wav"
+  },
+  {
+    "file": "units/garen/play_vo_garen_move2dstandard_r11_zh_cn.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenq_onbuffdeactivate.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenq_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenq_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenq_oncast_r1.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenq_oncast_r2.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenq_oncast_r3.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garenqattack_oncast_r.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garene_onbuffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garene_onbuffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garene_onbuffdeactivate_r3.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garene_hit_r1.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garene_hit_r2.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garene_hit_r3.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garene_oncast_r1.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garene_oncast_r2.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garene_oncast_r3.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garene_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garene_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/garen/play_sfx_garen_garene_onbuffactivate_r3.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbasicattack_onhit_r1_d.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbasicattack_onhit_r2_d.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbasicattack_onhit_r3_d.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbasicattack_onmissilelaunch_r1_d.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbasicattack_onmissilelaunch_r2_d.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbasicattack_onmissilelaunch_r3_d.wav"
+  },
+  {
+    "file": "units/gnar/play_vo_gnar_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/gnar/play_vo_gnar_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/gnar/play_vo_gnar_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/gnar/play_vo_gnar_attack2dgeneral_r1_en_us.wav"
+  },
+  {
+    "file": "units/gnar/play_vo_gnar_laugh3dgeneral_r2_en_us.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnartransformback_buffactivate_r1.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnartransformback_buffactivate_r2.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnartransformback_buffactivate_r3.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbigbasicattack_onhit_r1_d.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbigbasicattack_onhit_r2_d.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbigbasicattack_onhit_r3_d.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbigbasicattack2_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbigbasicattack2_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbigbasicattack2_oncast_r3_d.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbigw_hit2_r1.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbigw_hit2_r2.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbigw_hit2_r3.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnarbigw_oncast_r.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnartransform_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnartransform_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/gnar/play_sfx_gnar_gnartransform_onbuffactivate_r3.wav"
+  },
+  {
+    "file": "units/scuttle_crab/gold0.wav"
+  },
+  {
+    "file": "units/scuttle_crab/gold1.wav"
+  },
+  {
+    "file": "units/scuttle_crab/gold2.wav"
+  },
+  {
+    "file": "units/gold_ward/death.wav"
+  },
+  {
+    "file": "units/gold_ward/deploy.wav"
+  },
+  {
+    "file": "units/gold_ward/deploy_2.wav"
+  },
+  {
+    "file": "units/gold_ward/deploy_3.wav"
+  },
+  {
+    "file": "units/gold_ward/stasis.wav"
+  },
+  {
+    "file": "units/graves/play_sfx_graves_gravesbasicattack_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/graves/play_sfx_graves_gravesbasicattack_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/graves/play_sfx_graves_gravesbasicattack_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/graves/play_sfx_graves_gravesmove_oncast_r1.wav"
+  },
+  {
+    "file": "units/graves/play_sfx_graves_gravesmove_oncast_r2.wav"
+  },
+  {
+    "file": "units/graves/play_sfx_graves_gravesmove_oncast_r3.wav"
+  },
+  {
+    "file": "units/graves/play_sfx_graves_gravesbasicattack_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/graves/play_sfx_graves_gravesbasicattack_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/graves/play_sfx_graves_gravesbasicattack_onmissilelaunch_r3.wav"
+  },
+  {
+    "file": "units/graves/play_vo_graves_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/graves/play_vo_graves_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/graves/play_vo_graves_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/graves/champion_choose_104_zh_cn.ogg"
+  },
+  {
+    "file": "units/graves/play_vo_graves_move2dstandard_r8_zh_cn.wav"
+  },
+  {
+    "file": "units/graves/play_vo_graves_move2dstandard_r6_zh_cn.wav"
+  },
+  {
+    "file": "units/graves/play_sfx_graves_gravesbasicattackspread_reload_close.wav"
+  },
+  {
+    "file": "units/graves/play_sfx_graves_gravesbasicattackspread_reload_open.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenbasicattack_swipe_hit_r1.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenbasicattack_swipe_hit_r2.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenbasicattack_swipe_hit_r3.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenbasicattack_stab_hit_r1.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenbasicattack_stab_hit_r2.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenbasicattack_stab_hit_r3.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenbasicattack_swipe_cast_r1.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenbasicattack_swipe_cast_r2.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenbasicattack_swipe_cast_r3.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenbasicattack_stab_cast_r1.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenbasicattack_stab_cast_r2.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenbasicattack_stab_cast_r3.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenqfirst_hit_r1.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenqfirst_hit_r2.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenqfirst_hit_r3.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenqlast_hit_r1.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenqlast_hit_r2.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenqlast_hit_r3.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenqlast_hit_center_r.wav"
+  },
+  {
+    "file": "units/gwen/gwen_q_active_0.wav",
+    "edit": "混合 2 层，各层从第 95、1044 毫秒进入，截取前 1.5 秒，末尾 0.02 秒线性淡出"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenqmiddle_hit_r1.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenqmiddle_hit_r2.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenqmiddle_hit_r3.wav"
+  },
+  {
+    "file": "units/gwen/gwen_q_active_1.wav",
+    "edit": "混合 3 层，各层从第 95、949、1044 毫秒进入，截取前 1.5 秒，末尾 0.02 秒线性淡出"
+  },
+  {
+    "file": "units/gwen/gwen_q_active_2.wav",
+    "edit": "混合 4 层，各层从第 95、783、949、1044 毫秒进入，截取前 1.5 秒，末尾 0.02 秒线性淡出"
+  },
+  {
+    "file": "units/gwen/gwen_q_active_3.wav",
+    "edit": "混合 5 层，各层从第 95、616、783、949、1044 毫秒进入，截取前 1.5 秒，末尾 0.02 秒线性淡出"
+  },
+  {
+    "file": "units/gwen/play_vo_gwen_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/gwen/play_vo_gwen_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/gwen/play_vo_gwen_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/gwen/champion_lockin_sfx_887.wav"
+  },
+  {
+    "file": "units/gwen/play_vo_gwen_attack2dgeneral_r17_zh_cn.wav"
+  },
+  {
+    "file": "units/gwen/play_vo_gwen_attack2dgeneral_r20_zh_cn.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenw_cast_r1.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenw_cast_r2.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenw_cast_r3.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenq_max_stacks_buffactivate_r1.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenq_max_stacks_buffactivate_r2.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenq_max_stacks_buffactivate_r3.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenw_buffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/gwen/play_sfx_gwen_gwenw_buffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/gwen/gwen_w_sanctuary.wav",
+    "edit": "截取前 4 秒"
+  },
+  {
+    "file": "spells/heal/play_sfx_summonerheal_oncast_r1.wav"
+  },
+  {
+    "file": "spells/heal/play_sfx_summonerheal_oncast_r2.wav"
+  },
+  {
+    "file": "spells/heal/play_sfx_summonerheal_oncast_r3.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimrapidslash_hit_r1.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimrapidslash_hit_r2.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimrapidslash_hit_r3.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimrapidslash_oncast_r1.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimrapidslash_oncast_r2.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimrapidslash_oncast_r3.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimw_oncast_r1.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimw_oncast_r2.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimw_onbuffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimw_onbuffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimw_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimw_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimrampattack_onhit_r1.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimrampattack_onhit_r2.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimrampattack_onhit_r3.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimrampattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_hecarimrampattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/hecarim/play_sfx_hecarim_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/hecarim/deploy_face_death_zh_cn.wav",
+    "edit": "单独提取台词层，移除 W 的低吼层和 2.5 秒延迟，保留原事件的 -13 dB 增益"
+  },
+  {
+    "file": "units/hecarim/play_vo_hecarim_attack2dgeneral_r2_zh_cn.wav"
+  },
+  {
+    "file": "units/hecarim/play_vo_hecarim_move2dstandard_r3_zh_cn.wav"
+  },
+  {
+    "file": "units/imp/play_sfx_yorick_yorickq_ghoulattack_cast_r1.wav"
+  },
+  {
+    "file": "units/imp/play_sfx_yorick_yorickq_ghoul_death_r1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/imp/play_sfx_yorick_yorickq_ghoul_death_r2.wav"
+  },
+  {
+    "file": "units/imp/play_sfx_yorick_yorickq_ghoul_death_r3.wav"
+  },
+  {
+    "file": "units/imp/play_sfx_yorick_yorickq_summon_r1.wav"
+  },
+  {
+    "file": "units/imp/play_sfx_yorick_yorickq_summon_r2.wav"
+  },
+  {
+    "file": "units/imp/play_sfx_yorick_yorickq_summon_r3.wav"
+  },
+  {
+    "file": "units/inhibitor/death_r1.wav"
+  },
+  {
+    "file": "units/inhibitor/death_r2.wav"
+  },
+  {
+    "file": "units/inhibitor/death_r3.wav"
+  },
+  {
+    "file": "units/inhibitor/spawn.wav"
+  },
+  {
+    "file": "units/inhibitor/idle.wav"
+  },
+  {
+    "file": "units/ivern/play_sfx_ivern_ivernbasicattackranged_hit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/ivern/play_sfx_ivern_ivernbasicattackranged_hit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/ivern/play_sfx_ivern_ivernbasicattackranged_hit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/ivern/play_sfx_ivern_ivernbasicattackranged_cast_r1.wav"
+  },
+  {
+    "file": "units/ivern/play_sfx_ivern_ivernbasicattackranged_cast_r2.wav"
+  },
+  {
+    "file": "units/ivern/play_sfx_ivern_ivernbasicattackranged_cast_r3.wav"
+  },
+  {
+    "file": "units/ivern/play_sfx_ivern_ivernr_oncast.wav"
+  },
+  {
+    "file": "units/ivern/play_sfx_ivern_death3d_buffactivate.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ivern/play_vo_ivern_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ivern/play_vo_ivern_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ivern/play_vo_ivern_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ivern/play_sfx_ivern_respawn3d_buffactivate.wav"
+  },
+  {
+    "file": "units/ivern/deploy.ogg"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shacobox_shacoboxspell_onhit_r1.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shacobox_shacoboxspell_onhit_r2.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shacobox_shacoboxspell_onhit_r3.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shaco_jackinthebox_buffactivate_r1.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shaco_jackinthebox_buffactivate_r2.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shaco_jackinthebox_buffactivate_r3.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shacobox_shacoboxspell_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shacobox_shacoboxspell_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shacobox_shacoboxspell_onmissilelaunch_r3.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shaco_jackinthebox_onbuffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shaco_jackinthebox_onbuffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shaco_jackinthebox_onbuffdeactivate_r3.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shaco_jackinthebox_oncast_r1.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shaco_jackinthebox_oncast_r2.wav"
+  },
+  {
+    "file": "units/jack_in_the_box/play_sfx_shaco_jackinthebox_oncast_r3.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxbasicattack_onhit_1559186049_1153642577_r_d.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxbasicattack2_onhit_1559186049_1153642577_r.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxbasicattack_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxbasicattack_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxbasicattack_oncast_r3_d.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxe_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxe_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxe_onbuffactivate_r3.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxe_onbuffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxe_onbuffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxe_onbuffdeactivate_r3.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxe_hit_r1.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxe_hit_r2.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_jaxe_hit_r3.wav"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/jax/play_vo_jax_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/jax/play_vo_jax_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/jax/play_vo_jax_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/jax/play_sfx_jax_respawn3d_buffactivate.wav"
+  },
+  {
+    "file": "units/jax/deploy.ogg"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycerangedattack_onhit_r1_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycerangedattack_onhit_r2_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycerangedattack_onhit_r3_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycerangedattack_onmissilelaunch_r1_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycerangedattack_onmissilelaunch_r2_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycerangedattack_onmissilelaunch_r3_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycerangedattack_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycerangedattack_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycerangedattack_oncast_r3_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycehyperchargerangedattack_onhit_r1.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycehyperchargerangedattack_onhit_r2.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycehyperchargerangedattack_onhit_r3.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycehyperchargerangedattack_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycehyperchargerangedattack_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycehyperchargerangedattack_onmissilelaunch_r3.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycehyperchargerangedattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycehyperchargerangedattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycehyperchargerangedattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycehypercharge_onbuffactivate.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycehypercharge_onbuffdeactivate.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycehypercharge_oncast.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/jayce/play_vo_jayce_death3d_r1_zh_cn.wav"
+  },
+  {
+    "file": "units/jayce/play_vo_jayce_death3d_r2_zh_cn.wav"
+  },
+  {
+    "file": "units/jayce/play_vo_jayce_death3d_r3_zh_cn.wav"
+  },
+  {
+    "file": "units/jayce/champion_choose_126_zh_cn.ogg"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycepassiverangedattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycepassiverangedattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycepassiverangedattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycepassiverangedattack_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycepassiverangedattack_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycepassiverangedattack_onmissilelaunch_r3.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycestaticfield_onbuffdeactivate.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycestaticfield_onbuffactivate.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycestancehtg_oncast.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycepassiverangedattack_hit.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycebasicattack_onhit_1559186049_1153642577_r1_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycebasicattack_onhit_1559186049_1153642577_r2_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycebasicattack_onhit_1559186049_1153642577_r3_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycebasicattack_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycebasicattack_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycebasicattack_oncast_r3_d.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycestaticfield_oncast.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycepassivemeleeattack_oncast.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycestancegth_oncast.wav"
+  },
+  {
+    "file": "units/jayce/play_sfx_jayce_jaycepassivemeleeattack_onhit_r.wav"
+  },
+  {
+    "file": "units/jinx/rocket_hit0.wav"
+  },
+  {
+    "file": "units/jinx/rocket_hit1.wav"
+  },
+  {
+    "file": "units/jinx/rocket_hit2.wav"
+  },
+  {
+    "file": "units/jinx/rocket_launch0.wav"
+  },
+  {
+    "file": "units/jinx/rocket_launch1.wav"
+  },
+  {
+    "file": "units/jinx/rocket_launch2.wav"
+  },
+  {
+    "file": "units/jinx/death0.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/jinx/death1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/jinx/death2.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/jinx/respawn.wav",
+    "edit": "加速约 2.567 倍以配合 1 秒部署动作，保持音高"
+  },
+  {
+    "file": "units/jinx/passive0.wav"
+  },
+  {
+    "file": "units/jinx/to_rocket0.wav"
+  },
+  {
+    "file": "units/jinx/gun_hit0.wav"
+  },
+  {
+    "file": "units/jinx/gun_hit1.wav"
+  },
+  {
+    "file": "units/jinx/gun_hit2.wav"
+  },
+  {
+    "file": "units/jinx/gun_launch0.wav"
+  },
+  {
+    "file": "units/jinx/gun_launch1.wav"
+  },
+  {
+    "file": "units/jinx/gun_launch2.wav"
+  },
+  {
+    "file": "units/jinx/to_gun0.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_kassadinbasicattack_onhit_r1_d.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_kassadinbasicattack_onhit_r2_d.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_kassadinbasicattack_onhit_r3_d.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_kassadinbasicattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_kassadinbasicattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_kassadinbasicattack2_onhit_r3.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_kassadinbasicattack_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_kassadinbasicattack_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_kassadinbasicattack_oncast_r3_d.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_kassadinbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_kassadinbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_kassadinbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_riftwalk_oncast_r1.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_riftwalk_oncast_r2.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_riftwalk_oncast_r3.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_riftwalk_buffactivate_r1.wav"
+  },
+  {
+    "file": "units/kassadin/play_sfx_kassadin_riftwalk_buffactivate_r2.wav"
+  },
+  {
+    "file": "units/kassadin/play_vo_kassadin_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/kassadin/play_vo_kassadin_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/kassadin/play_vo_kassadin_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/kassadin/deploy.ogg"
+  },
+  {
+    "file": "units/kayle/play_sfx_kayle_kaylebasicattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/kayle/play_sfx_kayle_kaylebasicattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/kayle/play_sfx_kayle_kaylebasicattack2_onhit_r3.wav"
+  },
+  {
+    "file": "units/kayle/play_sfx_kayle_kaylebasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/kayle/play_sfx_kayle_kaylebasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/kayle/play_sfx_kayle_kaylebasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/kayle/play_sfx_kayle_kaylewheal_oncast_r1.wav"
+  },
+  {
+    "file": "units/kayle/play_sfx_kayle_kaylewheal_oncast_r2.wav"
+  },
+  {
+    "file": "units/kayle/play_sfx_kayle_kaylewheal_oncast_r3.wav"
+  },
+  {
+    "file": "units/kayle/play_sfx_kayle_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/kayle/deploy_melee_1.wav"
+  },
+  {
+    "file": "units/kayle/deploy_melee_2.wav"
+  },
+  {
+    "file": "units/kayle/deploy_melee_3.wav"
+  },
+  {
+    "file": "units/kayle/play_sfx_kayle_kaylebasicattack3_onhit.wav"
+  },
+  {
+    "file": "units/kayle/play_sfx_kayle_kaylebasicattack3_onmissilecast.wav"
+  },
+  {
+    "file": "units/kayle/wave_hit.wav"
+  },
+  {
+    "file": "units/kayle/wave_launch_r1.wav",
+    "edit": "片头延迟 70 毫秒"
+  },
+  {
+    "file": "units/kayle/wave_launch_r2.wav",
+    "edit": "片头延迟 70 毫秒"
+  },
+  {
+    "file": "units/kayle/wave_launch_r3.wav",
+    "edit": "片头延迟 70 毫秒"
+  },
+  {
+    "file": "units/kayle/deploy_ranged_1.wav"
+  },
+  {
+    "file": "units/kayle/deploy_ranged_2.wav"
+  },
+  {
+    "file": "units/kayle/deploy_ranged_3.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_attack_hit_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_attack_hit_2.wav"
+  },
+  {
+    "file": "units/kayn/kayn_attack1_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_attack1_2.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_attack3_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_attack3_2.wav"
+  },
+  {
+    "file": "units/kayn/kayn_q_cast_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_q_hit_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_q_spin_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_death_1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/kayn/kayn_deploy_voice_2.wav"
+  },
+  {
+    "file": "units/kayn/kayn_deploy_voice_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_deploy_voice_3.wav"
+  },
+  {
+    "file": "units/kayn/kayn_terrain_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_terrain_exit.wav"
+  },
+  {
+    "file": "units/kayn/kayn_terrain_sustain.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_attack1_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_attack1_2.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_attack3_2.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_q_cast_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_q_spin_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_deploy_voice_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_deploy_voice_2.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_deploy_voice_3.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_terrain_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_terrain_exit.wav"
+  },
+  {
+    "file": "units/kayn/kayn_assassin_terrain_sustain.wav"
+  },
+  {
+    "file": "units/kayn/kayn_slayer_attack1_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_slayer_attack1_2.wav"
+  },
+  {
+    "file": "units/kayn/kayn_slayer_q_cast_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_slayer_q_spin_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_slayer_deploy_voice_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_slayer_deploy_voice_2.wav"
+  },
+  {
+    "file": "units/kayn/kayn_slayer_deploy_voice_3.wav"
+  },
+  {
+    "file": "units/kayn/kayn_slayer_terrain_1.wav"
+  },
+  {
+    "file": "units/kayn/kayn_slayer_terrain_exit.wav"
+  },
+  {
+    "file": "units/kayn/kayn_slayer_terrain_sustain.wav"
+  },
+  {
+    "file": "spells/lightning/strike_r1.wav"
+  },
+  {
+    "file": "spells/lightning/strike_r2.wav"
+  },
+  {
+    "file": "spells/lightning/strike_r3.wav"
+  },
+  {
+    "file": "units/lulu/attack_hit_1.wav"
+  },
+  {
+    "file": "units/lulu/attack_hit_2.wav"
+  },
+  {
+    "file": "units/lulu/attack_hit_3.wav"
+  },
+  {
+    "file": "units/lulu/play_sfx_lulu_lulur_oncast_r1.wav"
+  },
+  {
+    "file": "units/lulu/play_sfx_lulu_lulur_oncast_r2.wav"
+  },
+  {
+    "file": "units/lulu/play_sfx_lulu_lulur_oncast_r3.wav"
+  },
+  {
+    "file": "units/lulu/attack_launch_1.wav"
+  },
+  {
+    "file": "units/lulu/attack_launch_2.wav"
+  },
+  {
+    "file": "units/lulu/attack_launch_3.wav"
+  },
+  {
+    "file": "units/lulu/death_1.wav"
+  },
+  {
+    "file": "units/lulu/deploy_voice.ogg"
+  },
+  {
+    "file": "units/lulu/deploy_slide.wav"
+  },
+  {
+    "file": "units/lulu/deploy_dewdrop.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphitebasicattack_onhit_1559186049_1153642577_r1_d.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphitebasicattack_onhit_1559186049_1153642577_r2_d.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphitebasicattack_onhit_1559186049_1153642577_r3_d.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphitebasicattack2_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphitebasicattack2_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphitebasicattack2_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphitebasicattack_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphitebasicattack_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphitebasicattack_oncast_r3_d.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphitebasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphitebasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphitebasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_landslide_oncast.wav"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_landslide_hit.wav"
+  },
+  {
+    "file": "units/malphite/play_vo_malphite_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/malphite/play_vo_malphite_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/malphite/play_vo_malphite_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphiteshieldeffect_onbuffactivate.wav"
+  },
+  {
+    "file": "units/malphite/deploy.ogg"
+  },
+  {
+    "file": "units/malphite/play_sfx_malphite_malphiteshieldeffect_onbuffdeactivate.wav"
+  },
+  {
+    "file": "units/malzahar/attack_hit_1.wav"
+  },
+  {
+    "file": "units/malzahar/attack_hit_2.wav"
+  },
+  {
+    "file": "units/malzahar/attack_hit_3.wav"
+  },
+  {
+    "file": "units/malzahar/attack_launch_1.wav"
+  },
+  {
+    "file": "units/malzahar/attack_launch_2.wav"
+  },
+  {
+    "file": "units/malzahar/attack_launch_3.wav"
+  },
+  {
+    "file": "units/malzahar/missile_launch_1.wav"
+  },
+  {
+    "file": "units/malzahar/missile_launch_2.wav"
+  },
+  {
+    "file": "units/malzahar/missile_launch_3.wav"
+  },
+  {
+    "file": "units/malzahar/channel_start_1.wav"
+  },
+  {
+    "file": "units/malzahar/channel_zone_1.wav"
+  },
+  {
+    "file": "units/malzahar/channel_zone_2.wav"
+  },
+  {
+    "file": "units/malzahar/death_1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/malzahar/death_2.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/malzahar/death_3.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/malzahar/deploy_voice.ogg"
+  },
+  {
+    "file": "units/malzahar/spawn_1_1.wav"
+  },
+  {
+    "file": "units/malzahar/spawn_2_2.wav"
+  },
+  {
+    "file": "units/malzahar/spawn_3_3.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_masteryibasicattack_onhit_1559186049_1153642577_r1_d.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_masteryibasicattack_onhit_1559186049_1153642577_r2_d.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_masteryibasicattack_onhit_1559186049_1153642577_r3_d.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_masteryidoublestrike_onhit_1559186049_1153642577_r.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_masteryibasicattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_masteryibasicattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_masteryibasicattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_masteryibasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_masteryibasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_masteryibasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_masteryidoublestrike_oncast_r1.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_masteryidoublestrike_oncast_r2.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_masteryidoublestrike_oncast_r3.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_highlander_onbuffdeactivate.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_highlander_onbuffactivate.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_highlander_trail.wav"
+  },
+  {
+    "file": "units/masteryi/play_sfx_masteryi_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/masteryi/play_vo_masteryi_attack2dgeneral_r2_en_us.wav"
+  },
+  {
+    "file": "announcer/defeat_r1.wav"
+  },
+  {
+    "file": "announcer/minions_spawn_r1.wav"
+  },
+  {
+    "file": "announcer/victory_r1.wav"
+  },
+  {
+    "file": "spells/medium_lightning/cast.wav"
+  },
+  {
+    "file": "spells/medium_lightning/hit.wav"
+  },
+  {
+    "file": "spells/medium_lightning/strike.wav"
+  },
+  {
+    "file": "spells/medium_lightning/tower_disable.wav"
+  },
+  {
+    "file": "spells/medium_lightning/warning.wav"
+  },
+  {
+    "file": "spells/medium_lightning/warning_enemy.wav"
+  },
+  {
+    "file": "spells/medium_lightning/tower_sustain.wav"
+  },
+  {
+    "file": "units/mega_inferno_bomb/play_sfx_ziggs_ziggsr_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/mega_inferno_bomb/play_sfx_ziggs_ziggsr_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/mega_inferno_bomb/play_sfx_ziggs_ziggsr_onmissilelaunch_r3.wav"
+  },
+  {
+    "file": "units/mega_inferno_bomb/play_sfx_ziggs_ziggsr_missilelaunch.wav"
+  },
+  {
+    "file": "units/mega_inferno_bomb/play_sfx_ziggs_ziggsr_hit_r1.wav"
+  },
+  {
+    "file": "units/mega_inferno_bomb/play_sfx_ziggs_ziggsr_hit_r2.wav"
+  },
+  {
+    "file": "units/mega_inferno_bomb/play_sfx_ziggs_ziggsr_hit_r3.wav"
+  },
+  {
+    "file": "units/melee_minion/order/play_sfx_sru_orderminionmelee_sru_orderminionmeleebasicattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/melee_minion/order/play_sfx_sru_orderminionmelee_sru_orderminionmeleebasicattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/melee_minion/order/play_sfx_sru_orderminionmelee_sru_orderminionmeleebasicattack2_onhit_r3.wav"
+  },
+  {
+    "file": "units/melee_minion/order/play_sfx_sru_orderminionmelee_sru_orderminionmeleebasicattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/melee_minion/order/play_sfx_sru_orderminionmelee_sru_orderminionmeleebasicattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/melee_minion/order/play_sfx_sru_orderminionmelee_sru_orderminionmeleebasicattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/melee_minion/order/play_sfx_sru_orderminionmelee_sru_orderminionmeleebasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/melee_minion/order/play_sfx_sru_orderminionmelee_sru_orderminionmeleebasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/melee_minion/order/play_sfx_sru_orderminionmelee_sru_orderminionmeleebasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/minion_shared/spawn_r1.wav"
+  },
+  {
+    "file": "units/minion_shared/spawn_r2.wav"
+  },
+  {
+    "file": "units/minion_shared/spawn_r3.wav"
+  },
+  {
+    "file": "units/melee_minion/chaos/play_sfx_sru_chaosminionmelee_sru_chaosminionmeleebasicattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/melee_minion/chaos/play_sfx_sru_chaosminionmelee_sru_chaosminionmeleebasicattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/melee_minion/chaos/play_sfx_sru_chaosminionmelee_sru_chaosminionmeleebasicattack2_onhit_r3.wav"
+  },
+  {
+    "file": "units/melee_minion/chaos/play_sfx_sru_chaosminionmelee_sru_chaosminionmeleebasicattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/melee_minion/chaos/play_sfx_sru_chaosminionmelee_sru_chaosminionmeleebasicattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/melee_minion/chaos/play_sfx_sru_chaosminionmelee_sru_chaosminionmeleebasicattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/melee_minion/chaos/play_sfx_sru_chaosminionmelee_sru_chaosminionmeleebasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/melee_minion/chaos/play_sfx_sru_chaosminionmelee_sru_chaosminionmeleebasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/melee_minion/chaos/play_sfx_sru_chaosminionmelee_sru_chaosminionmeleebasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunebasicattack_onhit_1559186049_1153642577_r1_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunebasicattack_onhit_1559186049_1153642577_r2_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunebasicattack_onhit_1559186049_1153642577_r3_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunebasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunebasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunebasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortuneviciousstrikes_onbuffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortuneviciousstrikes_onbuffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortuneviciousstrikes_oncast_r1.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortuneviciousstrikes_oncast_r2.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortuneviciousstrikes_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortuneviciousstrikes_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunebasicattack_onmissilelaunch_r1_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunebasicattack_onmissilelaunch_r2_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunebasicattack_onmissilelaunch_r3_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunebasicattack_onmissilecast_r1_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunebasicattack_onmissilecast_r2_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunebasicattack_onmissilecast_r3_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_vo_missfortune_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/missfortune/play_vo_missfortune_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/missfortune/play_vo_missfortune_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/missfortune/play_vo_missfortune_move2dstandard_r1_zh_cn.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunepassiveattack_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunepassiveattack_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunepassiveattack_onhitlocation_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunepassiveattack_onmissilecast_r1_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunepassiveattack_onmissilecast_r2_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunepassiveattack_onmissilelaunch_r1_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunepassiveattack_onmissilelaunch_r2_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunepassiveattack_onhit_1559186049_1153642577_r1_d.wav"
+  },
+  {
+    "file": "units/missfortune/play_sfx_missfortune_missfortunepassiveattack_onhit_1559186049_1153642577_r2_d.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaibasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaibasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaibasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiw_buffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiw_buffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiw_buffdeactivate_r3.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_global_eog_ordernexus_death_oc_r1.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_sruap_order_nexus_alive_loop_r1.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_sruap_order_nexus_spawn_r1.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_global_eog_chaosnexus_death_cast_r1.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_sruap_chaos_nexus_alive_loop_r1.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_sruap_chaos_nexus_spawn_r1.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturnebasicattack2_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturnebasicattack2_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturnebasicattack2_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturnebasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturnebasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturnebasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturneumbrabladesattack_hit_r1_d.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturneumbrabladesattack_hit_r2_d.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturneumbrabladesattack_hit_r3_d.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/nocturne/deploy.ogg"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturneshroudofdarkness_oncast_r1.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturneshroudofdarkness_oncast_r2.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturneshroudofdarkness_oncast_r3.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturneumbrabladesattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturneumbrabladesattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/nocturne/play_sfx_nocturne_nocturneumbrabladesattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafbasicattack_onhit_1559186049_1153642577_r1_d.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafbasicattack_onhit_1559186049_1153642577_r2_d.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafbasicattack_onhit_1559186049_1153642577_r3_d.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafbasicattack2_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafbasicattack2_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafbasicattack2_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafbasicattack_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafbasicattack_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafbasicattack_oncast_r3_d.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafw_oncast.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafw_onbuffactivate.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafr_oncast.wav"
+  },
+  {
+    "file": "units/olaf/play_sfx_olaf_olafr_onbuffactivate.wav"
+  },
+  {
+    "file": "units/olaf/play_vo_olaf_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/olaf/play_vo_olaf_death3d_r2_zh_cn.wav"
+  },
+  {
+    "file": "units/olaf/play_vo_olaf_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/olaf/deploy.ogg"
+  },
+  {
+    "file": "units/olaf/deploy_pillage.wav"
+  },
+  {
+    "file": "units/olaf/deploy_bloodlust.wav"
+  },
+  {
+    "file": "units/ornn/play_sfx_ornn_ornnbasicattack2_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/ornn/play_sfx_ornn_ornnbasicattack2_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/ornn/play_sfx_ornn_ornnbasicattack2_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/ornn/play_sfx_ornn_ornnbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/ornn/play_sfx_ornn_ornnbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/ornn/play_sfx_ornn_ornnbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/ornn/play_sfx_ornn_ornne_buffonmoveend_explosion_r.wav"
+  },
+  {
+    "file": "units/ornn/charge_knockup_1.wav"
+  },
+  {
+    "file": "units/ornn/play_sfx_ornn_ornne_oncast.wav"
+  },
+  {
+    "file": "units/ornn/charge_step_1.wav"
+  },
+  {
+    "file": "units/ornn/charge_step_2.wav"
+  },
+  {
+    "file": "units/ornn/charge_step_3.wav"
+  },
+  {
+    "file": "units/ornn/charge_trail_hit_1.wav"
+  },
+  {
+    "file": "units/ornn/charge_trail_hit_2.wav"
+  },
+  {
+    "file": "units/ornn/charge_trail_hit_3.wav"
+  },
+  {
+    "file": "units/ornn/play_vo_ornn_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ornn/play_vo_ornn_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ornn/play_vo_ornn_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ornn/deploy_ban_zh_cn.ogg"
+  },
+  {
+    "file": "units/ornn/deploy_choose_zh_cn.wav"
+  },
+  {
+    "file": "units/ornn/deploy_quality_zh_cn.wav"
+  },
+  {
+    "file": "units/ornn/forge_arrive_1.wav"
+  },
+  {
+    "file": "units/ornn/forge_final_strike.wav",
+    "edit": "从 3.5 秒开始截取，开头 88 个采样点淡入"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack2_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack2_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack2_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack3_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack3_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack3_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack3_oncast_r1.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack3_oncast_r2.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonbasicattack3_oncast_r3.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_death3d.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/pantheon/play_vo_pantheon_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/pantheon/play_vo_pantheon_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/pantheon/play_vo_pantheon_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/pantheon/pantheon_r_arrival_original.wav",
+    "edit": "混合 6 层，各层从第 0、200、200、650、650、1300 毫秒进入，截取前 3.45 秒，末尾 0.12 秒线性淡出"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonpassiveready_onbuffactivate.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonqtap_hit_vfx_r1.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonqtap_hit_vfx_r2.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonqtap_hit_vfx_r3.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonqtap_cast_lua_r1.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonqtap_cast_lua_r2.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonqtap_cast_lua_r3.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonqtap_hit_empowered_vfx_r1.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonqtap_hit_empowered_vfx_r2.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonqtap_hit_empowered_vfx_r3.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonqtap_cast_empowered_lua_r1.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonqtap_cast_empowered_lua_r2.wav"
+  },
+  {
+    "file": "units/pantheon/play_sfx_pantheon_pantheonqtap_cast_empowered_lua_r3.wav"
+  },
+  {
+    "file": "units/pillar_of_ice/w_cast.wav"
+  },
+  {
+    "file": "units/pillar_of_ice/e_fall.wav",
+    "edit": "截取 4.5–8.105 秒；淡入 0.005 秒；淡出 0.15 秒"
+  },
+  {
+    "file": "units/pillar_of_ice/e_rise.wav",
+    "edit": "截取 0–3.25 秒；淡入 0.005 秒；淡出 0.15 秒"
+  },
+  {
+    "file": "units/pillar_of_ice/w_loop.wav"
+  },
+  {
+    "file": "units/pix/play_sfx_lulu_lulupassivemissile_hit_r1.wav"
+  },
+  {
+    "file": "units/pix/play_sfx_lulu_lulupassivemissile_hit_r2.wav"
+  },
+  {
+    "file": "units/pix/play_sfx_lulu_lulupassivemissile_hit_r3.wav"
+  },
+  {
+    "file": "units/pix/play_sfx_lulu_lulupassivemissilecontroller_onmissilecast_r1.wav"
+  },
+  {
+    "file": "units/pix/play_sfx_lulu_lulupassivemissilecontroller_onmissilecast_r2.wav"
+  },
+  {
+    "file": "units/pix/play_sfx_lulu_lulupassivemissilecontroller_onmissilecast_r3.wav"
+  },
+  {
+    "file": "units/pix/play_sfx_lulu_lulufaerieoverride_blink_r1.wav"
+  },
+  {
+    "file": "units/pix/play_sfx_lulu_lulufaerieoverride_blink_r2.wav"
+  },
+  {
+    "file": "units/pix/play_sfx_lulu_lulufaerieoverride_blink_r3.wav"
+  },
+  {
+    "file": "units/pool_of_reflection/play_sfx_hwei_hweiwwshield_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/pool_of_reflection/play_sfx_hwei_hweiwwshield_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/pool_of_reflection/play_sfx_hwei_hweiwwshield_onbuffactivate_r3.wav"
+  },
+  {
+    "file": "units/pool_of_reflection/play_sfx_hwei_hweiww_oncast_r1.wav"
+  },
+  {
+    "file": "units/pool_of_reflection/play_sfx_hwei_hweiww_oncast_r2.wav"
+  },
+  {
+    "file": "units/pool_of_reflection/play_sfx_hwei_hweiww_oncast_r3.wav"
+  },
+  {
+    "file": "units/pool_of_reflection/play_sfx_hwei_hweiwwshield_onbuffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/pool_of_reflection/play_sfx_hwei_hweiwwshield_onbuffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/pool_of_reflection/play_sfx_hwei_hweiwwshield_onbuffdeactivate_r3.wav"
+  },
+  {
+    "file": "units/pool_of_reflection/stop_sfx_hwei_hweiww_aoe_buffactivate_r1_d.wav"
+  },
+  {
+    "file": "units/pool_of_reflection/stop_sfx_hwei_hweiww_aoe_buffactivate_r2_d.wav"
+  },
+  {
+    "file": "units/pool_of_reflection/stop_sfx_hwei_hweiww_aoe_buffactivate_r3_d.wav"
+  },
+  {
+    "file": "units/pool_of_reflection/play_sfx_hwei_hweiww_aoe_buffactivate_r_m.wav"
+  },
+  {
+    "file": "units/powder_keg/death_1.wav",
+    "edit": "截取前 1.5 秒，从 1.35 秒起线性淡出 0.15 秒"
+  },
+  {
+    "file": "units/powder_keg/death_2.wav",
+    "edit": "截取前 1.5 秒，从 1.35 秒起线性淡出 0.15 秒"
+  },
+  {
+    "file": "units/powder_keg/death_3.wav",
+    "edit": "截取前 1.5 秒，从 1.35 秒起线性淡出 0.15 秒"
+  },
+  {
+    "file": "units/powder_keg/deploy_start_1.wav"
+  },
+  {
+    "file": "units/powder_keg/deploy_start_2.wav"
+  },
+  {
+    "file": "units/powder_keg/deploy_start_3.wav"
+  },
+  {
+    "file": "units/powder_keg/hit_1.wav"
+  },
+  {
+    "file": "units/powder_keg/hit_2.wav"
+  },
+  {
+    "file": "units/powder_keg/hit_3.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_map11_orderturretminionbasicattack_hit_r1.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_map11_orderturretminionbasicattack_hit_r2.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_map11_orderturretminionbasicattack_cast_r1.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_map11_orderturretminionbasicattack_cast_r2.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_map11_orderturretminionbasicattack_cast_r3.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_map11_orderturretminionbasicattack_missilelaunch_r1.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_map11_orderturretminionbasicattack_missilelaunch_r2.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_map11_orderturretminionbasicattack_missilelaunch_r3.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_orderturret_break01_r1.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_orderturret_break02_r1.wav"
+  },
+  {
+    "file": "world/order/play_sfx_env_orderturret_break03_r1.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_map11_chaosturretminionbasicattack_hit_r1.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_map11_chaosturretminionbasicattack_hit_r2.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_map11_chaosturretminionbasicattack_hit_r3.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_map11_chaosturretminionbasicattack_cast_r1.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_map11_chaosturretminionbasicattack_cast_r2.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_map11_chaosturretminionbasicattack_cast_r3.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_map11_chaosturretminionbasicattack_missilelaunch_r1.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_map11_chaosturretminionbasicattack_missilelaunch_r2.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_map11_chaosturretminionbasicattack_missilelaunch_r3.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_chaosturret_break01_r1.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_chaosturret_break02_r1.wav"
+  },
+  {
+    "file": "world/chaos/play_sfx_env_chaosturret_break03_r1.wav"
+  },
+  {
+    "file": "units/queen_nest/w_burrow_voice.wav"
+  },
+  {
+    "file": "units/queen_nest/nest_death.wav"
+  },
+  {
+    "file": "units/queen_nest/nest_deploy.wav"
+  },
+  {
+    "file": "units/ranged_minion/order/play_sfx_sru_orderminionranged_sru_orderminionrangedbasicattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/ranged_minion/order/play_sfx_sru_orderminionranged_sru_orderminionrangedbasicattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/ranged_minion/order/play_sfx_sru_orderminionranged_sru_orderminionrangedbasicattack2_onhit_r3.wav"
+  },
+  {
+    "file": "units/ranged_minion/order/play_sfx_sru_orderminionranged_sru_orderminionrangedbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/ranged_minion/order/play_sfx_sru_orderminionranged_sru_orderminionrangedbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/ranged_minion/order/play_sfx_sru_orderminionranged_sru_orderminionrangedbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/ranged_minion/chaos/play_sfx_sru_chaosminionranged_sru_chaosminionrangedbasicattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/ranged_minion/chaos/play_sfx_sru_chaosminionranged_sru_chaosminionrangedbasicattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/ranged_minion/chaos/play_sfx_sru_chaosminionranged_sru_chaosminionrangedbasicattack2_onhit_r3.wav"
+  },
+  {
+    "file": "units/ranged_minion/chaos/play_sfx_sru_chaosminionranged_sru_chaosminionrangedbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/ranged_minion/chaos/play_sfx_sru_chaosminionranged_sru_chaosminionrangedbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/ranged_minion/chaos/play_sfx_sru_chaosminionranged_sru_chaosminionrangedbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiqattack3_oncast_r1.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiqattack3_oncast_r2.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiqattack3_oncast_r3.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiq_oncast_r1.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiq_oncast_r2.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiq_oncast_r3.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiw_hit_r1.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiw_hit_r2.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiw_hit_r3.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiq_onbuffdeactivate.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiq_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiq_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/reksai/play_sfx_reksai_reksaiq_onbuffactivate_r3.wav"
+  },
+  {
+    "file": "units/reksai/w_movement_trail.wav"
+  },
+  {
+    "file": "units/rift_herald/attack_hit_1_1.wav"
+  },
+  {
+    "file": "units/rift_herald/attack_hit_1_2.wav"
+  },
+  {
+    "file": "units/rift_herald/attack_hit_2_1.wav"
+  },
+  {
+    "file": "units/rift_herald/attack_hit_2_2.wav"
+  },
+  {
+    "file": "units/rift_herald/attack_swing_1_1.wav"
+  },
+  {
+    "file": "units/rift_herald/attack_swing_2_1.wav"
+  },
+  {
+    "file": "units/rift_herald/death_1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/rift_herald/deploy_start_1.wav"
+  },
+  {
+    "file": "units/rift_herald/rush_hit_1.wav"
+  },
+  {
+    "file": "units/rift_herald/rush_hit_2.wav"
+  },
+  {
+    "file": "units/rift_herald/rush_hit_3.wav"
+  },
+  {
+    "file": "units/rift_herald/rush_path_hit_1.wav"
+  },
+  {
+    "file": "units/rift_herald/rush_path_hit_2.wav"
+  },
+  {
+    "file": "units/rift_herald/rush_path_hit_3.wav"
+  },
+  {
+    "file": "units/rift_herald/rush_start_1.wav"
+  },
+  {
+    "file": "units/rift_herald/rush_prepare_1.wav"
+  },
+  {
+    "file": "units/rift_herald/spinning_punch_release_1.wav"
+  },
+  {
+    "file": "units/rift_herald/spinning_punch_start_1.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattack2_onhit_r3.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattackmelee2_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattackmelee2_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattackmelee2_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattack2_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattack2_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattack2_onmissilelaunch_r3.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattackmelee2_oncast_r1.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattackmelee2_oncast_r2.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirabasicattackmelee2_oncast_r3.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/samira/deploy_voice_1.wav"
+  },
+  {
+    "file": "units/samira/deploy_voice_2.wav"
+  },
+  {
+    "file": "units/samira/deploy_voice_3.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirar_oncast.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirar_onbuffactivate.wav"
+  },
+  {
+    "file": "units/samira/play_sfx_samira_samirarreadybuff_onbuffactivate_m.wav"
+  },
+  {
+    "file": "units/shurima_guard/play_sfx_azir_azirbasicattacksoldier_onhit_r1.wav"
+  },
+  {
+    "file": "units/shurima_guard/play_sfx_azir_azirbasicattacksoldier_onhit_r2.wav"
+  },
+  {
+    "file": "units/shurima_guard/play_sfx_azir_azirbasicattacksoldier_cast1_r1.wav"
+  },
+  {
+    "file": "units/shurima_guard/play_sfx_azir_azirbasicattacksoldier_cast1_r2.wav"
+  },
+  {
+    "file": "units/shurima_guard/play_sfx_azir_azirbasicattacksoldier_cast2_r1.wav"
+  },
+  {
+    "file": "units/shurima_guard/play_sfx_azir_azirbasicattacksoldier_cast2_r2.wav"
+  },
+  {
+    "file": "units/shurima_guard/play_sfx_azir_azireshield_onbuffcast_r1.wav"
+  },
+  {
+    "file": "units/shurima_guard/play_sfx_azir_azirwspawnsound_onbuffdeactivate_r1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/shurima_guard/play_sfx_azir_azirwspawnsound_onbuffdeactivate_r2.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/shurima_guard/play_sfx_azir_azirwspawnsound_onbuffcast_r1.wav"
+  },
+  {
+    "file": "units/shurima_guard/play_sfx_azir_azirwspawnsound_onbuffcast_r2.wav"
+  },
+  {
+    "file": "units/fiddlesticks/effigy_active_3s.wav",
+    "edit": "截取前 3 秒，末尾 0.5 秒线性淡出"
+  },
+  {
+    "file": "units/fiddlesticks/effigy_death_building_r1.wav"
+  },
+  {
+    "file": "units/fiddlesticks/effigy_death_building_r2.wav"
+  },
+  {
+    "file": "units/fiddlesticks/respawn_2s.wav",
+    "edit": "加速 2.15 倍以配合 2 秒部署动作，保持音高"
+  },
+  {
+    "file": "units/scuttle_crab/play_sfx_randuinsomen_oncast.wav"
+  },
+  {
+    "file": "units/scuttle_crab/play_sfx_sru_crab_death_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/scuttle_crab/play_sfx_sru_crab_spawn_cast.wav"
+  },
+  {
+    "file": "units/scuttle_crab/play_sfx_sru_crab_sru_dance_r1.wav"
+  },
+  {
+    "file": "units/scuttle_crab/play_sfx_sru_crab_sru_dance_r2.wav"
+  },
+  {
+    "file": "units/scuttle_crab/death_leap_1.wav"
+  },
+  {
+    "file": "units/scuttle_crab/ward0.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settbasicattack3_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settbasicattack3_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settbasicattack3_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settbasicattack2_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settbasicattack2_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settbasicattack2_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settbasicattack_cast_r1.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settbasicattack_cast_r2.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settbasicattack_cast_r3.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settbasicattack2_cast_r1.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settbasicattack2_cast_r2.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settbasicattack2_cast_r3.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settw_hit_r1.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settw_hit_r2.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settw_hit_center_sweetener_r1.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settw_hit_center_sweetener_r2.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settw_cast_r1.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settw_cast_r2.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settw_maxed_hit_r1.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settw_maxed_hit_r2.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settw_maxed_hit_center_sweetener_r1.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settw_maxed_hit_center_sweetener_r2.wav"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_settw_maxed_cast.wav"
+  },
+  {
+    "file": "units/sett/play_vo_sett_death3d_r10_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/sett/play_vo_sett_death3d_r11_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/sett/play_vo_sett_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/sett/play_sfx_sett_respawn3d_buffactivate_intro.wav",
+    "edit": "截取前 1 秒，从 0.95 秒起线性淡出 0.05 秒"
+  },
+  {
+    "file": "units/severing_bolt/play_sfx_hwei_hweiqw_aoe_explode_r1.wav"
+  },
+  {
+    "file": "units/severing_bolt/play_sfx_hwei_hweiqw_aoe_explode_r2.wav"
+  },
+  {
+    "file": "units/severing_bolt/play_sfx_hwei_hweiqw_aoe_explode_r3.wav"
+  },
+  {
+    "file": "units/severing_bolt/play_sfx_hwei_hweiqw_oncast_r1.wav"
+  },
+  {
+    "file": "units/severing_bolt/play_sfx_hwei_hweiqw_oncast_r2.wav"
+  },
+  {
+    "file": "units/severing_bolt/play_sfx_hwei_hweiqw_oncast_r3.wav"
+  },
+  {
+    "file": "units/severing_bolt/play_sfx_hwei_hweiqw_aoe_warning_r1.wav"
+  },
+  {
+    "file": "units/severing_bolt/play_sfx_hwei_hweiqw_aoe_warning_r2.wav"
+  },
+  {
+    "file": "units/severing_bolt/play_sfx_hwei_hweiqw_aoe_warning_r3.wav"
+  },
+  {
+    "file": "units/siege_minion/order/play_sfx_sru_orderminionsiege_sru_orderminionsiegebasicattack_onhit_r1.wav"
+  },
+  {
+    "file": "units/siege_minion/order/play_sfx_sru_orderminionsiege_sru_orderminionsiegebasicattack_onhit_r2.wav"
+  },
+  {
+    "file": "units/siege_minion/order/play_sfx_sru_orderminionsiege_sru_orderminionsiegebasicattack_onhit_r3.wav"
+  },
+  {
+    "file": "units/siege_minion/order/play_sfx_sru_orderminionsiege_sru_orderminionsiegebasicattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/siege_minion/order/play_sfx_sru_orderminionsiege_sru_orderminionsiegebasicattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/siege_minion/order/play_sfx_sru_orderminionsiege_sru_orderminionsiegebasicattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/siege_minion/chaos/play_sfx_sru_chaosminionsiege_sru_chaosminionsiegebasicattack_onhit_r1.wav"
+  },
+  {
+    "file": "units/siege_minion/chaos/play_sfx_sru_chaosminionsiege_sru_chaosminionsiegebasicattack_onhit_r2.wav"
+  },
+  {
+    "file": "units/siege_minion/chaos/play_sfx_sru_chaosminionsiege_sru_chaosminionsiegebasicattack_onhit_r3.wav"
+  },
+  {
+    "file": "units/siege_minion/chaos/play_sfx_sru_chaosminionsiege_sru_chaosminionsiegebasicattack_onmissilecast_r1.wav"
+  },
+  {
+    "file": "units/siege_minion/chaos/play_sfx_sru_chaosminionsiege_sru_chaosminionsiegebasicattack_onmissilecast_r2.wav"
+  },
+  {
+    "file": "units/siege_minion/chaos/play_sfx_sru_chaosminionsiege_sru_chaosminionsiegebasicattack_onmissilecast_r3.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattacktower2_onhit_r1.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattacktower2_onhit_r2.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattacktower2_onhit_r3.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattacktower_onhit_r1.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattacktower_onhit_r2.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattacktower_onhit_r3.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattacktower2_oncast_r1.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattacktower2_oncast_r2.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattacktower2_oncast_r3.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattacktower_oncast_r1.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattacktower_oncast_r2.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattacktower_oncast_r3.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionwshieldstacks_onbuffcast_r1.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionwshieldstacks_onbuffcast_r2.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionwshieldstacks_onbuffcast_r3.wav"
+  },
+  {
+    "file": "units/sion/deploy_battle.wav"
+  },
+  {
+    "file": "units/sion/deploy_crush.wav"
+  },
+  {
+    "file": "units/sion/deploy_dying.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionwshieldstacks_onbuffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionwshieldstacks_onbuffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionwshieldstacks_onbuffdeactivate_r3.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionwshieldstacks_onbuffactivate.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionpassivedelay_onbuffcast_r1.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionpassivedelay_onbuffcast_r2.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionpassivedelay_onbuffcast_r3.wav"
+  },
+  {
+    "file": "units/sion/rebirth_voice.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionwsoundhit_onbuffcast_r1.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionwsoundhit_onbuffcast_r2.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionwsoundhit_onbuffcast_r3.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattackpassive2_onhit_r1.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattackpassive2_onhit_r2.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattackpassive2_onhit_r3.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattackpassive2_oncast_r1.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattackpassive2_oncast_r2.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionbasicattackpassive2_oncast_r3.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionpassivezombie_onbuffactivate.wav"
+  },
+  {
+    "file": "units/sion/death_sfx.wav",
+    "edit": "截取前 2.5 秒，加速 3.125 倍，补齐或截至 0.8 秒，末尾 0.1 秒线性淡出"
+  },
+  {
+    "file": "units/sion/passive_death_0.wav",
+    "edit": "截取前 0.8 秒，从 0.6 秒起线性淡出 0.2 秒"
+  },
+  {
+    "file": "units/sion/passive_death_1.wav",
+    "edit": "截取前 0.8 秒，从 0.6 秒起线性淡出 0.2 秒"
+  },
+  {
+    "file": "units/sion/passive_death_2.wav",
+    "edit": "截取前 0.8 秒，从 0.6 秒起线性淡出 0.2 秒"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionpassivezombie_onbuffcast_r1.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionpassivezombie_onbuffcast_r2.wav"
+  },
+  {
+    "file": "units/sion/play_sfx_sion_sionpassivezombie_onbuffcast_r3.wav"
+  },
+  {
+    "file": "units/sivir/play_sfx_sivir_sivirq_hit_r1.wav"
+  },
+  {
+    "file": "units/sivir/play_sfx_sivir_sivirq_hit_r2.wav"
+  },
+  {
+    "file": "units/sivir/play_sfx_sivir_sivirq_hit_r3.wav"
+  },
+  {
+    "file": "units/sivir/play_sfx_sivir_sivirq_oncast_r1.wav"
+  },
+  {
+    "file": "units/sivir/play_sfx_sivir_sivirq_oncast_r2.wav"
+  },
+  {
+    "file": "units/sivir/play_sfx_sivir_sivirq_oncast_r3.wav"
+  },
+  {
+    "file": "units/sivir/play_sfx_sivir_sivirqmissile_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/sivir/play_sfx_sivir_sivirqmissile_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/sivir/play_sfx_sivir_sivirqmissile_onmissilelaunch_r3.wav"
+  },
+  {
+    "file": "units/sivir/return_1.wav"
+  },
+  {
+    "file": "units/sivir/return_2.wav"
+  },
+  {
+    "file": "units/sivir/return_3.wav"
+  },
+  {
+    "file": "units/sivir/play_sfx_sivir_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/sivir/deploy.ogg"
+  },
+  {
+    "file": "units/sivir/play_sfx_sivir_sivire_onbuffdeactivate.wav"
+  },
+  {
+    "file": "units/sivir/play_sfx_sivir_sivire_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/sivir/play_sfx_sivir_sivire_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/solar_flare/play_sfx_leona_leonasolarflare_oncast_r1.wav"
+  },
+  {
+    "file": "units/solar_flare/play_sfx_leona_leonasolarflare_oncast_r2.wav"
+  },
+  {
+    "file": "units/solar_flare/play_sfx_leona_leonasolarflare_oncast_r3.wav"
+  },
+  {
+    "file": "units/solar_flare/play_sfx_leona_leonasolarflare_hit_r1.wav"
+  },
+  {
+    "file": "units/solar_flare/play_sfx_leona_leonasolarflare_hit_r2.wav"
+  },
+  {
+    "file": "units/solar_flare/play_sfx_leona_leonasolarflare_hit_r3.wav"
+  },
+  {
+    "file": "units/solar_flare/play_sfx_leona_leonasunlight_hit_r1.wav"
+  },
+  {
+    "file": "units/solar_flare/play_sfx_leona_leonasunlight_hit_r2.wav"
+  },
+  {
+    "file": "units/solar_flare/play_sfx_leona_leonasunlight_hit_r3.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonabasicattack_onhit_r1_d.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonabasicattack_onhit_r2_d.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonabasicattack_onhit_r3_d.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonabasicattack_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonabasicattack_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonabasicattack_oncast_r3_d.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonabasicattack_onmissilelaunch_r1_d.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonabasicattack_onmissilelaunch_r2_d.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonabasicattack_onmissilelaunch_r3_d.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonar_onhit_r1.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonar_onhit_r2.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonar_onhit_r3.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonar_onmissilelaunch.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonar_oncast.wav"
+  },
+  {
+    "file": "units/sona/deploy_voice.ogg"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonaw_oncast_r1.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonaw_oncast_r2.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonaw_oncast_r3.wav"
+  },
+  {
+    "file": "units/sona/play_sfx_sona_sonaambientwsound_onbuffactivate.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleattack_minion_hit.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleattack_onbuffcast_r1.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleattack_onbuffcast_r2.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleattack_onbuffcast_r3.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleactive_onbuffcast_r1.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleactive_onbuffcast_r2.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleactive_onbuffcast_r3.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleactive_onbuffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleactive_onbuffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleactive_onbuffdeactivate_r3.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleactive_onbuffactivate.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleattack_ground_hit_r1.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleattack_ground_hit_r2.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentacleattack_ground_hit_r3.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentaclespawn_buffactivate_r1.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentaclespawn_buffactivate_r2.wav"
+  },
+  {
+    "file": "units/soul_tentacle/play_sfx_illaoi_illaoitentaclespawn_buffactivate_r3.wav"
+  },
+  {
+    "file": "spells/stasis/OnCast.wav"
+  },
+  {
+    "file": "spells/stasis/OnCast_2.wav"
+  },
+  {
+    "file": "spells/stasis/OnCast_3.wav"
+  },
+  {
+    "file": "spells/stasis/flight_1.wav"
+  },
+  {
+    "file": "spells/stasis/flight_2.wav"
+  },
+  {
+    "file": "spells/stasis/explo.wav"
+  },
+  {
+    "file": "spells/stasis/explo_2.wav"
+  },
+  {
+    "file": "spells/stasis/explo_3.wav"
+  },
+  {
+    "file": "spells/stasis/target_1.wav"
+  },
+  {
+    "file": "spells/stasis/target_2.wav"
+  },
+  {
+    "file": "units/stellar_convergence/play_sfx_aurelionsol_aurelionsole_oncast.wav"
+  },
+  {
+    "file": "units/stellar_convergence/play_sfx_aurelionsol_aurelionsoledebuff_buffdeactivate.wav"
+  },
+  {
+    "file": "units/stellar_convergence/play_sfx_aurelionsol_aurelionsole_hit_start_r1.wav"
+  },
+  {
+    "file": "units/stellar_convergence/play_sfx_aurelionsol_aurelionsole_hit_start_r2.wav"
+  },
+  {
+    "file": "units/stellar_convergence/play_sfx_aurelionsol_aurelionsole_hit_start_r3.wav"
+  },
+  {
+    "file": "units/stellar_convergence/play_sfx_aurelionsol_aurelionsole_buffdeactivate.wav"
+  },
+  {
+    "file": "units/stellar_convergence/play_sfx_aurelionsol_aurelionsole_buffactivate_aoe_other.wav"
+  },
+  {
+    "file": "units/sun_disc/play_sfx_env_turretbasicattack_hit_r1.wav"
+  },
+  {
+    "file": "units/sun_disc/play_sfx_env_turretbasicattack_hit_r2.wav"
+  },
+  {
+    "file": "units/sun_disc/play_sfx_env_turretbasicattack_hit_r3.wav"
+  },
+  {
+    "file": "units/sun_disc/play_sfx_env_map11_chaosturretchampionbasicattack_cast_r1.wav"
+  },
+  {
+    "file": "units/sun_disc/play_sfx_env_map11_chaosturretchampionbasicattack_cast_r2.wav"
+  },
+  {
+    "file": "units/sun_disc/play_sfx_env_map11_chaosturretchampionbasicattack_cast_r3.wav"
+  },
+  {
+    "file": "units/sun_disc/play_sfx_env_turretbasicattack_missilelaunch_r1.wav"
+  },
+  {
+    "file": "units/sun_disc/play_sfx_env_turretbasicattack_missilelaunch_r2.wav"
+  },
+  {
+    "file": "units/sun_disc/play_sfx_env_turretbasicattack_missilelaunch_r3.wav"
+  },
+  {
+    "file": "units/sun_disc/play_sfx_azir_azirobelisksound_onbuffdeactivate_r1.wav",
+    "edit": "截取前 2 秒，加速至 4/3 倍，补齐或截至 1.5 秒"
+  },
+  {
+    "file": "units/sun_disc/play_sfx_azir_azirobelisksound_onbuffdeactivate_r2.wav",
+    "edit": "截取前 2 秒，加速至 4/3 倍，补齐或截至 1.5 秒"
+  },
+  {
+    "file": "units/sun_disc/play_sfx_azir_azirobelisksound_onbuffcast_r1.wav",
+    "edit": "将前 4.967 秒加速约 4.967 倍至 1 秒，再拼接原速尾音"
+  },
+  {
+    "file": "units/sun_disc/play_sfx_3190active_oncast_r1.wav"
+  },
+  {
+    "file": "units/super_minion/order/play_sfx_sru_orderminionsuper_sru_orderminionsuperbasicattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/super_minion/order/play_sfx_sru_orderminionsuper_sru_orderminionsuperbasicattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/super_minion/order/play_sfx_sru_orderminionsuper_sru_orderminionsuperbasicattack2_onhit_r3.wav"
+  },
+  {
+    "file": "units/super_minion/order/play_sfx_sru_orderminionsuper_sru_orderminionsuperbasicattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/super_minion/order/play_sfx_sru_orderminionsuper_sru_orderminionsuperbasicattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/super_minion/order/play_sfx_sru_orderminionsuper_sru_orderminionsuperbasicattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/super_minion/order/play_sfx_sru_orderminionsuper_sru_orderminionsuperbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/super_minion/order/play_sfx_sru_orderminionsuper_sru_orderminionsuperbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/super_minion/order/play_sfx_sru_orderminionsuper_sru_orderminionsuperbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/super_minion/chaos/play_sfx_sru_chaosminionsuper_sru_chaosminionsuperbasicattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/super_minion/chaos/play_sfx_sru_chaosminionsuper_sru_chaosminionsuperbasicattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/super_minion/chaos/play_sfx_sru_chaosminionsuper_sru_chaosminionsuperbasicattack2_onhit_r3.wav"
+  },
+  {
+    "file": "units/super_minion/chaos/play_sfx_sru_chaosminionsuper_sru_chaosminionsuperbasicattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/super_minion/chaos/play_sfx_sru_chaosminionsuper_sru_chaosminionsuperbasicattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/super_minion/chaos/play_sfx_sru_chaosminionsuper_sru_chaosminionsuperbasicattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/super_minion/chaos/play_sfx_sru_chaosminionsuper_sru_chaosminionsuperbasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/super_minion/chaos/play_sfx_sru_chaosminionsuper_sru_chaosminionsuperbasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/super_minion/chaos/play_sfx_sru_chaosminionsuper_sru_chaosminionsuperbasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_perks_resolve_aftershock_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_perks_resolve_aftershock_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_perks_resolve_aftershock_onbuffactivate_r3.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_perks_resolve_aftershock_onbuffdeactivate_r1.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_perks_resolve_aftershock_onbuffdeactivate_r2.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_perks_resolve_aftershock_onbuffdeactivate_r3.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_practicedummy_death_r1.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_practicedummy_death_r2.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_practicedummy_death_r3.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_practicedummy_spawn_r1.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_practicedummy_spawn_r2.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_practicedummy_onhit_r1.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_practicedummy_onhit_r2.wav"
+  },
+  {
+    "file": "units/target_dummy/play_sfx_practicedummy_onhit_r3.wav"
+  },
+  {
+    "file": "units/teemo/play_sfx_teemo_teemobasicattack_onhit_r1.wav"
+  },
+  {
+    "file": "units/teemo/play_sfx_teemo_teemobasicattack_onhit_r2.wav"
+  },
+  {
+    "file": "units/teemo/play_sfx_teemo_teemobasicattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/teemo/play_sfx_teemo_teemobasicattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/teemo/play_sfx_teemo_teemoq_onhit_r1.wav"
+  },
+  {
+    "file": "units/teemo/play_sfx_teemo_teemoq_onhit_r2.wav"
+  },
+  {
+    "file": "units/teemo/play_sfx_teemo_teemobasicattack_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/teemo/play_sfx_teemo_teemobasicattack_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/teemo/play_vo_teemo_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/teemo/play_vo_teemo_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/teemo/play_vo_teemo_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/teemo/play_sfx_teemo_respawn3d_buffactivate.wav"
+  },
+  {
+    "file": "units/teemo/play_sfx_teemo_teemoq_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/teemo/play_sfx_teemo_teemoq_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/teemo/play_sfx_teemo_teemoq_oncast.wav"
+  },
+  {
+    "file": "units/thorn_spitter/play_sfx_zyrathornplant_zyraqplantmissile_onhit_r1_d.wav"
+  },
+  {
+    "file": "units/thorn_spitter/play_sfx_zyrathornplant_zyraqplantmissile_onhit_r2_d.wav"
+  },
+  {
+    "file": "units/thorn_spitter/play_sfx_zyrathornplant_zyraqplantmissile_onhit_r3_d.wav"
+  },
+  {
+    "file": "units/thorn_spitter/play_sfx_zyrathornplant_zyraqplantmissile_missilelaunch_r1.wav"
+  },
+  {
+    "file": "units/thorn_spitter/play_sfx_zyrathornplant_zyraqplantmissile_missilelaunch_r2.wav"
+  },
+  {
+    "file": "units/thorn_spitter/play_sfx_zyrathornplant_zyraqplantmissile_missilelaunch_r3.wav"
+  },
+  {
+    "file": "units/thorn_spitter/play_sfx_zyrathornplant_zyraqplantmissile_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/thorn_spitter/play_sfx_zyrathornplant_zyraqplantmissile_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/thorn_spitter/play_sfx_zyrathornplant_zyraqplantmissile_oncast_r3_d.wav"
+  },
+  {
+    "file": "units/thorn_spitter/play_sfx_zyra_zyraqplant_onbuffdeactivate_d.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/thorn_spitter/play_sfx_zyra_zyraqplant_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/thorn_spitter/play_sfx_zyra_zyraqplant_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/thorn_spitter/play_sfx_zyra_zyraqplant_onbuffactivate_r3.wav"
+  },
+  {
+    "file": "units/tibbers/play_sfx_annietibbers_annietibbersbasicattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/tibbers/play_sfx_annietibbers_annietibbersbasicattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/tibbers/play_sfx_annietibbers_annietibbersbasicattack2_onhit_r3.wav"
+  },
+  {
+    "file": "units/tibbers/play_sfx_annietibbers_annietibbersbasicattack2_oncast_r.wav"
+  },
+  {
+    "file": "units/tibbers/play_sfx_annietibbers_annier_buffactivate_loop_r1.wav"
+  },
+  {
+    "file": "units/tibbers/play_sfx_annietibbers_annier_buffactivate_loop_r2.wav"
+  },
+  {
+    "file": "units/tibbers/play_sfx_annietibbers_annier_death_buffactivate_r1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/tibbers/play_sfx_annietibbers_annier_death_buffactivate_r2.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/tibbers/play_sfx_annietibbers_annier_death_buffactivate_r3.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "spells/tidal_wave/cast_1.wav"
+  },
+  {
+    "file": "spells/tidal_wave/cast_2.wav"
+  },
+  {
+    "file": "spells/tidal_wave/cast_3.wav"
+  },
+  {
+    "file": "spells/tidal_wave/hit_1.wav"
+  },
+  {
+    "file": "spells/tidal_wave/hit_2.wav"
+  },
+  {
+    "file": "spells/tidal_wave/hit_3.wav"
+  },
+  {
+    "file": "spells/tidal_wave/wave_1.wav",
+    "edit": "截取前 1.65 秒，从 1.4 秒起线性淡出 0.25 秒"
+  },
+  {
+    "file": "spells/tidal_wave/wave_2.wav",
+    "edit": "截取前 1.65 秒，从 1.4 秒起线性淡出 0.25 秒"
+  },
+  {
+    "file": "units/tombstone/play_sfx_yorick_yorickw_oncast_r1.wav"
+  },
+  {
+    "file": "units/tombstone/play_sfx_yorick_yorickw_death_r1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/tombstone/play_sfx_yorick_yorickw_death_r2.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/tombstone/play_sfx_yorick_yorickw_death_r3.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/tombstone/play_sfx_yorick_yorickw_onhitlocation_r1.wav"
+  },
+  {
+    "file": "units/tombstone/play_sfx_yorick_yorickwwalllife_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/tristana/play_sfx_tristana_tristanabasicattack_onhit_1559186049_1153642577_r_d.wav"
+  },
+  {
+    "file": "units/tristana/play_sfx_tristana_tristanaq_onbuffdeactivate.wav"
+  },
+  {
+    "file": "units/tristana/play_sfx_tristana_tristanaq_oncast_r1.wav"
+  },
+  {
+    "file": "units/tristana/play_sfx_tristana_tristanaq_oncast_r2.wav"
+  },
+  {
+    "file": "units/tristana/play_sfx_tristana_tristanaq_oncast_r3.wav"
+  },
+  {
+    "file": "units/tristana/play_sfx_tristana_tristanabasicattack_onmissilelaunch_r1_d.wav"
+  },
+  {
+    "file": "units/tristana/play_sfx_tristana_tristanabasicattack_onmissilelaunch_r2_d.wav"
+  },
+  {
+    "file": "units/tristana/play_sfx_tristana_tristanabasicattack_onmissilelaunch_r3_d.wav"
+  },
+  {
+    "file": "units/tristana/play_vo_tristana_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/tristana/play_vo_tristana_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/tristana/play_vo_tristana_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/tristana/deploy_crossfire_zh_cn.wav"
+  },
+  {
+    "file": "units/tristana/deploy_ready_aim_fire_zh_cn.wav"
+  },
+  {
+    "file": "units/tristana/deploy_cannot_touch_me_zh_cn.wav"
+  },
+  {
+    "file": "units/tryndamere/hit1_1.wav"
+  },
+  {
+    "file": "units/tryndamere/hit1_2.wav"
+  },
+  {
+    "file": "units/tryndamere/hit1_3.wav"
+  },
+  {
+    "file": "units/tryndamere/crit_hit_1.wav"
+  },
+  {
+    "file": "units/tryndamere/crit_hit_2.wav"
+  },
+  {
+    "file": "units/tryndamere/crit_hit_3.wav"
+  },
+  {
+    "file": "units/tryndamere/attack1_1.wav"
+  },
+  {
+    "file": "units/tryndamere/attack1_2.wav"
+  },
+  {
+    "file": "units/tryndamere/attack1_3.wav"
+  },
+  {
+    "file": "units/tryndamere/crit_1.wav"
+  },
+  {
+    "file": "units/tryndamere/crit_2.wav"
+  },
+  {
+    "file": "units/tryndamere/crit_3.wav"
+  },
+  {
+    "file": "units/tryndamere/ultimate_end_1.wav"
+  },
+  {
+    "file": "units/tryndamere/ultimate_cast_1.wav"
+  },
+  {
+    "file": "units/tryndamere/ultimate_sustain_1.wav"
+  },
+  {
+    "file": "units/tryndamere/death_1.wav",
+    "edit": "截取前 1 秒，从 0.8 秒起线性淡出 0.2 秒"
+  },
+  {
+    "file": "units/tryndamere/death_2.wav",
+    "edit": "截取前 1 秒，从 0.8 秒起线性淡出 0.2 秒"
+  },
+  {
+    "file": "units/tryndamere/death_3.wav",
+    "edit": "截取前 1 秒，从 0.8 秒起线性淡出 0.2 秒"
+  },
+  {
+    "file": "units/tryndamere/deploy_1.ogg"
+  },
+  {
+    "file": "units/tryndamere/deploy_2.wav"
+  },
+  {
+    "file": "units/tryndamere/deploy_3.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_twistedfatebasicattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_twistedfatebasicattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_twistedfatebasicattack2_onhit_r3.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_cardmasterstack_hit_r1.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_cardmasterstack_hit_r2.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_cardmasterstack_hit_r3.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_twistedfatebasicattack_onmissilelaunch_r1_d.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_twistedfatebasicattack_onmissilelaunch_r2_d.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_twistedfatebasicattack_onmissilelaunch_r3_d.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_cardmasterstack_missilelaunch_r1.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_cardmasterstack_missilelaunch_r2.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_cardmasterstack_missilelaunch_r3.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_twistedfatebasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_twistedfatebasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_twistedfatebasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_cardmasterstack_cast_r1.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_cardmasterstack_cast_r2.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_vo_twistedfate_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/twisted_fate/play_vo_twistedfate_death3d_r2_zh_cn.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_vo_twistedfate_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_gate_marker_r1_first_1_75s.wav",
+    "edit": "截取前 1.75 秒"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_gate_marker_r2_first_1_75s.wav",
+    "edit": "截取前 1.75 秒"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_gate_marker_r3_first_1_75s.wav",
+    "edit": "截取前 1.75 秒"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_sealfatemissile_onhit_r.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_sealfatemissile_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_sealfatemissile_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_sealfatemissile_onmissilelaunch_r3.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_wildcards_oncast_r1.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_wildcards_oncast_r2.wav"
+  },
+  {
+    "file": "units/twisted_fate/play_sfx_twistedfate_wildcards_oncast_r3.wav"
+  },
+  {
+    "file": "units/twitch/play_sfx_twitch_twitchbasicattack_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/twitch/play_sfx_twitch_twitchbasicattack_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/twitch/play_sfx_twitch_twitchbasicattack_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/twitch/play_sfx_twitch_twitchbasicattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/twitch/play_sfx_twitch_twitchbasicattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/twitch/play_sfx_twitch_twitchbasicattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/twitch/spray_and_pray_onhit_1.wav"
+  },
+  {
+    "file": "units/twitch/spray_and_pray_onhit_2.wav"
+  },
+  {
+    "file": "units/twitch/spray_and_pray_onhit_3.wav"
+  },
+  {
+    "file": "units/twitch/spray_and_pray_onmissilelaunch_1.wav"
+  },
+  {
+    "file": "units/twitch/spray_and_pray_onmissilelaunch_2.wav"
+  },
+  {
+    "file": "units/twitch/spray_and_pray_onmissilelaunch_3.wav"
+  },
+  {
+    "file": "units/twitch/play_sfx_twitch_twitchfullautomatic_onbuffdeactivate.wav"
+  },
+  {
+    "file": "units/twitch/play_sfx_twitch_twitchfullautomatic_oncast.wav"
+  },
+  {
+    "file": "units/twitch/play_sfx_twitch_twitchbasicattack_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/twitch/play_sfx_twitch_twitchbasicattack_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/twitch/play_sfx_twitch_twitchbasicattack_onmissilelaunch_r3.wav"
+  },
+  {
+    "file": "units/twitch/play_vo_twitch_death3d_r1_zh_cn.wav"
+  },
+  {
+    "file": "units/twitch/play_vo_twitch_death3d_r2_zh_cn.wav"
+  },
+  {
+    "file": "units/twitch/play_vo_twitch_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/twitch/deploy_q_end_r4_zh_cn.wav"
+  },
+  {
+    "file": "units/twitch/deploy_q_end_r1_zh_cn.wav"
+  },
+  {
+    "file": "units/twitch/deploy_q_end_r3_zh_cn.wav"
+  },
+  {
+    "file": "units/twitch/twitch_q_enter.wav"
+  },
+  {
+    "file": "units/twitch/twitch_q_exit.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyragraspingplant_zyraeplantattack_onhit_r1_d.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyragraspingplant_zyraeplantattack_onhit_r2_d.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyragraspingplant_zyraeplantattack_onhit_r3_d.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyragraspingplant_zyraeplantattack2_onhit_r1.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyragraspingplant_zyraeplantattack2_onhit_r2.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyragraspingplant_zyraeplantattack2_onhit_r3.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyragraspingplant_zyraeplantattack_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyragraspingplant_zyraeplantattack_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyragraspingplant_zyraeplantattack_oncast_r3_d.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyragraspingplant_zyraeplantattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyragraspingplant_zyraeplantattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyragraspingplant_zyraeplantattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyra_zyraeplant_onbuffdeactivate.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyra_zyraeplant_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyra_zyraeplant_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/vine_lasher/play_sfx_zyra_zyraeplant_onbuffactivate_r3.wav"
+  },
+  {
+    "file": "units/void_gate/death_1.wav"
+  },
+  {
+    "file": "units/void_gate/deploy_start_1.wav"
+  },
+  {
+    "file": "units/void_gate/deploy_start_2.wav"
+  },
+  {
+    "file": "units/void_gate/deploy_start_3.wav"
+  },
+  {
+    "file": "units/void_scuttle_crab/death_cast_1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/void_scuttle_crab/spawn_cast_1.wav"
+  },
+  {
+    "file": "units/void_scuttle_crab/sru_dance_1.wav"
+  },
+  {
+    "file": "units/void_scuttle_crab/sru_dance_2.wav"
+  },
+  {
+    "file": "units/void_scuttle_crab/sru_dance_3.wav"
+  },
+  {
+    "file": "units/void_scuttle_crab/death_leap_1.wav"
+  },
+  {
+    "file": "units/scuttle_crab/voidward0.wav"
+  },
+  {
+    "file": "units/void_spawn/deploy_start_2.wav"
+  },
+  {
+    "file": "units/void_spawn/death_1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/void_spawn/death_2.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/void_spawn/deploy_start_1.wav"
+  },
+  {
+    "file": "units/void_spawn/sacrifice_impact_1.wav"
+  },
+  {
+    "file": "units/void_spawn/sacrifice_impact_2.wav"
+  },
+  {
+    "file": "units/void_spawn/sacrifice_start_1.wav"
+  },
+  {
+    "file": "units/void_spawn/sacrifice_start_2.wav"
+  },
+  {
+    "file": "units/void_spawn/sacrifice_start_3.wav"
+  },
+  {
+    "file": "spells/void_summoning/cast_sequence_1.wav",
+    "edit": "混合 4 层：先播放施法声，第 1 秒叠入变身、激活和循环声，循环至第 8 秒"
+  },
+  {
+    "file": "spells/void_summoning/cast_sequence_2.wav",
+    "edit": "混合 4 层：先播放施法声，第 1 秒叠入变身、激活和循环声，循环至第 8 秒"
+  },
+  {
+    "file": "spells/void_summoning/cast_sequence_3.wav",
+    "edit": "混合 4 层：先播放施法声，第 1 秒叠入变身、激活和循环声，循环至第 8 秒"
+  },
+  {
+    "file": "units/voidfish/hit_1.wav"
+  },
+  {
+    "file": "units/voidfish/swing_1.wav"
+  },
+  {
+    "file": "units/voidfish/death_1.wav"
+  },
+  {
+    "file": "units/voidfish/death_2.wav"
+  },
+  {
+    "file": "units/voidfish/deploy_1.wav"
+  },
+  {
+    "file": "units/voidfish/deploy_2.wav"
+  },
+  {
+    "file": "units/voidfish/deploy_3.wav"
+  },
+  {
+    "file": "units/voidfish_ranged/hit_1.wav"
+  },
+  {
+    "file": "units/voidfish_ranged/swing_1.wav"
+  },
+  {
+    "file": "units/voidling/attack_hit_1.wav"
+  },
+  {
+    "file": "units/voidling/attack_hit_2.wav"
+  },
+  {
+    "file": "units/voidling/attack_hit_3.wav"
+  },
+  {
+    "file": "units/voidling/attack_launch_1.wav"
+  },
+  {
+    "file": "units/voidling/attack_launch_2.wav"
+  },
+  {
+    "file": "units/voidling/attack_launch_3.wav"
+  },
+  {
+    "file": "units/voidling/death_1_1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/voidling/death_2_2.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/voidling/death_3_1.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/voidmite/attack_hit_1_1.wav"
+  },
+  {
+    "file": "units/voidmite/attack_hit_1_2.wav"
+  },
+  {
+    "file": "units/voidmite/attack_hit_1_3.wav"
+  },
+  {
+    "file": "units/voidmite/attack_swing_1_1.wav"
+  },
+  {
+    "file": "units/voidmite/attack_swing_1_2.wav"
+  },
+  {
+    "file": "units/voidmite/attack_swing_1_3.wav"
+  },
+  {
+    "file": "units/voidmite/death_1.wav"
+  },
+  {
+    "file": "units/voidmite/death_2.wav"
+  },
+  {
+    "file": "units/voidmite/death_3.wav"
+  },
+  {
+    "file": "units/voidmite/deploy_start_1.wav"
+  },
+  {
+    "file": "units/voidmite/deploy_start_2.wav"
+  },
+  {
+    "file": "units/voidmite/deploy_start_3.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaobasicattack2_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaobasicattack2_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaobasicattack2_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaopassivecritattack_onhit_r1.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaopassivecritattack_onhit_r2.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaopassivecritattack_onhit_r3.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaobasicattack2_oncast_r1.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaobasicattack2_oncast_r2.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaobasicattack2_oncast_r3.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaopassivecritattack_oncast_r1.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaopassivecritattack_oncast_r2.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaopassivecritattack_oncast_r3.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaor_hitlocation_knockback_r1.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaor_hitlocation_knockback_r2.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaor_oncast_sweep.wav",
+    "edit": "截取前 0.65 秒，从 0.55 秒起线性淡出 0.1 秒"
+  },
+  {
+    "file": "units/xin/play_vo_xinzhao_xinzhaor_cast3d_r1_zh_cn.wav"
+  },
+  {
+    "file": "units/xin/play_vo_xinzhao_xinzhaor_cast3d_r2_zh_cn.wav"
+  },
+  {
+    "file": "units/xin/play_vo_xinzhao_xinzhaor_cast3d_r3_zh_cn.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaoebattlecry_buffactivate_loop.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaoedash_hit_r1.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaoedash_hit_r2.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaoedash_hit_r3.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaoedash_cast_r1.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaoedash_cast_r2.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaoedash_cast_r3.wav"
+  },
+  {
+    "file": "units/xin/play_vo_xinzhao_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/xin/play_vo_xinzhao_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/xin/play_vo_xinzhao_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaopassive_heal_buffactivate_r1.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaopassive_heal_buffactivate_r2.wav"
+  },
+  {
+    "file": "units/xin/play_sfx_xinzhao_xinzhaopassive_heal_buffactivate_r3.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickbasicattack_onhit_1559186049_1153642577_r1_d.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickbasicattack_onhit_1559186049_1153642577_r2_d.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickbasicattack_onhit_1559186049_1153642577_r3_d.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickbasicattack2_onhit_1559186049_1153642577_r1.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickbasicattack2_onhit_1559186049_1153642577_r2.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickbasicattack2_onhit_1559186049_1153642577_r3.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickbasicattack_oncast_r_d.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickbasicattack2_oncast_r.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickqattack_hit_1559186049_1153642577_r.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_base_death_m.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/yorick/deploy.ogg"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickqbuff_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickqbuff_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickqbuff_onbuffactivate_r3.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickq_oncast_r1.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickq_oncast_r2.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickq_oncast_r3.wav"
+  },
+  {
+    "file": "units/yorick/play_sfx_yorick_yorickqattack_oncast_r.wav"
+  },
+  {
+    "file": "spells/zap/strike_r1.wav"
+  },
+  {
+    "file": "spells/zap/strike_r2.wav"
+  },
+  {
+    "file": "spells/zap/strike_r3.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsbasicattack_onmissilelaunch_r1_d.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsbasicattack_onmissilelaunch_r2_d.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsbasicattack_onmissilelaunch_r3_d.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsbasicattack_oncast_r1_d.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsbasicattack_oncast_r2_d.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsbasicattack_oncast_r3_d.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsbasicattack_onhit_r1_d.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsbasicattack_onhit_r2_d.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsbasicattack_onhit_r3_d.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsq_hit_r1.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsq_hit_r2.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsq_hit_r3.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsqspell2_onmissilelaunch_r.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsqspell3_onmissilelaunch_r_d.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_death3d_cast.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ziggs/play_vo_ziggs_death3d_r1_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ziggs/play_vo_ziggs_death3d_r2_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ziggs/play_vo_ziggs_death3d_r3_zh_cn.wav",
+    "edit": "截取前 1.5 秒，从 1 秒起线性淡出 0.5 秒"
+  },
+  {
+    "file": "units/ziggs/deploy_choose_zh_cn.ogg"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsqspell_onmissilelaunch_r1.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsqspell_onmissilelaunch_r2.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsqspell_onmissilelaunch_r3.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsshortfuse_onbuffactivate_r1.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsshortfuse_onbuffactivate_r2.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsshortfuse_onbuffactivate_r3.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsq_oncast_r1.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsq_oncast_r2.wav"
+  },
+  {
+    "file": "units/ziggs/play_sfx_ziggs_ziggsq_oncast_r3.wav"
+  }
+]

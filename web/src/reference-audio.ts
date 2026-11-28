@@ -217,14 +217,16 @@ export function profileSelections(profile: Profile): Selection[] {
   );
   return selections;
 }
+export function clipGainDb(id: number, spec: ClipEvent) {
+  return (spec.volume_db ?? 0) + (spec.clip_volume_db?.[id] ?? 0);
+}
 export function clipSlice(id: number, spec: ClipEvent) {
   const [bank, offset, samples] = audioCatalog.clips[id];
   return {
     bank,
     start: offset / 44100,
     duration: samples / 44100,
-    gain:
-      10 ** (((spec.volume_db ?? 0) + (spec.clip_volume_db?.[id] ?? 0)) / 20),
+    gain: 10 ** (clipGainDb(id, spec) / 20),
   };
 }
 const dependencies = new WeakMap<Profile, Set<number>>();
