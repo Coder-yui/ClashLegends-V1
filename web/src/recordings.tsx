@@ -1,6 +1,6 @@
 import { replayBookmarks } from "./player-data";
 import { useEffect, useRef, useState } from "react";
-import type { CSSProperties } from "react";
+import { battleStageStyle, readBattleFrame } from "./battle-map";
 import { api, href, type Match, type Catalog } from "./api";
 import { Battlefield, type Frame } from "./battle-field";
 import { useMatchAssets } from "./use-match-assets";
@@ -176,11 +176,16 @@ export function ReplayPage({
         return;
       }
       if (msg.type !== "frame") return;
+      const world = readBattleFrame(
+        msg,
+        catalog.maps.find((map) => map.id === match.map),
+        match.me,
+      );
       const cues = events.read(msg.presentation);
       if (events.reset) baseline++;
       const generation = baseline;
       setFrame((previous) => ({
-        ...msg,
+        ...world,
         baseline: generation,
         cues: [
           ...(previous?.baseline === generation
@@ -231,18 +236,7 @@ export function ReplayPage({
   return (
     <section
       className="battle-layout replay-layout"
-      style={
-        m
-          ? ({
-              "--map-width": m.width,
-              "--map-height": m.height,
-              "--ground-depth": m.height + 2 * m.backMargin,
-              "--projection": m.projection,
-              "--backdrop-width": m.backdropWidth,
-              "--terrain": m.terrain ? 'url("' + m.terrain + '")' : "none",
-            } as CSSProperties)
-          : undefined
-      }
+      style={battleStageStyle(m)}
     >
       <div className="battle-stage">
         {frame && (

@@ -94,7 +94,8 @@ impl Record {
         decks: [[Card; 8]; N],
         content: &str,
     ) -> Result<ClassicMatch, MatchError> {
-        self.replay_on(decks, content, super::MatchMap::rift())
+        let map = super::MatchMap::named(&self.map).ok_or(MatchError::Loadout)?;
+        self.replay_on(decks, content, map)
     }
     pub fn replay_on<const N: usize>(
         &self,

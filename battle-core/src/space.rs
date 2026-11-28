@@ -90,6 +90,7 @@ pub struct Arena {
     pub width: f64,
     pub height: f64,
     pub ground_obstacles: Vec<Rect>,
+    pub land_obstacles: Vec<Rect>,
 }
 impl Arena {
     pub fn classic() -> Self {
@@ -113,8 +114,25 @@ pub(crate) struct Block {
     pub radius: f64,
     pub layer: Layer,
 }
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub(crate) enum TerrainPassage {
+    Ordinary,
+    River,
+    All,
+}
+impl crate::UnitDef {
+    pub(crate) fn terrain_passage(&self) -> TerrainPassage {
+        if self.rules.is_some_and(|r| r["terrain_traversal"] == true) {
+            TerrainPassage::All
+        } else if self.rules.is_some_and(|r| r["river_traversal"] == true) {
+            TerrainPassage::River
+        } else {
+            TerrainPassage::Ordinary
+        }
+    }
+}
 pub(crate) struct Query<'a> {
-    pub cross_river: bool,
+    pub terrain: TerrainPassage,
     pub map: &'a Arena,
     pub blocks: &'a [Block],
     pub id: u64,
@@ -122,11 +140,20 @@ pub(crate) struct Query<'a> {
     pub radius: f64,
 }
 impl Query<'_> {
+    pub(crate) fn needs_bridge(&self) -> bool {
+        self.layer == Layer::Ground && self.terrain == TerrainPassage::Ordinary
+    }
     fn obstacles(&self) -> impl Iterator<Item = Rect> + '_ {
         self.map
             .ground_obstacles
             .iter()
-            .filter(|_| self.layer == Layer::Ground && !self.cross_river)
+            .filter(|_| self.needs_bridge())
+            .chain(
+                self.map
+                    .land_obstacles
+                    .iter()
+                    .filter(|_| self.layer == Layer::Ground && self.terrain != TerrainPassage::All),
+            )
             .map(|r| r.expand(self.radius))
     }
     fn circles(&self) -> impl Iterator<Item = &Block> {
@@ -213,16 +240,33 @@ impl Query<'_> {
             xs.extend([r.min.x, r.max.x]);
             ys.extend([r.min.y, r.max.y]);
         }
+        if !self.map.land_obstacles.is_empty() {
+            // Test local boundary projections before distant facility and river strips.
+            xs.sort_by(|a, b| {
+                (a - desired.x)
+                    .abs()
+                    .total_cmp(&(b - desired.x).abs())
+                    .then(a.total_cmp(b))
+            });
+            ys.sort_by(|a, b| {
+                (a - desired.y)
+                    .abs()
+                    .total_cmp(&(b - desired.y).abs())
+                    .then(a.total_cmp(b))
+            });
+            xs.dedup();
+            ys.dedup();
+        }
         let circles: Vec<_> = self
             .circles()
             .map(|b| (b.center, self.radius + b.radius + 0.00001))
             .collect();
         let mut best: Option<(f64, Point)> = None;
         let mut consider = |p: Point| {
-            if !self.legal(p) {
+            let d = (p - desired).length();
+            if best.is_some_and(|(dist, _)| d > dist + 1e-8) || !self.legal(p) {
                 return;
             }
-            let d = (p - desired).length();
             let better = best.is_none_or(|(dist, prev)| {
                 d < dist - 1e-8
                     || ((d - dist).abs() <= 1e-8

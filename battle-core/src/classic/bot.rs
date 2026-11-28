@@ -8,7 +8,9 @@ pub fn bot_input(team: Team, state: &MatchView) -> Option<Input> {
     }
     let own = &state.own;
     let cycle = tick / 23;
-    let lane = if (cycle + team.index() as u64) % 4 < 2 {
+    let lane = if state.lane_front.len() != 2 {
+        (cycle as usize + team.index()) % state.lane_front.len()
+    } else if (cycle + team.index() as u64) % 4 < 2 {
         0
     } else {
         1
@@ -93,7 +95,12 @@ pub fn roster_bot_input(team: Team, state: &MatchView) -> Option<Input> {
         let margin = 2. * state.tile_size;
         *point = Point::new(
             (point.x + side * margin).clamp(margin, state.arena_width - margin),
-            state.building_front[0].y,
+            state
+                .building_front
+                .iter()
+                .min_by(|a, b| (a.x - point.x).abs().total_cmp(&(b.x - point.x).abs()))
+                .unwrap()
+                .y,
         );
     } else if let Some(spell) = super::CardSpell::for_key(key) {
         let support = matches!(spell, super::CardSpell::Heal | super::CardSpell::Pool);
@@ -108,8 +115,8 @@ pub fn roster_bot_input(team: Team, state: &MatchView) -> Option<Input> {
                     && (!home_only
                         || state.home_zones.iter().any(|r| {
                             r.contains(
-                                (a.position.x / state.tile_size) as i32,
-                                (a.position.y / state.tile_size) as i32,
+                                ((a.position.x - state.tile_origin.x) / state.tile_size) as i32,
+                                ((a.position.y - state.tile_origin.y) / state.tile_size) as i32,
                             )
                         }))
             })

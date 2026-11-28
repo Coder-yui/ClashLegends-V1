@@ -158,20 +158,65 @@ fn main() {
             m["height"].as_f64().unwrap(),
             m["tile"].as_f64().unwrap(),
         );
+        let origin = |i: usize| m["tileOrigin"][i].as_f64().unwrap_or(0.);
         assert!(
             t > 0.
-                && w % t == 0.
-                && h % t == 0.
+                && origin(0) >= 0.
+                && origin(1) >= 0.
+                && (w - 2. * origin(0)) % t == 0.
+                && (h - 2. * origin(1)) % t == 0.
                 && m["projection"].as_f64().is_some_and(|v| v > 0. && v <= 1.),
             "invalid geometry {id}"
         );
-        for rect in m["home"].as_array().unwrap().iter().chain(
-            m["pockets"]
-                .as_array()
-                .unwrap()
-                .iter()
-                .flat_map(|side| side.as_array().unwrap()),
-        ) {
+        if let Some(teams) = m["landmarks"].as_array() {
+            let lanes = m["lanes"].as_array().expect("surveyed map needs lanes");
+            assert!(
+                teams.len() == 2 && !lanes.is_empty(),
+                "invalid sides for {id}"
+            );
+            for team in teams {
+                for positions in ["towers", "front", "buildingFront"] {
+                    assert_eq!(
+                        team[positions].as_array().unwrap().len(),
+                        lanes.len(),
+                        "invalid {positions} for {id}"
+                    );
+                }
+                for radius in ["towerRadius", "nexusRadius"] {
+                    assert!(
+                        team[radius].as_f64().is_some_and(|n| n > 0.),
+                        "invalid {radius} for {id}"
+                    );
+                }
+            }
+            for route in lanes {
+                let points = route.as_array().unwrap();
+                assert!(
+                    points.len() >= 2
+                        && points.first() == Some(&teams[1]["spawn"])
+                        && points.last() == Some(&teams[0]["spawn"])
+                        && points.windows(2).all(|pair| pair[0] != pair[1]),
+                    "invalid spawn path for {id}"
+                );
+            }
+            assert!(
+                m["redHome"].is_array()
+                    && ["pockets", "redPockets"]
+                        .iter()
+                        .all(|key| m[*key].as_array().is_some_and(|v| v.len() == lanes.len())),
+                "incomplete deployment zones for {id}"
+            );
+        }
+        let homes = ["home", "redHome"]
+            .into_iter()
+            .filter_map(|f| m[f].as_array())
+            .flatten();
+        let pockets = ["pockets", "redPockets"]
+            .into_iter()
+            .filter_map(|f| m[f].as_array())
+            .flatten()
+            .flat_map(|lane| lane.as_array().unwrap());
+        for rect in homes.chain(pockets) {
             let v: Vec<_> = rect
                 .as_array()
                 .unwrap()
@@ -182,8 +227,8 @@ fn main() {
                 v.len() == 4
                     && v[2] > 0.
                     && v[3] > 0.
-                    && (v[0] + v[2]) * t <= w
-                    && (v[1] + v[3]) * t <= h,
+                    && (v[0] + v[2]) * t <= w - 2. * origin(0)
+                    && (v[1] + v[3]) * t <= h - 2. * origin(1),
                 "invalid deployment region {id}"
             );
         }

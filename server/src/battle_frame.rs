@@ -54,17 +54,27 @@ pub(super) fn field_frame(
         .iter()
         .find(|m| m.id == game.map().id)
         .unwrap();
-    let map = json!({
+    let dock = map.id == "lowtide-dock";
+    let red = clash_battle_core::classic::seat_team(seat).index() == 1;
+    let terrain = if red {
+        map.terrain_red.as_ref().or(map.terrain.as_ref())
+    } else {
+        map.terrain.as_ref()
+    };
+    let mut map_frame = json!({
         "id": map.id, "width": map.width, "height": map.height, "tile": map.tile,
-        "terrain": map.terrain, "projection": map.projection, "backMargin": map.back_margin,
-        "backdropWidth": map.backdrop_width, "obstacles": map.obstacles,
+        "terrain": terrain, "projection": map.projection, "backMargin": map.back_margin,
+        "backdropWidth": map.backdrop_width,
     });
+    if !dock {
+        map_frame["obstacles"] = json!(map.obstacles);
+    }
     let ruins = game
         .ruined_towers()
         .map(|(id, team, p)| json!({"id":id, "team":team.index(), "x":p.x, "y":p.y}));
-    json!({
+    let mut frame = json!({
         "type": "frame", "protocol": PROTOCOL, "started": started, "tick": game.tick(),
-        "map": map, "ruinedTowers": ruins.collect::<Vec<_>>(), "deployment": game.deployment_regions_for(seat),
+        "map": map_frame, "ruinedTowers": ruins.collect::<Vec<_>>(),
         "remaining": view.remaining_ticks, "overtime": view.overtime,
         "result": view.result.map(|o| outcome(o, game.tick())),
         "units": view.field.units.iter().map(unit).collect::<Vec<_>>(),
@@ -79,7 +89,13 @@ pub(super) fn field_frame(
         "buttons": view.buttons.each_ref().map(|b| b.as_ref().map(|b| json!({
             "locked":b.locked, "cooldownLeft":b.cooldown_left, "cooldownTotal":b.cooldown_total, "freeRecast":b.free_recast
         }))),
-    })
+    });
+    if dock {
+        frame["deploymentZones"] = json!(game.deployment_zones_for(seat));
+    } else {
+        frame["deployment"] = json!(game.deployment_regions_for(seat));
+    }
+    frame
 }
 fn unit(u: &clash_battle_core::UnitView) -> Value {
     json!({

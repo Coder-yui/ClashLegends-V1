@@ -147,6 +147,7 @@ fn custom_map_routes_around_its_own_obstacles() {
     let map = Arena {
         width: 320.,
         height: 240.,
+        land_obstacles: Vec::new(),
         ground_obstacles: vec![Rect {
             min: p(120., 60.),
             max: p(155., 180.),

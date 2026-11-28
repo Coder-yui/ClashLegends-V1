@@ -27,7 +27,7 @@ use crate::{
 };
 use player::Player;
 pub use player::{Active, HandView};
-pub use rift::{maps, modes, MatchMap, ModeRules, SideLayout, Tiles};
+pub use rift::{maps, modes, DeploymentZone, MatchMap, ModeRules, SideLayout, Tiles};
 pub use roster::battle_cards;
 pub use spells::CardSpell;
 
@@ -257,8 +257,9 @@ pub struct ActiveButtonState {
 }
 #[derive(Clone, Debug, PartialEq)]
 pub struct MatchView {
-    pub lane_front: [Point; 2],
-    pub building_front: [Point; 2],
+    pub lane_front: Vec<Point>,
+    pub building_front: Vec<Point>,
+    pub tile_origin: Point,
     pub arena_width: f64,
     pub tile_size: f64,
     pub home_zones: Vec<Tiles>,
@@ -306,7 +307,7 @@ pub struct ClassicMatch {
     battle: Battle,
     players: Vec<Player>,
     nexus: [Id; 2],
-    towers: [[Id; 2]; 2],
+    towers: [Vec<Id>; 2],
     result: Option<Outcome>,
     overtime: bool,
     spells: Vec<spells::SpellCast>,
@@ -376,16 +377,47 @@ impl ClassicMatch {
             .collect::<Result<Vec<_>, _>>()?;
         let mut battle = Battle::new(map.arena.clone())?;
         battle.classic_attack_nodes = true;
-        let mut towers = [[0; 2]; 2];
+        let mut towers = [Vec::new(), Vec::new()];
         let mut nexus = [0; 2];
         for team in [Team::Blue, Team::Red] {
-            for (lane, pos) in map.sides[team.index()].towers.into_iter().enumerate() {
-                towers[team.index()][lane] = battle.spawn(team, pos, UnitDef::tower())?;
+            let side = &map.sides[team.index()];
+            if side.towers.is_empty()
+                || side.towers.len() != map.sides[team.enemy().index()].towers.len()
+                || side.wave.len() != side.towers.len()
+                || side.front.len() != side.towers.len()
+                || side.building_front.len() != side.towers.len()
+                || side.pockets.len() != side.towers.len()
+                || (!side.routes.is_empty()
+                    && (side.routes.len() != side.towers.len()
+                        || side.routes.iter().any(|r| r.len() < 2)))
+            {
+                return Err(MatchError::Placement);
+            }
+            for &pos in &side.towers {
+                let mut tower = UnitDef::tower();
+                tower.radius = side.tower_radius;
+                towers[team.index()].push(battle.spawn(team, pos, tower)?);
             }
         }
         for team in [Team::Blue, Team::Red] {
-            nexus[team.index()] =
-                battle.spawn(team, map.sides[team.index()].nexus, UnitDef::nexus())?;
+            let side = &map.sides[team.index()];
+            let mut def = UnitDef::nexus();
+            def.radius = side.nexus_radius;
+            nexus[team.index()] = battle.spawn(team, side.nexus, def)?;
+        }
+        for team in [Team::Blue, Team::Red] {
+            let enemy = team.enemy().index();
+            for (i, points) in map.sides[team.index()].routes.iter().enumerate() {
+                let target = map.sides[enemy].towers[i];
+                let mut lane = crate::model::MarchLane {
+                    tower: towers[enemy][i],
+                    nexus: nexus[enemy],
+                    tower_step: 0,
+                    points: points.clone().into(),
+                };
+                lane.tower_step = lane.nearest_segment(target).0;
+                battle.march_lanes[team.index()].push(lane);
+            }
         }
         Ok(Self {
             laboratory: false,
@@ -492,18 +524,10 @@ impl ClassicMatch {
             })
         });
         let side = &self.map.sides[team.index()];
-        let front = |offset: f64| {
-            side.towers.map(|p| {
-                Point::new(
-                    p.x,
-                    (self.map.arena.height / 2.)
-                        + if team == Team::Blue { offset } else { -offset },
-                )
-            })
-        };
         MatchView {
-            lane_front: front(self.map.tile_size * 2.5),
-            building_front: front(self.map.tile_size * 4.5),
+            lane_front: side.front.clone(),
+            building_front: side.building_front.clone(),
+            tile_origin: self.map.tile_origin,
             tile_size: self.map.tile_size,
             arena_width: self.map.arena.width,
             home_zones: side.home.clone(),
@@ -1026,6 +1050,7 @@ impl ClassicMatch {
         }
         let counts = self
             .towers
+            .each_ref()
             .map(|lane| lane.iter().filter(|id| live(id)).count());
         if self.tick() >= self.mode.regulation && counts[0] != counts[1] {
             self.result = Some(Outcome {
@@ -1121,3 +1146,6 @@ mod roster_tests;
 
 #[cfg(test)]
 mod team_tests;
+
+#[cfg(test)]
+mod dock_tests;

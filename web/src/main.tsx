@@ -473,6 +473,9 @@ function App({ url }: { url: string }) {
                   )}
                   onChange={setMapId}
                 />
+                {catalog.maps.find((item) => item.id === map)?.desktopRecommended && (
+                  <small>三条兵线覆盖较大，建议在电脑上游玩。</small>
+                )}
               </>
             )}
             {errors}

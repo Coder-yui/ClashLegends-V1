@@ -38,9 +38,7 @@ impl Battle {
         let a = self.actors.get(&id).ok_or(Error::NoTarget)?;
         let blocks = movement::blockers(&self.actors);
         let q = Query {
-            cross_river: def
-                .rules
-                .is_some_and(|s| s["river_traversal"] == true || s["terrain_traversal"] == true),
+            terrain: def.terrain_passage(),
             map: &self.map,
             blocks: &blocks,
             id,
@@ -52,6 +50,11 @@ impl Battle {
             .ok_or(Error::InvalidPoint)?;
         let a = self.actors.get_mut(&id).unwrap();
         let old = std::mem::replace(&mut a.def, def);
+        if a.def.role != crate::Role::Troop {
+            a.lane = None;
+        } else if a.lane.is_none() {
+            a.assign_lane(&self.march_lanes[a.team.index()]);
+        }
         a.hp = match health {
             HealthOnChange::Keep => a.hp.clamp(1, a.def.hp),
             HealthOnChange::Full => a.def.hp,

@@ -5,6 +5,7 @@ import { useMatchAssets } from "./use-match-assets";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MatchLoading } from "./match-loading";
 import type { CSSProperties } from "react";
+import { battleStageStyle, readBattleFrame } from "./battle-map";
 import { api, href, go } from "./api";
 import { Modal } from "./controls";
 import { RecordingSettings } from "./recording-options";
@@ -163,6 +164,11 @@ export function MatchPage({
           return;
         }
         if (message.type === "frame") {
+          const world = readBattleFrame(
+            message,
+            catalog.maps.find((map) => map.id === match.map),
+            match.me,
+          );
           const cues = events.read(message.presentation);
           for (const { fact } of cues)
             if (fact.kind === "commandFinished") {
@@ -172,7 +178,7 @@ export function MatchPage({
           if (events.reset) baselineId.current++;
           const baseline = baselineId.current;
           setFrame((previous) => ({
-            ...message,
+            ...world,
             baseline,
             cues: [
               ...(previous?.baseline === baseline
@@ -348,17 +354,7 @@ export function MatchPage({
       返回房间
     </a>
   );
-  const map = frame?.map;
-  const stageStyle = map
-    ? ({
-        "--map-width": map.width,
-        "--map-height": map.height,
-        "--ground-depth": map.height + 2 * map.backMargin,
-        "--projection": map.projection,
-        "--backdrop-width": map.backdropWidth,
-        "--terrain": map.terrain ? 'url("' + map.terrain + '")' : "none",
-      } as CSSProperties)
-    : undefined;
+  const stageStyle = battleStageStyle(frame?.map);
   if (result || !live) {
     const title = result
       ? result.winner === null
@@ -431,7 +427,7 @@ export function MatchPage({
     frame && selected !== undefined ? card(frame.hand[selected]) : undefined;
   const placement = selectedCard?.id === "mirror" ? mirrorSource : selectedCard;
   return (
-    <section className="battle-layout" style={stageStyle}>
+    <section className="battle-layout" data-map={match.map} style={stageStyle}>
       {!entered && (
         <MatchLoading
           back={roomLink}
@@ -605,8 +601,7 @@ export function MatchPage({
             ? ""
             : !connected
               ? "正在重新连接战场…"
-              : hint ||
-                (placement ? "点击战场，或拖牌到落点松手" : "")}
+              : hint || (placement ? "点击战场，或拖牌到落点松手" : "")}
         </p>
       </aside>
     </section>

@@ -16,13 +16,11 @@ pub(crate) fn blockers(actors: &BTreeMap<Id, Actor>) -> Vec<Block> {
         .collect()
 }
 pub(crate) fn query<'a>(map: &'a Arena, blocks: &'a [Block], a: &Actor) -> Query<'a> {
+    let terrain = a.def.terrain_passage();
     Query {
-        cross_river: a
-            .def
-            .rules
-            .is_some_and(|s| s["river_traversal"] == true || s["terrain_traversal"] == true),
+        terrain,
         map,
-        blocks: if a.def.rules.is_some_and(|s| s["terrain_traversal"] == true) {
+        blocks: if terrain == crate::space::TerrainPassage::All {
             &[]
         } else {
             blocks
@@ -82,12 +80,43 @@ fn walk(
     view: &Perception,
     intents: &BTreeMap<Id, Point>,
 ) {
-    let reach = a.def.range + a.def.radius + target.radius;
-    if a.route_goal.is_none_or(|p| (p - target.pos).length() > 8.)
+    let mut goal = target.pos;
+    let mut reach = a.def.range + a.def.radius + target.radius;
+    // The assigned tower remains the strategic target for every troop. A unit
+    // that can cross water needs no bridge waypoints on its route to that tower.
+    if let Some(lane) = a
+        .lane
+        .as_ref()
+        .filter(|_| a.activity == Activity::March && q.needs_bridge())
+    {
+        let end = if target.id == lane.tower {
+            lane.tower_step
+        } else {
+            lane.points.len() - 1
+        };
+        while a.lane_step < end {
+            let point = lane.points[a.lane_step];
+            let dir = point - lane.points[a.lane_step - 1];
+            if (point - a.pos).length() <= 20. || (a.pos - point).dot(dir) >= 0. {
+                a.lane_step += 1;
+            } else {
+                goal = point;
+                reach = 12.;
+                break;
+            }
+        }
+    }
+    if a.route_goal.is_none_or(|p| (p - goal).length() > 8.)
         || (a.route.is_empty() && tick >= a.replan)
     {
-        a.route = crate::navigation::route(q, a.pos, target.pos, reach);
-        a.route_goal = Some(target.pos);
+        a.route = crate::navigation::route(q, a.pos, goal, reach);
+        if a.route.is_empty() && goal != target.pos {
+            // A deployed structure may cover a landmark. Keep to the same lane.
+            a.lane_step += 1;
+            a.route_goal = None;
+            return;
+        }
+        a.route_goal = Some(goal);
         a.replan = tick + 10;
     }
     if let Some(&next) = a.route.front() {

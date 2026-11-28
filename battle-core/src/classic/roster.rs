@@ -257,19 +257,23 @@ impl ClassicMatch {
             members(card.key).ok_or(MatchError::Loadout)?
         };
         let clicked = self.cell(point, team, None)?;
-        let ruin = rule["tower_ruin_foundation"] == true
-            && [Team::Blue, Team::Red].iter().any(|t| {
-                self.map.sides[t.index()]
-                    .towers
-                    .iter()
-                    .enumerate()
-                    .any(|(i, p)| {
-                        *p == clicked
-                            && !self.battle.actors.contains_key(&self.towers[t.index()][i])
-                    })
-            });
-        let center = if ruin {
-            clicked
+        let ruin_pos = (rule["tower_ruin_foundation"] == true)
+            .then(|| {
+                self.ruined_towers().find_map(|(_, _, p)| {
+                    let delta = point - p;
+                    let hit = if self.map.sides[0].routes.is_empty() {
+                        p == clicked
+                    } else {
+                        delta.x.abs() <= self.map.tile_size / 2.
+                            && delta.y.abs() <= self.map.tile_size / 2.
+                    };
+                    hit.then_some(p)
+                })
+            })
+            .flatten();
+        let ruin = ruin_pos.is_some();
+        let center = if let Some(pos) = ruin_pos {
+            pos
         } else {
             self.deployment_cell(point, team, &defs[0], rule)?
         };
@@ -298,9 +302,7 @@ impl ClassicMatch {
                 return Err(MatchError::Placement);
             }
             let query = Query {
-                cross_river: def.rules.is_some_and(|s| {
-                    s["river_traversal"] == true || s["terrain_traversal"] == true
-                }),
+                terrain: def.terrain_passage(),
                 map: &self.battle.map,
                 blocks: &blocks,
                 id: self.battle.next_id,

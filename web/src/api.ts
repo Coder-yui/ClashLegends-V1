@@ -18,13 +18,31 @@ export interface Card {
   description: string;
   skills: Skill[];
 }
+export interface CatalogMap {
+  id: string;
+  name: string;
+  image: string;
+  width: number;
+  height: number;
+  tile: number;
+  terrain?: string | null;
+  terrainRed?: string | null;
+  desktopRecommended?: boolean;
+  tileOrigin?: number[];
+  obstacles: number[][];
+  landObstacles?: number[][];
+  home: number[][];
+  pockets: number[][][];
+  redHome?: number[][];
+  redPockets?: number[][][];
+}
 export interface Catalog {
   workbench?: boolean;
   cards: Card[];
   version: string;
   defaultDeck: string[];
   modes: { id: string; name: string; mapIds: string[] }[];
-  maps: { id: string; name: string; image: string; terrain?: string | null }[];
+  maps: CatalogMap[];
 }
 export interface Deck {
   cards: string[];

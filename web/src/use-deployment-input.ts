@@ -58,12 +58,14 @@ export function useDeploymentInput({
     const previous = latest.current;
     latest.current = point;
     const half = (frame?.map.tile ?? 1) / 2;
+    const [ox, oy] = frame?.map.tileOrigin ?? [0, 0];
     // Both odd and even footprints are stable inside each half tile.
     if (
       point &&
       previous &&
-      Math.floor(point.x / half) === Math.floor(previous.x / half) &&
-      Math.floor(point.y / half) === Math.floor(previous.y / half)
+      !frame?.ruinedTowers?.length &&
+      Math.floor((point.x - ox) / half) === Math.floor((previous.x - ox) / half) &&
+      Math.floor((point.y - oy) / half) === Math.floor((previous.y - oy) / half)
     )
       return;
     showPointer(point);

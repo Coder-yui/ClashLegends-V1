@@ -87,7 +87,7 @@ body:has(.battle-layout) #root > header {
   padding-bottom: var(--tray-height);
   /* BattleLayout.BACKDROP_BOUNDS is centered on the 720 × 1280 field. The
      camera export already contains the 54-degree foreshortening. */
-  background: #213a32 var(--terrain, url("/media/battle/rift-arena.webp")) no-repeat;
+  background: var(--battle-underlay, #213a32) var(--terrain, url("/media/battle/rift-arena.webp")) no-repeat;
   background-size: calc(var(--backdrop-width, 2480) * var(--ground-x)) auto;
   background-position: center calc(50% - var(--tray-height) / 2);
 }
@@ -125,6 +125,9 @@ body:has(.battle-layout) #root > header {
   height: calc(
     (var(--map-height, 1280) + 2 * var(--field-margin)) * var(--ground-y)
   );
+}
+.battle-input:not(.cinema) .battle-models {
+  clip-path: var(--terrain-clip, none);
 }
 .battle-input.cinema,
 .battle-input.cinema .battle-models {
@@ -204,6 +207,31 @@ body:has(.battle-layout) #root > header {
     position: static;
     margin-left: auto;
   }
+}
+/* Keep the central crystal's silhouette and health bar clear on both cameras. */
+.battle-layout[data-map="lowtide-dock"] .battle-top {
+  --hud-pad: max(10px, env(safe-area-inset-left));
+  left: 0;
+  transform: none;
+  width: 100%;
+  padding-left: var(--hud-pad);
+  padding-right: max(10px, env(safe-area-inset-right));
+  display: grid;
+  grid-template-columns: min(calc(50% - 34px), max(148px, calc((100vw - var(--map-width) * var(--ground-x)) / 2 - 2 * var(--hud-pad)))) 1fr auto;
+  row-gap: 5px;
+}
+.battle-layout[data-map="lowtide-dock"] .battle-tools {
+  grid-area: 1 / 1;
+  flex-wrap: wrap;
+}
+.battle-layout[data-map="lowtide-dock"] .battle-title {
+  grid-area: 2 / 1;
+  overflow-wrap: anywhere;
+}
+.battle-layout[data-map="lowtide-dock"] .battle-time {
+  position: static;
+  grid-area: 1 / 3;
+  margin-left: 0;
 }
 .battle-hand,
 .battle-next,

@@ -52,6 +52,7 @@ pub enum Error {
 
 pub struct Battle {
     classic_attack_nodes: bool,
+    march_lanes: [Vec<model::MarchLane>; 2],
     map: Arena,
     actors: BTreeMap<Id, Actor>,
     shots: Vec<Projectile>,
@@ -81,17 +82,22 @@ impl Battle {
             || !map.height.is_finite()
             || map.width <= 0.
             || map.height <= 0.
-            || map.ground_obstacles.iter().any(|r| {
-                !map.contains(r.min)
-                    || !map.contains(r.max)
-                    || r.min.x > r.max.x
-                    || r.min.y > r.max.y
-            })
+            || map
+                .ground_obstacles
+                .iter()
+                .chain(&map.land_obstacles)
+                .any(|r| {
+                    !map.contains(r.min)
+                        || !map.contains(r.max)
+                        || r.min.x > r.max.x
+                        || r.min.y > r.max.y
+                })
         {
             return Err(Error::InvalidDefinition);
         }
         Ok(Self {
             classic_attack_nodes: false,
+            march_lanes: Default::default(),
             map,
             actors: BTreeMap::new(),
             shots: vec![],
@@ -121,6 +127,9 @@ impl Battle {
         }
         let id = self.next_id;
         let mut a = Actor::new(id, team, pos, def);
+        if a.def.role == Role::Troop {
+            a.assign_lane(&self.march_lanes[team.index()]);
+        }
         a.since = self.tick;
         a.deploy_start = self.tick;
         if let Some(shield) = a.def.rules.and_then(|s| s["deployment_shield"].as_i64()) {

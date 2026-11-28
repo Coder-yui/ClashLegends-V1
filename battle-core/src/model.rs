@@ -160,6 +160,28 @@ pub struct AttackTiming {
 }
 
 #[derive(Clone, Debug)]
+pub(crate) struct MarchLane {
+    pub tower: Id,
+    pub nexus: Id,
+    pub tower_step: usize,
+    pub points: std::sync::Arc<[Point]>,
+}
+impl MarchLane {
+    pub fn nearest_segment(&self, p: Point) -> (usize, f64) {
+        self.points
+            .windows(2)
+            .enumerate()
+            .map(|(i, s)| {
+                let d = s[1] - s[0];
+                let t = ((p - s[0]).dot(d) / d.dot(d).max(1e-9)).clamp(0., 1.);
+                let delta = p - (s[0] + d * t);
+                (i + 1, delta.dot(delta))
+            })
+            .min_by(|a, b| a.1.total_cmp(&b.1))
+            .unwrap()
+    }
+}
+#[derive(Clone, Debug)]
 pub(crate) struct Actor {
     pub killed_by: Option<usize>,
     pub id: Id,
@@ -181,6 +203,8 @@ pub(crate) struct Actor {
     pub deploy_start: u64,
     pub route: VecDeque<Point>,
     pub route_goal: Option<Point>,
+    pub lane: Option<MarchLane>,
+    pub lane_step: usize,
     pub replan: u64,
     pub release_at: Option<u64>,
     pub next_attack: u64,
@@ -210,6 +234,22 @@ pub(crate) struct Actor {
     pub decay_carry: i64,
 }
 impl Actor {
+    pub fn assign_lane(&mut self, lanes: &[MarchLane]) {
+        // All launch paths meet at the muster point. A manually placed unit
+        // there takes the straight central road; the wave assigns each lane explicitly.
+        let best = lanes
+            .iter()
+            .enumerate()
+            .map(|(i, lane)| {
+                let (step, distance) = lane.nearest_segment(self.pos);
+                (lane, step, distance, i.abs_diff(lanes.len() / 2))
+            })
+            .min_by(|(_, _, da, ia), (_, _, db, ib)| da.total_cmp(db).then(ia.cmp(ib)));
+        if let Some((lane, step, _, _)) = best {
+            self.lane = Some(lane.clone());
+            self.lane_step = step;
+        }
+    }
     pub fn new(id: Id, team: Team, pos: Point, def: UnitDef) -> Self {
         Self {
             killed_by: None,
@@ -236,6 +276,8 @@ impl Actor {
             deploy_start: 0,
             route: VecDeque::new(),
             route_goal: None,
+            lane: None,
+            lane_step: 0,
             replan: 0,
             release_at: None,
             next_attack: 0,

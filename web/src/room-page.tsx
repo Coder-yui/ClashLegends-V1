@@ -156,6 +156,9 @@ export function RoomPage({
         >
           <small>{catalog.modes.find((x) => x.id === room.mode)?.name}</small>
           <h2>{map?.name}</h2>
+          {map?.desktopRecommended && (
+            <small>三条兵线覆盖较大，建议在电脑上游玩。</small>
+          )}
           {room.me === 0 && room.status === "open" && (
             <button onClick={() => setup("settings")}>对战设置</button>
           )}

@@ -1,5 +1,5 @@
 import data from "../../content/battle_rules.json";
-import type { Frame } from "./battle-field";
+import type { Frame, Unit } from "./battle-field";
 import type { Point } from "./presentation";
 
 interface Rule {
@@ -44,6 +44,68 @@ function footprint(kind: string) {
   );
 }
 
+function overlapsStructure(map: Frame["map"], u: Unit, x: number, y: number, half: number) {
+  if (map.id === "lowtide-dock" && (u.kind === "nexus" || u.kind === "princess_tower")) {
+    const dx = Math.max(0, Math.abs(x - u.x) - half);
+    const dy = Math.max(0, Math.abs(y - u.y) - half);
+    return dx * dx + dy * dy < u.radius * u.radius;
+  }
+  const reach = half + ((u.footprint ?? footprint(u.kind)) * map.tile) / 2;
+  return Math.abs(x - u.x) < reach && Math.abs(y - u.y) < reach;
+}
+
+function overlapsDockTerrain(map: Frame["map"], x: number, y: number, half: number) {
+  const overlaps = ([l, t, r, b]: number[]) =>
+    x + half > l && x - half < r && y + half > t && y - half < b;
+  return map.obstacles.some(overlaps) || !!map.landObstacles?.some(overlaps);
+}
+
+// Cache the base cells visible under a held card. Its movable footprint and
+// formation still use placementAt for the exact pointer location every tick.
+export function dockDeploymentMask() {
+  let lastZone: Frame["deployment"][number] | undefined;
+  let lastGeometry = "";
+  let mask: Path2D;
+  return (frame: Frame, slot: number, me: number) => {
+    const zone = frame.deployment[slot];
+    const card = frame.hand[slot] === "mirror" ? frame.lastCard : frame.hand[slot];
+    const rule = card ? rules[card] : undefined;
+    const onGround = rule && rule.type !== "spell";
+    const structures = onGround ? frame.units.filter(u => u.structure) : [];
+    const ruins = rule?.tower_ruin_foundation ? frame.ruinedTowers ?? [] : [];
+    const geometry = JSON.stringify([me, !!onGround, structures.map(u => [u.kind, u.x, u.y, u.radius, u.footprint]), ruins]);
+    if (lastZone === zone && geometry === lastGeometry) return mask;
+    lastZone = zone;
+    lastGeometry = geometry;
+    mask = new Path2D();
+    const { width, height, tile } = frame.map;
+    const [ox, oy] = frame.map.tileOrigin ?? [0, 0];
+    function rect(x: number, y: number, w: number, h: number) {
+      mask.rect(me ? width - x - w : x, me ? height - y - h : y, w, h);
+    }
+    for (const region of zone) {
+      if (!onGround) {
+        rect(ox + region.x * tile, oy + region.y * tile, region.width * tile, region.height * tile);
+        continue;
+      }
+      for (let row = region.y; row < region.y + region.height; row++) {
+        const end = region.x + region.width;
+        const y = oy + (row + 0.5) * tile;
+        let start = region.x;
+        for (let col = region.x; col <= end; col++) {
+          const x = ox + (col + 0.5) * tile;
+          if (col < end && !overlapsDockTerrain(frame.map, x, y, tile / 2) &&
+              !structures.some(u => overlapsStructure(frame.map, u, x, y, tile / 2))) continue;
+          if (start < col) rect(ox + start * tile, oy + row * tile, (col - start) * tile, tile);
+          start = col + 1;
+        }
+      }
+    }
+    for (const ruin of ruins) rect(ruin.x - tile / 2, ruin.y - tile / 2, tile, tile);
+    return mask;
+  };
+}
+
 function formation(rule: Rule, form: string, me: number) {
   const plan = rule.spawn_plan;
   const kinds =
@@ -72,10 +134,10 @@ function troopCenter(frame: Frame, kind: string, desired: Point, me: number) {
   const rule = rules[kind];
   const radius = rule?.radius ?? 14;
   const { width, height } = frame.map;
-  const obstacles =
-    rule?.is_air || rule?.river_traversal || rule?.terrain_traversal
-      ? []
-      : frame.map.obstacles;
+  const land = frame.map.landObstacles ?? [];
+  const obstacles = rule?.is_air || rule?.terrain_traversal ? [] :
+    rule?.river_traversal ? land :
+    land.length ? [...frame.map.obstacles, ...land] : frame.map.obstacles;
   const blocks = frame.units.filter(
     (u) =>
       (u.structure || u.controls.includes("Stasis")) &&
@@ -123,11 +185,13 @@ function troopCenter(frame: Frame, kind: string, desired: Point, me: number) {
       distance = d;
     }
   }
-  for (const x of xs) {
-    consider(x, desired.y);
-    for (const y of ys) consider(x, y);
+  const columns = [...new Set(xs)], rows = [...new Set(ys)];
+  for (const x of columns) consider(x, desired.y);
+  for (const y of rows) consider(desired.x, y);
+  for (const x of columns) {
+    if (Math.abs(x - desired.x) > distance + 1e-8) continue;
+    for (const y of rows) consider(x, y);
   }
-  for (const y of ys) consider(desired.x, y);
   const circles = blocks.map((u) => ({
     x: u.x,
     y: u.y,
@@ -141,14 +205,14 @@ function troopCenter(frame: Frame, kind: string, desired: Point, me: number) {
       c.x + (length ? dx / length : 0) * c.r,
       c.y + (length ? dy / length : forward) * c.r,
     );
-    for (const x of xs) {
+    for (const x of columns) {
       const h = Math.sqrt(c.r ** 2 - (x - c.x) ** 2);
       if (Number.isFinite(h)) {
         consider(x, c.y + h);
         consider(x, c.y - h);
       }
     }
-    for (const y of ys) {
+    for (const y of rows) {
       const h = Math.sqrt(c.r ** 2 - (y - c.y) ** 2);
       if (Number.isFinite(h)) {
         consider(c.x + h, y);
@@ -199,16 +263,21 @@ export function placementAt(
   const size = footprint(form);
   const span = size * tile,
     half = span / 2;
-  const snap = (v: number, max: number) =>
-    clamp(
-      (size % 2 ? Math.floor(v / tile) + 0.5 : Math.round(v / tile)) * tile,
-      half,
-      max - half,
-    );
-  const x = snap(pointer.x, width),
-    y = snap(pointer.y, height);
-  const left = Math.round((x - half) / tile),
-    top = Math.round((y - half) / tile);
+  const [ox, oy] = frame.map.tileOrigin ?? [0, 0];
+  const snap = (v: number, max: number, origin: number) => {
+    const cell = (v - origin) / tile;
+    const index = size % 2 ? Math.floor(cell) + 0.5 : Math.round(cell);
+    return clamp(origin + index * tile, origin + half, max - origin - half);
+  };
+  const gridX = snap(pointer.x, width, ox), gridY = snap(pointer.y, height, oy);
+  const dock = frame.map.id === "lowtide-dock";
+  const ruined = rule.tower_ruin_foundation && frame.ruinedTowers?.find(p =>
+    dock ? Math.abs(pointer.x - p.x) <= tile / 2 && Math.abs(pointer.y - p.y) <= tile / 2 :
+      p.x === gridX && p.y === gridY);
+  const x = ruined ? ruined.x : gridX;
+  const y = ruined ? ruined.y : gridY;
+  const left = Math.round((x - ox - half) / tile);
+  const top = Math.round((y - oy - half) / tile);
   const regions = frame.deployment[slot];
   let valid = true;
   for (let col = left; col < left + size; col++)
@@ -224,18 +293,13 @@ export function placementAt(
       )
         valid = false;
 
-  const ruin =
-    !!rule.tower_ruin_foundation &&
-    !!frame.ruinedTowers?.some((p) => p.x === x && p.y === y);
+  const ruin = !!ruined;
   let members: { kind: string; x: number; y: number }[] = [];
   if (!spell) {
     if (ruin) valid = true;
     else if (
-      frame.units.some((u) => {
-        if (!u.structure) return false;
-        const reach = half + ((u.footprint ?? footprint(u.kind)) * tile) / 2;
-        return Math.abs(x - u.x) < reach && Math.abs(y - u.y) < reach;
-      })
+      (dock && overlapsDockTerrain(frame.map, x, y, half)) ||
+      frame.units.some(u => u.structure && overlapsStructure(frame.map, u, x, y, half))
     )
       valid = false;
     members = formation(rule, form, me).map((p) => {
@@ -256,13 +320,13 @@ export function placementAt(
     if (rule.type === "building") {
       const radius = rule.radius ?? 14;
       if (
-        frame.map.obstacles.some(
+        [frame.map.obstacles, frame.map.landObstacles ?? []].some(rects => rects.some(
           ([l, t, r, b]) =>
             x >= l - radius &&
             x <= r + radius &&
             y >= t - radius &&
             y <= b + radius,
-        ) ||
+        )) ||
         frame.units.some(
           (u) =>
             !(u.air ?? rules[u.kind]?.is_air) &&
@@ -317,6 +381,13 @@ export function drawPlacement(
     ctx.globalAlpha = alpha;
     ctx.fill();
     ctx.globalAlpha = 1;
+    if (frame.map.id === "lowtide-dock") {
+      ctx.save();
+      ctx.strokeStyle = "#233d3e";
+      ctx.lineWidth = 5;
+      ctx.stroke();
+      ctx.restore();
+    }
     ctx.stroke();
   }
   ctx.beginPath();

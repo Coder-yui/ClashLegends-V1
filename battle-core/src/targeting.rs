@@ -150,6 +150,12 @@ impl Perception {
                 .unwrap_or(b);
             return Some((b, false));
         }
+        if let Some(lane) = &a.lane {
+            return [lane.tower, lane.nexus]
+                .into_iter()
+                .find_map(|id| self.bodies.get(&id).copied().filter(|b| eligible(*b)))
+                .map(|b| (b, true));
+        }
         self.towers
             .iter()
             .copied()

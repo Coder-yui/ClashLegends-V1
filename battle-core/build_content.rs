@@ -46,6 +46,8 @@ pub fn gameplay(catalog: &Value, mut rules: Value, mut maps: Value, mut modes: V
             &[
                 "name",
                 "terrain",
+                "terrainRed",
+                "desktopRecommended",
                 "image",
                 "backdropWidth",
                 "backMargin",

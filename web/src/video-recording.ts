@@ -1,3 +1,4 @@
+import { terrainFor } from "./battle-map";
 import { useEffect, useRef, useState } from "react";
 import type { Frame } from "./battle-field";
 import { fieldMargin } from "./battle-geometry";
@@ -57,7 +58,8 @@ function startVideo(
     if (c) image(cardArt(c, true));
   }
   const map = catalog.maps.find((m) => m.id === match.map);
-  if (map?.terrain) image(map.terrain);
+  const terrain = terrainFor(map, match.me);
+  if (terrain) image(terrain);
   const stream = canvas.captureStream(opts.fps);
   let audio: MediaStreamAudioDestinationNode | undefined;
   function cleanup() {
@@ -143,7 +145,7 @@ function startVideo(
     const unit = Math.min(w / 720, h / 1280);
     const tray = opts.hud ? 160 * unit : 0;
     const cy = (h - tray) / 2;
-    ctx.fillStyle = "#213a32";
+    ctx.fillStyle = m.id === "lowtide-dock" ? "#233136" : "#213a32";
     ctx.fillRect(0, 0, w, h);
     if (cinema) {
       const scale = Math.max(w / gl.width, (h - tray) / gl.height);
@@ -168,7 +170,15 @@ function startVideo(
       }
       const bw = (m.width + 2 * fieldMargin) * sx,
         bh = (m.height + 2 * fieldMargin) * sy;
+      if (m.id === "lowtide-dock") {
+        const depth = (m.height + 2 * m.backMargin) * sy;
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, cy - depth / 2, w, depth);
+        ctx.clip();
+      }
       if (gl.width > 0) ctx.drawImage(gl, (w - bw) / 2, cy - bh / 2, bw, bh);
+      if (m.id === "lowtide-dock") ctx.restore();
       ctx.drawImage(hud, (w - bw) / 2, cy - bh / 2, bw, bh);
     }
     if (opts.hud) {
@@ -209,9 +219,10 @@ function startVideo(
       ctx.font = "bold " + Math.max(15, 30 * unit) + "px monospace";
       ctx.textAlign = "center";
       ctx.fillStyle = "#10212bdd";
-      ctx.fillRect(w / 2 - 54 * unit, 8 * unit, 108 * unit, 42 * unit);
+      const clockX = m.id === "lowtide-dock" ? w - 64 * unit : w / 2;
+      ctx.fillRect(clockX - 54 * unit, 8 * unit, 108 * unit, 42 * unit);
       ctx.fillStyle = "white";
-      ctx.fillText(battleTime(frame.remaining), w / 2, 39 * unit);
+      ctx.fillText(battleTime(frame.remaining), clockX, 39 * unit);
     }
     if (frame.result) {
       ctx.fillStyle = "#0c1924b5";

@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Catalog, Deck, Match } from "./api";
+import { terrainFor } from "./battle-map";
 import { cardArt } from "./card-art";
 import type { ModelResources } from "./battle-models";
 
-function openingImages(catalog: Catalog, map: string, deck: Deck) {
+function openingImages(catalog: Catalog, map: string, me: number, deck: Deck) {
   const images = new Set<string>();
-  const terrain = catalog.maps.find((m) => m.id === map)?.terrain;
+  const terrain = terrainFor(catalog.maps.find((m) => m.id === map), me);
   if (terrain) images.add(terrain);
   for (const [slot, id] of deck.cards.entries()) {
     const card = catalog.cards.find((c) => c.id === id);
@@ -26,8 +27,8 @@ export function useMatchAssets(match: Match, catalog: Catalog, live: boolean) {
   const [attempt, setAttempt] = useState(0);
   const manifest = match.modelResources?.join(",") ?? "";
   const images = useMemo(
-    () => openingImages(catalog, match.map, match.deck),
-    [catalog, match.map, match.deck],
+    () => openingImages(catalog, match.map, match.me, match.deck),
+    [catalog, match.map, match.me, match.deck],
   );
   const imageList = images.join("\n");
   useEffect(() => {

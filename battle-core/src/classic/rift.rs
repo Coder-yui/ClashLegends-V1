@@ -13,13 +13,34 @@ pub struct MapDefinition {
     pub height: f64,
     pub tile: f64,
     pub obstacles: Vec<[f64; 4]>,
-    tower_columns: [f64; 2],
+    #[serde(default)]
+    tower_columns: Vec<f64>,
+    #[serde(default)]
     tower_depth: f64,
+    #[serde(default)]
     nexus: [f64; 2],
-    wave_columns: [f64; 2],
+    #[serde(default)]
+    wave_columns: Vec<f64>,
+    #[serde(default)]
     wave_depth: f64,
     home: Vec<[i32; 4]>,
-    pockets: [Vec<[i32; 4]>; 2],
+    pockets: Vec<Vec<[i32; 4]>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub red_home: Option<Vec<[i32; 4]>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub red_pockets: Option<Vec<Vec<[i32; 4]>>>,
+    #[serde(default)]
+    pub tile_origin: [f64; 2],
+    #[serde(default)]
+    pub land_obstacles: Vec<[f64; 4]>,
+    #[serde(default)]
+    landmarks: Option<[Landmarks; 2]>,
+    #[serde(default)]
+    lanes: Vec<Vec<[f64; 2]>>,
+    #[serde(default)]
+    pub terrain_red: Option<String>,
+    #[serde(default)]
+    pub desktop_recommended: bool,
     pub terrain: Option<String>,
     pub backdrop_width: f64,
     pub back_margin: f64,
@@ -27,6 +48,17 @@ pub struct MapDefinition {
     pub image: String,
     #[serde(default)]
     pub test_only: bool,
+}
+#[derive(Deserialize, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+struct Landmarks {
+    towers: Vec<[f64; 2]>,
+    nexus: [f64; 2],
+    spawn: [f64; 2],
+    front: Vec<[f64; 2]>,
+    building_front: Vec<[f64; 2]>,
+    tower_radius: f64,
+    nexus_radius: f64,
 }
 pub fn maps() -> &'static [MapDefinition] {
     static DATA: OnceLock<Vec<MapDefinition>> = OnceLock::new();
@@ -73,17 +105,23 @@ impl Tiles {
 }
 #[derive(Clone, Debug)]
 pub struct SideLayout {
-    pub towers: [Point; 2],
+    pub towers: Vec<Point>,
+    pub tower_radius: f64,
+    pub nexus_radius: f64,
+    pub routes: Vec<Vec<Point>>,
+    pub front: Vec<Point>,
+    pub building_front: Vec<Point>,
     pub nexus: Point,
-    pub wave: [Point; 2],
+    pub wave: Vec<Point>,
     pub home: Vec<Tiles>,
-    pub pockets: [Vec<Tiles>; 2],
+    pub pockets: Vec<Vec<Tiles>>,
 }
 #[derive(Clone, Debug)]
 pub struct MatchMap {
     pub id: &'static str,
     pub arena: crate::Arena,
     pub tile_size: f64,
+    pub tile_origin: Point,
     pub sides: [SideLayout; 2],
 }
 impl MatchMap {
@@ -113,29 +151,95 @@ impl MatchMap {
                 width,
                 height,
             };
-            SideLayout {
-                towers: def.tower_columns.map(|x| home(x, def.tower_depth)),
-                nexus: home(def.nexus[0], def.nexus[1]),
-                wave: def.wave_columns.map(|x| home(x, def.wave_depth)),
-                home: def.home.iter().copied().map(rect).collect(),
-                pockets: std::array::from_fn(|i| {
-                    def.pockets[i].iter().copied().map(rect).collect()
-                }),
+            let point = |[x, y]: [f64; 2]| Point::new(x, y);
+            let tile = |[x, y, width, height]: [i32; 4]| Tiles {
+                x,
+                y,
+                width,
+                height,
+            };
+            if let Some(teams) = &def.landmarks {
+                let side = &teams[team.index()];
+                let (homes, pockets) = if team == Team::Red {
+                    (
+                        def.red_home.as_ref().unwrap(),
+                        def.red_pockets.as_ref().unwrap(),
+                    )
+                } else {
+                    (&def.home, &def.pockets)
+                };
+                let routes = def
+                    .lanes
+                    .iter()
+                    .map(|lane| {
+                        let mut points: Vec<_> = lane.iter().copied().map(point).collect();
+                        if team == Team::Blue {
+                            points.reverse();
+                        }
+                        points.push(point(teams[team.enemy().index()].nexus));
+                        points
+                    })
+                    .collect();
+                SideLayout {
+                    towers: side.towers.iter().copied().map(point).collect(),
+                    nexus: point(side.nexus),
+                    wave: vec![point(side.spawn); side.towers.len()],
+                    routes,
+                    front: side.front.iter().copied().map(point).collect(),
+                    building_front: side.building_front.iter().copied().map(point).collect(),
+                    tower_radius: side.tower_radius,
+                    nexus_radius: side.nexus_radius,
+                    home: homes.iter().copied().map(tile).collect(),
+                    pockets: pockets
+                        .iter()
+                        .map(|r| r.iter().copied().map(tile).collect())
+                        .collect(),
+                }
+            } else {
+                let front = |offset| {
+                    def.tower_columns
+                        .iter()
+                        .map(|&x| home(x, def.height / 2. + def.tile * offset))
+                        .collect()
+                };
+                SideLayout {
+                    towers: def
+                        .tower_columns
+                        .iter()
+                        .map(|&x| home(x, def.tower_depth))
+                        .collect(),
+                    nexus: home(def.nexus[0], def.nexus[1]),
+                    wave: def
+                        .wave_columns
+                        .iter()
+                        .map(|&x| home(x, def.wave_depth))
+                        .collect(),
+                    home: def.home.iter().copied().map(rect).collect(),
+                    pockets: def
+                        .pockets
+                        .iter()
+                        .map(|r| r.iter().copied().map(rect).collect())
+                        .collect(),
+                    routes: Vec::new(),
+                    front: front(2.5),
+                    building_front: front(4.5),
+                    tower_radius: UnitDef::tower().radius,
+                    nexus_radius: UnitDef::nexus().radius,
+                }
             }
         });
+        let rect = |&[x, y, r, b]: &[f64; 4]| crate::Rect {
+            min: Point::new(x, y),
+            max: Point::new(r, b),
+        };
         Some(Self {
             id: &def.id,
+            tile_origin: Point::new(def.tile_origin[0], def.tile_origin[1]),
             arena: crate::Arena {
                 width: def.width,
                 height: def.height,
-                ground_obstacles: def
-                    .obstacles
-                    .iter()
-                    .map(|&[x, y, r, b]| crate::Rect {
-                        min: Point::new(x, y),
-                        max: Point::new(r, b),
-                    })
-                    .collect(),
+                ground_obstacles: def.obstacles.iter().map(rect).collect(),
+                land_obstacles: def.land_obstacles.iter().map(rect).collect(),
             },
             tile_size: def.tile,
             sides,
@@ -149,11 +253,15 @@ impl ClassicMatch {
     pub fn rules(&self) -> &ModeRules {
         self.mode
     }
-    pub fn open_pockets(&self, team: Team) -> [bool; 2] {
-        self.towers[team.enemy().index()].map(|id| !self.battle.actors.contains_key(&id))
+    pub fn open_pockets(&self, team: Team) -> Vec<bool> {
+        self.towers[team.enemy().index()]
+            .iter()
+            .map(|id| !self.battle.actors.contains_key(id))
+            .collect()
     }
     pub(super) fn home_tile(&self, point: Point, team: Team) -> bool {
         let tile = self.map.tile_size;
+        let point = point - self.map.tile_origin;
         self.map.sides[team.index()].home.iter().any(|r| {
             r.contains(
                 (point.x / tile).floor() as i32,
@@ -201,26 +309,30 @@ impl ClassicMatch {
         let size = actor.map_or(1, |d| d.lifecycle.footprint.max(1));
         let tile = self.map.tile_size;
         let half = f64::from(size) * tile / 2.;
-        if half * 2. > self.map.arena.width.min(self.map.arena.height) {
+        if half * 2.
+            > (self.map.arena.width - 2. * self.map.tile_origin.x)
+                .min(self.map.arena.height - 2. * self.map.tile_origin.y)
+        {
             return Err(MatchError::Placement);
         }
-        let snap = |v: f64, limit: f64| {
+        let snap = |v: f64, limit: f64, origin: f64| {
+            let v = v - origin;
             let x = if size % 2 == 0 {
                 (v / tile).round() * tile
             } else {
                 ((v / tile).floor() + 0.5) * tile
             };
-            x.clamp(half, limit - half)
+            origin + x.clamp(half, limit - 2. * origin - half)
         };
         let pos = Point::new(
-            snap(point.x, self.map.arena.width),
-            snap(point.y, self.map.arena.height),
+            snap(point.x, self.map.arena.width, self.map.tile_origin.x),
+            snap(point.y, self.map.arena.height, self.map.tile_origin.y),
         );
         if actor.is_none() {
             return Ok(pos);
         }
-        let low = ((pos.x - half) / tile).round() as i32;
-        let top = ((pos.y - half) / tile).round() as i32;
+        let low = ((pos.x - self.map.tile_origin.x - half) / tile).round() as i32;
+        let top = ((pos.y - self.map.tile_origin.y - half) / tile).round() as i32;
         let side = &self.map.sides[team.index()];
         for x in low..low + i32::from(size) {
             for y in top..top + i32::from(size) {
@@ -240,12 +352,36 @@ impl ClassicMatch {
                 }
             }
         }
+        // The survey provides the ordinary deployment banks (bridges are neutral).
+        // Global placements can choose either field, but still need a physical site.
+        if !side.routes.is_empty() && !self.laboratory {
+            let overlaps = |r: &crate::Rect| {
+                pos.x + half > r.min.x
+                    && pos.x - half < r.max.x
+                    && pos.y + half > r.min.y
+                    && pos.y - half < r.max.y
+            };
+            if self.map.arena.land_obstacles.iter().any(overlaps)
+                || self.map.arena.ground_obstacles.iter().any(overlaps)
+            {
+                return Err(MatchError::Placement);
+            }
+        }
         for a in self
             .battle
             .actors
             .values()
             .filter(|a| a.def.role != Role::Troop)
         {
+            if !side.routes.is_empty() && matches!(a.def.role, Role::Nexus | Role::LaneTower) {
+                let d = a.pos - pos;
+                if (d.x.abs() - half).max(0.).powi(2) + (d.y.abs() - half).max(0.).powi(2)
+                    < a.def.radius.powi(2)
+                {
+                    return Err(MatchError::Placement);
+                }
+                continue;
+            }
             let radius =
                 (tile / 2.) * (f64::from(size) + f64::from(a.def.lifecycle.footprint.max(1)));
             if (a.pos.x - pos.x).abs() < radius && (a.pos.y - pos.y).abs() < radius {
@@ -267,7 +403,12 @@ impl ClassicMatch {
     }
     pub(super) fn spawn_wave(&mut self, front: bool, siege: bool) {
         for team in [Team::Blue, Team::Red] {
-            for (lane, pos) in self.map.sides[team.index()].wave.into_iter().enumerate() {
+            for (lane, pos) in self.map.sides[team.index()]
+                .wave
+                .iter()
+                .copied()
+                .enumerate()
+            {
                 let def = if front {
                     if self
                         .battle
@@ -283,19 +424,33 @@ impl ClassicMatch {
                 } else {
                     UnitDef::ranged()
                 };
-                let _ = self.battle.spawn_near(team, pos, def);
+                if let Ok(id) = self.battle.spawn_near(team, pos, def) {
+                    if let Some(route) = self.battle.march_lanes[team.index()].get(lane) {
+                        let a = self.battle.actors.get_mut(&id).unwrap();
+                        a.lane = Some(route.clone());
+                        a.lane_step = 1;
+                    }
+                }
             }
         }
     }
 }
 
+#[derive(Clone, Debug, PartialEq, serde::Serialize)]
+pub enum DeploymentZone {
+    Empty,
+    Field,
+    /// Own bank plus the unlocked enemy-side lane pockets, in world x order.
+    Home(Vec<usize>),
+}
 impl ClassicMatch {
     /// Public map landmarks survive a disconnected spectator or player reconnecting.
     pub fn ruined_towers(&self) -> impl Iterator<Item = (crate::Id, Team, Point)> + '_ {
         [Team::Blue, Team::Red].into_iter().flat_map(move |team| {
             self.towers[team.index()]
-                .into_iter()
-                .zip(self.map.sides[team.index()].towers)
+                .iter()
+                .copied()
+                .zip(self.map.sides[team.index()].towers.iter().copied())
                 .filter(move |(id, _)| !self.battle.actors.contains_key(id))
                 .map(move |(id, point)| (id, team, point))
         })
@@ -305,40 +460,54 @@ impl ClassicMatch {
         self.deployment_regions_for(team.index())
     }
     pub fn deployment_regions_for(&self, seat: usize) -> [Vec<Tiles>; 4] {
-        let team = super::seat_team(seat);
+        let side = &self.map.sides[super::seat_team(seat).index()];
+        self.deployment_zones_for(seat).map(|zone| match zone {
+            DeploymentZone::Empty => vec![],
+            DeploymentZone::Field => vec![Tiles {
+                x: 0,
+                y: 0,
+                width: ((self.map.arena.width - 2. * self.map.tile_origin.x) / self.map.tile_size)
+                    as i32,
+                height: ((self.map.arena.height - 2. * self.map.tile_origin.y) / self.map.tile_size)
+                    as i32,
+            }],
+            DeploymentZone::Home(pockets) => {
+                let mut regions = side.home.clone();
+                for lane in pockets {
+                    regions.extend_from_slice(&side.pockets[lane]);
+                }
+                regions
+            }
+        })
+    }
+    pub fn deployment_zones_for(&self, seat: usize) -> [DeploymentZone; 4] {
         let player = &self.players[seat];
-        let side = &self.map.sides[team.index()];
-        let open = self.open_pockets(team);
+        let open = self.open_pockets(super::seat_team(seat));
         std::array::from_fn(|slot| {
             let mut card = player.deck[player.lookup(slot as u8, player.version).unwrap()];
             if matches!(card.play, super::Play::Mirror) {
                 let Some(last) = player.last_card else {
-                    return vec![];
+                    return DeploymentZone::Empty;
                 };
                 card = last;
             }
             if !card.home_deployment() {
-                return vec![Tiles {
-                    x: 0,
-                    y: 0,
-                    width: (self.map.arena.width / self.map.tile_size) as i32,
-                    height: (self.map.arena.height / self.map.tile_size) as i32,
-                }];
+                return DeploymentZone::Field;
             }
-            let mut zones = side.home.clone();
+            let mut pockets = Vec::new();
             if !matches!(
                 card.play,
                 super::Play::Spell(_) | super::Play::CardSpell(..)
             ) && (super::roster::rules()[card.key]["deploy_pocket_requires_both_towers"] != true
                 || open.iter().all(|v| *v))
             {
-                for (lane, unlocked) in open.into_iter().enumerate() {
+                for (lane, &unlocked) in open.iter().enumerate() {
                     if unlocked {
-                        zones.extend_from_slice(&side.pockets[lane])
+                        pockets.push(lane)
                     }
                 }
             }
-            zones
+            DeploymentZone::Home(pockets)
         })
     }
 }

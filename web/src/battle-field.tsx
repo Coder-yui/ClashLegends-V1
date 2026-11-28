@@ -1,4 +1,4 @@
-import { drawPlacement, states } from "./deployment-preview";
+import { dockDeploymentMask, drawPlacement, states } from "./deployment-preview";
 import type { DeploymentField } from "./use-deployment-input";
 import { fieldMargin, fieldPoint } from "./battle-geometry";
 import type { CaptureFrame } from "./video-recording";
@@ -140,6 +140,8 @@ export interface Frame {
     backMargin: number;
     backdropWidth: number;
     obstacles: number[][];
+    landObstacles?: number[][];
+    tileOrigin?: number[];
   };
   ruinedTowers?: { id: number; team: number; x: number; y: number }[];
   deployment: { x: number; y: number; width: number; height: number }[][];
@@ -257,7 +259,7 @@ function draw(
   frame: Frame,
   me: number,
   tick: number,
-  regions?: Frame["deployment"][number],
+  regions?: Frame["deployment"][number] | Path2D,
   models?: BattleModels,
   focusId?: number,
   geometry = false,
@@ -292,23 +294,25 @@ function draw(
       );
     }
   if (regions) {
-    for (const r of regions) {
-      const left = r.x * tile,
-        top = r.y * tile,
-        w = r.width * tile,
-        h = r.height * tile;
-      rect(
-        Math.min(x(left), x(left + w)),
-        Math.min(y(top), y(top + h)),
-        w,
-        h,
-        "rgba(102,179,255,.15)",
-      );
-    }
-    for (let i = 0; i <= width; i += tile)
-      rect(i, 0, 1, height, "rgba(255,255,255,.14)");
-    for (let i = 0; i <= height; i += tile)
-      rect(0, i, width, 1, "rgba(255,255,255,.14)");
+    const [ox, oy] = frame.map.tileOrigin ?? [0, 0];
+    const dock = frame.map.id === "lowtide-dock";
+    const zone = regions instanceof Path2D ? regions : new Path2D();
+    if (Array.isArray(regions))
+      for (const r of regions) {
+        const left = ox + r.x * tile, top = oy + r.y * tile;
+        const w = r.width * tile, h = r.height * tile;
+        zone.rect(Math.min(x(left), x(left + w)), Math.min(y(top), y(top + h)), w, h);
+      }
+    ctx.save();
+    ctx.fillStyle = dock ? "rgba(39,140,164,.17)" : "rgba(102,179,255,.15)";
+    ctx.fill(zone);
+    // On the dock the stone modules already mark the real cells. An active card
+    // brings out the grid only inside its own deployment zone.
+    if (dock) ctx.clip(zone);
+    const line = dock ? "rgba(226,255,248,.44)" : "rgba(255,255,255,.14)";
+    for (let i = ox; i <= width - ox; i += tile) rect(i, 0, 1, height, line);
+    for (let i = oy; i <= height - oy; i += tile) rect(0, i, width, 1, line);
+    ctx.restore();
   }
   for (const area of frame.areas) {
     if (!geometry && models?.effects.areas.has(area.id)) continue;
@@ -565,6 +569,7 @@ export function Battlefield({
         : undefined,
     );
     let models: BattleModels | undefined;
+    const dockMask = dockDeploymentMask();
     let disposed = false,
       raf = 0,
       previous: Frame | undefined;
@@ -577,7 +582,7 @@ export function Battlefield({
       void import("./battle-models")
         .then(({ BattleModels }) => {
           if (!disposed && !models) {
-            models = new BattleModels(gl, me, collect, resources);
+            models = new BattleModels(gl, me, collect, resources, current.current.frame.map.id);
             models.reset(current.current.frame.presentation.cursor);
             models.effects.prepare(current.current.frame, current.current.deck);
           }
@@ -645,7 +650,8 @@ export function Battlefield({
           shown,
           me,
           tick,
-          selection === undefined ? undefined : frame.deployment[selection],
+          selection === undefined ? undefined : frame.map.id === "lowtide-dock"
+            ? dockMask(frame, selection, me) : frame.deployment[selection],
           models,
           focusId,
           geometry,
@@ -689,7 +695,7 @@ export function Battlefield({
       gl.removeEventListener("webglcontextrestored", load);
       models?.dispose();
     };
-  }, [me, diagnostics, resources, onPrepared]);
+  }, [me, diagnostics, resources, onPrepared, frame.map.id]);
   return (
     <div
       className={"battle-input" + (cinema ? " cinema" : "")}

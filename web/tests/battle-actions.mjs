@@ -170,7 +170,9 @@ try {
     const requested = await p.evaluate(() =>
       performance
         .getEntriesByType("resource")
-        .map((e) => new URL(e.name).pathname.split("/").pop())
+        .map((e) => new URL(e.name).pathname)
+        .filter((path) => path.startsWith("/play/media/models/"))
+        .map((path) => path.split("/").pop())
         .filter((n) => n.endsWith(".glb")),
     );
     assert.deepEqual(

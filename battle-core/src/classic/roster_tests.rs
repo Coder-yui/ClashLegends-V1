@@ -592,6 +592,7 @@ fn practice_field() -> Battle {
     Battle::new(crate::Arena {
         width: 1000.,
         height: 1000.,
+        land_obstacles: Vec::new(),
         ground_obstacles: Vec::new(),
     })
     .unwrap()

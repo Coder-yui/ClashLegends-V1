@@ -61,9 +61,7 @@ impl SpellCast {
         let def = super::super::units::unit("voidfish");
         let blocks = movement::blockers(&game.battle.actors);
         let q = crate::space::Query {
-            cross_river: def
-                .rules
-                .is_some_and(|s| s["river_traversal"] == true || s["terrain_traversal"] == true),
+            terrain: def.terrain_passage(),
             map: &game.battle.map,
             blocks: &blocks,
             id: game.battle.next_id,

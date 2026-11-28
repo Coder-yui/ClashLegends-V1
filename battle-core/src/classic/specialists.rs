@@ -126,7 +126,7 @@ impl Battle {
             }
             if s["terrain_traversal"] == true {
                 let mut q = crate::movement::query(&self.map, &blocks, a);
-                q.cross_river = false;
+                q.terrain = crate::space::TerrainPassage::Ordinary;
                 q.blocks = &blocks;
                 let inside = !q.legal(pos);
                 if inside && !a.card_state.in_terrain {
@@ -271,10 +271,15 @@ impl Battle {
                 });
                 self.unit_sound(id, "pull:start", None);
             } else if s.get("rush_distance").is_some() {
-                let visible = self.map.ground_obstacles.iter().all(|r| {
-                    r.interval(pos, b.pos - pos)
-                        .is_none_or(|(lo, hi)| lo > 1. || hi < 0.)
-                });
+                let visible = self
+                    .map
+                    .ground_obstacles
+                    .iter()
+                    .chain(&self.map.land_obstacles)
+                    .all(|r| {
+                        r.interval(pos, b.pos - pos)
+                            .is_none_or(|(lo, hi)| lo > 1. || hi < 0.)
+                    });
                 if !visible {
                     continue;
                 }
